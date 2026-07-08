@@ -776,37 +776,214 @@
   <!-- ========== 6. FOOD ==================================================== -->
   <section id="food" class="py-24 px-6 bg-sand">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16 fade-in">
-        <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Taste Hunan</p>
-        <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Local Food & Cuisine</h2>
-        <p class="text-stone/70 text-lg max-w-2xl mx-auto">Zhangjiajie sits in Hunan province — home to Xiang cuisine (湘菜), one of China's Eight Culinary Traditions. Bold flavors, fresh ingredients, and spicy kick.</p>
+      <div class="text-center mb-10 fade-in">
+        <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Dining in Zhangjiajie</p>
+        <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Handpicked Restaurants</h2>
+        <p class="text-stone/70 text-lg max-w-2xl mx-auto">From a CCTV-featured <em>Xiangxi</em> cuisine museum to cozy Tujia claypot houses and Zhangjiajie's best Western kitchen — these are the highest-rated, traveler-loved restaurants our local team recommends.</p>
+        <p class="mt-4 text-sm text-stone/50">14 partner restaurants across the city &bull; Top picks rated 4.9–5.0 on TripAdvisor</p>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white rounded-2xl p-6 shadow-sm card-hover fade-in text-center">
-          <div class="text-3xl mb-3">🌶️</div>
-          <h3 class="font-display text-lg text-forest mb-2">Spicy Fish Heads</h3>
-          <p class="text-stone/60 text-sm">Hunan's signature dish — steamed chili fish head, rich and aromatic. A must-try for spice lovers.</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 shadow-sm card-hover fade-in text-center">
-          <div class="text-3xl mb-3">🥩</div>
-          <h3 class="font-display text-lg text-forest mb-2">Three Gourmet Ducks</h3>
-          <p class="text-stone/60 text-sm">Zhangjiajie specialty — smoked duck prepared three ways. Paired perfectly with local rice wine.</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 shadow-sm card-hover fade-in text-center">
-          <div class="text-3xl mb-3">🫕</div>
-          <h3 class="font-display text-lg text-forest mb-2">Tujia Banquet</h3>
-          <p class="text-stone/60 text-sm">Experience an authentic Tujia ethnic minority feast — 10+ dishes served family-style. Singing and dancing included.</p>
-        </div>
-        <div class="bg-white rounded-2xl p-6 shadow-sm card-hover fade-in text-center">
-          <div class="text-3xl mb-3">🍵</div>
-          <h3 class="font-display text-lg text-forest mb-2">Wild Tea & Herbs</h3>
-          <p class="text-stone/60 text-sm">Zhangjiajie is China's "tea capital." Try wild-grown tea and medicinal herbs harvested from the mountains.</p>
-        </div>
+      <!-- Category filter -->
+      <div class="flex flex-wrap justify-center gap-3 mb-10 fade-in" id="foodFilters">
+        <button class="food-filter bg-forest text-white border border-forest px-5 py-2 rounded-full text-sm font-semibold transition-colors" data-filter="all">All</button>
+        <button class="food-filter bg-white text-forest border border-stone/15 hover:border-forest px-5 py-2 rounded-full text-sm font-semibold transition-colors" data-filter="tujia">Tujia Local</button>
+        <button class="food-filter bg-white text-forest border border-stone/15 hover:border-forest px-5 py-2 rounded-full text-sm font-semibold transition-colors" data-filter="western">Western</button>
+        <button class="food-filter bg-white text-forest border border-stone/15 hover:border-forest px-5 py-2 rounded-full text-sm font-semibold transition-colors" data-filter="farmhouse">Farmhouse</button>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7" id="foodGrid">
+
+        <!-- 1. Suoxi Shanzhai · Xibu Street (Top Pick) -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="tujia">
+          <div class="relative h-40 bg-gradient-to-br from-forest to-emerald-700 flex items-center justify-center">
+            <span class="text-5xl">🍲</span>
+            <span class="absolute top-3 left-3 bg-gold text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow">★ Top Pick</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 5.0 <span class="text-stone/60 font-normal">· 93</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Tujia Local Cuisine</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Suoxi Shanzhai</h3>
+            <p class="text-stone/50 text-sm mb-3">索溪山寨 · 溪布街店</p>
+            <p class="text-stone/70 text-sm mb-4">A "Xiangxi Food Culture Museum" featured on CCTV. Ranked <strong>#3 of 104</strong> restaurants in Zhangjiajie.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🍗 Rock Fungus Stewed Free-Range Chicken</p>
+              <p class="text-sm text-stone/80">🍚 Smoked Pork Claypot Rice</p>
+              <p class="text-sm text-stone/80">🥩 Charcoal-smoked Tujia Pork</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 Wulingyuan · Xibu Street</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Zhaizili Bobo Cai · Charming Xiangxi (Top Pick) -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="tujia">
+          <div class="relative h-40 bg-gradient-to-br from-forest to-emerald-700 flex items-center justify-center">
+            <span class="text-5xl">🥘</span>
+            <span class="absolute top-3 left-3 bg-gold text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow">★ Top Pick</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 4.9 <span class="text-stone/60 font-normal">· 77</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Tujia Local Cuisine</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Zhaizili Bobo Cai</h3>
+            <p class="text-stone/50 text-sm mb-3">寨子里的钵钵菜 · 魅力湘西店</p>
+            <p class="text-stone/70 text-sm mb-4">Authentic Tujia "mountain-village" claypot cooking in a rustic wooden courtyard. Ranked <strong>#4 of 104</strong>.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🥩 Smoked Pork Bobo</p>
+              <p class="text-sm text-stone/80">🍖 Tujia Pig Trotter Bobo</p>
+              <p class="text-sm text-stone/80">🍄 Wild Mushroom Bobo</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 Yongding · Charming Xiangxi</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Suoxi Shanzhai · Tianmen Mountain -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="tujia">
+          <div class="relative h-40 bg-gradient-to-br from-forest to-emerald-700 flex items-center justify-center">
+            <span class="text-5xl">🍲</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 4.8 <span class="text-stone/60 font-normal">· 71</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Tujia Local Cuisine</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Suoxi Shanzhai</h3>
+            <p class="text-stone/50 text-sm mb-3">索溪山寨 · 天门山索道店</p>
+            <p class="text-stone/70 text-sm mb-4">The same award-winning brand, right by the Tianmen Mountain cable car — perfect before or after your climb.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🍗 Rock Fungus Stewed Chicken</p>
+              <p class="text-sm text-stone/80">🍚 Smoked Pork Claypot Rice</p>
+              <p class="text-sm text-stone/80">🍲 Sanxia Guo Hotpot</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 Near Tianmen Mountain</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. Summer Mary Western (Western) -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="western">
+          <div class="relative h-40 bg-gradient-to-br from-slate-700 to-slate-500 flex items-center justify-center">
+            <span class="text-5xl">🍽️</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 5.0 <span class="text-stone/60 font-normal">· 59</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Western Dining</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Summer Mary</h3>
+            <p class="text-stone/50 text-sm mb-3">夏日玛莉西餐厅</p>
+            <p class="text-stone/70 text-sm mb-4">Zhangjiajie's top-rated Western restaurant — steaks, pizza and pasta when you crave a break from spicy food. Ranked <strong>#12</strong>.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🥩 New York Strip Steak</p>
+              <p class="text-sm text-stone/80">🍕 Durian Thin-crust Pizza</p>
+              <p class="text-sm text-stone/80">🍝 Spaghetti Bolognese</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 City Center · Zhongshang Plaza</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Suoxi Shanzhai · 72 Wonders Tower -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="tujia">
+          <div class="relative h-40 bg-gradient-to-br from-forest to-emerald-700 flex items-center justify-center">
+            <span class="text-5xl">🍲</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 4.7 <span class="text-stone/60 font-normal">· 51</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Tujia Local Cuisine</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Suoxi Shanzhai</h3>
+            <p class="text-stone/50 text-sm mb-3">索溪山寨 · 72奇楼店</p>
+            <p class="text-stone/70 text-sm mb-4">Enjoy the brand's signature claypot feast with the glowing night view of the 72 Wonders Tower just steps away.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🍚 Smoked Pork Claypot Rice</p>
+              <p class="text-sm text-stone/80">🍗 Rock Fungus Stewed Chicken</p>
+              <p class="text-sm text-stone/80">🍲 Tujia Family Feast</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 72 Wonders Tower</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Zhaizili Bobo Cai · Tianmen Mountain -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="tujia">
+          <div class="relative h-40 bg-gradient-to-br from-forest to-emerald-700 flex items-center justify-center">
+            <span class="text-5xl">🥘</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 4.8 <span class="text-stone/60 font-normal">· 71</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Tujia Local Cuisine</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Zhaizili Bobo Cai</h3>
+            <p class="text-stone/50 text-sm mb-3">寨子里的钵钵菜 · 天门山索道店</p>
+            <p class="text-stone/70 text-sm mb-4">The Charming-Xiangxi favorite's Tianmen Mountain branch — same claypot recipes, convenient location.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🥩 Smoked Pork Bobo</p>
+              <p class="text-sm text-stone/80">🍖 Pig Trotter Bobo</p>
+              <p class="text-sm text-stone/80">🍄 Wild Mushroom Bobo</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 Near Tianmen Mountain</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 7. Da Dui Lao Yu Cun 1973 (Farmhouse) -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="farmhouse">
+          <div class="relative h-40 bg-gradient-to-br from-amber-700 to-amber-500 flex items-center justify-center">
+            <span class="text-5xl">🏡</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow flex items-center gap-1">★ 5.0 <span class="text-stone/60 font-normal">· 7</span></span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Farmhouse &amp; Rustic</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Da Dui Lao Yu Cun 1973</h3>
+            <p class="text-stone/50 text-sm mb-3">大队老渔村1973 · 湘西土菜研究院</p>
+            <p class="text-stone/70 text-sm mb-4">A photogenic farmhouse courtyard serving rustic Tujia flavors — a hidden gem with perfect 5.0 reviews.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🐟 Stewed Huai River Fish</p>
+              <p class="text-sm text-stone/80">🥩 Steamed Pork Belly</p>
+              <p class="text-sm text-stone/80">🍗 Free-range Country Chicken</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 Suburban farmhouse courtyard</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 8. Zaozao Xiaobo Cai · 72 Wonders Tower (Farmhouse) -->
+        <article class="restaurant-card bg-white rounded-2xl overflow-hidden shadow-sm card-hover fade-in" data-category="farmhouse">
+          <div class="relative h-40 bg-gradient-to-br from-amber-700 to-amber-500 flex items-center justify-center">
+            <span class="text-5xl">🍗</span>
+            <span class="absolute top-3 right-3 bg-white/95 text-forest text-xs font-bold px-2.5 py-1 rounded-full shadow">20+ yrs</span>
+          </div>
+          <div class="p-6">
+            <p class="text-xs uppercase tracking-wider text-gold-dark font-semibold mb-1">Farmhouse &amp; Rustic</p>
+            <h3 class="font-display text-xl text-forest mb-0.5">Zaozao Xiaobo Cai</h3>
+            <p class="text-stone/50 text-sm mb-3">灶灶小钵菜 · 72奇楼店</p>
+            <p class="text-stone/70 text-sm mb-4">A 20-year local favorite nicknamed "the locals' canteen" — honest flavors and fair prices, right by 72 Wonders Tower.</p>
+            <div class="space-y-1.5 mb-5">
+              <p class="text-sm text-stone/80">🍗 Tea-oil Braised Chicken</p>
+              <p class="text-sm text-stone/80">🍲 Sanxia Guo Hotpot</p>
+              <p class="text-sm text-stone/80">🥬 Claypot Seasonal Veggies</p>
+            </div>
+            <div class="flex items-center justify-between pt-4 border-t border-stone/10">
+              <span class="text-xs text-stone/60">📍 Near 72 Wonders Tower</span>
+              <a href="#" class="text-forest font-semibold text-sm hover:text-gold-dark">Details →</a>
+            </div>
+          </div>
+        </article>
+
       </div>
 
       <div class="mt-12 bg-forest text-white rounded-2xl p-8 text-center fade-in">
-        <p class="text-white/80 mb-3">Dietary requirements? Vegetarian, halal, allergy-friendly — just let us know when booking your tour. We'll arrange everything.</p>
+        <p class="text-white/85 mb-2 text-lg font-display">Dietary needs? We've got you.</p>
+        <p class="text-white/70 text-sm max-w-2xl mx-auto">Vegetarian, halal, or allergy-friendly — just tell us when booking your tour and we'll reserve the right table and pre-arrange dishes for you.</p>
       </div>
     </div>
   </section>
@@ -915,6 +1092,26 @@
         el.classList.add('visible');
       });
     }, 200);
+
+    // Restaurant category filter (Food section)
+    const foodFilters = document.querySelectorAll('.food-filter');
+    const foodCards = document.querySelectorAll('#foodGrid .restaurant-card');
+    foodFilters.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const f = btn.dataset.filter;
+        foodFilters.forEach((b) => {
+          b.classList.remove('bg-forest', 'text-white', 'border-forest');
+          b.classList.add('bg-white', 'text-forest', 'border', 'border-stone/15');
+        });
+        btn.classList.remove('bg-white', 'text-forest', 'border', 'border-stone/15');
+        btn.classList.add('bg-forest', 'text-white', 'border-forest');
+        foodCards.forEach((card) => {
+          const show = f === 'all' || card.dataset.category === f;
+          card.style.display = show ? '' : 'none';
+          if (show) card.classList.add('visible');
+        });
+      });
+    });
   </script>
 
 </body>
