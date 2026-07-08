@@ -756,14 +756,16 @@
     </div>
   </section>
 
-  <!-- ========== 5. HOTEL ================================================= -->
-  <section id="hotel" class="py-16 px-6 bg-white">
-    <div class="max-w-5xl mx-auto">
-      <div class="relative overflow-hidden rounded-3xl min-h-[340px] fade-in group cursor-pointer bg-slate-200">
+  <!-- ========== 5. STAY & DINE ============================================= -->
+  <section id="hotel" class="py-20 px-6 bg-stone-50">
+    <!-- Food shares this section for unified stacking — id anchor on parent div below -->
+    <div id="food" class="max-w-5xl mx-auto space-y-4">
+
+      <!-- Hotel Card -->
+      <div class="relative overflow-hidden rounded-3xl min-h-[320px] fade-in group cursor-pointer bg-slate-200">
         <img src="images/gallery-painting.jpg" alt="Zhangjiajie hotels &amp; mountain lodges" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async" onload="this.style.filter='none';this.style.transform=''" style="filter:blur(16px);transform:scale(1.08)">
         <div class="absolute inset-0 bg-gradient-to-t from-black/78 via-black/22 to-transparent"></div>
-        <!-- Compact: tag + title left, CTA right — balanced horizontal layout -->
-        <div class="absolute bottom-0 left-0 right-0 p-8 md:p-10 text-white flex items-end justify-between gap-6">
+        <div class="absolute bottom-0 left-0 right-0 p-7 md:p-9 text-white flex items-end justify-between gap-6">
           <div>
             <span class="inline-block bg-white/18 backdrop-blur-md text-white/95 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-3">Stay</span>
             <h2 class="font-display text-2xl sm:text-3xl leading-tight">Explore Hotels &amp; Accommodations</h2>
@@ -771,17 +773,12 @@
           <a href="#" class="flex-shrink-0 inline-flex items-center gap-2 bg-white text-forest font-semibold px-6 py-3 rounded-full hover:bg-white/92 transition-all shadow-lg shadow-black/15 hover:-translate-y-0.5">View Hotels →</a>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- ========== 6. FOOD ==================================================== -->
-  <section id="food" class="py-16 px-6 bg-sand">
-    <div class="max-w-5xl mx-auto">
-      <div class="relative overflow-hidden rounded-3xl min-h-[360px] fade-in group cursor-pointer bg-slate-200">
+      <!-- Food Card — stacks directly below hotel, same container -->
+      <div class="relative overflow-hidden rounded-3xl min-h-[320px] fade-in group cursor-pointer bg-slate-200">
         <img src="images/food-hunan.jpg" alt="Hunan cuisine - classic local dishes" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async" onload="this.style.filter='none';this.style.transform=''" style="filter:blur(16px);transform:scale(1.08)">
         <div class="absolute inset-0 bg-gradient-to-t from-black/78 via-black/22 to-transparent"></div>
-        <!-- Content: compact, centered-left, no redundant description -->
-        <div class="absolute bottom-0 left-0 right-0 p-8 md:p-10 text-white flex items-end justify-between gap-6">
+        <div class="absolute bottom-0 left-0 right-0 p-7 md:p-9 text-white flex items-end justify-between gap-6">
           <div>
             <span class="inline-block bg-white/18 backdrop-blur-md text-white/95 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-3">Taste</span>
             <h2 class="font-display text-2xl sm:text-3xl leading-tight">Explore Local Food &amp; Dining</h2>
@@ -789,6 +786,7 @@
           <a href="#" class="flex-shrink-0 inline-flex items-center gap-2 bg-white text-forest font-semibold px-6 py-3 rounded-full hover:bg-white/92 transition-all shadow-lg shadow-black/15 hover:-translate-y-0.5">View Food →</a>
         </div>
       </div>
+
     </div>
   </section>
 
