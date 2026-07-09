@@ -1,0 +1,1 @@
+{"name": "zhangjiajie-tours-v3", "private": true, "scripts": {"build:css": "tailwindcss -c tailwind.config.js -i styles/tailwind.src.css -o styles/tailwind.css --minify"}, "devDependencies": {"tailwindcss": "^3.4.0", "autoprefixer": "^10.4.0", "postcss": "^8.4.0"}}

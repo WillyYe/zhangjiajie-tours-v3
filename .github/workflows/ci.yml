@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  test:
+    name: Static audit + E2E / a11y / CWV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Static audit
+        run: npm run test:static
+      - name: E2E + a11y + Core Web Vitals
+        run: npm run test:e2e
+
+  lighthouse:
+    name: Lighthouse CI (performance gate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Measure the LIVE deployed site from the CI runner (US) = real overseas baseline.
+      # NOTE: treosh/lighthouse-ci-action@v12 dropped the `staticDistDir` input; use `urls`.
+      - name: Lighthouse against live site (overseas baseline)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: https://willyye.github.io/zhangjiajie-tours-v3/
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
