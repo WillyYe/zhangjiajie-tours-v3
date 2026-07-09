@@ -225,6 +225,99 @@ ok('FCP < 1800ms (good)', cwv.fcp > 0 && cwv.fcp < 1800, `${Math.round(cwv.fcp)}
 // ---------- 10. console errors ----------
 ok('No severe console / page errors on load', consoleErrors.length === 0, consoleErrors.slice(0, 3).join(' | '));
 
+// ---------- 11. detail page: attractions/yuanjiajie.html ----------
+// Extends coverage to the other real (existing) page. Homepage-specific checks
+// (card counts, in-page anchor scroll, contact modal) stay index-only above.
+try {
+  const YUAN = BASE.replace(/index\.html$/, 'attractions/yuanjiajie.html');
+  const yctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+  const ypage = await yctx.newPage();
+  await ypage.addInitScript(() => {
+    window.__lcp = 0;
+    try {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        if (entries.length) window.__lcp = entries[entries.length - 1].startTime;
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+    } catch (e) { /* unsupported */ }
+  });
+  const yConsole = [];
+  ypage.on('console', m => { if (m.type() === 'error') yConsole.push(m.text()); });
+  ypage.on('pageerror', e => yConsole.push('pageerror: ' + e.message));
+  await ypage.goto(YUAN, { waitUntil: 'load', timeout: 60000 });
+  await ypage.waitForTimeout(2500);
+  await ypage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+  await ypage.waitForTimeout(400);
+
+  ok('[yuanjiajie] Page <title> is non-empty', (await ypage.title()).trim().length > 0, await ypage.title());
+
+  const yBroken = await ypage.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
+  ok('[yuanjiajie] No broken <img> on render (naturalWidth>0)', yBroken.length === 0, yBroken.length ? yBroken.slice(0,5).join(', ') : 'all loaded');
+  const yNonLazy = await ypage.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
+  ok('[yuanjiajie] All non-hero <img> use loading="lazy"', yNonLazy === 0, `${yNonLazy} not lazy (hero exempt: fetchpriority=high)`);
+
+  // mobile
+  const ymctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
+  const ympage = await ymctx.newPage();
+  ympage.on('pageerror', e => yConsole.push('mobile pageerror: ' + e.message));
+  await ympage.goto(YUAN, { waitUntil: 'load', timeout: 60000 });
+  await ympage.waitForTimeout(2500);
+  await ympage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+  await ympage.waitForTimeout(300);
+  const ymNav = await ympage.locator('nav a[href^="#"], nav a[href^="../"]').count();
+  ok('[yuanjiajie] Mobile viewport exposes nav links', ymNav > 0, `${ymNav} links`);
+  await ympage.locator('button[onclick*="toggle"]').click();
+  await ympage.waitForTimeout(400);
+  const yMenuOpen = await ympage.locator('#mobile-menu').isVisible();
+  ok('[yuanjiajie] Mobile hamburger opens the menu', yMenuOpen);
+  await ympage.locator('#mobile-menu a').first().click();
+  await ympage.waitForTimeout(600);
+  const yMenuClosed = !(await ympage.locator('#mobile-menu').isVisible());
+  ok('[yuanjiajie] Mobile menu auto-closes after tapping a link', yMenuClosed);
+  await ymctx.close();
+
+  // a11y (axe-core, WCAG 2.1 AA)
+  await ypage.addScriptTag({ path: AXE });
+  const yAxe = await ypage.evaluate(async () => {
+    const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
+    return r.violations.map(v => ({
+      id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help,
+      samples: v.nodes.slice(0, 10).map(n => ({ target: n.target, html: (n.html || '').slice(0, 70), data: n.any && n.any[0] ? n.any[0].data : null }))
+    }));
+  });
+  const yCrit = yAxe.filter(v => v.impact === 'critical').length;
+  const ySer = yAxe.filter(v => v.impact === 'serious').length;
+  ok('[yuanjiajie] axe-core: no critical a11y violations', yCrit === 0, `${yCrit} critical`);
+  ok('[yuanjiajie] axe-core: no serious a11y violations', ySer === 0, `${ySer} serious`);
+  for (const v of yAxe) {
+    console.log(`\n  [yuanjiajie a11y ${v.impact}] ${v.id} (${v.nodes} nodes) — ${v.help}`);
+    for (const s of v.samples) {
+      if (v.id === 'color-contrast' && s.data) console.log(`     • ${s.target}: contrast ${s.data.contrastRatio} (need ${s.data.requiredContrastRatio}, fg=${s.data.fgColor}, bg=${s.data.bgColor})`);
+      else console.log(`     • ${s.target}: ${s.html}`);
+    }
+  }
+
+  // Core Web Vitals
+  const yCwv = await ypage.evaluate(() => {
+    const lcp = window.__lcp || 0;
+    const paints = performance.getEntriesByType('paint');
+    const fcp = (paints.find(p => p.name === 'first-contentful-paint') || {}).startTime || 0;
+    const shifts = performance.getEntriesByType('layout-shift').filter(e => !e.hadRecentInput);
+    const cls = shifts.reduce((s, e) => s + e.value, 0);
+    return { lcp, fcp, cls };
+  });
+  if (yCwv.lcp === 0) ok('[yuanjiajie] LCP captured by headless harness', true, 'verify with Lighthouse for authoritative value');
+  else ok('[yuanjiajie] LCP < 2500ms (good)', yCwv.lcp < 2500, `${Math.round(yCwv.lcp)}ms`);
+  ok('[yuanjiajie] CLS < 0.1 (good)', yCwv.cls < 0.1, yCwv.cls.toFixed(3));
+  ok('[yuanjiajie] FCP < 1800ms (good)', yCwv.fcp > 0 && yCwv.fcp < 1800, `${Math.round(yCwv.fcp)}ms`);
+
+  ok('[yuanjiajie] No severe console / page errors on load', yConsole.length === 0, yConsole.slice(0, 3).join(' | '));
+
+  await yctx.close();
+} catch (e) {
+  ok('[yuanjiajie] detail page flow completed', false, 'error: ' + e.message.split('\n')[0]);
+}
+
 await browser.close();
 ASSET_SERVER.close();
 

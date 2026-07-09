@@ -110,7 +110,7 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=PlayfairDisplay:ital,wght@0,400;0,600;0,700;1,400&display=swap"></noscript>
 
   <!-- Lucide Icons -->
-  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="https://unpkg.com/lucide@latest" onload="lucide.createIcons()"></script>
 
 
 <style>
@@ -974,7 +974,7 @@
   <!-- ========== Scripts ========== -->
   <script>
     function renderIcons() {
-      if (typeof lucide !== 'undefined') lucide.createIcons();
+      window.addEventListener('load', function(){ if (window.lucide) lucide.createIcons(); });
     }
     renderIcons();
     window.addEventListener('load', renderIcons);

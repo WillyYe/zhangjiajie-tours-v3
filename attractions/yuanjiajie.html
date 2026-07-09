@@ -16,10 +16,11 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"></noscript>
 
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script defer src="https://unpkg.com/lucide@latest" onload="lucide.createIcons()"></script>
 
   <!-- Contact modal functions (defined in a clean script block so they actually execute) -->
   <script>
@@ -90,7 +91,7 @@
 
     /* stone palette shades used only on this page (prebuilt CSS scans index.html, so absent) */
     .bg-stone-100 { background-color: #f5f5f4; }
-    .text-stone-500 { color: #78716c; }
+    .text-stone-600 { color: #57534e; }
     .hover\:bg-stone-200:hover { background-color: #e7e5e4; }
     .hover\:text-stone-700:hover { color: #44403c; }
 
@@ -383,30 +384,30 @@
 
     <!-- Mobile menu -->
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
-      <a href="../" class="block text-stone font-semibold py-2">1. Home</a>
+      <a href="../" class="block text-stone font-semibold py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">1. Home</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">2. Attraction</p>
       <a href="./yuanjiajie.html" class="block text-forest font-bold py-1 pl-3 text-sm">Yuanjiajie / Avatar Mtn ✓</a>
-      <a href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm">Tianzi Mountain</a>
-      <a href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm">Tianmen Mountain</a>
-      <a href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm">Golden Whip Stream</a>
-      <a href="../attractions/grand-canyon.html" class="block text-stone/80 py-1 pl-3 text-sm">Grand Canyon Glass Bridge</a>
-      <a href="../attractions/huangshizhai.html" class="block text-stone/80 py-1 pl-3 text-sm">Huangshizhai</a>
-      <a href="../attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm">Baofeng Lake</a>
-      <a href="../attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm">Yellow Dragon Cave</a>
+      <a href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Tianzi Mountain</a>
+      <a href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Tianmen Mountain</a>
+      <a href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Golden Whip Stream</a>
+      <a href="../attractions/grand-canyon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Grand Canyon Glass Bridge</a>
+      <a href="../attractions/huangshizhai.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Huangshizhai</a>
+      <a href="../attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Baofeng Lake</a>
+      <a href="../attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Yellow Dragon Cave</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">3. Experience</p>
-      <a href="../#exp-avatar" class="block text-stone/80 py-1 pl-3 text-sm">Avatar &amp; Bailong</a>
-      <a href="../#exp-glass" class="block text-stone/80 py-1 pl-3 text-sm">Glass Bridge &amp; Bungee</a>
-      <a href="../#exp-tianmen" class="block text-stone/80 py-1 pl-3 text-sm">Tianmen Mountain</a>
-      <a href="../#exp-heli" class="block text-stone/80 py-1 pl-3 text-sm">Helicopter Tour</a>
-      <a href="../#exp-show" class="block text-stone/80 py-1 pl-3 text-sm">Cultural Shows</a>
-      <a href="../#exp-minority" class="block text-stone/80 py-1 pl-3 text-sm">Minority &amp; Local Life</a>
+      <a href="../#exp-avatar" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Avatar &amp; Bailong</a>
+      <a href="../#exp-glass" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Glass Bridge &amp; Bungee</a>
+      <a href="../#exp-tianmen" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Tianmen Mountain</a>
+      <a href="../#exp-heli" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Helicopter Tour</a>
+      <a href="../#exp-show" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Cultural Shows</a>
+      <a href="../#exp-minority" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Minority &amp; Local Life</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">4. Things to do &amp; Tour</p>
-      <a href="../#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm">Top 8 Must-See Spots</a>
-      <a href="../#tour-day" class="block text-stone/80 py-1 pl-3 text-sm">Day Tours</a>
-      <a href="../#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm">Private Tours</a>
-      <a href="../#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm">VIP Tours</a>
-      <a href="../#hotel" class="block text-stone font-semibold py-2 pt-3">5. Hotel</a>
-      <a href="../#food" class="block text-stone font-semibold py-2">6. Food</a>
+      <a href="../#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Top 8 Must-See Spots</a>
+      <a href="../#tour-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Day Tours</a>
+      <a href="../#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">Private Tours</a>
+      <a href="../#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="document.getElementById('mobile-menu').classList.add('hidden')">VIP Tours</a>
+      <a href="../#hotel" class="block text-stone font-semibold py-2 pt-3" onclick="document.getElementById('mobile-menu').classList.add('hidden')">5. Hotel</a>
+      <a href="../#food" class="block text-stone font-semibold py-2" onclick="document.getElementById('mobile-menu').classList.add('hidden')">6. Food</a>
       <a href="javascript:void(0)" onclick="openContactModal(event);document.getElementById('mobile-menu').classList.add('hidden')" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</a>
       <a href="https://wa.me/8618777358302" target="_blank" class="block text-center bg-forest text-white font-semibold py-2.5 rounded-full mt-3">WhatsApp Us</a>
     </div>
@@ -414,7 +415,7 @@
 
   <!-- ========== HERO ========== -->
   <section id="hero" class="relative min-h-[78vh] flex items-end overflow-hidden">
-    <img id="heroImg" src="../images/yuanjiajie-avatar.webp" alt="The sandstone peaks of Yuanjiajie, the real-life Avatar Hallelujah Mountains"
+    <img id="heroImg" src="../images/yuanjiajie-avatar.webp" fetchpriority="high" alt="The sandstone peaks of Yuanjiajie, the real-life Avatar Hallelujah Mountains"
          class="absolute inset-0 w-full h-full object-cover" style="transform:scale(1.12);" />
     <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,58,42,0.35) 0%, rgba(26,58,42,0.45) 45%, rgba(26,58,42,0.85) 100%);"></div>
 
@@ -469,7 +470,7 @@
             <p>
               Unlike the green river valley of Golden Whip Stream, Yuanjiajie is a <strong class="text-forest">high plateau</strong>. You walk narrow cliff-edge paths with drops on both sides, looking down into a forest of stone peaks. After rain, the valley fills with a rolling <strong class="text-forest">sea of clouds</strong> and the pillar tops seem to float — that's the postcard shot every traveler comes for.
             </p>
-            <p class="text-sm text-stone/60">
+            <p class="text-sm text-stone-600">
               <em>Quick reality check: the film's floating mountains were made on a computer, but the inspiration is 100% real — the "Hallelujah Mountain" (哈利路亚山) you'll see here is the actual peak.</em>
             </p>
           </div>
@@ -478,7 +479,7 @@
         <!-- Highlights -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Top highlights</h2>
-          <p class="text-stone/70 mb-8 max-w-2xl">Five signature spots along the plateau loop — each a short walk apart.</p>
+          <p class="text-stone-600 mb-8 max-w-2xl">Five signature spots along the plateau loop — each a short walk apart.</p>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
@@ -540,7 +541,7 @@
         <!-- Recommended Routes -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Recommended routes</h2>
-          <p class="text-stone/70 mb-8 max-w-2xl">Two ways to see Yuanjiajie — pick by time and energy.</p>
+          <p class="text-stone-600 mb-8 max-w-2xl">Two ways to see Yuanjiajie — pick by time and energy.</p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Classic -->
@@ -549,7 +550,7 @@
                 <span class="w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center"><i data-lucide="zap" class="w-5 h-5"></i></span>
                 <div>
                   <h3 class="font-display text-xl text-forest">Classic loop</h3>
-                  <p class="text-xs text-stone/60">1.5–2 hours · elevator up + shuttle down</p>
+                  <p class="text-xs text-stone-600">1.5–2 hours · elevator up + shuttle down</p>
                 </div>
               </div>
               <div class="text-sm text-stone/85 space-y-0">
@@ -567,7 +568,7 @@
                 <span class="w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center"><i data-lucide="footprints" class="w-5 h-5"></i></span>
                 <div>
                   <h3 class="font-display text-xl text-forest">Hiking route</h3>
-                  <p class="text-xs text-stone/60">4+ hours · strenuous, fewer crowds</p>
+                  <p class="text-xs text-stone-600">4+ hours · strenuous, fewer crowds</p>
                 </div>
               </div>
               <div class="text-sm text-stone/85 space-y-0">
@@ -587,20 +588,20 @@
             <div class="bg-white rounded-2xl border border-sand-dark p-6 text-center">
               <i data-lucide="calendar-heart" class="w-7 h-7 text-gold-dark mx-auto mb-3"></i>
               <p class="font-semibold text-forest mb-1">Apr – May</p>
-              <p class="text-sm text-stone/70">Spring green, comfortable, good cloud days.</p>
+              <p class="text-sm text-stone-600">Spring green, comfortable, good cloud days.</p>
             </div>
             <div class="bg-white rounded-2xl border border-sand-dark p-6 text-center">
               <i data-lucide="calendar-heart" class="w-7 h-7 text-gold-dark mx-auto mb-3"></i>
               <p class="font-semibold text-forest mb-1">Sep – Nov</p>
-              <p class="text-sm text-stone/70">Crisp air, clear skies, best visibility.</p>
+              <p class="text-sm text-stone-600">Crisp air, clear skies, best visibility.</p>
             </div>
             <div class="bg-white rounded-2xl border border-sand-dark p-6 text-center">
               <i data-lucide="cloud-fog" class="w-7 h-7 text-gold-dark mx-auto mb-3"></i>
               <p class="font-semibold text-forest mb-1">After rain</p>
-              <p class="text-sm text-stone/70">Mornings right after rain = sea of clouds.</p>
+              <p class="text-sm text-stone-600">Mornings right after rain = sea of clouds.</p>
             </div>
           </div>
-          <p class="text-sm text-stone/60 mt-4">Avoid: heavy summer fog can shroud the peaks for hours; National Day (Oct 1–7) and summer holidays mean long elevator queues.</p>
+          <p class="text-sm text-stone-600 mt-4">Avoid: heavy summer fog can shroud the peaks for hours; National Day (Oct 1–7) and summer holidays mean long elevator queues.</p>
         </section>
 
         <!-- Travel tips -->
@@ -662,7 +663,7 @@
               <p class="text-stone/85"><strong class="text-forest">Alternative entry.</strong> From the Forest Park South Gate you can also reach Yuanjiajie via shuttle, but it's a longer transfer.</p>
             </div>
           </div>
-          <p class="text-sm text-stone/60 mt-4">No metro or ride-hail inside the park — the official shuttle buses are the only way between gates. Keep your passport for ticket check.</p>
+          <p class="text-sm text-stone-600 mt-4">No metro or ride-hail inside the park — the official shuttle buses are the only way between gates. Keep your passport for ticket check.</p>
         </section>
 
         <!-- Ticket & hours -->
@@ -680,7 +681,7 @@
               <tr><td>Best months</td><td>April–May, September–November</td></tr>
             </tbody>
           </table>
-          <p class="text-sm text-stone/60 mt-4">Prices are reference values for international visitors and may change by season — confirm at the official gate. The combo ticket covers multiple entries over 4 days, so you can return for a clear-sky morning.</p>
+          <p class="text-sm text-stone-600 mt-4">Prices are reference values for international visitors and may change by season — confirm at the official gate. The combo ticket covers multiple entries over 4 days, so you can return for a clear-sky morning.</p>
         </section>
 
       </main>
@@ -691,13 +692,13 @@
           <div class="facts-card bg-white rounded-2xl border border-sand-dark p-7 mb-5">
             <h3 class="font-display text-xl text-forest mb-5 pb-4 border-b border-sand-dark">Quick facts</h3>
             <dl class="space-y-3.5 text-sm">
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Elevation</dt><dd class="font-semibold text-forest text-right">~1,074 m</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Area</dt><dd class="font-semibold text-forest text-right">~12 km²</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Best season</dt><dd class="font-semibold text-forest text-right">Apr–May · Sep–Nov</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Suggested visit</dt><dd class="font-semibold text-forest text-right">2–4 hours</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Opening hours</dt><dd class="font-semibold text-forest text-right">07:00–17:00</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Ticket</dt><dd class="font-semibold text-forest text-right">¥227 + ¥65 elev.</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone/60">Type</dt><dd class="font-semibold text-forest text-right">UNESCO WHS</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Elevation</dt><dd class="font-semibold text-forest text-right">~1,074 m</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Area</dt><dd class="font-semibold text-forest text-right">~12 km²</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Best season</dt><dd class="font-semibold text-forest text-right">Apr–May · Sep–Nov</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Suggested visit</dt><dd class="font-semibold text-forest text-right">2–4 hours</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Opening hours</dt><dd class="font-semibold text-forest text-right">07:00–17:00</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Ticket</dt><dd class="font-semibold text-forest text-right">¥227 + ¥65 elev.</dd></div>
+              <div class="flex justify-between gap-4"><dt class="text-stone-600">Type</dt><dd class="font-semibold text-forest text-right">UNESCO WHS</dd></div>
             </dl>
             <button onclick="openContactModal(event)" class="mt-6 w-full bg-forest hover:bg-forest-light text-white font-semibold py-3.5 rounded-full transition-colors duration-300 flex items-center justify-center gap-2">
               <i data-lucide="calendar-check" class="w-5 h-5"></i> Plan your visit
@@ -794,7 +795,7 @@
           <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/tianzi-autumn.webp" alt="Tianzi Mountain"></div>
           <div class="p-5">
             <h3 class="font-display text-lg text-forest">Tianzi Mountain</h3>
-            <p class="text-xs text-stone/60 mt-1">天子山 · Sea of clouds &amp; imperial pillars</p>
+            <p class="text-xs text-stone-600 mt-1">天子山 · Sea of clouds &amp; imperial pillars</p>
           </div>
         </a>
 
@@ -802,7 +803,7 @@
           <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/peaks-panorama.webp" alt="Tianmen Mountain"></div>
           <div class="p-5">
             <h3 class="font-display text-lg text-forest">Tianmen Mountain</h3>
-            <p class="text-xs text-stone/60 mt-1">天门山 · 99 bends &amp; glass walkway</p>
+            <p class="text-xs text-stone-600 mt-1">天门山 · 99 bends &amp; glass walkway</p>
           </div>
         </a>
 
@@ -810,7 +811,7 @@
           <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/huangshizhai-winter.webp" alt="Huangshizhai"></div>
           <div class="p-5">
             <h3 class="font-display text-lg text-forest">Huangshizhai</h3>
-            <p class="text-xs text-stone/60 mt-1">黄石寨 · Classic panorama loop</p>
+            <p class="text-xs text-stone-600 mt-1">黄石寨 · Classic panorama loop</p>
           </div>
         </a>
 
@@ -818,7 +819,7 @@
           <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/jinbianxi-stream.webp" alt="Golden Whip Stream"></div>
           <div class="p-5">
             <h3 class="font-display text-lg text-forest">Golden Whip Stream</h3>
-            <p class="text-xs text-stone/60 mt-1">金鞭溪 · Family-friendly riverside walk</p>
+            <p class="text-xs text-stone-600 mt-1">金鞭溪 · Family-friendly riverside walk</p>
           </div>
         </a>
 
@@ -836,7 +837,7 @@
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M10 10h4"/><path d="M10 14h4"/></svg>
             <span class="font-display text-xl text-white tracking-tight">Visit Zhangjiajie</span>
           </div>
-          <p class="text-sm leading-relaxed text-white/50 pr-4">
+          <p class="text-sm leading-relaxed text-white/70 pr-4">
             Your trusted local partner for exploring the Wulingyuan World Heritage Site.
           </p>
         </div>
@@ -881,7 +882,7 @@
       </div>
 
       <!-- Bottom bar -->
-      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/35">
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/70">
         <p>&copy; 2026 Visit Zhangjiajie. All rights reserved.</p>
         <p>Wulingyuan World Natural Heritage Site, Hunan, China</p>
       </div>
@@ -890,7 +891,7 @@
 
   <!-- ========== Scripts ========== -->
   <script>
-    if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+    window.addEventListener('load', function(){ if (window.lucide) lucide.createIcons(); });
 
     // Fade-in on scroll
     const observer = new IntersectionObserver((entries) => {
@@ -933,7 +934,7 @@
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeContactModal()"></div>
     <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
       <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 md:p-10 text-center transform scale-95 opacity-0 transition-all duration-300 pointer-events-auto" id="contactModalPanel">
-        <button onclick="closeContactModal()" aria-label="Close" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-700 transition-colors">
+        <button onclick="closeContactModal()" aria-label="Close" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-700 transition-colors">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4l8 8M12 4L4 12"/></svg>
         </button>
         <div class="w-14 h-14 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-5">
