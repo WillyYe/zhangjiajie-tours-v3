@@ -117,7 +117,7 @@
     body { font-family: 'Inter', system-ui, sans-serif; }
 
     .hero-bg {
-      background-image: linear-gradient(to bottom, rgba(26,58,42,0.3) 0%, rgba(26,58,42,0.5) 50%, rgba(26,58,42,0.85) 100%), url('images/hero-tianzi-clouds.jpg');
+      background-image: linear-gradient(to bottom, rgba(26,58,42,0.3) 0%, rgba(26,58,42,0.5) 50%, rgba(26,58,42,0.85) 100%), url('images/hero-tianzi-clouds.webp');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -341,7 +341,7 @@
               <div class="grid grid-cols-2 gap-x-10 gap-y-1">
                 <div>
                   <p class="mega-col-title">Wulingyuan Core</p>
-                  <a href="#attraction-yuanjiajie" class="mega-link">🏔️ Yuanjiajie / Avatar Mtn (袁家界)</a>
+                  <a href="attractions/yuanjiajie.html" class="mega-link">🏔️ Yuanjiajie / Avatar Mtn (袁家界)</a>
                   <a href="#attraction-tianzi" class="mega-link">⛰️ Tianzi Mountain (天子山)</a>
                   <a href="#attraction-jinbian" class="mega-link">🐒 Golden Whip Stream (金鞭溪)</a>
                   <a href="#attraction-huangshizhai" class="mega-link">🔭 Huangshizhai (黄石寨)</a>
@@ -444,7 +444,7 @@
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
       <a href="#home" class="block text-stone font-semibold py-2">1. Home</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">2. Attraction</p>
-      <a href="#attraction-yuanjiajie" class="block text-stone/80 py-1 pl-3 text-sm">Yuanjiajie / Avatar Mtn</a>
+      <a href="attractions/yuanjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm">Yuanjiajie / Avatar Mtn</a>
       <a href="#attraction-tianzi" class="block text-stone/80 py-1 pl-3 text-sm">Tianzi Mountain</a>
       <a href="#attraction-tianmen" class="block text-stone/80 py-1 pl-3 text-sm">Tianmen Mountain</a>
       <a href="#attraction-jinbian" class="block text-stone/80 py-1 pl-3 text-sm">Golden Whip Stream</a>
@@ -551,16 +551,16 @@
       <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
         <!-- 1. Yuanjiajie (Avatar Mountains) -->
-        <div id="attraction-yuanjiajie" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a href="attractions/yuanjiajie.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="800" height="450" loading="lazy" decoding="async" src="images/yuanjiajie-avatar.webp" alt="Yuanjiajie Avatar Mountains" class="w-full h-full object-cover">
+            <img width="800" height="450" loading="lazy" decoding="async" src="images/yuanjiajie-avatar.webp" alt="Yuanjiajie Avatar Mountains" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-forest/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Avatar · 阿凡达</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Yuanjiajie (Avatar Mountains)</h3>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Yuanjiajie (Avatar Mountains)</h3>
             <p class="text-stone/60 text-sm leading-relaxed">The real-life Pandora — sandstone pillars that inspired Avatar's Hallelujah Mountains. Ride the Bailong Elevator and walk the Avatar viewpoint.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 2. Tianzi Mountain -->
         <div id="attraction-tianzi" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
