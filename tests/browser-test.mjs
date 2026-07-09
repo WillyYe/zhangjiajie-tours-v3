@@ -161,7 +161,7 @@ ok('Mobile hamburger opens the menu', menuOpen);
 await mpage.screenshot({ path: path.join(SHOT_DIR, 'mobile-menu.png') });
 
 // tap a link that triggers closeMobileMenu → menu auto-closes
-await mpage.locator('#mobile-menu a[onclick*="closeMobileMenu"]').click();
+await mpage.locator('#mobile-menu a[onclick*="closeMobileMenu"]').first().click();
 await mpage.waitForTimeout(600);
 const menuClosed = !(await mpage.locator('#mobile-menu').isVisible());
 ok('Mobile menu auto-closes after tapping a close-wired link', menuClosed);

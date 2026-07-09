@@ -19,8 +19,8 @@ module.exports = {
         'forest-light': '#2d5a3d',
         sand: '#f5f0e8',
         'sand-dark': '#e8e0d4',
-        gold: '#c9a96e',
-        'gold-dark': '#b08d4f',
+        gold: '#806021',
+        'gold-dark': '#6b521a',
         stone: {
           DEFAULT: '#3a3a3a',
           50: '#fafaf9',
