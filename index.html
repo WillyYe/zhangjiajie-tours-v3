@@ -7,8 +7,12 @@
   <meta name="description" content="Zhangjiajie travel guide & private tours for international travelers. Plan your trip with local experts — Wulingyuan peaks, itineraries, best time to visit, and how to get there.">
 
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com">
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Contact Modal logic. NOTE: a <script src="..."> ignores any inline body,
+       so these handlers MUST live in their own <script> (this was the bug that
+       broke the modal on production). -->
+  <script>
     // ========== Contact Modal ==========
     function openContactModal(e) {
       if (e) e.preventDefault();
@@ -46,6 +50,11 @@
       if (e.key === 'Escape') closeContactModal();
     }
 
+    // Close the mobile hamburger menu (called from mobile "Contact us" link)
+    function closeMobileMenu() {
+      var mm = document.getElementById('mobile-menu');
+      if (mm) mm.classList.add('hidden');
+    }
   </script>
 
   <!-- Google Fonts -->
