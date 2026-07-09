@@ -269,7 +269,7 @@
       <a href="#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm">VIP Tours</a>
       <a href="#hotel" class="block text-stone font-semibold py-2 pt-3">5. Hotel</a>
       <a href="#food" class="block text-stone font-semibold py-2">6. Food</a>
-      <a href="javascript:void(0)" onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</a>
+      <a href="javascript:void(0)" onclick="openContactModal(event);document.getElementById('mobile-menu').classList.add('hidden')" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</a>
       <a href="https://wa.me/8618777358302" target="_blank" class="block text-center bg-forest text-white font-semibold py-2.5 rounded-full mt-3">WhatsApp Us</a>
     </div>
   </header>
@@ -286,7 +286,7 @@
         Where Mountains<br>Float in the Clouds
       </h1>
       <p class="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-10 fade-in">
-        Discover the surreal sandstone peaks that inspired <em>Avatar</em>. Walk ancient streams beneath towering pillars. Experience Zhangjiajie like never before — with the #1 local team that knows it best.
+        Discover the surreal sandstone peaks that inspired <em>Avatar</em>. Walk quiet streams beneath towering pillars, and see the real landscape behind the floating mountains — with local guides who know every trail.
       </p>
     </div>
     <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -316,19 +316,19 @@
       <p class="text-gold text-xs font-semibold tracking-[0.3em] uppercase mb-5 fade-in">UNESCO World Heritage &middot; Hunan Province, China</p>
       <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-7 fade-in">Welcome to Zhangjiajie</h2>
 
-      <div class="text-left space-y-5 fade-in">
-        <p class="text-white/90 leading-relaxed text-base md:text-lg">
-          <strong class="text-white">Zhangjiajie (张家界)</strong> is a city in Hunan Province, central China, home to the <strong class="text-white">Wulingyuan Scenic Area</strong> — a <strong class="text-gold">UNESCO World Heritage Site</strong> inscribed in 1992. The park contains over <strong class="text-white">3,000 quartz-sandstone pillars and peaks</strong>, many over 200 meters tall, rising from deep mist-carved valleys. This surreal landscape was the <strong class="text-white">real-world inspiration for the floating "Hallelujah Mountains"</strong> in James Cameron's blockbuster film <em>Avatar</em>. If you've ever wondered <strong>"Where was Avatar filmed?"</strong> — this is it.
-        </p>
+        <div class="text-left space-y-5 fade-in">
+          <p class="text-white/90 leading-relaxed text-base md:text-lg">
+            <strong class="text-white">Zhangjiajie (张家界)</strong> is a city in the mountains of Hunan Province, home to the <strong class="text-gold">Wulingyuan Scenic Area</strong> — a UNESCO World Heritage Site since 1992. More than <strong class="text-white">3,000 quartz-sandstone pillars</strong> rise straight out of the mist here, many over 200 m tall. This is the real landscape behind the floating "Hallelujah Mountains" in the film <em>Avatar</em>.
+          </p>
 
-        <p class="text-white/80 leading-relaxed text-base md:text-lg">
-          For international visitors, <strong class="text-white">Zhangjiajie offers something no other destination can match</strong>: walk on the <strong class="text-white">world's longest cable car ride</strong> up Tianmen Mountain (7.5 km), step onto the <strong class="text-white">world's highest glass-bottom bridge</strong> at Grand Canyon (430 m above ground), hike through ancient forests along Golden Whip Stream where monkeys play at your feet, or take the world's tallest outdoor elevator (Bailong Elevator, 326 m) straight up a cliff face. Whether you're seeking <strong class="text-white">adventure travel, photography, family vacations, or a once-in-a-lifetime nature escape</strong>, Zhangjiajie delivers.
-        </p>
+          <p class="text-white/80 leading-relaxed text-base md:text-lg">
+            There's nowhere else quite like it. Ride the <strong class="text-white">world's longest cable car</strong> up Tianmen Mountain (7.5 km), cross the <strong class="text-white">world's highest glass-bottom bridge</strong> at Grand Canyon, or take the Bailong Elevator — the world's tallest outdoor lift — straight up a cliff face. Walk Golden Whip Stream where wild monkeys roam, and watch the peaks disappear into cloud at sunrise.
+          </p>
 
-        <p class="text-white/75 leading-relaxed text-base">
-          <strong class="text-gold">Why travel with Visit Zhangjiajie?</strong> We are Zhangjiajie's leading inbound travel service team, partnering with 100+ hotels and 50+ licensed travel agencies across the region. Every year we help <strong class="text-white">100,000+ international guests</strong> from the US, UK, Europe, Southeast Asia, and beyond explore this extraordinary land. Our <strong class="text-white">English-speaking guides</strong>, carefully curated itineraries, and transparent pricing mean you can focus on the experience — we handle everything else. From <strong class="text-white">private custom tours</strong> and small-group day trips to VIP luxury packages, we design your trip around <em>your</em> pace, interests, and budget.
-        </p>
-      </div>
+          <p class="text-white/75 leading-relaxed text-base">
+            <strong class="text-gold">Why travel with us?</strong> We're a Zhangjiajie-based team with English-speaking guides, hand-picked itineraries, and clear, upfront pricing — so you can enjoy the trip and leave the logistics to us. Whether it's a <strong class="text-white">private custom tour</strong>, a small-group day trip, or a relaxed family visit, we shape it around <em>your</em> pace and interests.
+          </p>
+        </div>
     </div>
 
     <!-- Understated navigation (de-emphasized — plain text links, no cards) -->
@@ -543,7 +543,7 @@
         <div class="text-center mb-12 fade-in">
           <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Don't Miss These</p>
           <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Top 8 Must-See Spots</h2>
-          <p class="text-stone/70 text-lg max-w-2xl mx-auto">Ranked by popularity among our 100K+ guests.</p>
+          <p class="text-stone/70 text-lg max-w-2xl mx-auto">The spots our guests love most, ranked by how often they actually go.</p>
         </div>
         <div class="overflow-x-auto fade-in">
           <table class="compare-table rounded-xl overflow-hidden shadow-sm">
@@ -596,7 +596,7 @@
               <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center text-2xl">🎒</div>
               <div><h3 class="font-display text-2xl text-forest">Private Tour</h3><p class="text-gold-dark text-sm font-medium">Most Popular ★</p></div>
             </div>
-            <p class="text-stone/70 text-sm mb-4">Fully customized to your pace and interests. Your own guide, car, and flexible itinerary. The way 90% of our guests travel.</p>
+            <p class="text-stone/70 text-sm mb-4">Built around your pace and interests — your own guide, your own car, and a flexible plan that changes when you want it to.</p>
             <ul class="text-stone/60 text-sm space-y-2 mb-6">
               <li>✓ Customizable 3–7 day itinerary</li>
               <li>✓ Private English-speaking guide</li>
@@ -614,7 +614,7 @@
               <div class="w-12 h-12 bg-forest/10 rounded-full flex items-center justify-center text-2xl">💎</div>
               <div><h3 class="font-display text-2xl text-forest">VIP Tour</h3><p class="text-stone/50 text-sm">Ultimate experience</p></div>
             </div>
-            <p class="text-stone/70 text-sm mb-4">Skip every line, enjoy premium hotels, exclusive access spots, and white-glove service. For travelers who want only the best.</p>
+            <p class="text-stone/70 text-sm mb-4">Skip the queues, stay in top hotels, and reach the quietest viewpoints. For travelers who'd rather relax and let us handle the rest.</p>
             <ul class="text-stone/60 text-sm space-y-2 mb-6">
               <li>✓ Fast-track entry (skip lines)</li>
               <li>✓ 5★ luxury hotel suite</li>
