@@ -127,5 +127,27 @@ export const modules = [
       { img: 'huangshizhai-winter.webp', alt: 'Tujia feast spread', title: 'Tujia & Minority Fare', desc: 'Hearty mountain cooking — cured meats, sour veg, and communal feasts from the local Tujia and Miao communities.', href: '../#food', tag: 'Culture' },
       { img: 'jinbianxi-rock.webp', alt: 'Night market street snacks', title: 'Street Snacks & Night Market', desc: 'Grilled skewers, stuffed tofu, and sweet rice cakes — the easy, fun way to graze your way through an evening.', href: '../#food', tag: 'Street' }
     ]
+  },
+
+  {
+    slug: 'plan',
+    file: 'plan/index.html',
+    title: 'Plan Like a Local | Visit Zhangjiajie',
+    metaDesc: 'Plan your Zhangjiajie trip like a local — practical itineraries, best time to visit, where to stay, and how to avoid the crowds, written by our Zhangjiajie-based team.',
+    canonical: 'https://willyye.github.io/zhangjiajie-tours-v3/plan/index.html',
+    heroImg: 'yuanjiajie-mist.webp',
+    heroImgAlt: 'Misty Yuanjiajie quartz-sandstone peaks at dawn',
+    breadcrumb: 'Plan Like a Local',
+    heroEyebrow: 'Travel guides',
+    h1: 'Plan Like a Local',
+    heroDesc: 'Practical, no-fluff Zhangjiajie guides written by our team — itineraries, best time to visit, where to stay, and how to string the sights together.',
+    intro: 'The best Zhangjiajie trips are planned, not stumbled into. These guides cover the decisions that matter most — how many days, where to base yourself, when to come, and how to avoid the crowds.',
+    gridTitle: 'Zhangjiajie travel guides',
+    gridIntro: 'Each guide links to real attractions and booking advice, so you can turn a plan into a trip.',
+    cards: [
+      { img: 'yuanjiajie-avatar.webp', alt: 'Yuanjiajie Avatar Hallelujah Mountain at sunrise', title: 'Zhangjiajie Itinerary: 3, 4, or 5 Days', desc: 'A practical day-by-day plan for 3, 4, and 5 days — covering Yuanjiajie, Tianzi Mountain, Golden Whip Stream, Tianmen Mountain, and the Grand Canyon.', href: './zhangjiajie-itinerary.html', date: '2026-03-12', readingTime: '9 min read', tags: ['Itinerary', 'Planning', 'First-timer'] },
+      { img: 'tianzi-autumn.webp', alt: 'Autumn colors on Tianzi Mountain ridges', title: 'Best Time to Visit Zhangjiajie', desc: 'Month-by-month weather, crowd levels, and what to expect on the peaks — plus the two weeks to avoid.', href: './best-time-to-visit-zhangjiajie.html', date: '2026-02-26', readingTime: '7 min read', tags: ['Weather', 'Planning', 'Seasons'] },
+      { img: 'gallery-painting.webp', alt: 'Scenic valley view near Wulingyuan', title: 'Zhangjiajie vs Wulingyuan: Where to Base Your Trip', desc: 'Zhangjiajie city or Wulingyuan? A straight comparison of transport, park access, scenery, and hotels.', href: './zhangjiajie-vs-wulingyuan.html', date: '2026-03-05', readingTime: '6 min read', tags: ['Planning', 'Where to stay', 'Wulingyuan'] }
+    ]
   }
 ];

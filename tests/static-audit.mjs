@@ -11,7 +11,7 @@ const imagesDir = path.join(ROOT, 'images');
 // Modules: attractions, experiences, tours, hotels, food (each is a first-level hub
 // plus, for attractions, the 8 detail pages).
 const pages = ['index.html'];
-const moduleDirs = ['attractions', 'experiences', 'tours', 'hotels', 'food'];
+const moduleDirs = ['attractions', 'experiences', 'tours', 'hotels', 'food', 'plan'];
 for (const dir of moduleDirs) {
   const d = path.join(ROOT, dir);
   if (fs.existsSync(d)) {

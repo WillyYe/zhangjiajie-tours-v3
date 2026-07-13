@@ -19,12 +19,18 @@ const esc = (s) => String(s)
 const tpl = fs.readFileSync(TEMPLATE, 'utf8');
 
 function cardHtml(c) {
+  const meta = (c.date && c.readingTime)
+    ? `<p class="text-gold-dark text-xs font-bold uppercase tracking-[0.15em] mb-2">${c.date} · ${c.readingTime}</p>`
+    : `<p class="module-tag">${esc(c.tag)}</p>`;
+  const tags = Array.isArray(c.tags) && c.tags.length
+    ? `<div>${c.tags.map(t => `<span class="module-tag">${esc(t)}</span>`).join(' ')}</div>`
+    : '';
   return `        <a href="${c.href}" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
           <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/${c.img}" alt="${esc(c.alt)}"></div>
           <div class="p-6">
-            <p class="module-tag">${esc(c.tag)}</p>
+            ${meta}
             <h3 class="font-display text-xl text-forest mb-2 leading-snug">${esc(c.title)}</h3>
-            <p class="text-sm text-stone-600 leading-relaxed mb-4">${esc(c.desc)}</p>
+            <p class="text-sm text-stone-600 leading-relaxed mb-4">${esc(c.desc)}</p>${tags ? '\n            ' + tags : ''}
           </div>
         </a>`;
 }
@@ -37,6 +43,8 @@ function itemListJson(m) {
       url = dir + c.href.slice(2);
     } else if (c.href.startsWith('../#')) {
       url = SITE_BASE + c.href.slice(3);
+    } else if (/^https?:/i.test(c.href)) {
+      url = c.href;
     } else {
       url = SITE_BASE;
     }

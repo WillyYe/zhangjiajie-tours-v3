@@ -102,6 +102,41 @@ await page.waitForTimeout(900);
 const foodVisible = await page.locator('#food').isVisible();
 ok('Nav "Food" scrolls to #food target (anchor resolves)', foodVisible, `visible=${foodVisible}`);
 
+// ---------- 4b. cross-page nav to module hub pages ----------
+try {
+  const navToHub = await page.locator('nav a[href="attractions/index.html"]').first();
+  await navToHub.scrollIntoViewIfNeeded();
+  await navToHub.click();
+  await page.waitForLoadState('load', { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const hubUrl = page.url();
+  const hubTitle = await page.title();
+  ok('Nav "Attractions" navigates cross-page to hub', hubUrl.endsWith('attractions/index.html'), hubUrl);
+  ok('Hub page loads with expected title', /Attraction/i.test(hubTitle), hubTitle);
+  // return to homepage so subsequent checks (contact modal etc.) still run here
+  await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
+  await page.waitForTimeout(500);
+} catch (e) {
+  ok('Nav "Attractions" cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
+}
+
+// ---------- 4c. cross-page nav to Plan Like a Local hub ----------
+try {
+  const navToPlan = await page.locator('nav a[href="plan/index.html"]').first();
+  await navToPlan.scrollIntoViewIfNeeded();
+  await navToPlan.click();
+  await page.waitForLoadState('load', { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const planUrl = page.url();
+  const planTitle = await page.title();
+  ok('Nav "Plan" navigates cross-page to hub', planUrl.endsWith('plan/index.html'), planUrl);
+  ok('Plan hub page loads with expected title', /Plan/i.test(planTitle), planTitle);
+  await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
+  await page.waitForTimeout(500);
+} catch (e) {
+  ok('Nav "Plan" cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
+}
+
 // ---------- 5. Contact modal (v3 id: #contactModal) ----------
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.waitForTimeout(300);
@@ -324,13 +359,109 @@ for (const FILE of DETAIL_PAGES) {
   }
 }
 
-// ---------- 12. first-level module hub pages: 5 module index pages ----------
+// ---------- 11b. Plan Like a Local guide detail pages ----------
+const PLAN_GUIDE_PAGES = [
+  'zhangjiajie-itinerary.html', 'best-time-to-visit-zhangjiajie.html', 'zhangjiajie-vs-wulingyuan.html',
+];
+for (const FILE of PLAN_GUIDE_PAGES) {
+  const URL = BASE.replace(/index\.html$/, 'plan/' + FILE);
+  try {
+    const pctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+    const ppage = await pctx.newPage();
+    await ppage.addInitScript(() => {
+      window.__lcp = 0;
+      try {
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          if (entries.length) window.__lcp = entries[entries.length - 1].startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (e) { /* unsupported */ }
+    });
+    const pConsole = [];
+    ppage.on('console', m => { if (m.type() === 'error') pConsole.push(m.text()); });
+    ppage.on('pageerror', e => pConsole.push('pageerror: ' + e.message));
+    await ppage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await ppage.waitForTimeout(2500);
+    await ppage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await ppage.waitForTimeout(400);
+
+    ok(`[plan/${FILE}] Page <title> is non-empty`, (await ppage.title()).trim().length > 0, await ppage.title());
+
+    const pBroken = await ppage.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
+    ok(`[plan/${FILE}] No broken <img> on render (naturalWidth>0)`, pBroken.length === 0, pBroken.length ? pBroken.slice(0,5).join(', ') : 'all loaded');
+    const pNonLazy = await ppage.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
+    ok(`[plan/${FILE}] All non-hero <img> use loading="lazy"`, pNonLazy === 0, `${pNonLazy} not lazy (hero exempt: fetchpriority=high)`);
+
+    // mobile
+    const pmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
+    const pmpage = await pmctx.newPage();
+    pmpage.on('pageerror', e => pConsole.push('mobile pageerror: ' + e.message));
+    await pmpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await pmpage.waitForTimeout(2500);
+    await pmpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await pmpage.waitForTimeout(300);
+    const pmNav = await pmpage.locator('nav a[href^="#"], nav a[href^="../"]').count();
+    ok(`[plan/${FILE}] Mobile viewport exposes nav links`, pmNav > 0, `${pmNav} links`);
+    await pmpage.locator('button[onclick*="toggle"]').click();
+    await pmpage.waitForTimeout(400);
+    const pMenuOpen = await pmpage.locator('#mobile-menu').isVisible();
+    ok(`[plan/${FILE}] Mobile hamburger opens the menu`, pMenuOpen);
+    await pmpage.locator('#mobile-menu a').first().click();
+    await pmpage.waitForTimeout(600);
+    const pMenuClosed = !(await pmpage.locator('#mobile-menu').isVisible());
+    ok(`[plan/${FILE}] Mobile menu auto-closes after tapping a link`, pMenuClosed);
+    await pmctx.close();
+
+    // a11y (axe-core, WCAG 2.1 AA)
+    await ppage.addScriptTag({ path: AXE });
+    const pAxe = await ppage.evaluate(async () => {
+      const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
+      return r.violations.map(v => ({
+        id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help,
+        samples: v.nodes.slice(0, 10).map(n => ({ target: n.target, html: (n.html || '').slice(0, 70), data: n.any && n.any[0] ? n.any[0].data : null }))
+      }));
+    });
+    const pCrit = pAxe.filter(v => v.impact === 'critical').length;
+    const pSer = pAxe.filter(v => v.impact === 'serious').length;
+    ok(`[plan/${FILE}] axe-core: no critical a11y violations`, pCrit === 0, `${pCrit} critical`);
+    ok(`[plan/${FILE}] axe-core: no serious a11y violations`, pSer === 0, `${pSer} serious`);
+    for (const v of pAxe) {
+      console.log(`\n  [plan/${FILE} a11y ${v.impact}] ${v.id} (${v.nodes} nodes) — ${v.help}`);
+      for (const s of v.samples) {
+        if (v.id === 'color-contrast' && s.data) console.log(`     • ${s.target}: contrast ${s.data.contrastRatio} (need ${s.data.requiredContrastRatio}, fg=${s.data.fgColor}, bg=${s.data.fgColor}`);
+        else console.log(`     • ${s.target}: ${s.html}`);
+      }
+    }
+
+    // Core Web Vitals
+    const pCwv = await ppage.evaluate(() => {
+      const lcp = window.__lcp || 0;
+      const paints = performance.getEntriesByType('paint');
+      const fcp = (paints.find(p => p.name === 'first-contentful-paint') || {}).startTime || 0;
+      const shifts = performance.getEntriesByType('layout-shift').filter(e => !e.hadRecentInput);
+      const cls = shifts.reduce((s, e) => s + e.value, 0);
+      return { lcp, fcp, cls };
+    });
+    if (pCwv.lcp === 0) ok(`[plan/${FILE}] LCP captured by headless harness`, true, 'verify with Lighthouse for authoritative value');
+    else ok(`[plan/${FILE}] LCP < 2500ms (good)`, pCwv.lcp < 2500, `${Math.round(pCwv.lcp)}ms`);
+    ok(`[plan/${FILE}] CLS < 0.1 (good)`, pCwv.cls < 0.1, pCwv.cls.toFixed(3));
+    ok(`[plan/${FILE}] FCP < 1800ms (good)`, pCwv.fcp > 0 && pCwv.fcp < 1800, `${Math.round(pCwv.fcp)}ms`);
+
+    ok(`[plan/${FILE}] No severe console / page errors on load`, pConsole.length === 0, pConsole.slice(0, 3).join(' | '));
+
+    await pctx.close();
+  } catch (e) {
+    ok(`[plan/${FILE}] plan guide detail page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
+  }
+}
+
+// ---------- 12. first-level module hub pages: 6 module index pages ----------
 // attractions/index.html, experiences/index.html, tours/index.html,
 // hotels/index.html, food/index.html — each is a listing hub linking to
 // detail pages (attractions) or homepage anchors (other modules, detail TBD).
 const FIRSTLEVEL_PAGES = [
   'attractions/index.html', 'experiences/index.html', 'tours/index.html',
-  'hotels/index.html', 'food/index.html',
+  'hotels/index.html', 'food/index.html', 'plan/index.html',
 ];
 for (const FILE of FIRSTLEVEL_PAGES) {
   const URL = BASE.replace(/index\.html$/, FILE);
