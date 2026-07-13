@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yuanjiajie (袁家界) — Avatar Hallelujah Mountains | Visit Zhangjiajie</title>
-  <meta name="description" content="Yuanjiajie (袁家界) in Zhangjiajie Wulingyuan — the real-life Avatar Hallelujah Mountains. Quick facts, top highlights, recommended routes, tickets, best time to visit and how to get there for international travelers.">
+  <title>{{PAGE_TITLE}}</title>
+  <meta name="description" content="{{META_DESC}}">
 
   <meta name="theme-color" content="#1a3a2a">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E">
-  <link rel="canonical" href="https://willyye.github.io/zhangjiajie-tours-v3/attractions/yuanjiajie.html">
+  <link rel="canonical" href="{{CANONICAL}}">
 
   <!-- Tailwind CSS (prebuilt, static) -->
   <link rel="stylesheet" href="../styles/tailwind.css">
@@ -66,7 +66,7 @@
     body { font-family: 'Inter', system-ui, sans-serif; }
 
     .hero-bg {
-      background-image: linear-gradient(to bottom, rgba(26,58,42,0.3) 0%, rgba(26,58,42,0.5) 50%, rgba(26,58,42,0.85) 100%), url('../images/hero-tianzi-clouds.webp');
+      background-image: linear-gradient(to bottom, rgba(26,58,42,0.3) 0%, rgba(26,58,42,0.5) 50%, rgba(26,58,42,0.85) 100%), url('../images/{{HERO_BG_IMG}}');
       background-size: cover;
       background-position: center;
     }
@@ -288,7 +288,7 @@
               <div class="grid grid-cols-2 gap-x-10 gap-y-1">
                 <div>
                   <p class="mega-col-title">Wulingyuan Core</p>
-                  <a href="./yuanjiajie.html" class="mega-link" aria-current="page">🏔️ Yuanjiajie / Avatar Mtn (袁家界)</a>
+                  <a href="./{{SELF_SLUG}}.html" class="mega-link" aria-current="page">🏔️ {{NAV_SELF}}</a>
                   <a href="../attractions/tianzi.html" class="mega-link">⛰️ Tianzi Mountain (天子山)</a>
                   <a href="../attractions/jinbian.html" class="mega-link">🐒 Golden Whip Stream (金鞭溪)</a>
                   <a href="../attractions/huangshizhai.html" class="mega-link">🔭 Huangshizhai (黄石寨)</a>
@@ -391,7 +391,7 @@
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
       <a href="../" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">1. Home</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">2. Attraction</p>
-      <a href="./yuanjiajie.html" class="block text-forest font-bold py-1 pl-3 text-sm">Yuanjiajie / Avatar Mtn ✓</a>
+      <a href="./{{SELF_SLUG}}.html" class="block text-forest font-bold py-1 pl-3 text-sm">{{NAV_SELF}} ✓</a>
       <a href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianzi Mountain</a>
       <a href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
       <a href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Golden Whip Stream</a>
@@ -420,7 +420,7 @@
 
   <!-- ========== HERO ========== -->
   <section id="hero" class="relative min-h-[78vh] flex items-end overflow-hidden">
-    <img id="heroImg" src="../images/yuanjiajie-avatar.webp" fetchpriority="high" alt="The sandstone peaks of Yuanjiajie, the real-life Avatar Hallelujah Mountains"
+    <img id="heroImg" src="../images/{{HERO_IMG}}" fetchpriority="high" alt="{{HERO_IMG_ALT}}"
          class="absolute inset-0 w-full h-full object-cover" style="transform:scale(1.12);" />
     <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,58,42,0.35) 0%, rgba(26,58,42,0.45) 45%, rgba(26,58,42,0.85) 100%);"></div>
 
@@ -431,14 +431,14 @@
         <span class="text-white/40">/</span>
         <a href="../#attraction" class="hover:text-white transition-colors">Attractions</a>
         <span class="text-white/40">/</span>
-        <span class="text-white font-medium">Yuanjiajie</span>
+        <span class="text-white font-medium">{{BREADCRUMB}}</span>
       </nav>
 
       <span class="inline-block bg-gold/90 text-forest text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-4">UNESCO World Heritage · Wulingyuan</span>
-      <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white leading-[1.05] mb-4">Yuanjiajie</h1>
-      <p class="text-xl md:text-2xl text-white/85 font-display italic mb-5">袁家界 · The Avatar Hallelujah Mountains</p>
+      <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white leading-[1.05] mb-4">{{H1}}</h1>
+      <p class="text-xl md:text-2xl text-white/85 font-display italic mb-5">{{SUBTITLE}}</p>
       <p class="text-white/80 text-base md:text-lg max-w-2xl leading-relaxed">
-        Stand where James Cameron's floating "Hallelujah Mountains" were born. A knife-edge plateau of quartz-sandstone pillars, sea-of-clouds viewpoints and the world's tallest outdoor elevator.
+        {{HERO_INTRO}}
       </p>
     </div>
   </section>
@@ -451,7 +451,7 @@
         <div>
           <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-2">At a glance</p>
           <p class="text-stone/85 text-base md:text-lg leading-relaxed max-w-3xl">
-            <strong class="text-forest">Yuanjiajie (袁家界)</strong> is a plateau of towering sandstone pillars in the Wulingyuan area of Zhangjiajie, Hunan, China — the landscape that inspired the floating &ldquo;Hallelujah Mountains&rdquo; in <em>Avatar</em>. A UNESCO World Heritage site, it sits about 1,074&nbsp;m above sea level, and you can ride to the top in 90 seconds on the Bailong Elevator.
+            {{TLDR}}
           </p>
         </div>
       </div>
@@ -467,206 +467,49 @@
 
         <!-- Intro -->
         <section class="fade-in">
-          <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">Why Yuanjiajie is a must-see</h2>
+          <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">{{INTRO_H2}}</h2>
           <div class="space-y-4 text-stone/85 leading-relaxed text-base md:text-lg">
-            <p>
-              If there's one stop in Zhangjiajie you shouldn't skip, make it this one. Yuanjiajie (袁家界) sits on the northwest edge of the <strong class="text-forest">Wulingyuan Scenic Area</strong>, and it's the viewpoint that gave the world the "Hallelujah Mountains" from the movie <em>Avatar</em> — those quartz-sandstone pillars rising out of the mist are real, and you'll be standing right in front of them.
-            </p>
-            <p>
-              Unlike the green river valley of Golden Whip Stream, Yuanjiajie is a <strong class="text-forest">high plateau</strong>. You walk narrow cliff-edge paths with drops on both sides, looking down into a forest of stone peaks. After rain, the valley fills with a rolling <strong class="text-forest">sea of clouds</strong> and the pillar tops seem to float — that's the postcard shot every traveler comes for.
-            </p>
-            <p class="text-sm text-stone-600">
-              <em>Quick reality check: the film's floating mountains were made on a computer, but the inspiration is 100% real — the "Hallelujah Mountain" (哈利路亚山) you'll see here is the actual peak.</em>
-            </p>
+            {{INTRO_BODY}}
           </div>
         </section>
 
         <!-- Highlights -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Top highlights</h2>
-          <p class="text-stone-600 mb-8 max-w-2xl">Five signature spots along the plateau loop — each a short walk apart.</p>
+          <p class="text-stone-600 mb-8 max-w-2xl">{{HIGHLIGHTS_INTRO}}</p>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
-            <!-- 1 -->
-            <article class="highlight-card card-hover bg-white rounded-2xl overflow-hidden border border-sand-dark">
-              <div class="overflow-hidden"><img class="highlight-img" loading="lazy" decoding="async" src="../images/yuanjiajie-avatar.webp" alt="Avatar Hallelujah Mountain peak"></div>
-              <div class="p-5">
-                <h3 class="font-display text-xl text-forest mb-1">Avatar Hallelujah Mountain</h3>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-2">哈利路亚山</p>
-                <p class="text-sm text-stone/80 leading-relaxed">The star of the show — a 1,074 m quartz-sandstone pillar that inspired the film's floating peaks. The viewing platform here is the busiest (and the best) photo spot in the park.</p>
-              </div>
-            </article>
-
-            <!-- 2 -->
-            <article class="highlight-card card-hover bg-white rounded-2xl overflow-hidden border border-sand-dark">
-              <div class="overflow-hidden"><img class="highlight-img" loading="lazy" decoding="async" src="../images/peaks-panorama.webp" alt="First Bridge Under Heaven natural stone arch"></div>
-              <div class="p-5">
-                <h3 class="font-display text-xl text-forest mb-1">First Bridge Under Heaven</h3>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-2">天下第一桥</p>
-                <p class="text-sm text-stone/80 leading-relaxed">Two peaks fused at the top, leaving a 50 m-long natural stone arch with a sheer drop below — one of the rarest landforms in Wulingyuan.</p>
-              </div>
-            </article>
-
-            <!-- 3 -->
-            <article class="highlight-card card-hover bg-white rounded-2xl overflow-hidden border border-sand-dark">
-              <div class="overflow-hidden"><img class="highlight-img" loading="lazy" decoding="async" src="../images/yuanjiajie-mist.webp" alt="Enchanting Terrace misty viewpoint"></div>
-              <div class="p-5">
-                <h3 class="font-display text-xl text-forest mb-1">Enchanting Terrace</h3>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-2">迷魂台</p>
-                <p class="text-sm text-stone/80 leading-relaxed">A wraparound cliff ledge with the widest view on the plateau. On misty mornings the peaks drift in and out of cloud — the most breathtaking stop, and the name fits.</p>
-              </div>
-            </article>
-
-            <!-- 4 -->
-            <article class="highlight-card card-hover bg-white rounded-2xl overflow-hidden border border-sand-dark">
-              <div class="overflow-hidden"><img class="highlight-img" loading="lazy" decoding="async" src="../images/yangjiajie-wall.webp" alt="Back Garden peak cluster"></div>
-              <div class="p-5">
-                <h3 class="font-display text-xl text-forest mb-1">Back Garden</h3>
-                <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-2">后花园</p>
-                <p class="text-sm text-stone/80 leading-relaxed">A quieter cluster of slender pillars at the far end of the plateau. Far fewer crowds than the avatar platform — a calm place to just take it all in.</p>
-              </div>
-            </article>
-
-            <!-- 5 (full width) -->
-            <article class="highlight-card card-hover bg-white rounded-2xl overflow-hidden border border-sand-dark sm:col-span-2">
-              <div class="grid grid-cols-1 sm:grid-cols-2">
-                <div class="overflow-hidden"><img class="highlight-img sm:h-full" loading="lazy" decoding="async" src="../images/jinbianxi-rock.webp" alt="Bailong Elevator cliff face"></div>
-                <div class="p-5 flex flex-col justify-center">
-                  <h3 class="font-display text-xl text-forest mb-1">Bailong Elevator</h3>
-                  <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-2">百龙天梯 · World's tallest outdoor elevator</p>
-                  <p class="text-sm text-stone/80 leading-relaxed">A 326 m glass elevator built into the cliff face that whisks you from the valley floor to the Yuanjiajie plateau in <strong class="text-forest">90 seconds</strong>. It's the fastest (and most popular) way up — expect queues at peak times.</p>
-                </div>
-              </div>
-            </article>
-
+            {{HIGHLIGHTS}}
           </div>
         </section>
 
         <!-- Recommended Routes -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Recommended routes</h2>
-          <p class="text-stone-600 mb-8 max-w-2xl">Two ways to see Yuanjiajie — pick by time and energy.</p>
+          <p class="text-stone-600 mb-8 max-w-2xl">{{ROUTES_INTRO}}</p>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Classic -->
-            <div class="bg-white rounded-2xl border border-sand-dark p-6 sm:p-7">
-              <div class="flex items-center gap-3 mb-5">
-                <span class="w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center"><i data-lucide="zap" class="w-5 h-5"></i></span>
-                <div>
-                  <h3 class="font-display text-xl text-forest">Classic loop</h3>
-                  <p class="text-xs text-stone-600">1.5–2 hours · elevator up + shuttle down</p>
-                </div>
-              </div>
-              <div class="text-sm text-stone/85 space-y-0">
-                <div class="route-step"><span class="route-dot">1</span><p><strong class="text-forest">Bailong Elevator up</strong> — 90-second ride to the plateau.</p></div>
-                <div class="route-step"><span class="route-dot">2</span><p><strong class="text-forest">Avatar Hallelujah Mountain</strong> — main viewpoint &amp; photos.</p></div>
-                <div class="route-step"><span class="route-dot">3</span><p><strong class="text-forest">First Bridge Under Heaven</strong> — short walk along the ridge.</p></div>
-                <div class="route-step"><span class="route-dot">4</span><p><strong class="text-forest">Enchanting Terrace</strong> — panorama stop.</p></div>
-                <div class="route-step"><span class="route-dot">5</span><p><strong class="text-forest">Back Garden</strong> — quiet finale, then shuttle back down.</p></div>
-              </div>
-            </div>
-
-            <!-- Hiking -->
-            <div class="bg-white rounded-2xl border border-sand-dark p-6 sm:p-7">
-              <div class="flex items-center gap-3 mb-5">
-                <span class="w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center"><i data-lucide="footprints" class="w-5 h-5"></i></span>
-                <div>
-                  <h3 class="font-display text-xl text-forest">Hiking route</h3>
-                  <p class="text-xs text-stone-600">4+ hours · strenuous, fewer crowds</p>
-                </div>
-              </div>
-              <div class="text-sm text-stone/85 space-y-0">
-                <div class="route-step"><span class="route-dot">1</span><p><strong class="text-forest">Enter from Yangjiajie</strong> side or hike up via Luanchuanpo (乱窜坡) steps.</p></div>
-                <div class="route-step"><span class="route-dot">2</span><p><strong class="text-forest">Climb the ridge</strong> — steep stone steps, real workout, few tour groups.</p></div>
-                <div class="route-step"><span class="route-dot">3</span><p><strong class="text-forest">Connect to the plateau</strong> loop — all five highlights on foot.</p></div>
-                <div class="route-step"><span class="route-dot">4</span><p><strong class="text-forest">Descend</strong> by Bailong Elevator or park shuttle.</p></div>
-              </div>
-            </div>
+            {{ROUTES}}
           </div>
         </section>
 
         <!-- Best time -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">Best time to visit</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            <div class="bg-white rounded-2xl border border-sand-dark p-6 text-center">
-              <i data-lucide="calendar-heart" class="w-7 h-7 text-gold-dark mx-auto mb-3"></i>
-              <p class="font-semibold text-forest mb-1">Apr – May</p>
-              <p class="text-sm text-stone-600">Spring green, comfortable, good cloud days.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-sand-dark p-6 text-center">
-              <i data-lucide="calendar-heart" class="w-7 h-7 text-gold-dark mx-auto mb-3"></i>
-              <p class="font-semibold text-forest mb-1">Sep – Nov</p>
-              <p class="text-sm text-stone-600">Crisp air, clear skies, best visibility.</p>
-            </div>
-            <div class="bg-white rounded-2xl border border-sand-dark p-6 text-center">
-              <i data-lucide="cloud-fog" class="w-7 h-7 text-gold-dark mx-auto mb-3"></i>
-              <p class="font-semibold text-forest mb-1">After rain</p>
-              <p class="text-sm text-stone-600">Mornings right after rain = sea of clouds.</p>
-            </div>
-          </div>
-          <p class="text-sm text-stone-600 mt-4">Avoid: heavy summer fog can shroud the peaks for hours; National Day (Oct 1–7) and summer holidays mean long elevator queues.</p>
+          {{BEST_TIME}}
         </section>
 
         <!-- Travel tips -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-2">Travel tips</h2>
-          <div>
-            <div class="tip-item">
-              <span class="tip-icon"><i data-lucide="users" class="w-5 h-5 text-white"></i></span>
-              <div>
-                <p class="font-semibold text-forest">Beat the elevator queue</p>
-                <p class="text-sm text-stone/75">Bailong Elevator can take <strong>1+ hour</strong> in peak season. Arrive at park opening (07:00) or go late afternoon.</p>
-              </div>
-            </div>
-            <div class="tip-item">
-              <span class="tip-icon"><i data-lucide="cloud-rain" class="w-5 h-5 text-white"></i></span>
-              <div>
-                <p class="font-semibold text-forest">Weather is everything</p>
-                <p class="text-sm text-stone/75">Peaks often vanish in fog. Build in a buffer day; mornings after rain give the best "floating mountains" shot.</p>
-              </div>
-            </div>
-            <div class="tip-item">
-              <span class="tip-icon"><i data-lucide="utensils" class="w-5 h-5 text-white"></i></span>
-              <div>
-                <p class="font-semibold text-forest">Bring water &amp; snacks</p>
-                <p class="text-sm text-stone/75">Food options on the plateau are limited and pricey. Carry at least 1 L water per person.</p>
-              </div>
-            </div>
-            <div class="tip-item">
-              <span class="tip-icon"><i data-lucide="bird" class="w-5 h-5 text-white"></i></span>
-              <div>
-                <p class="font-semibold text-forest">Mind the monkeys</p>
-                <p class="text-sm text-stone/75">Wild macaques near the stream approaches — never feed them and keep bags zipped.</p>
-              </div>
-            </div>
-            <div class="tip-item">
-              <span class="tip-icon"><i data-lucide="bed-double" class="w-5 h-5 text-white"></i></span>
-              <div>
-                <p class="font-semibold text-forest">Stay near the East Gate</p>
-                <p class="text-sm text-stone/75">Wulingyuan (East Gate) has the most hotels and gets you in first — ideal for sunrise cloud days.</p>
-              </div>
-            </div>
-          </div>
+          {{TIPS}}
         </section>
 
         <!-- How to get there -->
         <section class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">How to get there</h2>
           <div class="bg-white rounded-2xl border border-sand-dark p-6 sm:p-8 space-y-0">
-            <div class="route-step"><span class="route-dot">1</span>
-              <p class="text-stone/85"><strong class="text-forest">City → Wulingyuan East Gate.</strong> From Zhangjiajie city center / railway station take a bus to the East Gate (武陵源东门). About <strong>40–60 min, ¥13</strong>.</p>
-            </div>
-            <div class="route-step"><span class="route-dot">2</span>
-              <p class="text-stone/85"><strong class="text-forest">East Gate → Bailong Elevator.</strong> Inside the park, take the shuttle bus to the Bailong Elevator station (~30 min).</p>
-            </div>
-            <div class="route-step"><span class="route-dot">3</span>
-              <p class="text-stone/85"><strong class="text-forest">Elevator up.</strong> Ride Bailong Elevator to the Yuanjiajie plateau in 90 seconds, then follow the loop signs.</p>
-            </div>
-            <div class="route-step"><span class="route-dot">4</span>
-              <p class="text-stone/85"><strong class="text-forest">Alternative entry.</strong> From the Forest Park South Gate you can also reach Yuanjiajie via shuttle, but it's a longer transfer.</p>
-            </div>
+            {{GETTING_THERE}}
           </div>
           <p class="text-sm text-stone-600 mt-4">No metro or ride-hail inside the park — the official shuttle buses are the only way between gates. Keep your passport for ticket check.</p>
         </section>
@@ -679,11 +522,7 @@
               <tr><th>Item</th><th>Detail</th></tr>
             </thead>
             <tbody>
-              <tr><td>Wulingyuan combo ticket</td><td>¥227 — valid 4 days; includes park shuttle bus + insurance</td></tr>
-              <tr><td>Bailong Elevator (one-way)</td><td>¥65</td></tr>
-              <tr><td>Bailong Elevator (round-trip)</td><td>¥130</td></tr>
-              <tr><td>Opening hours</td><td>07:00 – 17:00</td></tr>
-              <tr><td>Best months</td><td>April–May, September–November</td></tr>
+              {{TICKETS}}
             </tbody>
           </table>
           <p class="text-sm text-stone-600 mt-4">Prices are reference values for international visitors and may change by season — confirm at the official gate. The combo ticket covers multiple entries over 4 days, so you can return for a clear-sky morning.</p>
@@ -697,13 +536,7 @@
           <div class="facts-card bg-white rounded-2xl border border-sand-dark p-7 mb-5">
             <h3 class="font-display text-xl text-forest mb-5 pb-4 border-b border-sand-dark">Quick facts</h3>
             <dl class="space-y-3.5 text-sm">
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Elevation</dt><dd class="font-semibold text-forest text-right">~1,074 m</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Area</dt><dd class="font-semibold text-forest text-right">~12 km²</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Best season</dt><dd class="font-semibold text-forest text-right">Apr–May · Sep–Nov</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Suggested visit</dt><dd class="font-semibold text-forest text-right">2–4 hours</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Opening hours</dt><dd class="font-semibold text-forest text-right">07:00–17:00</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Ticket</dt><dd class="font-semibold text-forest text-right">¥227 + ¥65 elev.</dd></div>
-              <div class="flex justify-between gap-4"><dt class="text-stone-600">Type</dt><dd class="font-semibold text-forest text-right">UNESCO WHS</dd></div>
+              {{FACTS}}
             </dl>
             <button onclick="openContactModal(event)" class="mt-6 w-full bg-forest hover:bg-forest-light text-white font-semibold py-3.5 rounded-full transition-colors duration-300 flex items-center justify-center gap-2">
               <i data-lucide="calendar-check" class="w-5 h-5"></i> Plan your visit
@@ -715,7 +548,7 @@
 
           <div class="bg-forest rounded-2xl p-7 text-white">
             <h4 class="font-display text-lg mb-2">Local tip</h4>
-            <p class="text-white/75 text-sm leading-relaxed">Yuanjiajie's avatar platform gets packed by 10 am. Arrive at the East Gate for opening and you'll often have the misty peaks nearly to yourself.</p>
+            <p class="text-white/75 text-sm leading-relaxed">{{LOCAL_TIP}}</p>
           </div>
         </div>
       </aside>
@@ -728,15 +561,10 @@
     <div class="max-w-[1400px] mx-auto">
       <div class="text-center mb-10 fade-in">
         <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-3">Gallery</p>
-        <h2 class="font-display text-3xl md:text-4xl text-forest">Scenery of Yuanjiajie &amp; Wulingyuan</h2>
+        <h2 class="font-display text-3xl md:text-4xl text-forest">{{GALLERY_TITLE}}</h2>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div class="gallery-item"><img loading="lazy" decoding="async" class="w-full h-56 object-cover" src="../images/yuanjiajie-avatar.webp" alt="Yuanjiajie avatar peaks"></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" class="w-full h-56 object-cover" src="../images/yuanjiajie-mist.webp" alt="Morning sea of clouds"></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" class="w-full h-56 object-cover" src="../images/peaks-panorama.webp" alt="Sandstone pillars at dawn"></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" class="w-full h-56 object-cover" src="../images/yangjiajie-wall.webp" alt="Wall-like peak formation"></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" class="w-full h-56 object-cover" src="../images/tianzi-autumn.webp" alt="Autumn colors, Tianzi area"></div>
-        <div class="gallery-item"><img loading="lazy" decoding="async" class="w-full h-56 object-cover" src="../images/jinbianxi-rock.webp" alt="Weathered quartz-sandstone"></div>
+        {{GALLERY}}
       </div>
     </div>
   </section>
@@ -749,37 +577,7 @@
         <h2 class="font-display text-3xl md:text-4xl text-forest">Frequently asked questions</h2>
       </div>
       <div class="max-w-3xl mx-auto space-y-4">
-
-        <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-          <h3 class="font-display text-lg md:text-xl text-forest mb-2">Where is Yuanjiajie, and how do I get there from Zhangjiajie city?</h3>
-          <p class="text-stone/80 leading-relaxed text-sm md:text-base">Yuanjiajie sits in the Wulingyuan section of Zhangjiajie National Forest Park, about 40&nbsp;km from Zhangjiajie city. From the city, take a bus to the park's East Gate (roughly 40–60 minutes, around &yen;13), then the park shuttle to the Bailong Elevator, which lifts you to the top plateau in about 90 seconds.</p>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-          <h3 class="font-display text-lg md:text-xl text-forest mb-2">Is the Avatar &ldquo;Hallelujah Mountain&rdquo; real?</h3>
-          <p class="text-stone/80 leading-relaxed text-sm md:text-base">The floating mountain in the film isn't real — but the inspiration is. Yuanjiajie's quartz-sandstone pillars, especially the viewpoint now called Avatar Hallelujah Mountain (once Southern Sky Pillar), are what Cameron's team studied while designing the movie's peaks.</p>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-          <h3 class="font-display text-lg md:text-xl text-forest mb-2">Do I need a separate ticket for the Bailong Elevator?</h3>
-          <p class="text-stone/80 leading-relaxed text-sm md:text-base">Yes. Park entry (about &yen;227, valid 4 days) covers the shuttle buses, but the Bailong Elevator is priced separately at roughly &yen;65 one way. Most visitors ride up and walk or shuttle down to skip the queue.</p>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-          <h3 class="font-display text-lg md:text-xl text-forest mb-2">How long should I plan for Yuanjiajie?</h3>
-          <p class="text-stone/80 leading-relaxed text-sm md:text-base">A half day covers the highlights: the Avatar viewpoint, First Bridge Under Heaven, and Enchanting Terrace. Add the forest walk down or pair it with Tianzi Mountain, and you'll want a full day.</p>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-          <h3 class="font-display text-lg md:text-xl text-forest mb-2">What's the best time of year to visit Yuanjiajie?</h3>
-          <p class="text-stone/80 leading-relaxed text-sm md:text-base">Spring (April–May) and autumn (September–November) are best — mild weather and the clearest chance of the famous sea of clouds. Arrive early; overcast days can shroud the peaks in mist, and elevator queues peak mid-morning.</p>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-          <h3 class="font-display text-lg md:text-xl text-forest mb-2">Can foreign tourists use credit cards, and do I need my passport?</h3>
-          <p class="text-stone/80 leading-relaxed text-sm md:text-base">Bring your passport — it's required to buy park tickets and may be checked at entrances. Cards aren't reliable at small vendors inside the park, so carry some cash (RMB) for snacks, water, and the elevator. Alipay works if you've linked an international card.</p>
-        </div>
-
+        {{FAQ}}
       </div>
     </div>
   </section>
@@ -795,39 +593,7 @@
         <a href="../#attraction" class="hidden sm:inline-flex items-center gap-1 text-sm font-semibold text-forest hover:text-gold-dark transition-colors">View all →</a>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        <a href="../attractions/tianzi.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/tianzi-autumn.webp" alt="Tianzi Mountain"></div>
-          <div class="p-5">
-            <h3 class="font-display text-lg text-forest">Tianzi Mountain</h3>
-            <p class="text-xs text-stone-600 mt-1">天子山 · Sea of clouds &amp; imperial pillars</p>
-          </div>
-        </a>
-
-        <a href="../attractions/tianmen.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/peaks-panorama.webp" alt="Tianmen Mountain"></div>
-          <div class="p-5">
-            <h3 class="font-display text-lg text-forest">Tianmen Mountain</h3>
-            <p class="text-xs text-stone-600 mt-1">天门山 · 99 bends &amp; glass walkway</p>
-          </div>
-        </a>
-
-        <a href="../attractions/huangshizhai.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/huangshizhai-winter.webp" alt="Huangshizhai"></div>
-          <div class="p-5">
-            <h3 class="font-display text-lg text-forest">Huangshizhai</h3>
-            <p class="text-xs text-stone-600 mt-1">黄石寨 · Classic panorama loop</p>
-          </div>
-        </a>
-
-        <a href="../attractions/jinbian.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/jinbianxi-stream.webp" alt="Golden Whip Stream"></div>
-          <div class="p-5">
-            <h3 class="font-display text-lg text-forest">Golden Whip Stream</h3>
-            <p class="text-xs text-stone-600 mt-1">金鞭溪 · Family-friendly riverside walk</p>
-          </div>
-        </a>
-
+        {{RELATED}}
       </div>
     </div>
   </section>
