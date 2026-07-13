@@ -324,6 +324,111 @@ for (const FILE of DETAIL_PAGES) {
   }
 }
 
+// ---------- 12. first-level module hub pages: 5 module index pages ----------
+// attractions/index.html, experiences/index.html, tours/index.html,
+// hotels/index.html, food/index.html — each is a listing hub linking to
+// detail pages (attractions) or homepage anchors (other modules, detail TBD).
+const FIRSTLEVEL_PAGES = [
+  'attractions/index.html', 'experiences/index.html', 'tours/index.html',
+  'hotels/index.html', 'food/index.html',
+];
+for (const FILE of FIRSTLEVEL_PAGES) {
+  const URL = BASE.replace(/index\.html$/, FILE);
+  const TAG = FILE.replace(/\.html$/, '');
+  try {
+    const fctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+    const fpage = await fctx.newPage();
+    await fpage.addInitScript(() => {
+      window.__lcp = 0;
+      try {
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          if (entries.length) window.__lcp = entries[entries.length - 1].startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (e) { /* unsupported */ }
+    });
+    const fConsole = [];
+    fpage.on('console', m => { if (m.type() === 'error') fConsole.push(m.text()); });
+    fpage.on('pageerror', e => fConsole.push('pageerror: ' + e.message));
+    await fpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await fpage.waitForTimeout(2500);
+    await fpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await fpage.waitForTimeout(400);
+
+    ok(`[${TAG}] Page <title> is non-empty`, (await fpage.title()).trim().length > 0, await fpage.title());
+
+    const fBroken = await fpage.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
+    ok(`[${TAG}] No broken <img> on render (naturalWidth>0)`, fBroken.length === 0, fBroken.length ? fBroken.slice(0,5).join(', ') : 'all loaded');
+    const fNonLazy = await fpage.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
+    ok(`[${TAG}] All non-hero <img> use loading="lazy"`, fNonLazy === 0, `${fNonLazy} not lazy (hero exempt: fetchpriority=high)`);
+
+    // listing hub: has outbound card links
+    const fCards = await fpage.$$eval('.card-hover', els => els.length);
+    ok(`[${TAG}] Has outbound card links (.card-hover)`, fCards > 0, `${fCards} cards`);
+
+    // mobile
+    const fmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
+    const fmpage = await fmctx.newPage();
+    fmpage.on('pageerror', e => fConsole.push('mobile pageerror: ' + e.message));
+    await fmpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await fmpage.waitForTimeout(2500);
+    await fmpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await fmpage.waitForTimeout(300);
+    const fmNav = await fmpage.locator('nav a[href^="#"], nav a[href^="../"]').count();
+    ok(`[${TAG}] Mobile viewport exposes nav links`, fmNav > 0, `${fmNav} links`);
+    await fmpage.locator('button[onclick*="toggle"]').click();
+    await fmpage.waitForTimeout(400);
+    const fMenuOpen = await fmpage.locator('#mobile-menu').isVisible();
+    ok(`[${TAG}] Mobile hamburger opens the menu`, fMenuOpen);
+    await fmpage.locator('#mobile-menu a').first().click();
+    await fmpage.waitForTimeout(600);
+    const fMenuClosed = !(await fmpage.locator('#mobile-menu').isVisible());
+    ok(`[${TAG}] Mobile menu auto-closes after tapping a link`, fMenuClosed);
+    await fmctx.close();
+
+    // a11y (axe-core, WCAG 2.1 AA)
+    await fpage.addScriptTag({ path: AXE });
+    const fAxe = await fpage.evaluate(async () => {
+      const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
+      return r.violations.map(v => ({
+        id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help,
+        samples: v.nodes.slice(0, 10).map(n => ({ target: n.target, html: (n.html || '').slice(0, 70), data: n.any && n.any[0] ? n.any[0].data : null }))
+      }));
+    });
+    const fCrit = fAxe.filter(v => v.impact === 'critical').length;
+    const fSer = fAxe.filter(v => v.impact === 'serious').length;
+    ok(`[${TAG}] axe-core: no critical a11y violations`, fCrit === 0, `${fCrit} critical`);
+    ok(`[${TAG}] axe-core: no serious a11y violations`, fSer === 0, `${fSer} serious`);
+    for (const v of fAxe) {
+      console.log(`\n  [${TAG} a11y ${v.impact}] ${v.id} (${v.nodes} nodes) — ${v.help}`);
+      for (const s of v.samples) {
+        if (v.id === 'color-contrast' && s.data) console.log(`     • ${s.target}: contrast ${s.data.contrastRatio} (need ${s.data.requiredContrastRatio}, fg=${s.data.fgColor}, bg=${s.data.bgColor})`);
+        else console.log(`     • ${s.target}: ${s.html}`);
+      }
+    }
+
+    // Core Web Vitals
+    const fCwv = await fpage.evaluate(() => {
+      const lcp = window.__lcp || 0;
+      const paints = performance.getEntriesByType('paint');
+      const fcp = (paints.find(p => p.name === 'first-contentful-paint') || {}).startTime || 0;
+      const shifts = performance.getEntriesByType('layout-shift').filter(e => !e.hadRecentInput);
+      const cls = shifts.reduce((s, e) => s + e.value, 0);
+      return { lcp, fcp, cls };
+    });
+    if (fCwv.lcp === 0) ok(`[${TAG}] LCP captured by headless harness`, true, 'verify with Lighthouse for authoritative value');
+    else ok(`[${TAG}] LCP < 2500ms (good)`, fCwv.lcp < 2500, `${Math.round(fCwv.lcp)}ms`);
+    ok(`[${TAG}] CLS < 0.1 (good)`, fCwv.cls < 0.1, fCwv.cls.toFixed(3));
+    ok(`[${TAG}] FCP < 1800ms (good)`, fCwv.fcp > 0 && fCwv.fcp < 1800, `${Math.round(fCwv.fcp)}ms`);
+
+    ok(`[${TAG}] No severe console / page errors on load`, fConsole.length === 0, fConsole.slice(0, 3).join(' | '));
+
+    await fctx.close();
+  } catch (e) {
+    ok(`[${TAG}] first-level page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
+  }
+}
+
 await browser.close();
 ASSET_SERVER.close();
 

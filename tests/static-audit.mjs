@@ -7,12 +7,17 @@ import path from 'path';
 const ROOT = process.cwd();
 const imagesDir = path.join(ROOT, 'images');
 
-// ---- collect pages: index.html + every attractions/*.html ----
+// ---- collect pages: index.html + every module/*.html ----
+// Modules: attractions, experiences, tours, hotels, food (each is a first-level hub
+// plus, for attractions, the 8 detail pages).
 const pages = ['index.html'];
-const attrDir = path.join(ROOT, 'attractions');
-if (fs.existsSync(attrDir)) {
-  for (const f of fs.readdirSync(attrDir).sort()) {
-    if (f.endsWith('.html')) pages.push(path.join('attractions', f));
+const moduleDirs = ['attractions', 'experiences', 'tours', 'hotels', 'food'];
+for (const dir of moduleDirs) {
+  const d = path.join(ROOT, dir);
+  if (fs.existsSync(d)) {
+    for (const f of fs.readdirSync(d).sort()) {
+      if (f.endsWith('.html')) pages.push(path.join(dir, f));
+    }
   }
 }
 

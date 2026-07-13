@@ -4,6 +4,7 @@
   "scripts": {
     "build:css": "tailwindcss -c tailwind.config.js -i styles/tailwind.src.css -o styles/tailwind.css --minify",
     "build:attractions": "node scripts/build-attractions.mjs",
+    "build:module-index": "node scripts/build-module-index.mjs",
     "test:static": "node tests/static-audit.mjs",
     "test:e2e": "node tests/browser-test.mjs"
   },
