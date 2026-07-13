@@ -137,6 +137,23 @@ try {
   ok('Nav "Plan" cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
 }
 
+// ---------- 4d. homepage "Experiences You Can't Miss" cards navigate cross-page ----------
+try {
+  const expCard = await page.locator('#exp-avatar');
+  await expCard.scrollIntoViewIfNeeded();
+  await expCard.click();
+  await page.waitForLoadState('load', { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const expUrl = page.url();
+  const expTitle = await page.title();
+  ok('Homepage experience card navigates cross-page to detail', expUrl.endsWith('experiences/avatar-bailong-elevator.html'), expUrl);
+  ok('Experience detail page loads with expected title', /Avatar/i.test(expTitle), expTitle);
+  await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
+  await page.waitForTimeout(500);
+} catch (e) {
+  ok('Homepage experience card cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
+}
+
 // ---------- 5. Contact modal (v3 id: #contactModal) ----------
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.waitForTimeout(300);
@@ -452,6 +469,103 @@ for (const FILE of PLAN_GUIDE_PAGES) {
     await pctx.close();
   } catch (e) {
     ok(`[plan/${FILE}] plan guide detail page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
+  }
+}
+
+// ---------- 11c. Experience detail pages (6) ----------
+const EXPERIENCE_PAGES = [
+  'avatar-bailong-elevator.html', 'glass-bridge-bungee.html', 'tianmen-mountain.html',
+  'helicopter-tour.html', 'cultural-shows.html', 'minority-local-life.html',
+];
+for (const FILE of EXPERIENCE_PAGES) {
+  const URL = BASE.replace(/index\.html$/, 'experiences/' + FILE);
+  try {
+    const ectx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+    const epage = await ectx.newPage();
+    await epage.addInitScript(() => {
+      window.__lcp = 0;
+      try {
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          if (entries.length) window.__lcp = entries[entries.length - 1].startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (e) { /* unsupported */ }
+    });
+    const eConsole = [];
+    epage.on('console', m => { if (m.type() === 'error') eConsole.push(m.text()); });
+    epage.on('pageerror', e => eConsole.push('pageerror: ' + e.message));
+    await epage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await epage.waitForTimeout(2500);
+    await epage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await epage.waitForTimeout(400);
+
+    ok(`[experiences/${FILE}] Page <title> is non-empty`, (await epage.title()).trim().length > 0, await epage.title());
+
+    const eBroken = await epage.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
+    ok(`[experiences/${FILE}] No broken <img> on render (naturalWidth>0)`, eBroken.length === 0, eBroken.length ? eBroken.slice(0,5).join(', ') : 'all loaded');
+    const eNonLazy = await epage.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
+    ok(`[experiences/${FILE}] All non-hero <img> use loading="lazy"`, eNonLazy === 0, `${eNonLazy} not lazy (hero exempt: fetchpriority=high)`);
+
+    // mobile
+    const emctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
+    const empage = await emctx.newPage();
+    empage.on('pageerror', e => eConsole.push('mobile pageerror: ' + e.message));
+    await empage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await empage.waitForTimeout(2500);
+    await empage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await empage.waitForTimeout(300);
+    const emNav = await empage.locator('nav a[href^="#"], nav a[href^="../"]').count();
+    ok(`[experiences/${FILE}] Mobile viewport exposes nav links`, emNav > 0, `${emNav} links`);
+    await empage.locator('button[onclick*="toggle"]').click();
+    await empage.waitForTimeout(400);
+    const eMenuOpen = await empage.locator('#mobile-menu').isVisible();
+    ok(`[experiences/${FILE}] Mobile hamburger opens the menu`, eMenuOpen);
+    await empage.locator('#mobile-menu a').first().click();
+    await empage.waitForTimeout(600);
+    const eMenuClosed = !(await empage.locator('#mobile-menu').isVisible());
+    ok(`[experiences/${FILE}] Mobile menu auto-closes after tapping a link`, eMenuClosed);
+    await emctx.close();
+
+    // a11y (axe-core, WCAG 2.1 AA)
+    await epage.addScriptTag({ path: AXE });
+    const eAxe = await epage.evaluate(async () => {
+      const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
+      return r.violations.map(v => ({
+        id: v.id, impact: v.impact, nodes: v.nodes.length, help: v.help,
+        samples: v.nodes.slice(0, 10).map(n => ({ target: n.target, html: (n.html || '').slice(0, 70), data: n.any && n.any[0] ? n.any[0].data : null }))
+      }));
+    });
+    const eCrit = eAxe.filter(v => v.impact === 'critical').length;
+    const eSer = eAxe.filter(v => v.impact === 'serious').length;
+    ok(`[experiences/${FILE}] axe-core: no critical a11y violations`, eCrit === 0, `${eCrit} critical`);
+    ok(`[experiences/${FILE}] axe-core: no serious a11y violations`, eSer === 0, `${eSer} serious`);
+    for (const v of eAxe) {
+      console.log(`\n  [experiences/${FILE} a11y ${v.impact}] ${v.id} (${v.nodes} nodes) — ${v.help}`);
+      for (const s of v.samples) {
+        if (v.id === 'color-contrast' && s.data) console.log(`     • ${s.target}: contrast ${s.data.contrastRatio} (need ${s.data.requiredContrastRatio}, fg=${s.data.fgColor}, bg=${s.data.bgColor})`);
+        else console.log(`     • ${s.target}: ${s.html}`);
+      }
+    }
+
+    // Core Web Vitals
+    const eCwv = await epage.evaluate(() => {
+      const lcp = window.__lcp || 0;
+      const paints = performance.getEntriesByType('paint');
+      const fcp = (paints.find(p => p.name === 'first-contentful-paint') || {}).startTime || 0;
+      const shifts = performance.getEntriesByType('layout-shift').filter(e => !e.hadRecentInput);
+      const cls = shifts.reduce((s, e) => s + e.value, 0);
+      return { lcp, fcp, cls };
+    });
+    if (eCwv.lcp === 0) ok(`[experiences/${FILE}] LCP captured by headless harness`, true, 'verify with Lighthouse for authoritative value');
+    else ok(`[experiences/${FILE}] LCP < 2500ms (good)`, eCwv.lcp < 2500, `${Math.round(eCwv.lcp)}ms`);
+    ok(`[experiences/${FILE}] CLS < 0.1 (good)`, eCwv.cls < 0.1, eCwv.cls.toFixed(3));
+    ok(`[experiences/${FILE}] FCP < 1800ms (good)`, eCwv.fcp > 0 && eCwv.fcp < 1800, `${Math.round(eCwv.fcp)}ms`);
+
+    ok(`[experiences/${FILE}] No severe console / page errors on load`, eConsole.length === 0, eConsole.slice(0, 3).join(' | '));
+
+    await ectx.close();
+  } catch (e) {
+    ok(`[experiences/${FILE}] experience detail page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
   }
 }
 

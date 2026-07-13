@@ -46,16 +46,16 @@ export const modules = [
     heroEyebrow: 'Things to do',
     h1: 'Things to Do in Zhangjiajie',
     heroDesc: 'Ride the world’s tallest outdoor elevator, walk the glass bridge, drift a stream by bamboo raft, or watch Tujia culture come alive — the experiences that turn a scenic stop into a real adventure.',
-    intro: 'Beyond the viewpoints, Zhangjiajie is built for doing. These six experiences are the ones travellers talk about for years — each card jumps to where it happens on our main page, so you can plan around your park days.',
+    intro: 'Beyond the viewpoints, Zhangjiajie is built for doing. These six experiences are the ones travellers talk about for years — each card now opens a dedicated guide with what to expect, how to book, and how to fit it into your trip.',
     gridTitle: 'Six experiences worth the trip',
-    gridIntro: 'Tap any card to jump to the full write-up and booking notes on our main page.',
+    gridIntro: 'Tap any card to open the full experience guide.',
     cards: [
-      { img: 'yuanjiajie-avatar.webp', alt: 'Bailong Elevator against the cliff', title: 'Avatar & Bailong Elevator', desc: 'The 326 m outdoor elevator that lifts you to the Yuanjiajie plateau in about 90 seconds — the fastest way to the Avatar mountains.', href: '../#exp-avatar', tag: 'Iconic' },
-      { img: 'peaks-panorama.webp', alt: 'Glass bridge over the canyon', title: 'Glass Bridge & Bungee', desc: 'Walk the transparent span of the Grand Canyon Glass Bridge, then step off the edge on one of the world’s highest bungee jumps.', href: '../#exp-glass', tag: 'Adrenaline' },
-      { img: 'yangjiajie-wall.webp', alt: 'Tianmen Mountain cable car', title: 'Tianmen Mountain', desc: 'Cable car up, the 99-turn road, the cliffside glass walkway, and the vast natural arch of Heaven’s Gate.', href: '../#exp-tianmen', tag: 'Views' },
-      { img: 'tianzi-snow.webp', alt: 'Aerial view of the peaks', title: 'Helicopter Tour', desc: 'A bird’s-eye loop over the sandstone sea — the only way to take in the whole landscape in one go.', href: '../#exp-heli', tag: 'Aerial' },
-      { img: 'gallery-painting.webp', alt: 'Tujia cultural performance', title: 'Cultural Shows', desc: 'Evening song-and-dance performances of Tujia and Miao heritage, including the large-scale Tianmen Fox Fairy show.', href: '../#exp-show', tag: 'Night' },
-      { img: 'huangshizhai-winter.webp', alt: 'Minority village life', title: 'Minority & Local Life', desc: 'Markets, villages, and food of the Tujia and Miao people who call the Wuling mountains home.', href: '../#exp-minority', tag: 'Culture' }
+      { img: 'yuanjiajie-avatar.webp', alt: 'Bailong Elevator against the cliff', title: 'Avatar & Bailong Elevator', desc: 'The 326 m outdoor elevator that lifts you to the Yuanjiajie plateau in about 90 seconds — the fastest way to the Avatar mountains.', href: './avatar-bailong-elevator.html', tag: 'Iconic' },
+      { img: 'yangjiajie-wall.webp', alt: 'Glass bridge over the canyon', title: 'Glass Bridge & Bungee', desc: 'Walk the transparent span of the Grand Canyon Glass Bridge, then step off the edge on one of the world’s highest bungee jumps.', href: './glass-bridge-bungee.html', tag: 'Adrenaline' },
+      { img: 'peaks-panorama.webp', alt: 'Tianmen Mountain cable car', title: 'Tianmen Mountain', desc: 'Cable car up, the 99-turn road, the cliffside glass walkway, and the vast natural arch of Heaven’s Gate.', href: './tianmen-mountain.html', tag: 'Views' },
+      { img: 'tianzi-snow.webp', alt: 'Aerial view of the peaks', title: 'Helicopter Tour', desc: 'A bird’s-eye loop over the sandstone sea — the only way to take in the whole landscape in one go.', href: './helicopter-tour.html', tag: 'Aerial' },
+      { img: 'gallery-painting.webp', alt: 'Tujia cultural performance', title: 'Cultural Shows', desc: 'Evening song-and-dance performances of Tujia and Miao heritage, including the large-scale Tianmen Fox Fairy show.', href: './cultural-shows.html', tag: 'Night' },
+      { img: 'huangshizhai-winter.webp', alt: 'Minority village life', title: 'Minority & Local Life', desc: 'Markets, villages, and food of the Tujia and Miao people who call the Wuling mountains home.', href: './minority-local-life.html', tag: 'Culture' }
     ]
   },
 

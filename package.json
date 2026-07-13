@@ -6,6 +6,7 @@
     "build:attractions": "node scripts/build-attractions.mjs",
     "build:module-index": "node scripts/build-module-index.mjs",
     "build:plan-guides": "node scripts/build-plan-guides.mjs",
+    "build:experiences": "node scripts/build-experiences.mjs",
     "test:static": "node tests/static-audit.mjs",
     "test:e2e": "node tests/browser-test.mjs"
   },
