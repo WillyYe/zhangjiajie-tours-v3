@@ -79,6 +79,24 @@ ok('Attractions module renders 8 cards', attrCount === 8, `found ${attrCount}`);
 const expCount = await page.locator('#experience [id^="exp-"]').count();
 ok('Experiences module renders 6 cards', expCount === 6, `found ${expCount}`);
 
+// ---------- 2b. each homepage attraction card is a clickable <a> to its detail page ----------
+// Regression guard: previously 7/8 cards were <div> (not navigable) and the
+// mega-menu pointed at in-page #attraction-* anchors instead of real detail pages.
+const ATTR_SLUGS = ['yuanjiajie','tianzi','jinbian','huangshizhai','tianmen','grand-canyon','baofeng','yellow-dragon'];
+for (const slug of ATTR_SLUGS) {
+  const card = page.locator(`#attraction [id="attraction-${slug}"]`);
+  const tag = await card.evaluate(el => el.tagName.toLowerCase()).catch(() => 'NOT_FOUND');
+  ok(`Attraction card "${slug}" is a clickable <a>`, tag === 'a', `tag=${tag}`);
+  const href = await card.getAttribute('href').catch(() => null);
+  ok(`Attraction card "${slug}" links to its detail page`, href === `attractions/${slug}.html`, `href=${href}`);
+}
+
+// ---------- 2c. mega-menu links all 8 attraction detail pages (no dead #anchors) ----------
+const navAttrLinks = await page.$$eval('nav a[href^="attractions/"]', as => as.map(a => a.getAttribute('href')));
+const navSlugs = [...new Set(navAttrLinks.filter(h => h && h !== 'attractions/index.html' && /^attractions\/[a-z-]+\.html$/.test(h)).map(h => h.replace('attractions/','').replace('.html','')))];
+ok('Mega-menu links to all 8 attraction detail pages', navSlugs.length === 8, `${navSlugs.length} unique: ${navSlugs.join(',')}`);
+ok('No dead #attraction-* anchors in nav', !navAttrLinks.some(h => h && h.startsWith('#attraction')), navAttrLinks.filter(h => h && h.startsWith('#attraction')).join(',') || 'none');
+
 // ---------- 3. images ----------
 const broken = await page.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
 ok('No broken <img> on render (naturalWidth>0)', broken.length === 0, broken.length ? broken.slice(0,5).join(', ') : 'all loaded');
@@ -312,6 +330,16 @@ for (const FILE of DETAIL_PAGES) {
     ok(`[${FILE}] No broken <img> on render (naturalWidth>0)`, dBroken.length === 0, dBroken.length ? dBroken.slice(0,5).join(', ') : 'all loaded');
     const dNonLazy = await dpage.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
     ok(`[${FILE}] All non-hero <img> use loading="lazy"`, dNonLazy === 0, `${dNonLazy} not lazy (hero exempt: fetchpriority=high)`);
+
+    // nav active/selected state: landing on a secondary page must highlight its section (bold + dark)
+    const dActive = await dpage.locator('nav a[aria-current="page"]:not(.mega-link)').count();
+    ok(`[${FILE}] Nav marks current section active (exactly 1 aria-current)`, dActive === 1, `${dActive} active`);
+    if (dActive > 0) {
+      const dActiveText = (await dpage.locator('nav a[aria-current="page"]:not(.mega-link)').first().innerText()).trim();
+      ok(`[${FILE}] Active nav item is "Attractions"`, /attraction/i.test(dActiveText), dActiveText);
+      const dWeight = await dpage.locator('nav a[aria-current="page"]:not(.mega-link)').first().evaluate(el => getComputedStyle(el).fontWeight);
+      ok(`[${FILE}] Active nav item is bold (font-weight >= 700)`, parseInt(dWeight, 10) >= 700, `weight ${dWeight}`);
+    }
 
     // mobile
     const dmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
@@ -610,6 +638,10 @@ for (const FILE of FIRSTLEVEL_PAGES) {
     // listing hub: has outbound card links
     const fCards = await fpage.$$eval('.card-hover', els => els.length);
     ok(`[${TAG}] Has outbound card links (.card-hover)`, fCards > 0, `${fCards} cards`);
+
+    // nav active/selected state: hub page must highlight its own section
+    const fActive = await fpage.locator('nav a[aria-current="page"]:not(.mega-link)').count();
+    ok(`[${TAG}] Nav marks current section active (exactly 1 aria-current)`, fActive === 1, `${fActive} active`);
 
     // mobile
     const fmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });

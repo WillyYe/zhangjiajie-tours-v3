@@ -254,6 +254,9 @@
       margin-bottom: 0.25rem;
     }
     .callout p { margin-bottom: 0; }
+  
+    /* selected nav state: bold + dark (加粗加黑) */
+    .nav-link.active{font-weight:700;color:#1a3a2a;}
   </style>
 </head>
 <body class="bg-sand text-stone antialiased">
@@ -329,7 +332,7 @@
 
           <!-- 4. Things to do & Tour -->
           <li class="nav-item h-full flex items-center">
-            <a href="../#tour" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="../tours/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Things to do &amp; Tour
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -337,11 +340,11 @@
               <div class="grid grid-cols-2 gap-8">
                 <div>
                   <p class="mega-col-title">Top Ranked</p>
-                  <a href="../#tour-ranking" class="mega-link">🏆 Top 8 Must-See Spots</a>
+                  <a href="../tours/index.html-ranking" class="mega-link">🏆 Top 8 Must-See Spots</a>
                   <p class="mega-col-title mt-4">Tour Types</p>
-                  <a href="../#tour-day" class="mega-link">📅 Day Tours</a>
-                  <a href="../#tour-private-card" class="mega-link">🎒 Private Tours</a>
-                  <a href="../#tour-vip-card" class="mega-link">💎 VIP Tours</a>
+                  <a href="../tours/index.html-day" class="mega-link">📅 Day Tours</a>
+                  <a href="../tours/index.html-private-card" class="mega-link">🎒 Private Tours</a>
+                  <a href="../tours/index.html-vip-card" class="mega-link">💎 VIP Tours</a>
                 </div>
                 <div>
                   <p class="mega-col-title">Featured</p>
@@ -350,7 +353,7 @@
                     <div class="overlay"></div>
                     <span class="absolute bottom-2 left-3 text-white text-sm font-semibold">All Tours →</span>
                   </a>
-                  <a href="../#tour-private-card" class="mega-link text-forest font-semibold">Most Popular: Private Guide + Car</a>
+                  <a href="../tours/index.html-private-card" class="mega-link text-forest font-semibold">Most Popular: Private Guide + Car</a>
                 </div>
               </div>
             </div>
@@ -413,10 +416,10 @@
       <a href="../experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
       <a href="../experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">4. Things to do &amp; Tour</p>
-      <a href="../#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
-      <a href="../#tour-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
-      <a href="../#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
-      <a href="../#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
+      <a href="../tours/index.html-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
+      <a href="../tours/index.html-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
+      <a href="../tours/index.html-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
+      <a href="../tours/index.html-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
       <a href="../hotels/index.html" class="block text-stone font-semibold py-2 pt-3" onclick="closeMobileMenu()">5. Hotel</a>
       <a href="../food/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">6. Food</a>
       <a href="./index.html" class="block text-forest font-bold py-2" onclick="closeMobileMenu()">7. Plan Like a Local ✓</a>

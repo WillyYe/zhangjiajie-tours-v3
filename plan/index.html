@@ -169,6 +169,9 @@
       outline-offset: 2px;
       border-radius: 4px;
     }
+  
+    /* selected nav state: bold + dark (加粗加黑) */
+    .nav-link.active{font-weight:700;color:#1a3a2a;}
   </style>
 </head>
 <body class="bg-sand text-stone antialiased">
@@ -242,7 +245,7 @@
 
           <!-- 4. Things to do & Tour -->
           <li class="nav-item h-full flex items-center">
-            <a href="../#tour" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="../tours/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Things to do &amp; Tour
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -250,20 +253,20 @@
               <div class="grid grid-cols-2 gap-8">
                 <div>
                   <p class="mega-col-title">Top Ranked</p>
-                  <a href="../#tour-ranking" class="mega-link">🏆 Top 8 Must-See Spots</a>
+                  <a href="../tours/index.html-ranking" class="mega-link">🏆 Top 8 Must-See Spots</a>
                   <p class="mega-col-title mt-4">Tour Types</p>
-                  <a href="../#tour-day" class="mega-link">📅 Day Tours</a>
-                  <a href="../#tour-private-card" class="mega-link">🎒 Private Tours</a>
-                  <a href="../#tour-vip-card" class="mega-link">💎 VIP Tours</a>
+                  <a href="../tours/index.html-day" class="mega-link">📅 Day Tours</a>
+                  <a href="../tours/index.html-private-card" class="mega-link">🎒 Private Tours</a>
+                  <a href="../tours/index.html-vip-card" class="mega-link">💎 VIP Tours</a>
                 </div>
                 <div>
                   <p class="mega-col-title">Featured</p>
-                  <a href="../#tour" class="mega-feature block mb-3">
+                  <a href="../tours/index.html" class="mega-feature block mb-3">
                     <img loading="lazy" decoding="async" src="../images/peaks-panorama.webp" alt="" class="h-28 w-full object-cover">
                     <div class="overlay"></div>
                     <span class="absolute bottom-2 left-3 text-white text-sm font-semibold">All Tours →</span>
                   </a>
-                  <a href="../#tour-private-card" class="mega-link text-forest font-semibold">Most Popular: Private Guide + Car</a>
+                  <a href="../tours/index.html-private-card" class="mega-link text-forest font-semibold">Most Popular: Private Guide + Car</a>
                 </div>
               </div>
             </div>
@@ -271,12 +274,17 @@
 
           <!-- 5. Hotel -->
           <li class="nav-item h-full flex items-center">
-            <a href="../#hotel" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Hotel</a>
+            <a href="../hotels/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Hotel</a>
           </li>
 
           <!-- 6. Food -->
           <li class="nav-item h-full flex items-center">
-            <a href="../#food" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Food</a>
+            <a href="../food/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Food</a>
+          </li>
+
+          <!-- 6b. Plan (current section) -->
+          <li class="nav-item h-full flex items-center">
+            <a href="../plan/index.html" class="active text-sm font-bold text-forest hover:text-forest px-4 h-full flex items-center" aria-current="page">Plan</a>
           </li>
 
           <!-- 7. Contact us -->
@@ -321,13 +329,14 @@
       <a href="../experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
       <a href="../experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">4. Things to do &amp; Tour</p>
-      <a href="../#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
-      <a href="../#tour-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
-      <a href="../#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
-      <a href="../#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
-      <a href="../#hotel" class="block text-stone font-semibold py-2 pt-3" onclick="closeMobileMenu()">5. Hotel</a>
-      <a href="../#food" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">6. Food</a>
-      <a href="javascript:void(0)" onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</a>
+      <a href="../tours/index.html-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
+      <a href="../tours/index.html-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
+      <a href="../tours/index.html-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
+      <a href="../tours/index.html-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
+      <a href="../hotels/index.html" class="block text-stone font-semibold py-2 pt-3" onclick="closeMobileMenu()">5. Hotel</a>
+      <a href="../food/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">6. Food</a>
+      <a href="../plan/index.html" class="block text-forest font-bold py-2" onclick="closeMobileMenu()">Plan ✓</a>
+      <a href="javascript:void(0)" onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">8. Contact us</a>
       <a href="https://wa.me/8618777358302" target="_blank" class="block text-center bg-forest text-white font-semibold py-2.5 rounded-full mt-3">WhatsApp Us</a>
     </div>
   </header>
@@ -428,9 +437,9 @@
           <ul class="space-y-3 text-sm">
             <li><a href="../attractions/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Attractions</a></li>
             <li><a href="../experiences/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Experiences</a></li>
-            <li><a href="../#tour" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Tours &amp; Itineraries</a></li>
-            <li><a href="../#hotel" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Hotels</a></li>
-            <li><a href="../#food" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Local Food</a></li>
+            <li><a href="../tours/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Tours &amp; Itineraries</a></li>
+            <li><a href="../hotels/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Hotels</a></li>
+            <li><a href="../food/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Local Food</a></li>
           </ul>
         </div>
 
