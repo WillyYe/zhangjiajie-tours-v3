@@ -32,6 +32,7 @@ await new Promise(r => ASSET_SERVER.listen(0, '127.0.0.1', r));
 const PORT = ASSET_SERVER.address().port;
 const BASE = process.env.BASE || (`http://127.0.0.1:${PORT}/index.html`);
 const AXE = require.resolve('axe-core/axe.min.js');
+const AXE_SRC = fs.readFileSync(AXE, 'utf8');
 const SHOT_DIR = path.join(ROOT, 'tests', 'screenshots');
 fs.mkdirSync(SHOT_DIR, { recursive: true });
 
@@ -46,6 +47,9 @@ const launchOpts = { args: ['--no-sandbox', '--disable-setuid-sandbox'] };
 if (CHROME) launchOpts.executablePath = CHROME;
 const browser = await chromium.launch(launchOpts);
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+// Reusable contexts for the detail-page loops (avoid ~46 one-off newContext calls)
+const dCtx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
+const mCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
 const page = await ctx.newPage();
 
 // Capture LCP via a buffered PerformanceObserver registered before any load.
@@ -65,7 +69,7 @@ page.on('pageerror', e => consoleErrors.push('pageerror: ' + e.message));
 console.log('→ loading', BASE);
 await page.goto(BASE, { waitUntil: 'load', timeout: 60000 });
 // give Tailwind (local) / fonts / lucide (CDN) time to settle
-await page.waitForTimeout(2500);
+await page.waitForTimeout(1500);
 // force fade-in elements visible for accurate screenshots
 await page.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
 await page.waitForTimeout(400);
@@ -216,7 +220,7 @@ const mctx = await browser.newContext({ viewport: { width: 390, height: 844 }, d
 const mpage = await mctx.newPage();
 mpage.on('pageerror', e => consoleErrors.push('mobile pageerror: ' + e.message));
 await mpage.goto(BASE, { waitUntil: 'load', timeout: 60000 });
-await mpage.waitForTimeout(2500);
+await mpage.waitForTimeout(1500);
 await mpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
 await mpage.waitForTimeout(300);
 
@@ -247,7 +251,7 @@ await mctx.close();
 // ---------- 8. a11y (axe-core, WCAG 2.1 AA) ----------
 let axeSummary = 'skipped';
 try {
-  await page.addScriptTag({ path: AXE });
+  await page.addScriptTag({ content: AXE_SRC });
   const axeResults = await page.evaluate(async () => {
     const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
     return r.violations.map(v => ({
@@ -305,8 +309,7 @@ const DETAIL_PAGES = [
 for (const FILE of DETAIL_PAGES) {
   const URL = BASE.replace(/index\.html$/, 'attractions/' + FILE);
   try {
-    const dctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
-    const dpage = await dctx.newPage();
+    const dpage = await dCtx.newPage();
     await dpage.addInitScript(() => {
       window.__lcp = 0;
       try {
@@ -320,7 +323,7 @@ for (const FILE of DETAIL_PAGES) {
     dpage.on('console', m => { if (m.type() === 'error') dConsole.push(m.text()); });
     dpage.on('pageerror', e => dConsole.push('pageerror: ' + e.message));
     await dpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await dpage.waitForTimeout(2500);
+    await dpage.waitForTimeout(1500);
     await dpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await dpage.waitForTimeout(400);
 
@@ -342,11 +345,10 @@ for (const FILE of DETAIL_PAGES) {
     }
 
     // mobile
-    const dmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
-    const dmpage = await dmctx.newPage();
+    const dmpage = await mCtx.newPage();
     dmpage.on('pageerror', e => dConsole.push('mobile pageerror: ' + e.message));
     await dmpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await dmpage.waitForTimeout(2500);
+    await dmpage.waitForTimeout(1500);
     await dmpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await dmpage.waitForTimeout(300);
     const dmNav = await dmpage.locator('nav a[href^="#"], nav a[href^="../"]').count();
@@ -359,10 +361,10 @@ for (const FILE of DETAIL_PAGES) {
     await dmpage.waitForTimeout(600);
     const dMenuClosed = !(await dmpage.locator('#mobile-menu').isVisible());
     ok(`[${FILE}] Mobile menu auto-closes after tapping a link`, dMenuClosed);
-    await dmctx.close();
+    await dmpage.close();
 
     // a11y (axe-core, WCAG 2.1 AA)
-    await dpage.addScriptTag({ path: AXE });
+    await dpage.addScriptTag({ content: AXE_SRC });
     const dAxe = await dpage.evaluate(async () => {
       const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
       return r.violations.map(v => ({
@@ -398,7 +400,7 @@ for (const FILE of DETAIL_PAGES) {
 
     ok(`[${FILE}] No severe console / page errors on load`, dConsole.length === 0, dConsole.slice(0, 3).join(' | '));
 
-    await dctx.close();
+    await dpage.close();
   } catch (e) {
     ok(`[${FILE}] detail page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
   }
@@ -411,8 +413,7 @@ const PLAN_GUIDE_PAGES = [
 for (const FILE of PLAN_GUIDE_PAGES) {
   const URL = BASE.replace(/index\.html$/, 'plan/' + FILE);
   try {
-    const pctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
-    const ppage = await pctx.newPage();
+    const ppage = await dCtx.newPage();
     await ppage.addInitScript(() => {
       window.__lcp = 0;
       try {
@@ -426,7 +427,7 @@ for (const FILE of PLAN_GUIDE_PAGES) {
     ppage.on('console', m => { if (m.type() === 'error') pConsole.push(m.text()); });
     ppage.on('pageerror', e => pConsole.push('pageerror: ' + e.message));
     await ppage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await ppage.waitForTimeout(2500);
+    await ppage.waitForTimeout(1500);
     await ppage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await ppage.waitForTimeout(400);
 
@@ -438,11 +439,10 @@ for (const FILE of PLAN_GUIDE_PAGES) {
     ok(`[plan/${FILE}] All non-hero <img> use loading="lazy"`, pNonLazy === 0, `${pNonLazy} not lazy (hero exempt: fetchpriority=high)`);
 
     // mobile
-    const pmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
-    const pmpage = await pmctx.newPage();
+    const pmpage = await mCtx.newPage();
     pmpage.on('pageerror', e => pConsole.push('mobile pageerror: ' + e.message));
     await pmpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await pmpage.waitForTimeout(2500);
+    await pmpage.waitForTimeout(1500);
     await pmpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await pmpage.waitForTimeout(300);
     const pmNav = await pmpage.locator('nav a[href^="#"], nav a[href^="../"]').count();
@@ -455,10 +455,10 @@ for (const FILE of PLAN_GUIDE_PAGES) {
     await pmpage.waitForTimeout(600);
     const pMenuClosed = !(await pmpage.locator('#mobile-menu').isVisible());
     ok(`[plan/${FILE}] Mobile menu auto-closes after tapping a link`, pMenuClosed);
-    await pmctx.close();
+    await pmpage.close();
 
     // a11y (axe-core, WCAG 2.1 AA)
-    await ppage.addScriptTag({ path: AXE });
+    await ppage.addScriptTag({ content: AXE_SRC });
     const pAxe = await ppage.evaluate(async () => {
       const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
       return r.violations.map(v => ({
@@ -494,7 +494,7 @@ for (const FILE of PLAN_GUIDE_PAGES) {
 
     ok(`[plan/${FILE}] No severe console / page errors on load`, pConsole.length === 0, pConsole.slice(0, 3).join(' | '));
 
-    await pctx.close();
+    await ppage.close();
   } catch (e) {
     ok(`[plan/${FILE}] plan guide detail page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
   }
@@ -508,8 +508,7 @@ const EXPERIENCE_PAGES = [
 for (const FILE of EXPERIENCE_PAGES) {
   const URL = BASE.replace(/index\.html$/, 'experiences/' + FILE);
   try {
-    const ectx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
-    const epage = await ectx.newPage();
+    const epage = await dCtx.newPage();
     await epage.addInitScript(() => {
       window.__lcp = 0;
       try {
@@ -523,7 +522,7 @@ for (const FILE of EXPERIENCE_PAGES) {
     epage.on('console', m => { if (m.type() === 'error') eConsole.push(m.text()); });
     epage.on('pageerror', e => eConsole.push('pageerror: ' + e.message));
     await epage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await epage.waitForTimeout(2500);
+    await epage.waitForTimeout(1500);
     await epage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await epage.waitForTimeout(400);
 
@@ -535,11 +534,10 @@ for (const FILE of EXPERIENCE_PAGES) {
     ok(`[experiences/${FILE}] All non-hero <img> use loading="lazy"`, eNonLazy === 0, `${eNonLazy} not lazy (hero exempt: fetchpriority=high)`);
 
     // mobile
-    const emctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
-    const empage = await emctx.newPage();
+    const empage = await mCtx.newPage();
     empage.on('pageerror', e => eConsole.push('mobile pageerror: ' + e.message));
     await empage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await empage.waitForTimeout(2500);
+    await empage.waitForTimeout(1500);
     await empage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await empage.waitForTimeout(300);
     const emNav = await empage.locator('nav a[href^="#"], nav a[href^="../"]').count();
@@ -552,10 +550,10 @@ for (const FILE of EXPERIENCE_PAGES) {
     await empage.waitForTimeout(600);
     const eMenuClosed = !(await empage.locator('#mobile-menu').isVisible());
     ok(`[experiences/${FILE}] Mobile menu auto-closes after tapping a link`, eMenuClosed);
-    await emctx.close();
+    await empage.close();
 
     // a11y (axe-core, WCAG 2.1 AA)
-    await epage.addScriptTag({ path: AXE });
+    await epage.addScriptTag({ content: AXE_SRC });
     const eAxe = await epage.evaluate(async () => {
       const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
       return r.violations.map(v => ({
@@ -591,7 +589,7 @@ for (const FILE of EXPERIENCE_PAGES) {
 
     ok(`[experiences/${FILE}] No severe console / page errors on load`, eConsole.length === 0, eConsole.slice(0, 3).join(' | '));
 
-    await ectx.close();
+    await epage.close();
   } catch (e) {
     ok(`[experiences/${FILE}] experience detail page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
   }
@@ -609,8 +607,7 @@ for (const FILE of FIRSTLEVEL_PAGES) {
   const URL = BASE.replace(/index\.html$/, FILE);
   const TAG = FILE.replace(/\.html$/, '');
   try {
-    const fctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
-    const fpage = await fctx.newPage();
+    const fpage = await dCtx.newPage();
     await fpage.addInitScript(() => {
       window.__lcp = 0;
       try {
@@ -624,7 +621,7 @@ for (const FILE of FIRSTLEVEL_PAGES) {
     fpage.on('console', m => { if (m.type() === 'error') fConsole.push(m.text()); });
     fpage.on('pageerror', e => fConsole.push('pageerror: ' + e.message));
     await fpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await fpage.waitForTimeout(2500);
+    await fpage.waitForTimeout(1500);
     await fpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await fpage.waitForTimeout(400);
 
@@ -644,11 +641,10 @@ for (const FILE of FIRSTLEVEL_PAGES) {
     ok(`[${TAG}] Nav marks current section active (exactly 1 aria-current)`, fActive === 1, `${fActive} active`);
 
     // mobile
-    const fmctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
-    const fmpage = await fmctx.newPage();
+    const fmpage = await mCtx.newPage();
     fmpage.on('pageerror', e => fConsole.push('mobile pageerror: ' + e.message));
     await fmpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
-    await fmpage.waitForTimeout(2500);
+    await fmpage.waitForTimeout(1500);
     await fmpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
     await fmpage.waitForTimeout(300);
     const fmNav = await fmpage.locator('nav a[href^="#"], nav a[href^="../"]').count();
@@ -661,10 +657,10 @@ for (const FILE of FIRSTLEVEL_PAGES) {
     await fmpage.waitForTimeout(600);
     const fMenuClosed = !(await fmpage.locator('#mobile-menu').isVisible());
     ok(`[${TAG}] Mobile menu auto-closes after tapping a link`, fMenuClosed);
-    await fmctx.close();
+    await fmpage.close();
 
     // a11y (axe-core, WCAG 2.1 AA)
-    await fpage.addScriptTag({ path: AXE });
+    await fpage.addScriptTag({ content: AXE_SRC });
     const fAxe = await fpage.evaluate(async () => {
       const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
       return r.violations.map(v => ({
@@ -700,7 +696,7 @@ for (const FILE of FIRSTLEVEL_PAGES) {
 
     ok(`[${TAG}] No severe console / page errors on load`, fConsole.length === 0, fConsole.slice(0, 3).join(' | '));
 
-    await fctx.close();
+    await fpage.close();
   } catch (e) {
     ok(`[${TAG}] first-level page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
   }

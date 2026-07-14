@@ -1,0 +1,43 @@
+# zhangjiajie-tours-v3 — crawl directives
+# Allow all mainstream search engines + AI answer engines to crawl the site.
+# Host: GitHub Pages project site at willyye.github.io/zhangjiajie-tours-v3/
+
+User-agent: *
+Allow: /
+
+# ---- AI answer engines (RAG crawlers) ----
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ---- Traditional search engines ----
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://willyye.github.io/zhangjiajie-tours-v3/sitemap.xml
