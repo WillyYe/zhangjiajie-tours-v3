@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Food in Zhangjiajie | Visit Zhangjiajie</title>
-  <meta name="description" content="What to eat in Zhangjiajie — spicy Hunan cooking, the famous beer fish, Guilin-style rice noodles, Tujia feasts, and the street snacks and night markets worth seeking out.">
+  <meta name="description" content="What to eat in Zhangjiajie — spicy Hunan cooking, Tujia feasts, the famous three-pot stew, rice noodles, and the restaurants travellers rate highest.">
 
   <meta name="theme-color" content="#1a3a2a">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E">
@@ -169,7 +169,7 @@
       outline-offset: 2px;
       border-radius: 4px;
     }
-  
+
     /* selected nav state: bold + dark (加粗加黑) */
     .nav-link.active{font-weight:700;color:#1a3a2a;}
   </style>
@@ -194,7 +194,7 @@
             <a href="../" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Home</a>
           </li>
 
-          <!-- 2. Attraction (links to the new listing page + detail pages) -->
+          <!-- 2. Attraction -->
           <li class="nav-item h-full flex items-center">
             <a href="../attractions/index.html" class="nav-link text-sm font-semibold text-forest hover:text-forest px-4 h-full flex items-center gap-1">
               Attraction
@@ -337,7 +337,7 @@
 
   <!-- ========== HERO ========== -->
   <section id="hero" class="relative min-h-[70vh] flex items-end overflow-hidden">
-    <img id="heroImg" src="../images/food-hunan.webp" fetchpriority="high" alt="Hunan dishes on a Zhangjiajie table"
+    <img id="heroImg" src="../images/food-hunan.webp" fetchpriority="high" alt="Hunan cuisine — classic local dishes"
          class="absolute inset-0 w-full h-full object-cover" style="transform:scale(1.12);" />
     <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,58,42,0.35) 0%, rgba(26,58,42,0.45) 45%, rgba(26,58,42,0.85) 100%);"></div>
 
@@ -346,13 +346,15 @@
       <nav class="flex items-center gap-2 text-white/70 text-sm mb-5" aria-label="Breadcrumb">
         <a href="../" class="hover:text-white transition-colors">Home</a>
         <span class="text-white/40">/</span>
-        <span class="text-white font-medium">Food</span>
+        <a href="../hotels/index.html" class="hover:text-white transition-colors">Hotels</a>
+        <span class="text-white/40">/</span>
+        <span class="text-white font-medium"></span>
       </nav>
 
-      <span class="inline-block bg-gold/90 text-forest text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-4">Eat like a local</span>
+      <span class="inline-block bg-gold/90 text-forest text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-4">Local flavours</span>
       <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white leading-[1.05] mb-4">Food in Zhangjiajie</h1>
       <p class="text-white/85 text-lg md:text-xl max-w-2xl leading-relaxed">
-        Spicy Hunan cooking, the famous beer fish, street snacks, and minority village fare — a quick map of what to eat and where to find it.
+        Spicy Hunan cooking, Tujia feasts, the famous three-pot stew, rice noodles, and the restaurants travellers rate highest — here’s where to start.
       </p>
     </div>
   </section>
@@ -365,52 +367,68 @@
         <div>
           <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-2">At a glance</p>
           <p class="text-stone/85 text-base md:text-lg leading-relaxed max-w-3xl">
-            Zhangjiajie eats like the rest of Hunan: bold, smoky, and unafraid of chili. The must-tries are beer fish and rice noodles; the fun is in the street snacks and Tujia feasts. Jump to the full food guide on our main page.
+            Zhangjiajie’s table blends bold Hunan heat with Tujia and Miao mountain traditions. We’ve grouped it so you can go straight to the dishes, the restaurants, or the shortlist.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== Card grid ========== -->
+  <!-- ========== Card grid (injected) ========== -->
+  <!-- ========== Food by type ========== -->
   <section class="py-16 lg:py-20 px-6">
     <div class="max-w-[1400px] mx-auto">
-      <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">What to eat</h2>
-      <p class="text-stone-600 mb-10 max-w-2xl">Each card links to the matching section on our main page.</p>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
-                <a href="../food/index.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-hunan.webp" alt="Beer fish dish"></div>
-          <div class="p-6">
-            <p class="module-tag">Signature</p>
-            <h3 class="font-display text-xl text-forest mb-2 leading-snug">Beer Fish (啤酒鱼)</h3>
-            <p class="text-sm text-stone-600 leading-relaxed mb-4">The regional signature — fresh river fish braised in beer with chili and vegetables. The dish to order first.</p>
-          </div>
-        </a>
-        <a href="../food/index.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/gallery-painting.webp" alt="Bowl of rice noodles"></div>
-          <div class="p-6">
-            <p class="module-tag">Breakfast</p>
-            <h3 class="font-display text-xl text-forest mb-2 leading-snug">Rice Noodles</h3>
-            <p class="text-sm text-stone-600 leading-relaxed mb-4">A cheap, filling breakfast staple — springy noodles in a savory broth, dressed with your own chili and vinegar.</p>
-          </div>
-        </a>
-        <a href="../food/index.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/huangshizhai-winter.webp" alt="Tujia feast spread"></div>
-          <div class="p-6">
-            <p class="module-tag">Culture</p>
-            <h3 class="font-display text-xl text-forest mb-2 leading-snug">Tujia &amp; Minority Fare</h3>
-            <p class="text-sm text-stone-600 leading-relaxed mb-4">Hearty mountain cooking — cured meats, sour veg, and communal feasts from the local Tujia and Miao communities.</p>
-          </div>
-        </a>
-        <a href="../food/index.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-          <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/jinbianxi-rock.webp" alt="Night market street snacks"></div>
-          <div class="p-6">
-            <p class="module-tag">Street</p>
-            <h3 class="font-display text-xl text-forest mb-2 leading-snug">Street Snacks &amp; Night Market</h3>
-            <p class="text-sm text-stone-600 leading-relaxed mb-4">Grilled skewers, stuffed tofu, and sweet rice cakes — the easy, fun way to graze your way through an evening.</p>
-          </div>
-        </a>
+      <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Food by type</h2>
+      <p class="text-stone-600 mb-10 max-w-2xl">From the signature dishes to the restaurants travellers rate highest — here’s Zhangjiajie’s table, organised so you can find your meal fast.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 fade-in">
+          <a href="zhangjiajie-cuisine.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-tujia-feast.webp" alt="A Tujia feast of steamed pork, smoked pork and wild mushroom hotpot"></div>
+            <div class="p-6">
+              <p class="module-tag">The local table</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Zhangjiajie Cuisine</h3>
+              <p class="text-sm text-stone-600 leading-relaxed mb-4">The signature dishes of Zhangjiajie — what to order and why.</p>
+              <span class="text-forest font-semibold text-sm">Explore →</span>
+            </div>
+          </a>
+          <a href="featured-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-restaurant-interior.webp" alt="A cosy Zhangjiajie restaurant interior with Tujia decor"></div>
+            <div class="p-6">
+              <p class="module-tag">Our picks</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Featured Restaurants</h3>
+              <p class="text-sm text-stone-600 leading-relaxed mb-4">Characterful restaurants with a real sense of place.</p>
+              <span class="text-forest font-semibold text-sm">Explore →</span>
+            </div>
+          </a>
+          <a href="chinese-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-sanxiaguo.webp" alt="A Hunan three-pot dry hotpot on the table"></div>
+            <div class="p-6">
+              <p class="module-tag">Local flavours</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Chinese Restaurants</h3>
+              <p class="text-sm text-stone-600 leading-relaxed mb-4">Hunan &amp; Tujia kitchens, from adjustable-spice to dry-pot specialists.</p>
+              <span class="text-forest font-semibold text-sm">Explore →</span>
+            </div>
+          </a>
+          <a href="western-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-western.webp" alt="A plated Western grilled chicken with roasted vegetables"></div>
+            <div class="p-6">
+              <p class="module-tag">When you need a break</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Western &amp; Cafe Dining</h3>
+              <p class="text-sm text-stone-600 leading-relaxed mb-4">Hotel international dining and cafes when you need a break from chilli.</p>
+              <span class="text-forest font-semibold text-sm">Explore →</span>
+            </div>
+          </a>
+          <a href="must-eat-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-mushroom-hotpot.webp" alt="A rich wild mushroom hotpot"></div>
+            <div class="p-6">
+              <p class="module-tag">Travellers' top list</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Must-Eat Restaurants</h3>
+              <p class="text-sm text-stone-600 leading-relaxed mb-4">The highest-rated local restaurants, by traveller rankings.</p>
+              <span class="text-forest font-semibold text-sm">Explore →</span>
+            </div>
+          </a>
+      </div>
+      <div class="mt-12 text-center">
+        <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors duration-300">Tell us your taste, we’ll point you →</a>
       </div>
     </div>
   </section>
@@ -545,36 +563,44 @@
     </div>
   </div>
 
-  <!-- ========== Structured data: ItemList ========== -->
+  <!-- ========== Structured data ========== -->
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "itemListElement": [    {
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {
       "@type": "ListItem",
       "position": 1,
-      "name": "Beer Fish (啤酒鱼)",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/#food"
+      "name": "Zhangjiajie Cuisine",
+      "url": "https://willyye.github.io/zhangjiajie-tours-v3/food/zhangjiajie-cuisine.html"
     },
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Rice Noodles",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/#food"
+      "name": "Featured Restaurants",
+      "url": "https://willyye.github.io/zhangjiajie-tours-v3/food/featured-restaurants.html"
     },
     {
       "@type": "ListItem",
       "position": 3,
-      "name": "Tujia & Minority Fare",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/#food"
+      "name": "Chinese Restaurants",
+      "url": "https://willyye.github.io/zhangjiajie-tours-v3/food/chinese-restaurants.html"
     },
     {
       "@type": "ListItem",
       "position": 4,
-      "name": "Street Snacks & Night Market",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/#food"
-    }]
-  }
+      "name": "Western & Cafe Dining",
+      "url": "https://willyye.github.io/zhangjiajie-tours-v3/food/western-restaurants.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "name": "Must-Eat Restaurants",
+      "url": "https://willyye.github.io/zhangjiajie-tours-v3/food/must-eat-restaurants.html"
+    }
+  ]
+}
   </script>
 
 </body>

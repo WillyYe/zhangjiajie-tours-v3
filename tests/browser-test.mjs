@@ -118,21 +118,41 @@ ok('No broken <img> on render (naturalWidth>0)', broken.length === 0, broken.len
 const nonLazy = await page.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
 ok('All non-hero <img> use loading="lazy"', nonLazy === 0, `${nonLazy} not lazy (hero exempt: LCP)`);
 
-// ---------- 4. anchor navigation ----------
-const sh = await page.locator('a[href="#hotel"]').first();
-await sh.scrollIntoViewIfNeeded();
-await sh.click();
-await page.waitForTimeout(900);
-const hotelVisible = await page.locator('#hotel').isVisible();
-const hotelScrolled = await page.evaluate(() => Math.abs(window.scrollY) > 50);
-ok('Nav "Hotel" scrolls to #hotel target (anchor resolves)', hotelVisible && hotelScrolled, `visible=${hotelVisible} scrolled=${hotelScrolled}`);
+// ---------- 4. cross-page nav from homepage Hotel / Food cards ----------
+// Regression guard: the homepage Stay & Dine cards must link to the real
+// module hubs (hotels/index.html, food/index.html), not dead in-page #anchors.
+try {
+  const hotelCard = await page.locator('#hotel a[href="hotels/index.html"]').first();
+  await hotelCard.scrollIntoViewIfNeeded();
+  await hotelCard.click();
+  await page.waitForLoadState('load', { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const hotelUrl = page.url();
+  const hotelTitle = await page.title();
+  ok('Homepage Hotel card navigates cross-page to hub', hotelUrl.endsWith('hotels/index.html'), hotelUrl);
+  ok('Hotel hub loads with expected title', /Hotel/i.test(hotelTitle), hotelTitle);
+  await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
+  await page.waitForTimeout(500);
+} catch (e) {
+  ok('Homepage Hotel card cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
+}
 
-const sf = await page.locator('a[href="#food"]').first();
-await sf.scrollIntoViewIfNeeded();
-await sf.click();
-await page.waitForTimeout(900);
-const foodVisible = await page.locator('#food').isVisible();
-ok('Nav "Food" scrolls to #food target (anchor resolves)', foodVisible, `visible=${foodVisible}`);
+// ---------- 4a. Food card → food hub ----------
+try {
+  const foodCard = await page.locator('#food a[href="food/index.html"]').first();
+  await foodCard.scrollIntoViewIfNeeded();
+  await foodCard.click();
+  await page.waitForLoadState('load', { timeout: 30000 });
+  await page.waitForTimeout(800);
+  const foodUrl = page.url();
+  const foodTitle = await page.title();
+  ok('Homepage Food card navigates cross-page to hub', foodUrl.endsWith('food/index.html'), foodUrl);
+  ok('Food hub loads with expected title', /Food|Cuisine|Dining/i.test(foodTitle), foodTitle);
+  await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
+  await page.waitForTimeout(500);
+} catch (e) {
+  ok('Homepage Food card cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
+}
 
 // ---------- 4b. cross-page nav to module hub pages ----------
 try {

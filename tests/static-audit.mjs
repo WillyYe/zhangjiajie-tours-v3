@@ -21,6 +21,17 @@ for (const dir of moduleDirs) {
   }
 }
 
+// ---- global referenced-image set (across ALL pages) ----
+// Used by T8 so images referenced from any module page (not just index.html)
+// are not false-flagged as "dead". Keyed as 'images/<file>' to match T8's check.
+const globalRefImgs = new Set();
+const imgKey = (p) => 'images/' + p.split('/').pop().toLowerCase();
+for (const file of pages) {
+  const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  for (const m of html.matchAll(/src=["']([^"']+\.(?:webp|jpg|jpeg|avif|png))["']/gi)) globalRefImgs.add(imgKey(m[1]));
+  for (const m of html.matchAll(/url\(["']?([^"'()]+\.(?:webp|jpg|jpeg|avif|png))["']?\)/gi)) globalRefImgs.add(imgKey(m[1]));
+}
+
 // Resolve a local path reference relative to the page's own directory.
 // External (http/https/protocol-relative/data) refs are treated as present.
 function existsRel(pageDir, p) {
@@ -100,8 +111,7 @@ for (const file of pages) {
   // ---- T8: dead files (index only — global check) ----
   if (isIndex) {
     const allImgFiles = fs.readdirSync(imagesDir).filter((f) => /\.(webp|jpg|jpeg|avif|png)$/i.test(f));
-    const isRef = (f) => refImgs.has('images/' + f.toLowerCase());
-    const dead = allImgFiles.filter((f) => !isRef(f));
+    const dead = allImgFiles.filter((f) => !globalRefImgs.has(imgKey(f)));
     if (dead.length) warn.push({ name: 'Unreferenced image files on disk', detail: dead.join(', ') });
     else pass.push({ name: 'No stray dead image files' });
   }
