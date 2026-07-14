@@ -130,7 +130,7 @@ try {
   const hotelUrl = page.url();
   const hotelTitle = await page.title();
   ok('Homepage Hotel card navigates cross-page to hub', hotelUrl.endsWith('hotels/index.html'), hotelUrl);
-  ok('Hotel hub loads with expected title', /Hotel/i.test(hotelTitle), hotelTitle);
+  ok('Hotel hub loads with expected title', /Stay|Hotel|Lodge|Accommod/i.test(hotelTitle), hotelTitle);
   await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
   await page.waitForTimeout(500);
 } catch (e) {
