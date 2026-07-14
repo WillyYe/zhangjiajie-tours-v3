@@ -101,6 +101,16 @@ const navSlugs = [...new Set(navAttrLinks.filter(h => h && h !== 'attractions/in
 ok('Mega-menu links to all 8 attraction detail pages', navSlugs.length === 8, `${navSlugs.length} unique: ${navSlugs.join(',')}`);
 ok('No dead #attraction-* anchors in nav', !navAttrLinks.some(h => h && h.startsWith('#attraction')), navAttrLinks.filter(h => h && h.startsWith('#attraction')).join(',') || 'none');
 
+// ---------- 2e. homepage "Plan Like a Local" section is present (regression guard) ----------
+// Previously the nav had a "Plan" item but the homepage had NO #plan section,
+// so the module was undiscoverable from the landing page. Guard against regression.
+const planSectionVisible = await page.locator('#plan').isVisible().catch(() => false);
+ok('Homepage has a visible #plan (Plan Like a Local) section', planSectionVisible, 'section#plan');
+const planLinks = await page.$$eval('#plan a[href^="plan/"]', as => as.map(a => a.getAttribute('href'))).catch(() => []);
+const expectPlan = ['plan/index.html', 'plan/zhangjiajie-itinerary.html', 'plan/best-time-to-visit-zhangjiajie.html', 'plan/zhangjiajie-vs-wulingyuan.html'];
+const missingPlan = expectPlan.filter(h => !planLinks.includes(h));
+ok('Plan section links to hub + 3 guide pages', missingPlan.length === 0, missingPlan.length ? 'missing: ' + missingPlan.join(', ') : `all ${expectPlan.length} present`);
+
 // ---------- 3. images ----------
 const broken = await page.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
 ok('No broken <img> on render (naturalWidth>0)', broken.length === 0, broken.length ? broken.slice(0,5).join(', ') : 'all loaded');
