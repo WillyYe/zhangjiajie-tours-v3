@@ -172,75 +172,6 @@
 
     /* selected nav state: bold + dark (加粗加黑) */
     .nav-link.active{font-weight:700;color:#1a3a2a;}
-
-    /* ===== Hub category hero cards (myguilin-style big-image cards) ===== */
-    .category-hero-card {
-      position: relative;
-      display: block;
-      border-radius: 1.5rem;
-      overflow: hidden;
-      isolation: isolate;
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-    }
-    .category-hero-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
-    }
-    .category-hero-card img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .category-hero-card:hover img {
-      transform: scale(1.05);
-    }
-    .category-hero-card .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0) 70%);
-    }
-    .category-hero-card .content {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 1.75rem;
-      color: #fff;
-      z-index: 2;
-    }
-    .category-hero-card .eyebrow {
-      display: inline-block;
-      background: rgba(255,255,255,0.18);
-      color: rgba(255,255,255,0.95);
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 0.3rem 0.7rem;
-      border-radius: 999px;
-      margin-bottom: 0.75rem;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-    .category-hero-card h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.75rem;
-      line-height: 1.15;
-      margin-bottom: 0.35rem;
-      font-weight: 600;
-    }
-    .category-hero-card p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.85);
-      line-height: 1.5;
-    }
-    @media (max-width: 640px) {
-      .category-hero-card h3 { font-size: 1.35rem; }
-      .category-hero-card .content { padding: 1.25rem; }
-    }
   </style>
 </head>
 <body class="bg-sand text-stone antialiased">
@@ -451,44 +382,57 @@
         <h2 class="font-display text-4xl md:text-5xl text-forest mb-4">Where to Stay</h2>
         <p class="text-stone-600 text-lg max-w-2xl mx-auto">Real, bookable hotels in Zhangjiajie and beyond — picked for view, character and value.</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 fade-in">
-          <a href="mountain-lodges.html" class="category-hero-card card-hover" style="height:380px;">
-            <img loading="lazy" decoding="async" src="../images/hotel-hetianye-1.webp" alt="Hetianye mountain lodge among the peaks">
-            <div class="overlay"></div>
-            <div class="content">
-              <span class="eyebrow">Best for parks</span>
-              <h3>Mountain &amp; Forest Lodges</h3>
-              <p>Boutique and hillside stays inside Wulingyuan — balcony rooms with peak views.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 fade-in">
+          <a href="mountain-lodges.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/hotel-hetianye-1.webp" alt="Hetianye mountain lodge among the peaks"></div>
+            <div class="p-6">
+              <p class="module-tag">Best for parks</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Mountain &amp; Forest Lodges</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Boutique and hillside stays inside Wulingyuan — balcony rooms with peak views.</p>
             </div>
           </a>
-          <a href="selected-stays.html" class="category-hero-card card-hover" style="height:380px;">
-            <img loading="lazy" decoding="async" src="../images/hotel-vienna-1.webp" alt="Vienna International Hotel exterior">
-            <div class="overlay"></div>
-            <div class="content">
-              <span class="eyebrow">Our favourites</span>
-              <h3>Curated &amp; Design Stays</h3>
-              <p>International-standard and design-led hotels we routinely recommend.</p>
+          <a href="selected-stays.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/hotel-vienna-1.webp" alt="Vienna International Hotel exterior"></div>
+            <div class="p-6">
+              <p class="module-tag">Our favourites</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Curated &amp; Design Stays</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">International-standard and design-led hotels we routinely recommend.</p>
             </div>
           </a>
-          <a href="value-hotels.html" class="category-hero-card card-hover" style="height:380px;">
-            <img loading="lazy" decoding="async" src="../images/hotel-72qilou-1.webp" alt="Homeinn near the 72 Qilou towers">
-            <div class="overlay"></div>
-            <div class="content">
-              <span class="eyebrow">Smart spend</span>
-              <h3>Great-Value Hotels</h3>
-              <p>Dependable, budget-friendly stays in Zhangjiajie city.</p>
+          <a href="value-hotels.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/hotel-72qilou-1.webp" alt="Homeinn near the 72 Qilou towers"></div>
+            <div class="p-6">
+              <p class="module-tag">Smart spend</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Great-Value Hotels</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Dependable, budget-friendly stays in Zhangjiajie city.</p>
             </div>
           </a>
-          <a href="by-area.html" class="category-hero-card card-hover" style="height:380px;">
-            <img loading="lazy" decoding="async" src="../images/hotel-huatian-1.webp" alt="Huatiancheng city-centre suites">
-            <div class="overlay"></div>
-            <div class="content">
-              <span class="eyebrow">Transit hub</span>
-              <h3>City &amp; By-Area Stays</h3>
-              <p>Spacious city-centre suites close to transit and dining.</p>
+          <a href="by-area.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/hotel-huatian-1.webp" alt="Huatiancheng city-centre suites"></div>
+            <div class="p-6">
+              <p class="module-tag">Transit hub</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">City &amp; By-Area Stays</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">Spacious city-centre suites close to transit and dining.</p>
             </div>
           </a>
       </div>
+    </div>
+  </section>  <!-- ========== FAQ ========== -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-16">
+    <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">Frequently asked questions</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+            <h3 class="font-display text-lg md:text-xl text-forest mb-2">Which area should I stay in?</h3>
+            <p class="text-stone/80 leading-relaxed text-sm md:text-base">Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+            <h3 class="font-display text-lg md:text-xl text-forest mb-2">Do you book hotels for me?</h3>
+            <p class="text-stone/80 leading-relaxed text-sm md:text-base">We don’t take payment, but message us on WhatsApp and we’ll recommend and help reserve the right stay for your dates — free, no obligation.</p>
+          </div>
+          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+            <h3 class="font-display text-lg md:text-xl text-forest mb-2">What’s the price range?</h3>
+            <p class="text-stone/80 leading-relaxed text-sm md:text-base">From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead.</p>
+          </div>
     </div>
   </section>
 

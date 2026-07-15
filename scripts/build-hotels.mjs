@@ -44,7 +44,7 @@ function hotelCard(h) {
 
 function categoryBody(cat) {
   const cards = cat.hotels.map((id) => hotelCard(hotels[id])).join('\n');
-  return `  <!-- ========== Stays in this category ========== -->
+  const main = `  <!-- ========== Stays in this category ========== -->
   <section class="py-16 lg:py-20 px-6">
     <div class="max-w-[1400px] mx-auto">
       <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Our ${escHtml(cat.title.toLowerCase())}</h2>
@@ -54,18 +54,59 @@ ${cards}
       </div>
     </div>
   </section>`;
+  return main + '\n' + faqSection(HOTEL_FAQ) + '\n' + relatedSection(hotelCategories, cat, 'Other ways to browse hotels');
 }
 
 function categoryCard(cat) {
-  return `          <a href="${cat.slug}.html" class="category-hero-card card-hover" style="height:380px;">
-            <img loading="lazy" decoding="async" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}">
-            <div class="overlay"></div>
-            <div class="content">
-              <span class="eyebrow">${escAttr(cat.tag)}</span>
-              <h3>${escHtml(cat.title)}</h3>
-              <p>${escHtml(cat.hubDesc)}</p>
+  return `          <a href="${cat.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}"></div>
+            <div class="p-6">
+              <p class="module-tag">${escAttr(cat.tag)}</p>
+              <h3 class="font-display text-xl text-forest mb-2 leading-snug">${escHtml(cat.title)}</h3>
+              <p class="text-sm text-stone-600 leading-relaxed">${escHtml(cat.hubDesc)}</p>
             </div>
           </a>`;
+}
+
+const HOTEL_FAQ = [
+  ['Which area should I stay in?', 'Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain.'],
+  ['Do you book hotels for me?', 'We don’t take payment, but message us on WhatsApp and we’ll recommend and help reserve the right stay for your dates — free, no obligation.'],
+  ['What’s the price range?', 'From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead.'],
+];
+
+function faqSection(items) {
+  const cards = items.map(([q, a]) => `          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+            <h3 class="font-display text-lg md:text-xl text-forest mb-2">${escHtml(q)}</h3>
+            <p class="text-stone/80 leading-relaxed text-sm md:text-base">${escHtml(a)}</p>
+          </div>`).join('\n');
+  return `  <!-- ========== FAQ ========== -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-16">
+    <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">Frequently asked questions</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+${cards}
+    </div>
+  </section>`;
+}
+
+function relatedCard(cat) {
+  return `          <a href="${cat.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="p-6">
+              <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-1">${escAttr(cat.tag)}</p>
+              <h3 class="font-display text-lg text-forest group-hover:text-gold-dark transition-colors">${escHtml(cat.title)}</h3>
+              <p class="text-sm text-stone-600 mt-1">${escHtml(cat.hubDesc)}</p>
+            </div>
+          </a>`;
+}
+
+function relatedSection(cats, current, label) {
+  const cards = cats.filter((c) => c.slug !== current.slug).map(relatedCard).join('\n');
+  return `  <!-- ========== Related categories ========== -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-20">
+    <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">${escHtml(label)}</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+${cards}
+    </div>
+  </section>`;
 }
 
 function itemListJsonLd(items) {
@@ -139,11 +180,11 @@ for (const cat of hotelCategories) {
         <h2 class="font-display text-4xl md:text-5xl text-forest mb-4">Where to Stay</h2>
         <p class="text-stone-600 text-lg max-w-2xl mx-auto">Real, bookable hotels in Zhangjiajie and beyond — picked for view, character and value.</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 fade-in">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 fade-in">
 ${cards}
       </div>
     </div>
-  </section>`;
+  </section>` + faqSection(HOTEL_FAQ);
 
   const jsonLd = itemListJsonLd(hotelCategories.map((c) => ({
     name: c.title,
