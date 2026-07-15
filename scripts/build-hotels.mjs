@@ -1,6 +1,6 @@
 // zhangjiajie-tours-v3 — Hotel module generator
 // Reads templates/hotel-category.html + hotels-data.mjs and writes:
-//   hotels/<slug>.html  (4 category pages)  +  hotels/index.html (hub)
+//   hotels/<slug>.html  (4 category pages); no hub — categories are first-level.
 // Run: node scripts/build-hotels.mjs   (from project root)
 import fs from 'fs';
 import path from 'path';
@@ -18,8 +18,8 @@ const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
 const imgSrc = (n) => '../images/' + imgName(n);
 
-const ACTIVE = 'class="active  text-sm font-bold text-stone hover:text-forest px-4 h-full flex items-center" aria-current="page"';
-const NORMAL = 'class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center"';
+const ACTIVE = 'text-forest font-bold';
+const NORMAL = '';
 
 function hotelCard(h) {
   const feats = h.features.map((f) =>
@@ -169,49 +169,6 @@ for (const cat of hotelCategories) {
   console.log(`  ✓ wrote hotels/${cat.slug}.html (${html.length} bytes)`);
 }
 
-// hub page (hotels/index.html)
-{
-  if (!validateImage('gallery-painting')) { /* still write */ }
-  const cards = hotelCategories.map(categoryCard).join('\n');
-  const body = `  <!-- ========== Hotels by type ========== -->
-  <section class="py-16 lg:py-24 px-6">
-    <div class="max-w-[1400px] mx-auto">
-      <div class="text-center mb-12">
-        <h2 class="font-display text-4xl md:text-5xl text-forest mb-4">Where to Stay</h2>
-        <p class="text-stone-600 text-lg max-w-2xl mx-auto">Real, bookable hotels in Zhangjiajie and beyond — picked for view, character and value.</p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 fade-in">
-${cards}
-      </div>
-    </div>
-  </section>` + faqSection(HOTEL_FAQ);
+// No hub page generated — categories are first-level.
 
-  const jsonLd = itemListJsonLd(hotelCategories.map((c) => ({
-    name: c.title,
-    url: `${base}/hotels/${c.slug}.html`,
-  })));
-
-  const html = fill(tpl, {
-    TITLE: 'Where to Stay in Zhangjiajie | Visit Zhangjiajie',
-    META_DESC: 'How to choose where to stay in Zhangjiajie — mountain lodges, curated stays, great-value hotels, and city bases, picked by local experts.',
-    CANONICAL: `${base}/hotels/index.html`,
-    HOTEL_NAV: ACTIVE,
-    FOOD_NAV: NORMAL,
-    BREADCRUMB: '',
-    HERO_IMG: imgSrc('gallery-painting'),
-    HERO_ALT: 'Scenic hotel terrace with valley view',
-    HERO_TAG: 'Where to stay',
-    H1: 'Where to Stay in Zhangjiajie',
-    SUBTITLE: 'Base yourself inside Wulingyuan for sunrise at the gates, or in Zhangjiajie city for transport links — here’s how to choose, with our picked stays.',
-    INTRO_TEXT: 'Where you sleep shapes your park days. Staying inside Wulingyuan puts you minutes from the gates; the city is better for trains and flights. We’ve grouped our recommended stays by what matters most to you.',
-    BODY: body,
-    JSONLD: JSON.stringify(jsonLd, null, 2),
-  });
-
-  const dest = path.join(OUT_DIR, 'index.html');
-  fs.writeFileSync(dest, html, 'utf8');
-  console.log(`  ✓ wrote hotels/index.html (${html.length} bytes)`);
-}
-
-console.log('\nHotel module generated.\n');
 process.exit(process.exitCode || 0);

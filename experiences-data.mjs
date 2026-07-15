@@ -761,7 +761,7 @@ export const experiences = [
     ],
     related: [
       { slug: 'cultural-shows', img: 'gallery-painting', alt: 'Cultural Shows', title: 'Cultural Shows', sub: 'Evening performances' },
-      { slug: '../food/index', img: 'food-hunan', alt: 'Food', title: 'Food in Zhangjiajie', sub: 'Hunan and Tujia cuisine' },
+      { slug: '../food/zhangjiajie-cuisine', img: 'food-hunan', alt: 'Food', title: 'Food in Zhangjiajie', sub: 'Hunan and Tujia cuisine' },
       { slug: 'avatar-bailong-elevator', img: 'yuanjiajie-avatar', alt: 'Avatar', title: 'Avatar & Bailong', sub: 'Elevator to the pillars' },
       { slug: 'helicopter-tour', img: 'tianzi-autumn', alt: 'Helicopter', title: 'Helicopter Tour', sub: 'Aerial view' },
     ],

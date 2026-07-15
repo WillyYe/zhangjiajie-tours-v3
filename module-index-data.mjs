@@ -84,52 +84,6 @@ export const modules = [
   },
 
   {
-    slug: 'hotels',
-    file: 'hotels/index.html',
-    title: 'Where to Stay in Zhangjiajie | Visit Zhangjiajie',
-    metaDesc: 'How to choose where to stay in Zhangjiajie — inside Wulingyuan for sunrise at the gates, or Zhangjiajie city for transport links — with our picked stays by area.',
-    canonical: 'https://willyye.github.io/zhangjiajie-tours-v3/hotels/index.html',
-    heroImg: 'gallery-painting.webp',
-    heroImgAlt: 'Scenic hotel terrace with valley view',
-    breadcrumb: 'Hotels',
-    heroEyebrow: 'Where to stay',
-    h1: 'Where to Stay in Zhangjiajie',
-    heroDesc: 'Base yourself inside Wulingyuan for sunrise at the gates, or in Zhangjiajie city for transport links — here’s how to choose, with our picked stays.',
-    intro: 'Where you sleep shapes your park days. Staying inside Wulingyuan puts you minutes from the gates; the city is better for trains and flights. We’ve grouped our recommended stays by area — jump to the full list on our main page.',
-    gridTitle: 'Hotels by area',
-    gridIntro: 'Each card opens the relevant section on our main page.',
-    cards: [
-      { img: 'peaks-panorama.webp', alt: 'Hotel inside Wulingyuan', title: 'Inside Wulingyuan', desc: 'Best for early gate access and sunrise over the pillars. Walk or shuttle to the main entrances.', href: '../#hotel', tag: 'Best for parks' },
-      { img: 'tianzi-snow.webp', alt: 'City hotel skyline', title: 'Zhangjiajie City', desc: 'The transport hub — trains, the airport, and the biggest choice of mid-range and business hotels.', href: '../#hotel', tag: 'Transport hub' },
-      { img: 'yangjiajie-wall.webp', alt: 'Hotel near Tianmen', title: 'Near Tianmen Mountain', desc: 'Convenient if Tianmen Mountain and the glass bridge are your focus, south of the main park.', href: '../#hotel', tag: 'Tianmen side' },
-      { img: 'jinbianxi-stream.webp', alt: 'Riverside countryside stay', title: 'Riverside & Countryside', desc: 'Quieter stays along the streams and villages — good for a slower, scenic base.', href: '../#hotel', tag: 'Scenic' }
-    ]
-  },
-
-  {
-    slug: 'food',
-    file: 'food/index.html',
-    title: 'Food in Zhangjiajie | Visit Zhangjiajie',
-    metaDesc: 'What to eat in Zhangjiajie — spicy Hunan cooking, the famous beer fish, Guilin-style rice noodles, Tujia feasts, and the street snacks and night markets worth seeking out.',
-    canonical: 'https://willyye.github.io/zhangjiajie-tours-v3/food/index.html',
-    heroImg: 'food-hunan.webp',
-    heroImgAlt: 'Hunan dishes on a Zhangjiajie table',
-    breadcrumb: 'Food',
-    heroEyebrow: 'Eat like a local',
-    h1: 'Food in Zhangjiajie',
-    heroDesc: 'Spicy Hunan cooking, the famous beer fish, street snacks, and minority village fare — a quick map of what to eat and where to find it.',
-    intro: 'Zhangjiajie eats like the rest of Hunan: bold, smoky, and unafraid of chili. The must-tries are beer fish and rice noodles; the fun is in the street snacks and Tujia feasts. Jump to the full food guide on our main page.',
-    gridTitle: 'What to eat',
-    gridIntro: 'Each card links to the matching section on our main page.',
-    cards: [
-      { img: 'food-hunan.webp', alt: 'Beer fish dish', title: 'Beer Fish (啤酒鱼)', desc: 'The regional signature — fresh river fish braised in beer with chili and vegetables. The dish to order first.', href: '../#food', tag: 'Signature' },
-      { img: 'gallery-painting.webp', alt: 'Bowl of rice noodles', title: 'Rice Noodles', desc: 'A cheap, filling breakfast staple — springy noodles in a savory broth, dressed with your own chili and vinegar.', href: '../#food', tag: 'Breakfast' },
-      { img: 'huangshizhai-winter.webp', alt: 'Tujia feast spread', title: 'Tujia & Minority Fare', desc: 'Hearty mountain cooking — cured meats, sour veg, and communal feasts from the local Tujia and Miao communities.', href: '../#food', tag: 'Culture' },
-      { img: 'jinbianxi-rock.webp', alt: 'Night market street snacks', title: 'Street Snacks & Night Market', desc: 'Grilled skewers, stuffed tofu, and sweet rice cakes — the easy, fun way to graze your way through an evening.', href: '../#food', tag: 'Street' }
-    ]
-  },
-
-  {
     slug: 'plan',
     file: 'plan/index.html',
     title: 'Plan Like a Local | Visit Zhangjiajie',

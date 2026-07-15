@@ -1,6 +1,6 @@
 // zhangjiajie-tours-v3 — Food module generator
 // Reads templates/hotel-category.html (reused) + food-data.mjs and writes:
-//   food/<slug>.html  (5 category pages)  +  food/index.html (hub)
+//   food/<slug>.html  (5 category pages); no hub — categories are first-level.
 // Run: node scripts/build-food.mjs   (from project root)
 import fs from 'fs';
 import path from 'path';
@@ -18,8 +18,8 @@ const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
 const imgSrc = (n) => '../images/' + imgName(n);
 
-const ACTIVE = 'class="active  text-sm font-bold text-stone hover:text-forest px-4 h-full flex items-center" aria-current="page"';
-const NORMAL = 'class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center"';
+const ACTIVE = 'text-forest font-bold';
+const NORMAL = '';
 
 function dishCard(d) {
   return `          <article class="card-hover group bg-white rounded-2xl overflow-hidden border border-sand-dark flex flex-col">
@@ -183,51 +183,6 @@ for (const cat of foodCategories) {
   console.log(`  ✓ wrote food/${cat.slug}.html (${html.length} bytes)`);
 }
 
-// hub page (food/index.html)
-{
-  if (!validateImage('food-hunan')) { /* still write */ }
-  const cards = foodCategories.map(categoryCard).join('\n');
-  const body = `  <!-- ========== Food by type ========== -->
-  <section class="py-16 lg:py-24 px-6">
-    <div class="max-w-[1400px] mx-auto">
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
-        <div class="text-center md:text-left">
-          <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-2">Taste Zhangjiajie</p>
-          <h2 class="font-display text-4xl md:text-5xl text-forest">Restaurants & Food</h2>
-        </div>
-        <a href="zhangjiajie-cuisine.html" class="inline-flex items-center gap-1 text-forest font-semibold hover:text-gold-dark transition-colors text-center">All food →</a>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
-${cards}
-      </div>
-    </div>
-  </section>` + faqSection(FOOD_FAQ);
+// No hub page generated — categories are first-level.
 
-  const jsonLd = itemListJsonLd(foodCategories.map((c) => ({
-    name: c.title, url: `${base}/food/${c.slug}.html`,
-  })));
-
-  const html = fill(tpl, {
-    TITLE: 'Food in Zhangjiajie | Visit Zhangjiajie',
-    META_DESC: 'What to eat in Zhangjiajie — spicy Hunan cooking, Tujia feasts, the famous three-pot stew, rice noodles, and the restaurants travellers rate highest.',
-    CANONICAL: `${base}/food/index.html`,
-    HOTEL_NAV: NORMAL,
-    FOOD_NAV: ACTIVE,
-    BREADCRUMB: '',
-    HERO_IMG: imgSrc('food-hunan'),
-    HERO_ALT: 'Hunan cuisine — classic local dishes',
-    HERO_TAG: 'Local flavours',
-    H1: 'Food in Zhangjiajie',
-    SUBTITLE: 'Spicy Hunan cooking, Tujia feasts, the famous three-pot stew, rice noodles, and the restaurants travellers rate highest — here’s where to start.',
-    INTRO_TEXT: 'Zhangjiajie’s table blends bold Hunan heat with Tujia and Miao mountain traditions. We’ve grouped it so you can go straight to the dishes, the restaurants, or the shortlist.',
-    BODY: body,
-    JSONLD: JSON.stringify(jsonLd, null, 2),
-  });
-
-  const dest = path.join(OUT_DIR, 'index.html');
-  fs.writeFileSync(dest, html, 'utf8');
-  console.log(`  ✓ wrote food/index.html (${html.length} bytes)`);
-}
-
-console.log('\nFood module generated.\n');
 process.exit(process.exitCode || 0);

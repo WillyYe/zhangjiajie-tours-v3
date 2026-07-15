@@ -94,6 +94,20 @@ for (const m of modules) {
     out = out.split(k).join(v);
   }
 
+  // Mark the current module's top-level nav link as active + expose it to
+  // assistive tech via aria-current="page". Exactly one top-level link should
+  // carry it per page (mega-link sub-items are excluded by the test's :not()).
+  {
+    const activeHref = `../${m.slug}/index.html`;
+    const re = new RegExp(`(<a href="${activeHref}"[^>]*class="nav-link)([^"]*)(")`);
+    if (re.test(out)) {
+      out = out.replace(re, `$1 active$2" aria-current="page"`);
+    } else {
+      console.error(`✗ [${m.slug}] active nav link ${activeHref} not found — aria-current not injected`);
+      allOk = false;
+    }
+  }
+
   const leftovers = out.match(/\{\{[A-Z_]+\}\}/g);
   if (leftovers) {
     console.error(`✗ [${m.slug}] leftover placeholders: ${[...new Set(leftovers)].join(', ')}`);

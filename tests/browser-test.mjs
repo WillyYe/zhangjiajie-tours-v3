@@ -119,35 +119,35 @@ const nonLazy = await page.$$eval('img', imgs => imgs.filter(i => i.getAttribute
 ok('All non-hero <img> use loading="lazy"', nonLazy === 0, `${nonLazy} not lazy (hero exempt: LCP)`);
 
 // ---------- 4. cross-page nav from homepage Hotel / Food cards ----------
-// Regression guard: the homepage Stay & Dine cards must link to the real
-// module hubs (hotels/index.html, food/index.html), not dead in-page #anchors.
+// Regression guard: the homepage Stay & Dine cards must link to real category
+// pages, not dead in-page #anchors or removed hubs.
 try {
-  const hotelCard = await page.locator('#hotel a[href="hotels/index.html"]').first();
+  const hotelCard = await page.locator('#hotel a[href="hotels/mountain-lodges.html"]').first();
   await hotelCard.scrollIntoViewIfNeeded();
   await hotelCard.click();
   await page.waitForLoadState('load', { timeout: 30000 });
   await page.waitForTimeout(800);
   const hotelUrl = page.url();
   const hotelTitle = await page.title();
-  ok('Homepage Hotel card navigates cross-page to hub', hotelUrl.endsWith('hotels/index.html'), hotelUrl);
-  ok('Hotel hub loads with expected title', /Stay|Hotel|Lodge|Accommod/i.test(hotelTitle), hotelTitle);
+  ok('Homepage Hotel card navigates cross-page to category', hotelUrl.endsWith('hotels/mountain-lodges.html'), hotelUrl);
+  ok('Hotel category page loads with expected title', /Stay|Hotel|Lodge|Mountain|Accommod/i.test(hotelTitle), hotelTitle);
   await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
   await page.waitForTimeout(500);
 } catch (e) {
   ok('Homepage Hotel card cross-page navigation works', false, 'error: ' + e.message.split('\n')[0]);
 }
 
-// ---------- 4a. Food card → food hub ----------
+// ---------- 4a. Food card → food category ----------
 try {
-  const foodCard = await page.locator('#food a[href="food/index.html"]').first();
+  const foodCard = await page.locator('#food a[href="food/zhangjiajie-cuisine.html"]').first();
   await foodCard.scrollIntoViewIfNeeded();
   await foodCard.click();
   await page.waitForLoadState('load', { timeout: 30000 });
   await page.waitForTimeout(800);
   const foodUrl = page.url();
   const foodTitle = await page.title();
-  ok('Homepage Food card navigates cross-page to hub', foodUrl.endsWith('food/index.html'), foodUrl);
-  ok('Food hub loads with expected title', /Food|Cuisine|Dining/i.test(foodTitle), foodTitle);
+  ok('Homepage Food card navigates cross-page to category', foodUrl.endsWith('food/zhangjiajie-cuisine.html'), foodUrl);
+  ok('Food category page loads with expected title', /Food|Cuisine|Dining|Zhangjiajie/i.test(foodTitle), foodTitle);
   await page.goto(BASE, { waitUntil: 'load', timeout: 30000 });
   await page.waitForTimeout(500);
 } catch (e) {
@@ -625,13 +625,11 @@ for (const FILE of EXPERIENCE_PAGES) {
   }
 }
 
-// ---------- 12. first-level module hub pages: 6 module index pages ----------
-// attractions/index.html, experiences/index.html, tours/index.html,
-// hotels/index.html, food/index.html — each is a listing hub linking to
-// detail pages (attractions) or homepage anchors (other modules, detail TBD).
+// ---------- 12. first-level module hub pages: 4 module index pages ----------
+// attractions/index.html, experiences/index.html, tours/index.html, plan/index.html.
+// Hotels and Food no longer have hubs; their categories are now first-level pages.
 const FIRSTLEVEL_PAGES = [
-  'attractions/index.html', 'experiences/index.html', 'tours/index.html',
-  'hotels/index.html', 'food/index.html', 'plan/index.html',
+  'attractions/index.html', 'experiences/index.html', 'tours/index.html', 'plan/index.html',
 ];
 for (const FILE of FIRSTLEVEL_PAGES) {
   const URL = BASE.replace(/index\.html$/, FILE);
