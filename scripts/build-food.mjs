@@ -64,13 +64,12 @@ ${cards}
 }
 
 function categoryCard(cat) {
-  return `          <a href="${cat.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}"></div>
-            <div class="p-6">
-              <p class="module-tag">${escAttr(cat.tag)}</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">${escHtml(cat.title)}</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">${escHtml(cat.hubDesc)}</p>
-              <span class="text-forest font-semibold text-sm">Explore →</span>
+  return `          <a href="${cat.slug}.html" class="category-hero-card card-hover" style="height:320px;">
+            <img loading="lazy" decoding="async" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}">
+            <div class="overlay"></div>
+            <div class="content">
+              <h3>${escHtml(cat.title)}</h3>
+              <p>${escHtml(cat.hubDesc)}</p>
             </div>
           </a>`;
 }
@@ -138,15 +137,17 @@ for (const cat of foodCategories) {
   if (!validateImage('food-hunan')) { /* still write */ }
   const cards = foodCategories.map(categoryCard).join('\n');
   const body = `  <!-- ========== Food by type ========== -->
-  <section class="py-16 lg:py-20 px-6">
+  <section class="py-16 lg:py-24 px-6">
     <div class="max-w-[1400px] mx-auto">
-      <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Food by type</h2>
-      <p class="text-stone-600 mb-10 max-w-2xl">From the signature dishes to the restaurants travellers rate highest — here’s Zhangjiajie’s table, organised so you can find your meal fast.</p>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
+        <div class="text-center md:text-left">
+          <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-2">Taste Zhangjiajie</p>
+          <h2 class="font-display text-4xl md:text-5xl text-forest">Restaurants & Food</h2>
+        </div>
+        <a href="zhangjiajie-cuisine.html" class="inline-flex items-center gap-1 text-forest font-semibold hover:text-gold-dark transition-colors text-center">All food →</a>
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 fade-in">
 ${cards}
-      </div>
-      <div class="mt-12 text-center">
-        <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors duration-300">Tell us your taste, we’ll point you →</a>
       </div>
     </div>
   </section>`;

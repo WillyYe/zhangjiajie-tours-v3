@@ -172,6 +172,75 @@
 
     /* selected nav state: bold + dark (加粗加黑) */
     .nav-link.active{font-weight:700;color:#1a3a2a;}
+
+    /* ===== Hub category hero cards (myguilin-style big-image cards) ===== */
+    .category-hero-card {
+      position: relative;
+      display: block;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .category-hero-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+    .category-hero-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .category-hero-card:hover img {
+      transform: scale(1.05);
+    }
+    .category-hero-card .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0) 70%);
+    }
+    .category-hero-card .content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.75rem;
+      color: #fff;
+      z-index: 2;
+    }
+    .category-hero-card .eyebrow {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.95);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .category-hero-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      line-height: 1.15;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+    .category-hero-card p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.5;
+    }
+    @media (max-width: 640px) {
+      .category-hero-card h3 { font-size: 1.35rem; }
+      .category-hero-card .content { padding: 1.25rem; }
+    }
   </style>
 </head>
 <body class="bg-sand text-stone antialiased">
@@ -376,59 +445,56 @@
 
   <!-- ========== Card grid (injected) ========== -->
   <!-- ========== Food by type ========== -->
-  <section class="py-16 lg:py-20 px-6">
+  <section class="py-16 lg:py-24 px-6">
     <div class="max-w-[1400px] mx-auto">
-      <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Food by type</h2>
-      <p class="text-stone-600 mb-10 max-w-2xl">From the signature dishes to the restaurants travellers rate highest — here’s Zhangjiajie’s table, organised so you can find your meal fast.</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 fade-in">
-          <a href="zhangjiajie-cuisine.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-tujia-feast.webp" alt="A Tujia feast of steamed pork, smoked pork and wild mushroom hotpot"></div>
-            <div class="p-6">
-              <p class="module-tag">The local table</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Zhangjiajie Cuisine</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">The signature dishes of Zhangjiajie — what to order and why.</p>
-              <span class="text-forest font-semibold text-sm">Explore →</span>
-            </div>
-          </a>
-          <a href="featured-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-restaurant-interior.webp" alt="A cosy Zhangjiajie restaurant interior with Tujia decor"></div>
-            <div class="p-6">
-              <p class="module-tag">Our picks</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Featured Restaurants</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">Characterful restaurants with a real sense of place.</p>
-              <span class="text-forest font-semibold text-sm">Explore →</span>
-            </div>
-          </a>
-          <a href="chinese-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-sanxiaguo.webp" alt="A Hunan three-pot dry hotpot on the table"></div>
-            <div class="p-6">
-              <p class="module-tag">Local flavours</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Chinese Restaurants</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">Hunan &amp; Tujia kitchens, from adjustable-spice to dry-pot specialists.</p>
-              <span class="text-forest font-semibold text-sm">Explore →</span>
-            </div>
-          </a>
-          <a href="western-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-western.webp" alt="A plated Western grilled chicken with roasted vegetables"></div>
-            <div class="p-6">
-              <p class="module-tag">When you need a break</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Western &amp; Cafe Dining</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">Hotel international dining and cafes when you need a break from chilli.</p>
-              <span class="text-forest font-semibold text-sm">Explore →</span>
-            </div>
-          </a>
-          <a href="must-eat-restaurants.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="../images/food-mushroom-hotpot.webp" alt="A rich wild mushroom hotpot"></div>
-            <div class="p-6">
-              <p class="module-tag">Travellers' top list</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">Must-Eat Restaurants</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">The highest-rated local restaurants, by traveller rankings.</p>
-              <span class="text-forest font-semibold text-sm">Explore →</span>
-            </div>
-          </a>
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-4">
+        <div class="text-center md:text-left">
+          <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-2">Taste Zhangjiajie</p>
+          <h2 class="font-display text-4xl md:text-5xl text-forest">Restaurants & Food</h2>
+        </div>
+        <a href="zhangjiajie-cuisine.html" class="inline-flex items-center gap-1 text-forest font-semibold hover:text-gold-dark transition-colors text-center">All food →</a>
       </div>
-      <div class="mt-12 text-center">
-        <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors duration-300">Tell us your taste, we’ll point you →</a>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 fade-in">
+          <a href="zhangjiajie-cuisine.html" class="category-hero-card card-hover" style="height:320px;">
+            <img loading="lazy" decoding="async" src="../images/food-tujia-feast.webp" alt="A Tujia feast of steamed pork, smoked pork and wild mushroom hotpot">
+            <div class="overlay"></div>
+            <div class="content">
+              <h3>Zhangjiajie Cuisine</h3>
+              <p>The signature dishes of Zhangjiajie — what to order and why.</p>
+            </div>
+          </a>
+          <a href="featured-restaurants.html" class="category-hero-card card-hover" style="height:320px;">
+            <img loading="lazy" decoding="async" src="../images/food-restaurant-interior.webp" alt="A cosy Zhangjiajie restaurant interior with Tujia decor">
+            <div class="overlay"></div>
+            <div class="content">
+              <h3>Featured Restaurants</h3>
+              <p>Characterful restaurants with a real sense of place.</p>
+            </div>
+          </a>
+          <a href="chinese-restaurants.html" class="category-hero-card card-hover" style="height:320px;">
+            <img loading="lazy" decoding="async" src="../images/food-sanxiaguo.webp" alt="A Hunan three-pot dry hotpot on the table">
+            <div class="overlay"></div>
+            <div class="content">
+              <h3>Chinese Restaurants</h3>
+              <p>Hunan &amp; Tujia kitchens, from adjustable-spice to dry-pot specialists.</p>
+            </div>
+          </a>
+          <a href="western-restaurants.html" class="category-hero-card card-hover" style="height:320px;">
+            <img loading="lazy" decoding="async" src="../images/food-western.webp" alt="A plated Western grilled chicken with roasted vegetables">
+            <div class="overlay"></div>
+            <div class="content">
+              <h3>Western &amp; Cafe Dining</h3>
+              <p>Hotel international dining and cafes when you need a break from chilli.</p>
+            </div>
+          </a>
+          <a href="must-eat-restaurants.html" class="category-hero-card card-hover" style="height:320px;">
+            <img loading="lazy" decoding="async" src="../images/food-mushroom-hotpot.webp" alt="A rich wild mushroom hotpot">
+            <div class="overlay"></div>
+            <div class="content">
+              <h3>Must-Eat Restaurants</h3>
+              <p>The highest-rated local restaurants, by traveller rankings.</p>
+            </div>
+          </a>
       </div>
     </div>
   </section>

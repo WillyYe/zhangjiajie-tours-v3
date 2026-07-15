@@ -57,13 +57,13 @@ ${cards}
 }
 
 function categoryCard(cat) {
-  return `          <a href="${cat.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}"></div>
-            <div class="p-6">
-              <p class="module-tag">${escAttr(cat.tag)}</p>
-              <h3 class="font-display text-xl text-forest mb-2 leading-snug">${escHtml(cat.title)}</h3>
-              <p class="text-sm text-stone-600 leading-relaxed mb-4">${escHtml(cat.hubDesc)}</p>
-              <span class="text-forest font-semibold text-sm">View stays →</span>
+  return `          <a href="${cat.slug}.html" class="category-hero-card card-hover" style="height:380px;">
+            <img loading="lazy" decoding="async" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}">
+            <div class="overlay"></div>
+            <div class="content">
+              <span class="eyebrow">${escAttr(cat.tag)}</span>
+              <h3>${escHtml(cat.title)}</h3>
+              <p>${escHtml(cat.hubDesc)}</p>
             </div>
           </a>`;
 }
@@ -133,15 +133,14 @@ for (const cat of hotelCategories) {
   if (!validateImage('gallery-painting')) { /* still write */ }
   const cards = hotelCategories.map(categoryCard).join('\n');
   const body = `  <!-- ========== Hotels by type ========== -->
-  <section class="py-16 lg:py-20 px-6">
+  <section class="py-16 lg:py-24 px-6">
     <div class="max-w-[1400px] mx-auto">
-      <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Hotels by type</h2>
-      <p class="text-stone-600 mb-10 max-w-2xl">Where you sleep shapes your park days. We’ve grouped our recommended stays by what matters most — scenery, comfort, value, or a central city base.</p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 fade-in">
-${cards}
+      <div class="text-center mb-12">
+        <h2 class="font-display text-4xl md:text-5xl text-forest mb-4">Where to Stay</h2>
+        <p class="text-stone-600 text-lg max-w-2xl mx-auto">Real, bookable hotels in Zhangjiajie and beyond — picked for view, character and value.</p>
       </div>
-      <div class="mt-12 text-center">
-        <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors duration-300">Not sure which fits? Message us →</a>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 fade-in">
+${cards}
       </div>
     </div>
   </section>`;
