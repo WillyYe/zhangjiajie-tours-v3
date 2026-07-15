@@ -10,18 +10,56 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E">
   <link rel="canonical" href="{{CANONICAL}}">
 
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{PAGE_TITLE}}">
+  <meta property="og:description" content="{{META_DESC}}">
+  <meta property="og:url" content="{{CANONICAL}}">
+  <meta property="og:site_name" content="Visit Zhangjiajie">
+  <meta property="og:image" content="https://willyye.github.io/zhangjiajie-tours-v3/images/hero-tianzi-clouds.webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{PAGE_TITLE}}">
+  <meta name="twitter:description" content="{{META_DESC}}">
+  <meta name="twitter:image" content="https://willyye.github.io/zhangjiajie-tours-v3/images/hero-tianzi-clouds.webp">
+
   <!-- Tailwind CSS (prebuilt, static) -->
   <link rel="stylesheet" href="../styles/tailwind.css">
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"></noscript>
+  <!-- Self-hosted latin fonts -->
+  <link rel="preload" as="font" type="font/woff2" href="../fonts/Inter.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="../fonts/PlayfairDisplay.woff2" crossorigin>
+  <style>@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/Inter.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/PlayfairDisplay-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('../fonts/PlayfairDisplay.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}</style>
 
   <!-- Lucide Icons -->
-  <script defer src="https://unpkg.com/lucide@latest" onload="lucide.createIcons()"></script>
-
+  
   <script>
     function openContactModal(e) {
       if (e) e.preventDefault();
@@ -361,7 +399,7 @@
 
                     <!-- 5. Hotel -->
           <li class="nav-item h-full flex items-center">
-            <a href="javascript:void(0)" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="../hotels/mountain-lodges.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Hotel
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -377,7 +415,7 @@
 
           <!-- 6. Food -->
           <li class="nav-item h-full flex items-center">
-            <a href="javascript:void(0)" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="../food/zhangjiajie-cuisine.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Food
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -399,7 +437,7 @@
 
           <!-- 8. Contact us -->
           <li class="nav-item h-full flex items-center">
-            <a href="javascript:void(0)" onclick="openContactModal(event)" class="nav-link text-sm font-semibold text-forest hover:bg-forest hover:text-white px-4 h-full flex items-center rounded-full transition-colors cursor-pointer">Contact us</a>
+            <button type="button"  onclick="openContactModal(event)" class="nav-link text-sm font-semibold text-forest hover:bg-forest hover:text-white px-4 h-full flex items-center rounded-full transition-colors cursor-pointer">Contact us</button>
           </li>
         </ul>
       </nav>
@@ -413,7 +451,7 @@
       </div>
 
       <!-- Mobile toggle -->
-      <button class="lg:hidden text-forest" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <button class="lg:hidden text-forest" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
     </div>
@@ -455,10 +493,11 @@
       <a href="../food/western-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🍕 Western Restaurants</a>
       <a href="../food/must-eat-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏆 Must-Eat Restaurants</a>
       <a href="./index.html" class="block text-forest font-bold py-2" onclick="closeMobileMenu()">7. Plan Like a Local ✓</a>
-      <a href="javascript:void(0)" onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">8. Contact us</a>
+      <button type="button"  onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">8. Contact us</button>
       <a href="https://wa.me/8618777358302" target="_blank" class="block text-center bg-forest text-white font-semibold py-2.5 rounded-full mt-3">WhatsApp Us</a>
     </div>
   </header>
+<main>
 
   <!-- ========== HERO ========== -->
   <section id="hero" class="hero-bg relative min-h-[70vh] flex items-end overflow-hidden">
@@ -478,9 +517,14 @@
       <h1 class="font-display text-4xl sm:text-5xl md:text-6xl text-white leading-[1.08] mb-4 max-w-3xl">{{H1}}</h1>
       <p class="text-xl md:text-2xl text-white/85 font-display italic mb-5">{{SUBTITLE}}</p>
       <p class="text-white/70 text-sm flex flex-wrap items-center gap-4">
-        <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> {{DATE}}</span>
-        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> {{READING_TIME}}</span>
-        <span class="flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i> {{AUTHOR}}</span>
+        <span class="flex items-center gap-1"><svg class="w-4 h-4 lucide lucide-calendar" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4" />
+  <path d="M16 2v4" />
+  <rect width="18" height="18" x="3" y="4" rx="2" />
+  <path d="M3 10h18" /></svg> {{DATE}}</span>
+        <span class="flex items-center gap-1"><svg class="w-4 h-4 lucide lucide-clock" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" />
+  <polyline points="12 6 12 12 16 14" /></svg> {{READING_TIME}}</span>
+        <span class="flex items-center gap-1"><svg class="w-4 h-4 lucide lucide-user" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+  <circle cx="12" cy="7" r="4" /></svg> {{AUTHOR}}</span>
       </p>
       <div class="mt-4">{{TAGS}}</div>
     </div>
@@ -510,7 +554,8 @@
   </section>
 
   <!-- ========== Footer ========== -->
-  <footer class="relative bg-[#0c3c46] text-white/60 py-14 px-6">
+  </main>
+<footer class="relative bg-[#0c3c46] text-white/60 py-14 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         <!-- Brand -->
@@ -574,7 +619,7 @@
 
   <!-- ========== Scripts ========== -->
   <script>
-    window.addEventListener('load', function(){ if (window.lucide) lucide.createIcons(); });
+    window.addEventListener('load', function(){  });
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
