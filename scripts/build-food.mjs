@@ -51,7 +51,7 @@ function restaurantCard(r, fallbackImg) {
                 <li><span class="text-forest font-medium">Try:</span> ${escHtml(r.signature)}</li>
                 <li><span class="text-forest font-medium">Where:</span> ${escHtml(r.area)}</li>
               </ul>
-              <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-5 py-2.5 rounded-full transition-colors text-sm">Ask us to book →</a>
+              <a href="mailto:zjjpark@outlook.com" class="mt-auto inline-flex items-center justify-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-5 py-2.5 rounded-full transition-colors text-sm">Ask us to book →</a>
             </div>
           </article>`;
 }
@@ -87,7 +87,7 @@ function categoryCard(cat) {
 const FOOD_FAQ = [
   ['What’s the one dish to try?', 'Sanxia Guo (three-pot stew) — smoked pork, tripe and tofu in a dry chilli pot. It’s Zhangjiajie’s signature and on nearly every local table.'],
   ['Is the food very spicy?', 'Hunan cooking is chilli-forward, but most kitchens adjust the heat if you ask. Say “wee-spicy” (微辣) for mild.'],
-  ['Do restaurants have English menus?', 'The top-rated spots do, or we can translate and even help book on WhatsApp before you go.'],
+  ['Do restaurants have English menus?', 'The top-rated spots do, or we can translate and even help book by email before you go.'],
 ];
 
 function faqSection(items) {

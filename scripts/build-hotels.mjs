@@ -37,7 +37,7 @@ function hotelCard(h) {
               <p class="text-gold-dark text-xs font-semibold uppercase tracking-wide mb-2">${escAttr(h.zh)} · ${escAttr(h.area)}</p>
               <p class="text-sm text-stone-600 leading-relaxed mb-4 flex-1">${escHtml(h.blurb)}</p>
               <ul class="space-y-1.5 mb-5">${feats}</ul>
-              <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-5 py-3 rounded-full transition-colors">Ask about ${escAttr(h.name)} →</a>
+              <a href="mailto:zjjpark@outlook.com" class="mt-auto inline-flex items-center justify-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-5 py-3 rounded-full transition-colors">Ask about ${escAttr(h.name)} →</a>
             </div>
           </article>`;
 }
@@ -70,7 +70,7 @@ function categoryCard(cat) {
 
 const HOTEL_FAQ = [
   ['Which area should I stay in?', 'Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain.'],
-  ['Do you book hotels for me?', 'We don’t take payment, but message us on WhatsApp and we’ll recommend and help reserve the right stay for your dates — free, no obligation.'],
+  ['Do you book hotels for me?', 'We don’t take payment, but message us by email and we’ll recommend and help reserve the right stay for your dates — free, no obligation.'],
   ['What’s the price range?', 'From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead.'],
 ];
 

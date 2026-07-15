@@ -82,7 +82,7 @@ ok('Lucide icons rendered as SVG (not blank)', svgCount > 0, `${svgCount} svg ic
 // 7. runtime third-party requests
 const hosts = [...new Set(responses.map(r => { try { return new URL(r.url).host; } catch { return null; } }).filter(Boolean))];
 const externals = hosts.filter(h => !h.includes(SAME_ORIGIN));
-ok('Zero runtime third-party requests (besides wa.me)', externals.every(h => h.includes('wa.me')), externals.length ? externals.join(', ') : 'only same-origin');
+ok('Zero runtime third-party requests', externals.length === 0, externals.length ? externals.join(', ') : 'only same-origin');
 
 // 8. OG + JSON-LD
 const ogCount = await page.locator('meta[property^="og:"]').count();
