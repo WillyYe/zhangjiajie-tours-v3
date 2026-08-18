@@ -104,6 +104,22 @@
       var mm = document.getElementById('mobile-menu');
       if (mm) mm.classList.add('hidden');
     }
+
+    // ========== Header: transparent → solid on scroll ==========
+    (function() {
+      var header = document.getElementById('main-header');
+      if (!header) return;
+      var threshold = 60; // px scrolled before switching
+      function onScroll() {
+        if (window.scrollY > threshold) {
+          header.classList.add('header-scrolled');
+        } else {
+          header.classList.remove('header-scrolled');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll(); // run once in case page is already scrolled
+    })();
   </script>
 
   <!-- Self-hosted latin fonts -->
@@ -177,7 +193,7 @@
       transform: scale(1.08);
     }
 
-    .nav-link {
+    a.nav-link {
       position: relative;
     }
     a.nav-link::after {
@@ -188,8 +204,9 @@
       transform: translateX(-50%);
       width: 0;
       height: 2px;
-      background: #1a3a2a;
+      background: currentColor;
       border-radius: 1px;
+      opacity: 0.7;
       transition: width 0.3s ease;
     }
     a.nav-link:hover::after {
@@ -339,19 +356,66 @@
   
     /* selected nav state: bold + dark (加粗加黑) */
     .nav-link.active{font-weight:700;color:#1a3a2a;}
+
+    /* ===== Transparent → Solid header on scroll ===== */
+    #main-header {
+      background: transparent;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    #main-header.header-scrolled {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,58,42,0.08);
+      box-shadow: 0 1px 8px rgba(26,58,42,0.06);
+    }
+    /* Logo text */
+    .header-logo-text { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .header-scrolled .header-logo-text { color: #1a3a2a; text-shadow: none; }
+    /* Nav links — transparent state: white with shadow */
+    .header-nav-link { color: rgba(255,255,255,0.9); text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+    .header-nav-link:hover { color: #ffffff; }
+    .header-scrolled .header-nav-link { color: #57534e; text-shadow: none; }
+    .header-scrolled .header-nav-link:hover { color: #1a3a2a; }
+    /* Contact CTA button */
+    .header-cta {
+      border-color: rgba(255,255,255,0.6);
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .header-cta:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: #ffffff;
+      color: #ffffff;
+    }
+    .header-scrolled .header-cta {
+      border-color: #1a3a2a;
+      color: #1a3a2a;
+      text-shadow: none;
+    }
+    .header-scrolled .header-cta:hover {
+      background: #1a3a2a;
+      color: #ffffff;
+    }
+    /* Mobile hamburger */
+    .header-mobile-toggle { color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+    .header-scrolled .header-mobile-toggle { color: #1a3a2a; text-shadow: none; }
+    /* Dropdown caret color in transparent state */
+    #main-header:not(.header-scrolled) .dropdown-caret { stroke: rgba(255,255,255,0.85); }
+    /* Mega-menu always white (unchanged) */
   </style>
   <link rel="preload" as="image" href="images/hero-tianzi-clouds.webp" fetchpriority="high">
 </head>
 <body class="bg-sand text-stone antialiased">
 
   <!-- ========== Navigation ========== -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-dark" style="height:66px; box-shadow: 0 1px 4px rgba(26,58,42,0.06);">
+  <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="height:66px;">
     <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-between">
 
       <!-- Logo -->
       <a href="#home" class="flex items-center gap-2.5 shrink-0 group">
         <span class="text-[26px] group-hover:scale-110 transition-transform duration-300">⛰</span>
-        <span class="font-display text-xl text-forest tracking-wide">Visit Zhangjiajie</span>
+        <span class="font-display text-xl tracking-wide header-logo-text transition-colors duration-300">Visit Zhangjiajie</span>
       </a>
 
       <!-- Desktop nav -->
@@ -360,12 +424,12 @@
 
           <!-- 1. Home -->
           <li class="nav-item h-full flex items-center">
-            <a href="#home" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center transition-colors duration-200">Home</a>
+            <a href="#home" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center transition-colors duration-200">Home</a>
           </li>
 
           <!-- 2. Attraction -->
           <li class="nav-item h-full flex items-center">
-            <a href="attractions/index.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="attractions/index.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Attractions
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -396,7 +460,7 @@
 
           <!-- 3. Experience -->
           <li class="nav-item h-full flex items-center">
-            <a href="experiences/index.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="experiences/index.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Experiences
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -414,7 +478,7 @@
 
           <!-- 4. Tours -->
           <li class="nav-item h-full flex items-center">
-            <a href="tours/index.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Tours
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -443,7 +507,7 @@
 
           <!-- 5. Hotels -->
           <li class="nav-item h-full flex items-center">
-            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Hotels
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -481,7 +545,7 @@
 
           <!-- 6. Contact -->
           <li class="nav-item h-full flex items-center">
-            <button type="button" onclick="openContactModal(event)" class="text-[13.5px] font-semibold border border-forest text-forest hover:bg-forest hover:text-white px-5 py-2 rounded-full transition-all duration-200 cursor-pointer">Contact Us</button>
+            <button type="button" onclick="openContactModal(event)" class="text-[13.5px] font-semibold border px-5 py-2 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
           </li>
         </ul>
       </nav>
@@ -490,7 +554,7 @@
       
 
       <!-- Mobile toggle -->
-      <button class="lg:hidden text-forest" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <button class="lg:hidden header-mobile-toggle" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
     </div>
