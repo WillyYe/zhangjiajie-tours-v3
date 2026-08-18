@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>张家界后台 · Content Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">⛰ 张家界后台</div>
+    <div class="sidebar-status">
+      <span id="statusDot" class="dot ok"></span>
+      <span id="statusText">就绪</span>
+      <button id="openSettings" class="icon-btn" title="GitHub 设置">⚙</button>
+    </div>
+
+    <div class="nav-group-title">内容模块</div>
+    <nav class="module-list">
+      <button class="module active" data-module="hotels">🏨 酒店 Hotels</button>
+      <button class="module" data-module="nav">🧭 导航菜单</button>
+    </nav>
+
+    <div class="nav-group-title">内容页面（规划中）</div>
+    <nav class="module-list">
+      <button class="module disabled" disabled>🏞️ 景点 Attractions</button>
+      <button class="module disabled" disabled>📖 指南 Guides</button>
+      <button class="module disabled" disabled>🍜 美食 Food</button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <header class="content-head">
+      <div>
+        <h1 id="modTitle">酒店 Hotels</h1>
+        <p class="hint" id="modHint">改完右侧实时预览，满意后点「保存并发布」即可上线。</p>
+      </div>
+      <div class="actions">
+        <button id="saveBtn" class="btn primary" disabled>💾 保存并发布</button>
+        <button id="reloadBtn" class="btn">↻ 重新加载</button>
+      </div>
+    </header>
+
+    <div class="editor-grid">
+      <section class="editor" id="editor"></section>
+      <aside class="preview">
+        <h3>实时预览 · 酒店</h3>
+        <div id="preview"></div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<!-- 设置弹窗 -->
+<div class="modal-mask" id="settingsModal" hidden>
+  <div class="modal">
+    <h2>GitHub 连接设置</h2>
+    <label>GitHub Token（PAT）
+      <input id="cfgToken" type="password" placeholder="ghp_xxx 或 github_pat_xxx">
+    </label>
+    <p class="hint">在 <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> 生成，需有本仓库 <code>Contents: read &amp; write</code>。令牌只存本浏览器，不会上传到任何服务器。</p>
+    <label>仓库（owner/repo）
+      <input id="cfgRepo" placeholder="WillyYe/zhangjiajie-tours-v3">
+    </label>
+    <label>分支
+      <input id="cfgBranch" placeholder="main">
+    </label>
+    <div class="modal-actions">
+      <button id="saveSettings" class="btn primary">保存设置</button>
+      <button id="closeSettings" class="btn">关闭</button>
+    </div>
+    <p id="settingsStatus" class="hint"></p>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
