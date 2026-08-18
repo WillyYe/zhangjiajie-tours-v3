@@ -142,7 +142,7 @@ const ok = (name, cond, detail = '') => { results.push({ name, pass: !!cond, det
     winW: window.innerWidth,
     heroW: (document.querySelector('#home img') || {}).naturalWidth || 0,
     navVisible: !!document.querySelector('nav') || !!document.querySelector('header nav'),
-    ctaVisible: !!Array.from(document.querySelectorAll('a,button')).find(e => /explore|discover|book|whatsapp/i.test(e.textContent || '')),
+    ctaVisible: !!Array.from(document.querySelectorAll('a,button')).find(e => /explore|discover|book|email/i.test(e.textContent || '')),
   }));
   ok('移动端无横向溢出', !mobile.overflowX, `scrollW=${mobile.scrollW} winW=${mobile.winW}`);
   ok('移动端 hero 图加载', mobile.heroW > 0, `hero naturalWidth=${mobile.heroW}`);

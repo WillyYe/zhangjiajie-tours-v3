@@ -11,6 +11,9 @@
   <!-- SEO: canonical -->
   <link rel="canonical" href="https://willyye.github.io/zhangjiajie-tours-v3/">
 
+  <!-- Preload LCP hero (CSS background image) -->
+  <link rel="preload" as="image" href="images/hero-tianzi-clouds.webp">
+
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Visit Zhangjiajie — Your Complete Travel Guide to the Avatar Mountains">
@@ -103,15 +106,238 @@
     }
   </script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Self-hosted latin fonts -->
+  <link rel="preload" as="font" type="font/woff2" href="fonts/Inter.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="fonts/PlayfairDisplay.woff2" crossorigin>
+  <style>@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('fonts/Inter.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/PlayfairDisplay-italic.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('fonts/PlayfairDisplay.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}</style>
 
   <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  
 
+<style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
 
+    .hero-bg {
+      background-image: linear-gradient(to bottom, rgba(26,58,42,0.3) 0%, rgba(26,58,42,0.5) 50%, rgba(26,58,42,0.85) 100%), url('images/hero-tianzi-clouds.webp');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .card-hover {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 0.75rem;
+    }
+    .gallery-item img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #c9a96e;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* ===== Three-layer mega-menu navigation ===== */
+    html { scroll-padding-top: 80px; }
+    section[id] { scroll-margin-top: 80px; }
+
+    .nav-item { position: relative; }
+    .dropdown-caret {
+      transition: transform 0.25s ease;
+    }
+    .nav-item:hover .dropdown-caret { transform: rotate(180deg); }
+
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #ffffff;
+      border-radius: 0 0 1rem 1rem;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.14);
+      padding: 2.25rem 2rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      z-index: 60;
+    }
+    .nav-item:hover .mega-menu,
+    .nav-item:focus-within .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .mega-menu::before {
+      content: '';
+      position: absolute;
+      top: -14px;
+      left: 0;
+      right: 0;
+      height: 14px;
+    }
+    .mega-col-title {
+      color: #b08d4f;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .mega-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #3a3a3a;
+      font-size: 0.9rem;
+      padding: 0.32rem 0;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .mega-link:hover { color: #1a3a2a; padding-left: 0.3rem; }
+    .mega-feature {
+      border-radius: 0.85rem;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+    .mega-feature .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,58,42,0.85) 0%, rgba(26,58,42,0) 60%);
+    }
+
+    /* ===== Quick guide cards ===== */
+    .quick-card {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .quick-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .quick-card:hover img { transform: scale(1.06); }
+    .quick-card .quick-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,58,42,0.85) 0%, rgba(26,58,42,0.1) 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.25rem;
+    }
+
+    /* ===== Comparison table ===== */
+    .compare-table { width: 100%; border-collapse: collapse; }
+    .compare-table th, .compare-table td {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #e8e0d4;
+      font-size: 0.92rem;
+    }
+    .compare-table thead th {
+      background: #1a3a2a;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .compare-table tbody tr:nth-child(even) { background: #faf7f1; }
+    .compare-table tbody tr:hover { background: #f0ece2; }
+
+    .season-card {
+      border-radius: 1rem;
+      overflow: hidden;
+      position: relative;
+      min-height: 220px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .season-card img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .season-card .season-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 55%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem;
+    }
+
+    .tip-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.25rem 0;
+      border-bottom: 1px dashed #e8e0d4;
+    }
+    .tip-item:last-child { border-bottom: none; }
+    .tip-icon {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: #1a3a2a;
+      display: flex; align-items: center; justify-content: center;
+    }
+  
+    /* selected nav state: bold + dark (加粗加黑) */
+    .nav-link.active{font-weight:700;color:#1a3a2a;}
+  </style>
+  <link rel="preload" as="image" href="images/hero-tianzi-clouds.webp" fetchpriority="high">
 </head>
 <body class="bg-sand text-stone antialiased">
 
@@ -136,7 +362,7 @@
 
           <!-- 2. Attraction (7 sub-items) -->
           <li class="nav-item h-full flex items-center">
-            <a href="#attraction" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="attractions/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Attraction
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -144,21 +370,21 @@
               <div class="grid grid-cols-2 gap-x-10 gap-y-1">
                 <div>
                   <p class="mega-col-title">Wulingyuan Core</p>
-                  <a href="#attraction-yuanjiajie" class="mega-link">🏔️ Yuanjiajie / Avatar Mtn (袁家界)</a>
-                  <a href="#attraction-tianzi" class="mega-link">⛰️ Tianzi Mountain (天子山)</a>
-                  <a href="#attraction-jinbian" class="mega-link">🐒 Golden Whip Stream (金鞭溪)</a>
-                  <a href="#attraction-huangshizhai" class="mega-link">🔭 Huangshizhai (黄石寨)</a>
+                  <a href="attractions/yuanjiajie.html" class="mega-link">🏔️ Yuanjiajie / Avatar Mtn (袁家界)</a>
+                  <a href="attractions/tianzi.html" class="mega-link">⛰️ Tianzi Mountain (天子山)</a>
+                  <a href="attractions/jinbian.html" class="mega-link">🐒 Golden Whip Stream (金鞭溪)</a>
+                  <a href="attractions/huangshizhai.html" class="mega-link">🔭 Huangshizhai (黄石寨)</a>
                 </div>
                 <div>
                   <p class="mega-col-title">Scenic Spots Around</p>
-                  <a href="#attraction-tianmen" class="mega-link">🚠 Tianmen Mountain (天门山)</a>
-                  <a href="#attraction-grand-canyon" class="mega-link">🌉 Grand Canyon Glass Bridge</a>
-                  <a href="#attraction-baofeng" class="mega-link">🚣 Baofeng Lake (宝峰湖)</a>
-                  <a href="#attraction-yellow-dragon" class="mega-link">🐉 Yellow Dragon Cave (黄龙洞)</a>
+                  <a href="attractions/tianmen.html" class="mega-link">🚠 Tianmen Mountain (天门山)</a>
+                  <a href="attractions/grand-canyon.html" class="mega-link">🌉 Grand Canyon Glass Bridge</a>
+                  <a href="attractions/baofeng.html" class="mega-link">🚣 Baofeng Lake (宝峰湖)</a>
+                  <a href="attractions/yellow-dragon.html" class="mega-link">🐉 Yellow Dragon Cave (黄龙洞)</a>
                 </div>
               </div>
               <div class="mt-4 pt-4 border-t border-sand-dark">
-                <a href="#attraction" class="inline-flex items-center gap-1 text-sm font-semibold text-forest hover:text-gold-dark transition-colors">
+                <a href="attractions/index.html" class="inline-flex items-center gap-1 text-sm font-semibold text-forest hover:text-gold-dark transition-colors">
                   View All Attractions →
                 </a>
               </div>
@@ -167,25 +393,25 @@
 
           <!-- 3. Experience (3 sub-items) -->
           <li class="nav-item h-full flex items-center">
-            <a href="#experience" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="experiences/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Experience
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:480px;">
               <div class="grid grid-cols-2 gap-x-8 gap-y-1">
-                <a href="#exp-avatar" class="mega-link">🎬 Avatar &amp; Bailong</a>
-                <a href="#exp-glass" class="mega-link">🌉 Glass Bridge &amp; Bungee</a>
-                <a href="#exp-tianmen" class="mega-link">⛰️ Tianmen Mountain</a>
-                <a href="#exp-heli" class="mega-link">🚁 Helicopter Tour</a>
-                <a href="#exp-show" class="mega-link">🎭 Cultural Shows</a>
-                <a href="#exp-minority" class="mega-link">🏮 Minority &amp; Local Life</a>
+                <a href="experiences/avatar-bailong-elevator.html" class="mega-link">🎬 Avatar &amp; Bailong</a>
+                <a href="experiences/glass-bridge-bungee.html" class="mega-link">🌉 Glass Bridge &amp; Bungee</a>
+                <a href="experiences/tianmen-mountain.html" class="mega-link">⛰️ Tianmen Mountain</a>
+                <a href="experiences/helicopter-tour.html" class="mega-link">🚁 Helicopter Tour</a>
+                <a href="experiences/cultural-shows.html" class="mega-link">🎭 Cultural Shows</a>
+                <a href="experiences/minority-local-life.html" class="mega-link">🏮 Minority &amp; Local Life</a>
               </div>
             </div>
           </li>
 
           <!-- 4. Things to do & Tour (4 sub-items) -->
           <li class="nav-item h-full flex items-center">
-            <a href="#tour" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+            <a href="tours/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Things to do &amp; Tour
               <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -201,7 +427,7 @@
                 </div>
                 <div>
                   <p class="mega-col-title">Featured</p>
-                  <a href="#tour" class="mega-feature block mb-3">
+                  <a href="tours/index.html" class="mega-feature block mb-3">
                     <img width="1200" height="815" loading="lazy" decoding="async" src="images/peaks-panorama.webp" alt="" class="h-28 w-full object-cover">
                     <div class="overlay"></div>
                     <span class="absolute bottom-2 left-3 text-white text-sm font-semibold">All Tours →</span>
@@ -214,28 +440,51 @@
 
           <!-- 5. Hotel -->
           <li class="nav-item h-full flex items-center">
-            <a href="#hotel" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Hotel</a>
+            <a href="hotels/mountain-lodges.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+              Hotel
+              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <div class="mega-menu" style="width:480px;">
+              <div class="grid grid-cols-2 gap-x-8 gap-y-1">
+                <a href="hotels/mountain-lodges.html" class="mega-link">🏔️ Mountain Lodges</a>
+                <a href="hotels/selected-stays.html" class="mega-link">⭐ Selected Stays</a>
+                <a href="hotels/value-hotels.html" class="mega-link">💡 Value Hotels</a>
+                <a href="hotels/by-area.html" class="mega-link">📍 By Area</a>
+              </div>
+            </div>
           </li>
 
           <!-- 6. Food -->
           <li class="nav-item h-full flex items-center">
-            <a href="#food" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Food</a>
+            <a href="food/zhangjiajie-cuisine.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
+              Food
+              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            </a>
+            <div class="mega-menu" style="width:520px;">
+              <div class="grid grid-cols-2 gap-x-8 gap-y-1">
+                <a href="food/zhangjiajie-cuisine.html" class="mega-link">🍜 Zhangjiajie Cuisine</a>
+                <a href="food/featured-restaurants.html" class="mega-link">⭐ Featured Restaurants</a>
+                <a href="food/chinese-restaurants.html" class="mega-link">🥢 Chinese Restaurants</a>
+                <a href="food/western-restaurants.html" class="mega-link">🍕 Western Restaurants</a>
+                <a href="food/must-eat-restaurants.html" class="mega-link">🏆 Must-Eat Restaurants</a>
+              </div>
+            </div>
+          </li>
+
+          <!-- Plan -->
+          <li class="nav-item h-full flex items-center">
+            <a href="plan/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Plan</a>
           </li>
 
           <!-- 7. Contact us -->
           <li class="nav-item h-full flex items-center">
-            <a href="javascript:void(0)" onclick="openContactModal(event)" class="nav-link text-sm font-semibold text-forest hover:bg-forest hover:text-white px-4 h-full flex items-center rounded-full transition-colors cursor-pointer">Contact us</a>
+            <button type="button"  onclick="openContactModal(event)" class="nav-link text-sm font-semibold text-forest hover:bg-forest hover:text-white px-4 h-full flex items-center rounded-full transition-colors cursor-pointer">Contact us</button>
           </li>
         </ul>
       </nav>
 
       <!-- Right CTA -->
-      <div class="hidden lg:flex items-center shrink-0">
-        <a href="https://wa.me/8618777358302" target="_blank" class="flex items-center gap-2 bg-forest hover:bg-forest-light text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-colors duration-300">
-          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.464 3.488"/></svg>
-          WhatsApp
-        </a>
-      </div>
+      
 
       <!-- Mobile toggle -->
       <button class="lg:hidden text-forest" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
@@ -245,34 +494,48 @@
 
     <!-- Mobile menu -->
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
-      <a href="#home" class="block text-stone font-semibold py-2">1. Home</a>
+      <a href="#home" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">1. Home</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">2. Attraction</p>
-      <a href="#attraction-yuanjiajie" class="block text-stone/80 py-1 pl-3 text-sm">Yuanjiajie / Avatar Mtn</a>
-      <a href="#attraction-tianzi" class="block text-stone/80 py-1 pl-3 text-sm">Tianzi Mountain</a>
-      <a href="#attraction-tianmen" class="block text-stone/80 py-1 pl-3 text-sm">Tianmen Mountain</a>
-      <a href="#attraction-jinbian" class="block text-stone/80 py-1 pl-3 text-sm">Golden Whip Stream</a>
-      <a href="#attraction-grand-canyon" class="block text-stone/80 py-1 pl-3 text-sm">Grand Canyon Glass Bridge</a>
-      <a href="#attraction-huangshizhai" class="block text-stone/80 py-1 pl-3 text-sm">Huangshizhai</a>
-      <a href="#attraction-baofeng" class="block text-stone/80 py-1 pl-3 text-sm">Baofeng Lake</a>
-      <a href="#attraction-yellow-dragon" class="block text-stone/80 py-1 pl-3 text-sm">Yellow Dragon Cave</a>
+      <a href="attractions/index.html" class="block text-forest font-semibold py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Attractions</a>
+      <a href="attractions/yuanjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yuanjiajie / Avatar Mtn</a>
+      <a href="attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianzi Mountain</a>
+      <a href="attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
+      <a href="attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Golden Whip Stream</a>
+      <a href="attractions/grand-canyon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Grand Canyon Glass Bridge</a>
+      <a href="attractions/huangshizhai.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Huangshizhai</a>
+      <a href="attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Baofeng Lake</a>
+      <a href="attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yellow Dragon Cave</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">3. Experience</p>
-      <a href="#exp-avatar" class="block text-stone/80 py-1 pl-3 text-sm">Avatar &amp; Bailong</a>
-      <a href="#exp-glass" class="block text-stone/80 py-1 pl-3 text-sm">Glass Bridge &amp; Bungee</a>
-      <a href="#exp-tianmen" class="block text-stone/80 py-1 pl-3 text-sm">Tianmen Mountain</a>
-      <a href="#exp-heli" class="block text-stone/80 py-1 pl-3 text-sm">Helicopter Tour</a>
-      <a href="#exp-show" class="block text-stone/80 py-1 pl-3 text-sm">Cultural Shows</a>
-      <a href="#exp-minority" class="block text-stone/80 py-1 pl-3 text-sm">Minority &amp; Local Life</a>
+      <a href="experiences/index.html" class="block text-forest font-semibold py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Experiences</a>
+      <a href="experiences/avatar-bailong-elevator.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Avatar &amp; Bailong</a>
+      <a href="experiences/glass-bridge-bungee.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Glass Bridge &amp; Bungee</a>
+      <a href="experiences/tianmen-mountain.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
+      <a href="experiences/helicopter-tour.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Helicopter Tour</a>
+      <a href="experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
+      <a href="experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">4. Things to do &amp; Tour</p>
-      <a href="#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm">Top 8 Must-See Spots</a>
-      <a href="#tour-day" class="block text-stone/80 py-1 pl-3 text-sm">Day Tours</a>
-      <a href="#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm">Private Tours</a>
-      <a href="#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm">VIP Tours</a>
-      <a href="#hotel" class="block text-stone font-semibold py-2 pt-3">5. Hotel</a>
-      <a href="#food" class="block text-stone font-semibold py-2">6. Food</a>
-      <a href="javascript:void(0)" onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</a>
-      <a href="https://wa.me/8618777358302" target="_blank" class="block text-center bg-forest text-white font-semibold py-2.5 rounded-full mt-3">WhatsApp Us</a>
+      <a href="tours/index.html" class="block text-forest font-semibold py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Tours</a>
+      <a href="#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
+      <a href="#tour-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
+      <a href="#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
+      <a href="#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
+      <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">5. Hotel</p>
+      <a href="hotels/mountain-lodges.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏔️ Mountain Lodges</a>
+      <a href="hotels/selected-stays.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">⭐ Selected Stays</a>
+      <a href="hotels/value-hotels.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">💡 Value Hotels</a>
+      <a href="hotels/by-area.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">📍 By Area</a>
+      <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">6. Food</p>
+      <a href="food/zhangjiajie-cuisine.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🍜 Zhangjiajie Cuisine</a>
+      <a href="food/featured-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">⭐ Featured Restaurants</a>
+      <a href="food/chinese-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🥢 Chinese Restaurants</a>
+      <a href="food/western-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🍕 Western Restaurants</a>
+      <a href="food/must-eat-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏆 Must-Eat Restaurants</a>
+      <a href="plan/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Plan Like a Local</a>
+      <button type="button"  onclick="openContactModal(event);document.getElementById('mobile-menu').classList.add('hidden')" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</button>
+      
     </div>
   </header>
+<main>
 
   <!-- ============================================================ -->
   <!-- PAGE SECTIONS — Mind Map Structure: 7 Main Areas               -->
@@ -286,7 +549,7 @@
         Where Mountains<br>Float in the Clouds
       </h1>
       <p class="text-lg md:text-xl text-white/80 leading-relaxed max-w-2xl mx-auto mb-10 fade-in">
-        Discover the surreal sandstone peaks that inspired <em>Avatar</em>. Walk ancient streams beneath towering pillars. Experience Zhangjiajie like never before — with the #1 local team that knows it best.
+        Discover the surreal sandstone peaks that inspired <em>Avatar</em>. Walk quiet streams beneath towering pillars, and see the real landscape behind the floating mountains — with local guides who know every trail.
       </p>
     </div>
     <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
@@ -297,10 +560,10 @@
   <!-- Quick stats bar (under Hero) -->
   <section class="bg-forest py-10 border-t border-white/10">
     <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div><p class="font-display text-3xl text-gold">3,000+</p><p class="text-white/60 text-sm mt-1">Sandstone Pillars</p></div>
-      <div><p class="font-display text-3xl text-gold">7</p><p class="text-white/60 text-sm mt-1">Major Attractions</p></div>
-      <div><p class="font-display text-3xl text-gold">54%</p><p class="text-white/60 text-sm mt-1">Overseas Market Share</p></div>
-      <div><p class="font-display text-3xl text-gold">100K+</p><p class="text-white/60 text-sm mt-1">Guests / Year</p></div>
+      <div><p class="font-display text-3xl text-sand">3,000+</p><p class="text-white/60 text-sm mt-1">Sandstone Pillars</p></div>
+      <div><p class="font-display text-3xl text-sand">7</p><p class="text-white/60 text-sm mt-1">Major Attractions</p></div>
+      <div><p class="font-display text-3xl text-sand">54%</p><p class="text-white/60 text-sm mt-1">Overseas Market Share</p></div>
+      <div><p class="font-display text-3xl text-sand">100K+</p><p class="text-white/60 text-sm mt-1">Guests / Year</p></div>
     </div>
   </section>
 
@@ -316,29 +579,29 @@
       <p class="text-gold text-xs font-semibold tracking-[0.3em] uppercase mb-5 fade-in">UNESCO World Heritage &middot; Hunan Province, China</p>
       <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-7 fade-in">Welcome to Zhangjiajie</h2>
 
-      <div class="text-left space-y-5 fade-in">
-        <p class="text-white/90 leading-relaxed text-base md:text-lg">
-          <strong class="text-white">Zhangjiajie (张家界)</strong> is a city in Hunan Province, central China, home to the <strong class="text-white">Wulingyuan Scenic Area</strong> — a <strong class="text-gold">UNESCO World Heritage Site</strong> inscribed in 1992. The park contains over <strong class="text-white">3,000 quartz-sandstone pillars and peaks</strong>, many over 200 meters tall, rising from deep mist-carved valleys. This surreal landscape was the <strong class="text-white">real-world inspiration for the floating "Hallelujah Mountains"</strong> in James Cameron's blockbuster film <em>Avatar</em>. If you've ever wondered <strong>"Where was Avatar filmed?"</strong> — this is it.
-        </p>
+        <div class="text-left space-y-5 fade-in">
+          <p class="text-white/90 leading-relaxed text-base md:text-lg">
+            <strong class="text-white">Zhangjiajie (张家界)</strong> is a city in the mountains of Hunan Province, home to the <strong class="text-gold">Wulingyuan Scenic Area</strong> — a UNESCO World Heritage Site since 1992. More than <strong class="text-white">3,000 quartz-sandstone pillars</strong> rise straight out of the mist here, many over 200 m tall. This is the real landscape behind the floating "Hallelujah Mountains" in the film <em>Avatar</em>.
+          </p>
 
-        <p class="text-white/80 leading-relaxed text-base md:text-lg">
-          For international visitors, <strong class="text-white">Zhangjiajie offers something no other destination can match</strong>: walk on the <strong class="text-white">world's longest cable car ride</strong> up Tianmen Mountain (7.5 km), step onto the <strong class="text-white">world's highest glass-bottom bridge</strong> at Grand Canyon (430 m above ground), hike through ancient forests along Golden Whip Stream where monkeys play at your feet, or take the world's tallest outdoor elevator (Bailong Elevator, 326 m) straight up a cliff face. Whether you're seeking <strong class="text-white">adventure travel, photography, family vacations, or a once-in-a-lifetime nature escape</strong>, Zhangjiajie delivers.
-        </p>
+          <p class="text-white/80 leading-relaxed text-base md:text-lg">
+            There's nowhere else quite like it. Ride the <strong class="text-white">world's longest cable car</strong> up Tianmen Mountain (7.5 km), cross the <strong class="text-white">world's highest glass-bottom bridge</strong> at Grand Canyon, or take the Bailong Elevator — the world's tallest outdoor lift — straight up a cliff face. Walk Golden Whip Stream where wild monkeys roam, and watch the peaks disappear into cloud at sunrise.
+          </p>
 
-        <p class="text-white/75 leading-relaxed text-base">
-          <strong class="text-gold">Why travel with Visit Zhangjiajie?</strong> We are Zhangjiajie's leading inbound travel service team, partnering with 100+ hotels and 50+ licensed travel agencies across the region. Every year we help <strong class="text-white">100,000+ international guests</strong> from the US, UK, Europe, Southeast Asia, and beyond explore this extraordinary land. Our <strong class="text-white">English-speaking guides</strong>, carefully curated itineraries, and transparent pricing mean you can focus on the experience — we handle everything else. From <strong class="text-white">private custom tours</strong> and small-group day trips to VIP luxury packages, we design your trip around <em>your</em> pace, interests, and budget.
-        </p>
-      </div>
+          <p class="text-white/75 leading-relaxed text-base">
+            <strong class="text-gold">Why travel with us?</strong> We're a Zhangjiajie-based team with English-speaking guides, hand-picked itineraries, and clear, upfront pricing — so you can enjoy the trip and leave the logistics to us. Whether it's a <strong class="text-white">private custom tour</strong>, a small-group day trip, or a relaxed family visit, we shape it around <em>your</em> pace and interests.
+          </p>
+        </div>
     </div>
 
     <!-- Understated navigation (de-emphasized — plain text links, no cards) -->
     <nav class="relative z-10 mt-14 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-white/60 fade-in">
-      <a href="#attraction" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Attractions</a>
-      <a href="#experience" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Experiences</a>
-      <a href="#tour" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Tours</a>
+      <a href="attractions/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Attractions</a>
+      <a href="experiences/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Experiences</a>
+      <a href="tours/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Tours</a>
       <a href="#hotel" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Hotels</a>
       <a href="#food" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Food</a>
-      <a href="javascript:void(0)" onclick="openContactModal(event)" class="hover:text-white transition-colors cursor-pointer">Contact</a>
+      <button type="button"  onclick="openContactModal(event)" class="hover:text-white transition-colors cursor-pointer">Contact</button>
     </nav>
   </section>
 
@@ -348,107 +611,110 @@
       <div class="text-center mb-16 fade-in">
         <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Explore</p>
         <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Top Attractions in Zhangjiajie</h2>
-        <p class="text-stone/70 text-lg max-w-2xl mx-auto">Eight must-see destinations — the same iconic spots ranked in our Top 8 list, from the Avatar mountains to hidden caves.</p>
+        <p class="text-stone-600 text-lg max-w-2xl mx-auto">Eight must-see destinations — the same iconic spots ranked in our Top 8 list, from the Avatar mountains to hidden caves.</p>
       </div>
 
       <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
         <!-- 1. Yuanjiajie (Avatar Mountains) -->
-        <div id="attraction-yuanjiajie" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-yuanjiajie" href="attractions/yuanjiajie.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="800" height="450" loading="lazy" decoding="async" src="images/yuanjiajie-avatar.webp" alt="Yuanjiajie Avatar Mountains" class="w-full h-full object-cover">
+            <img width="800" height="450" loading="lazy" decoding="async" src="images/yuanjiajie-avatar.webp" alt="Yuanjiajie Avatar Mountains" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-forest/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Avatar · 阿凡达</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Yuanjiajie (Avatar Mountains)</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">The real-life Pandora — sandstone pillars that inspired Avatar's Hallelujah Mountains. Ride the Bailong Elevator and walk the Avatar viewpoint.</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Yuanjiajie (Avatar Mountains)</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">The real-life Pandora — sandstone pillars that inspired Avatar's Hallelujah Mountains. Ride the Bailong Elevator and walk the Avatar viewpoint.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 2. Tianzi Mountain -->
-        <div id="attraction-tianzi" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-tianzi" href="attractions/tianzi.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="1200" height="781" loading="lazy" decoding="async" src="images/tianzi-autumn.webp" alt="Tianzi Mountain" class="w-full h-full object-cover">
+            <img width="1200" height="781" loading="lazy" decoding="async" src="images/tianzi-autumn.webp" alt="Tianzi Mountain" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-emerald-600/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Sea of Clouds</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Tianzi Mountain</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">Legendary peak forest with rolling seas of clouds and crimson sunrises. Named after Xiang Dakun, the Tujia "Son of Heaven". Best at dawn.</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Tianzi Mountain</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">Legendary peak forest with rolling seas of clouds and crimson sunrises. Named after Xiang Dakun, the Tujia "Son of Heaven". Best at dawn.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 3. Tianmen Mountain -->
-        <div id="attraction-tianmen" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-tianmen" href="attractions/tianmen.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="1200" height="815" loading="lazy" decoding="async" src="images/peaks-panorama.webp" alt="Tianmen Mountain" class="w-full h-full object-cover">
+            <img width="1200" height="815" loading="lazy" decoding="async" src="images/peaks-panorama.webp" alt="Tianmen Mountain" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-gold/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">World Record</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Tianmen Mountain</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">Ride the world's longest cable car (7.5 km), climb the 999-step Heavenly Stairway, and walk the glass skywalk at 1,500 m.</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Tianmen Mountain</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">Ride the world's longest cable car (7.5 km), climb the 999-step Heavenly Stairway, and walk the glass skywalk at 1,500 m.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 4. Golden Whip Stream -->
-        <div id="attraction-jinbian" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-jinbian" href="attractions/jinbian.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="800" height="534" loading="lazy" decoding="async" src="images/jinbianxi-stream.webp" alt="Golden Whip Stream" class="w-full h-full object-cover">
+            <img width="800" height="534" loading="lazy" decoding="async" src="images/jinbianxi-stream.webp" alt="Golden Whip Stream" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-blue-600/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Family Friendly</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Golden Whip Stream</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">A flat 7.5 km valley walk along a crystal stream, shaded by peaks and home to playful wild macaques. Easy and perfect for families.</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Golden Whip Stream</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">A flat 7.5 km valley walk along a crystal stream, shaded by peaks and home to playful wild macaques. Easy and perfect for families.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 5. Grand Canyon Glass Bridge -->
-        <div id="attraction-grand-canyon" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-grand-canyon" href="attractions/grand-canyon.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="1200" height="801" loading="lazy" decoding="async" src="images/yangjiajie-wall.webp" alt="Grand Canyon Glass Bridge" class="w-full h-full object-cover">
+            <img width="1200" height="801" loading="lazy" decoding="async" src="images/yangjiajie-wall.webp" alt="Grand Canyon Glass Bridge" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-red-600/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Thrill Seeker</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Grand Canyon Glass Bridge</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">The world's highest & longest glass-bottom suspension bridge (430 m), 300 m above the canyon floor. Bungee jumping available!</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Grand Canyon Glass Bridge</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">The world's highest & longest glass-bottom suspension bridge (430 m), 300 m above the canyon floor. Bungee jumping available!</p>
           </div>
-        </div>
+        </a>
 
         <!-- 6. Huangshizhai -->
-        <div id="attraction-huangshizhai" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-huangshizhai" href="attractions/huangshizhai.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="1200" height="627" loading="lazy" decoding="async" src="images/huangshizhai-winter.webp" alt="Huangshizhai" class="w-full h-full object-cover">
+            <img width="1200" height="627" loading="lazy" decoding="async" src="images/huangshizhai-winter.webp" alt="Huangshizhai" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-orange-500/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Panorama</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Huangshizhai</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">A classic loop trail with a 360° panorama of the quartz-sandstone peaks. "He who doesn't reach Huangshizhai hasn't seen Zhangjiajie."</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Huangshizhai</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">A classic loop trail with a 360° panorama of the quartz-sandstone peaks. "He who doesn't reach Huangshizhai hasn't seen Zhangjiajie."</p>
           </div>
-        </div>
+        </a>
 
         <!-- 7. Baofeng Lake -->
-        <div id="attraction-baofeng" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-baofeng" href="attractions/baofeng.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="1200" height="801" loading="lazy" decoding="async" src="images/gallery-painting.webp" alt="Baofeng Lake" class="w-full h-full object-cover">
+            <img width="1200" height="801" loading="lazy" decoding="async" src="images/gallery-painting.webp" alt="Baofeng Lake" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-blue-600/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Relaxing</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Baofeng Lake</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">A pristine alpine lake surrounded by towering cliffs. Take a boat ride while local ethnic singers perform traditional folk songs. Pure serenity.</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Baofeng Lake</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">A pristine alpine lake surrounded by towering cliffs. Take a boat ride while local ethnic singers perform traditional folk songs. Pure serenity.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 8. Yellow Dragon Cave -->
-        <div id="attraction-yellow-dragon" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in">
+        <a id="attraction-yellow-dragon" href="attractions/yellow-dragon.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
           <div class="relative h-52 overflow-hidden">
-            <img width="970" height="1200" loading="lazy" decoding="async" src="images/jinbianxi-rock.webp" alt="Yellow Dragon Cave" class="w-full h-full object-cover">
+            <img width="970" height="1200" loading="lazy" decoding="async" src="images/jinbianxi-rock.webp" alt="Yellow Dragon Cave" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             <div class="absolute top-3 left-3 bg-purple-700/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">Underground Wonder</div>
           </div>
           <div class="p-5">
-            <h3 class="font-display text-xl text-forest mb-2">Yellow Dragon Cave</h3>
-            <p class="text-stone/60 text-sm leading-relaxed">One of China's largest karst cave systems — 13 levels, underground rivers, stalactites and waterfalls spanning 48 hectares beneath the earth.</p>
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">Yellow Dragon Cave</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">One of China's largest karst cave systems — 13 levels, underground rivers, stalactites and waterfalls spanning 48 hectares beneath the earth.</p>
           </div>
-        </div>
+        </a>
 
+      </div>
+      <div class="text-center mt-14 fade-in">
+        <a href="attractions/index.html" class="inline-flex items-center gap-2 bg-forest text-white font-semibold px-7 py-3.5 rounded-full hover:bg-forest-light transition-colors duration-300">View all 8 attractions &rarr;</a>
       </div>
     </div>
   </section>
@@ -459,13 +725,13 @@
       <div class="text-center mb-16 fade-in">
         <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Immerse Yourself</p>
         <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Experiences You Can't Miss</h2>
-        <p class="text-stone/70 text-lg max-w-2xl mx-auto">Six signature experiences international travelers love most in Zhangjiajie.</p>
+        <p class="text-stone-600 text-lg max-w-2xl mx-auto">Six signature experiences international travelers love most in Zhangjiajie.</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
 
         <!-- 1. Avatar Mountains & Bailong Elevator -->
-        <div id="exp-avatar" class="group relative min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200">
+        <a href="experiences/avatar-bailong-elevator.html" id="exp-avatar" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Avatar Mountains & Bailong Elevator">
           <img width="800" height="450" loading="lazy" decoding="async" src="images/yuanjiajie-avatar.webp" alt="Avatar Mountains & Bailong Elevator" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -473,10 +739,10 @@
             <h3 class="font-display text-2xl mb-1.5">Avatar Mountains & Bailong Elevator</h3>
             <p class="text-white/70 text-sm leading-relaxed">Ride the world's tallest outdoor lift to the real Pandora peaks.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 2. Glass Bridge & Bungee -->
-        <div id="exp-glass" class="group relative min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200">
+        <a href="experiences/glass-bridge-bungee.html" id="exp-glass" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Glass Bridge & Bungee">
           <img width="970" height="1200" loading="lazy" decoding="async" src="images/jinbianxi-rock.webp" alt="Glass Bridge & Bungee" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -484,10 +750,10 @@
             <h3 class="font-display text-2xl mb-1.5">Glass Bridge & Bungee</h3>
             <p class="text-white/70 text-sm leading-relaxed">Walk a 430m transparent bridge — then leap off it bungee-style.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 3. Tianmen Mountain -->
-        <div id="exp-tianmen" class="group relative min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200">
+        <a href="experiences/tianmen-mountain.html" id="exp-tianmen" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Tianmen Mountain">
           <img width="1200" height="815" loading="lazy" decoding="async" src="images/peaks-panorama.webp" alt="Tianmen Mountain" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -495,10 +761,10 @@
             <h3 class="font-display text-2xl mb-1.5">Tianmen Mountain</h3>
             <p class="text-white/70 text-sm leading-relaxed">Cable car above the clouds to the legendary Heaven's Gate cave.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 4. Helicopter Air Tour -->
-        <div id="exp-heli" class="group relative min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200">
+        <a href="experiences/helicopter-tour.html" id="exp-heli" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Helicopter Air Tour">
           <img width="1200" height="499" loading="lazy" decoding="async" src="images/yuanjiajie-mist.webp" alt="Helicopter Air Tour" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -506,10 +772,10 @@
             <h3 class="font-display text-2xl mb-1.5">Helicopter Air Tour</h3>
             <p class="text-white/70 text-sm leading-relaxed">See the whole sandstone maze from the sky in 10 minutes.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 5. Cultural Shows -->
-        <div id="exp-show" class="group relative min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200">
+        <a href="experiences/cultural-shows.html" id="exp-show" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Cultural Shows">
           <img width="1200" height="801" loading="lazy" decoding="async" src="images/gallery-painting.webp" alt="Cultural Shows" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -517,10 +783,10 @@
             <h3 class="font-display text-2xl mb-1.5">Cultural Shows</h3>
             <p class="text-white/70 text-sm leading-relaxed">Tujia & Miao song, dance and legend under the open sky.</p>
           </div>
-        </div>
+        </a>
 
         <!-- 6. Minority Crafts & Local Life -->
-        <div id="exp-minority" class="group relative min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200">
+        <a href="experiences/minority-local-life.html" id="exp-minority" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Minority Crafts & Local Life">
           <img width="800" height="449" loading="lazy" decoding="async" src="images/tianzi-snow.webp" alt="Minority Crafts & Local Life" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -528,7 +794,7 @@
             <h3 class="font-display text-2xl mb-1.5">Minority Crafts & Local Life</h3>
             <p class="text-white/70 text-sm leading-relaxed">Try Tujia tie-dye, silverwork & a homemade folk feast.</p>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -543,7 +809,7 @@
         <div class="text-center mb-12 fade-in">
           <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Don't Miss These</p>
           <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Top 8 Must-See Spots</h2>
-          <p class="text-stone/70 text-lg max-w-2xl mx-auto">Ranked by popularity among our 100K+ guests.</p>
+          <p class="text-stone-600 text-lg max-w-2xl mx-auto">The spots our guests love most, ranked by how often they actually go.</p>
         </div>
         <div class="overflow-x-auto fade-in">
           <table class="compare-table rounded-xl overflow-hidden shadow-sm">
@@ -576,10 +842,10 @@
           <div id="tour-day-card" class="bg-white rounded-2xl p-8 shadow-sm card-hover fade-in">
             <div class="flex items-center gap-3 mb-5">
               <div class="w-12 h-12 bg-sand rounded-full flex items-center justify-center text-2xl">📅</div>
-              <div><h3 class="font-display text-2xl text-forest">Day Tour</h3><p class="text-stone/50 text-sm">One-day highlights</p></div>
+              <div><h3 class="font-display text-2xl text-forest">Day Tour</h3><p class="text-stone-500 text-sm">One-day highlights</p></div>
             </div>
-            <p class="text-stone/70 text-sm mb-4">Perfect if you're short on time. Hit the biggest sights in one action-packed day with a private guide and driver.</p>
-            <ul class="text-stone/60 text-sm space-y-2 mb-6">
+            <p class="text-stone-600 text-sm mb-4">Perfect if you're short on time. Hit the biggest sights in one action-packed day with a private guide and driver.</p>
+            <ul class="text-stone-500 text-sm space-y-2 mb-6">
               <li>✓ Yuanjiajie + Avatar Platform</li>
               <li>✓ Tianzi Mountain overlook</li>
               <li>✓ Golden Whip Stream walk</li>
@@ -587,7 +853,7 @@
               <li>✓ Hotel pickup & drop-off</li>
             </ul>
             <p class="font-display text-2xl text-forest mb-1">From <span class="text-gold">$129</span>/person</p>
-            <a href="javascript:void(0)" onclick="openContactModal(event)" class="mt-4 inline-block w-full text-center bg-forest hover:bg-forest-light text-white font-semibold py-3 rounded-full transition-colors">Inquire Now →</a>
+            <button type="button"  onclick="openContactModal(event)" class="mt-4 inline-block w-full text-center bg-forest hover:bg-forest-light text-white font-semibold py-3 rounded-full transition-colors">Inquire Now →</button>
           </div>
 
           <!-- Private Tour -->
@@ -596,8 +862,8 @@
               <div class="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center text-2xl">🎒</div>
               <div><h3 class="font-display text-2xl text-forest">Private Tour</h3><p class="text-gold-dark text-sm font-medium">Most Popular ★</p></div>
             </div>
-            <p class="text-stone/70 text-sm mb-4">Fully customized to your pace and interests. Your own guide, car, and flexible itinerary. The way 90% of our guests travel.</p>
-            <ul class="text-stone/60 text-sm space-y-2 mb-6">
+            <p class="text-stone-600 text-sm mb-4">Built around your pace and interests — your own guide, your own car, and a flexible plan that changes when you want it to.</p>
+            <ul class="text-stone-500 text-sm space-y-2 mb-6">
               <li>✓ Customizable 3–7 day itinerary</li>
               <li>✓ Private English-speaking guide</li>
               <li>✓ Private vehicle throughout</li>
@@ -605,17 +871,17 @@
               <li>✓ All entrance tickets included</li>
             </ul>
             <p class="font-display text-2xl text-forest mb-1">From <span class="text-gold">$599</span>/person</p>
-            <a href="javascript:void(0)" onclick="openContactModal(event)" class="mt-4 inline-block w-full text-center bg-gold hover:bg-gold-dark text-white font-semibold py-3 rounded-full transition-colors">Inquire Now →</a>
+            <button type="button"  onclick="openContactModal(event)" class="mt-4 inline-block w-full text-center bg-gold hover:bg-gold-dark text-white font-semibold py-3 rounded-full transition-colors">Inquire Now →</button>
           </div>
 
           <!-- VIP Tour -->
           <div id="tour-vip-card" class="bg-white rounded-2xl p-8 shadow-sm card-hover fade-in">
             <div class="flex items-center gap-3 mb-5">
               <div class="w-12 h-12 bg-forest/10 rounded-full flex items-center justify-center text-2xl">💎</div>
-              <div><h3 class="font-display text-2xl text-forest">VIP Tour</h3><p class="text-stone/50 text-sm">Ultimate experience</p></div>
+              <div><h3 class="font-display text-2xl text-forest">VIP Tour</h3><p class="text-stone-500 text-sm">Ultimate experience</p></div>
             </div>
-            <p class="text-stone/70 text-sm mb-4">Skip every line, enjoy premium hotels, exclusive access spots, and white-glove service. For travelers who want only the best.</p>
-            <ul class="text-stone/60 text-sm space-y-2 mb-6">
+            <p class="text-stone-600 text-sm mb-4">Skip the queues, stay in top hotels, and reach the quietest viewpoints. For travelers who'd rather relax and let us handle the rest.</p>
+            <ul class="text-stone-500 text-sm space-y-2 mb-6">
               <li>✓ Fast-track entry (skip lines)</li>
               <li>✓ 5★ luxury hotel suite</li>
               <li>✓ Premium dining experiences</li>
@@ -623,7 +889,7 @@
               <li>✓ Personal concierge 24/7</li>
             </ul>
             <p class="font-display text-2xl text-forest mb-1">From <span class="text-gold">$1,999</span>/person</p>
-            <a href="javascript:void(0)" onclick="openContactModal(event)" class="mt-4 inline-block w-full text-center bg-forest hover:bg-forest-light text-white font-semibold py-3 rounded-full transition-colors">Inquire Now →</a>
+            <button type="button"  onclick="openContactModal(event)" class="mt-4 inline-block w-full text-center bg-forest hover:bg-forest-light text-white font-semibold py-3 rounded-full transition-colors">Inquire Now →</button>
           </div>
 
         </div>
@@ -632,41 +898,155 @@
     </div>
   </section>
 
-  <!-- ========== 5. STAY & DINE ============================================= -->
+  <!-- ========== 5. PLAN LIKE A LOCAL ===================================== -->
+  <section id="plan" class="py-24 px-6 bg-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 fade-in">
+        <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Plan Like a Local</p>
+        <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">Plan Your Trip with Local Experts</h2>
+        <p class="text-stone-600 text-lg max-w-2xl mx-auto">The best Zhangjiajie trips are planned, not stumbled into. Use our local guides to decide how many days to stay, when to come, and where to base yourself.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <!-- 1. Itinerary -->
+        <a href="plan/zhangjiajie-itinerary.html" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Zhangjiajie Itinerary: 3, 4, or 5 Days">
+          <img width="800" height="450" loading="lazy" decoding="async" src="images/yuanjiajie-avatar.webp" alt="Yuanjiajie Avatar Hallelujah Mountain at sunrise" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <span class="inline-block bg-white/15 backdrop-blur-sm text-white/90 text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2.5 tracking-wide">PLANNING</span>
+            <h3 class="font-display text-2xl mb-1.5">Zhangjiajie Itinerary: 3, 4, or 5 Days</h3>
+            <p class="text-white/70 text-sm leading-relaxed">A practical day-by-day plan covering Yuanjiajie, Tianzi, Golden Whip Stream, Tianmen &amp; the Grand Canyon.</p>
+          </div>
+        </a>
+
+        <!-- 2. Best time -->
+        <a href="plan/best-time-to-visit-zhangjiajie.html" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Best Time to Visit Zhangjiajie">
+          <img width="800" height="450" loading="lazy" decoding="async" src="images/tianzi-snow.webp" alt="Snow on Tianzi Mountain ridges in winter" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <span class="inline-block bg-white/15 backdrop-blur-sm text-white/90 text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2.5 tracking-wide">SEASONS</span>
+            <h3 class="font-display text-2xl mb-1.5">Best Time to Visit Zhangjiajie</h3>
+            <p class="text-white/70 text-sm leading-relaxed">Month-by-month weather, crowd levels, and the two weeks you'll want to avoid.</p>
+          </div>
+        </a>
+
+        <!-- 3. vs Wulingyuan -->
+        <a href="plan/zhangjiajie-vs-wulingyuan.html" class="group relative block min-h-[380px] rounded-2xl overflow-hidden shadow-lg fade-in cursor-pointer bg-stone-200" aria-label="Zhangjiajie vs Wulingyuan: Where to Base Your Trip">
+          <img width="1200" height="815" loading="lazy" decoding="async" src="images/peaks-panorama.webp" alt="Scenic valley view near Wulingyuan" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <span class="inline-block bg-white/15 backdrop-blur-sm text-white/90 text-[11px] font-semibold px-2.5 py-1 rounded-full mb-2.5 tracking-wide">WHERE TO STAY</span>
+            <h3 class="font-display text-2xl mb-1.5">Zhangjiajie vs Wulingyuan</h3>
+            <p class="text-white/70 text-sm leading-relaxed">City or Wulingyuan? A straight comparison of transport, park access, scenery and hotels.</p>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="text-center mt-12 fade-in">
+        <a href="plan/index.html" class="inline-flex items-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-7 py-3.5 rounded-full transition-colors duration-300">View all travel guides →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 6. HOTEL ============================================= -->
   <section id="hotel" class="py-24 px-6 bg-white">
-    <!-- Food shares this section for unified stacking — id anchor on parent div below -->
-    <div id="food" class="max-w-7xl mx-auto space-y-4">
-
-      <!-- Hotel Card -->
-      <div class="relative overflow-hidden rounded-3xl min-h-[320px] fade-in group cursor-pointer bg-slate-200">
-        <img width="1200" height="801" src="images/gallery-painting.webp" alt="Zhangjiajie hotels &amp; mountain lodges" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async" onload="this.style.filter='none';this.style.transform=''" style="filter:blur(16px);transform:scale(1.08)">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/78 via-black/22 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-7 md:p-9 text-white flex items-end justify-between gap-6">
-          <div>
-            <span class="inline-block bg-white/18 backdrop-blur-md text-white/95 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-3">Stay</span>
-            <h2 class="font-display text-2xl sm:text-3xl leading-tight">Explore Hotels &amp; Accommodations</h2>
+    <div class="max-w-7xl mx-auto">
+      <h2 class="font-display text-3xl md:text-4xl text-forest mb-2 text-center">Where to Stay in Zhangjiajie</h2>
+      <p class="text-center text-stone-600 mb-10 max-w-2xl mx-auto">Real, bookable hotels and lodges near the park — picked for scenery, comfort and value.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <a href="hotels/mountain-lodges.html" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/hotel-jimo-1.webp" alt="Mountain lodges with valley views in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+            <h3 class="font-display text-xl md:text-2xl mb-1">Mountain Lodges</h3>
+            <p class="text-white/80 text-sm">Stay close to the peaks and trails</p>
           </div>
-          <a href="#hotel" class="flex-shrink-0 inline-flex items-center gap-2 bg-white text-forest font-semibold px-6 py-3 rounded-full hover:bg-white/92 transition-all shadow-lg shadow-black/15 hover:-translate-y-0.5">View Hotels →</a>
-        </div>
-      </div>
-
-      <!-- Food Card — stacks directly below hotel, same container -->
-      <div class="relative overflow-hidden rounded-3xl min-h-[320px] fade-in group cursor-pointer bg-slate-200">
-        <img width="1600" height="1200" src="images/food-hunan.webp" alt="Hunan cuisine - classic local dishes" class="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async" onload="this.style.filter='none';this.style.transform=''" style="filter:blur(16px);transform:scale(1.08)">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/78 via-black/22 to-transparent"></div>
-        <div class="absolute bottom-0 left-0 right-0 p-7 md:p-9 text-white flex items-end justify-between gap-6">
-          <div>
-            <span class="inline-block bg-white/18 backdrop-blur-md text-white/95 text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-3">Taste</span>
-            <h2 class="font-display text-2xl sm:text-3xl leading-tight">Explore Local Food &amp; Dining</h2>
+        </a>
+        <a href="hotels/selected-stays.html" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/hotel-vienna-1.webp" alt="Selected boutique hotels in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+            <h3 class="font-display text-xl md:text-2xl mb-1">Selected Stays</h3>
+            <p class="text-white/80 text-sm">Hand-picked for comfort & service</p>
           </div>
-          <a href="#food" class="flex-shrink-0 inline-flex items-center gap-2 bg-white text-forest font-semibold px-6 py-3 rounded-full hover:bg-white/92 transition-all shadow-lg shadow-black/15 hover:-translate-y-0.5">View Food →</a>
-        </div>
+        </a>
+        <a href="hotels/value-hotels.html" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/hotel-homeinn-plus-1.webp" alt="Great-value hotels in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+            <h3 class="font-display text-xl md:text-2xl mb-1">Value Hotels</h3>
+            <p class="text-white/80 text-sm">Comfortable rooms that save your budget</p>
+          </div>
+        </a>
+        <a href="hotels/by-area.html" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/hotel-huatian-1.webp" alt="Hotels by area in Zhangjiajie city" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">
+            <h3 class="font-display text-xl md:text-2xl mb-1">By Area</h3>
+            <p class="text-white/80 text-sm">City centre · Wulingyuan · park gates</p>
+          </div>
+        </a>
       </div>
-
     </div>
   </section>
 
-  <!-- ========== 7. CONTACT US ============================================= -->
+  <!-- ========== 7. FOOD ============================================= -->
+  <section id="food" class="py-24 px-6 bg-stone-50">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <p class="text-gold-dark text-xs font-bold uppercase tracking-wide mb-1">Taste Zhangjiajie</p>
+          <h2 class="font-display text-2xl md:text-3xl text-forest">Restaurants &amp; Food</h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="food/zhangjiajie-cuisine.html" class="group relative min-h-[220px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/food-tujia-feast.webp" alt="Zhangjiajie cuisine and Tujia dishes" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-5 text-white">
+            <h3 class="font-display text-lg md:text-xl mb-0.5">Zhangjiajie Cuisine</h3>
+            <p class="text-white/80 text-xs">Signature dishes & local flavors</p>
+          </div>
+        </a>
+        <a href="food/featured-restaurants.html" class="group relative min-h-[220px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/food-restaurant-interior.webp" alt="Featured restaurants in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-5 text-white">
+            <h3 class="font-display text-lg md:text-xl mb-0.5">Featured Restaurants</h3>
+            <p class="text-white/80 text-xs">Scenic & characterful tables</p>
+          </div>
+        </a>
+        <a href="food/chinese-restaurants.html" class="group relative min-h-[220px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/food-sanxiaguo.webp" alt="Chinese restaurants in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-5 text-white">
+            <h3 class="font-display text-lg md:text-xl mb-0.5">Chinese Restaurants</h3>
+            <p class="text-white/80 text-xs">Hunan & Tujia classics</p>
+          </div>
+        </a>
+        <a href="food/western-restaurants.html" class="group relative min-h-[220px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/food-western.webp" alt="Western restaurants in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-5 text-white">
+            <h3 class="font-display text-lg md:text-xl mb-0.5">Western Restaurants</h3>
+            <p class="text-white/80 text-xs">Pizza, cafés & international</p>
+          </div>
+        </a>
+        <a href="food/must-eat-restaurants.html" class="group relative min-h-[220px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+          <img src="images/food-dessert.webp" alt="Must-eat restaurants in Zhangjiajie" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-5 text-white">
+            <h3 class="font-display text-lg md:text-xl mb-0.5">Must-Eat Restaurants</h3>
+            <p class="text-white/80 text-xs">Our shortlist of best tables</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 8. CONTACT US ============================================= -->
   <section id="contact" class="relative overflow-hidden min-h-[680px] flex items-center">
     <!-- Full-viewport background with blur-on-load + parallax -->
     <div class="absolute inset-0 bg-slate-900" aria-hidden="true">
@@ -680,38 +1060,30 @@
       <p class="text-gold text-xs md:text-sm font-medium tracking-[0.25em] uppercase mb-5">Let\'s Plan Together</p>
       <h2 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.4rem] text-white mb-6 leading-[1.15]">Ready for Your Zhangjiajie Adventure?</h2>
       <p class="text-white/70 text-base md:text-lg mb-12 max-w-2xl mx-auto leading-relaxed">
-        Send us a message on WhatsApp or email. We\'ll reply within 24 hours with a personalized itinerary &mdash; no obligation, no pressure, no spam ever.
+        Send us a message by email. We\'ll reply within 24 hours with a personalized itinerary &mdash; no obligation, no pressure, no spam ever.
       </p>
 
       <!-- CTA Buttons -->
       <div class="flex flex-col sm:flex-row gap-4 justify-center mb-10">
-        <!-- WhatsApp — filled dark teal (myguilin style) -->
-        <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer"
-           class="group inline-flex items-center justify-center gap-3 bg-teal-800/90 hover:bg-teal-700 text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 text-base shadow-xl shadow-black/30 hover:shadow-teal-900/40 hover:-translate-y-0.5">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24" class="flex-shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.148-.644-.099-.297-.247-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          WhatsApp: +86 187 7735 8302
-        </a>
+        
         <!-- Email — white outlined pill (myguilin style) -->
-        <a href="mailto:willyumi2026@outlook.com"
+        <a href="mailto:zjjpark@outlook.com"
            class="inline-flex items-center justify-center gap-3 bg-white/95 hover:bg-white text-slate-800 font-semibold px-8 py-4 rounded-full transition-all duration-300 text-base shadow-lg shadow-black/20 hover:-translate-y-0.5">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" class="flex-shrink-0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          Email: willyumi2026@outlook.com
+          Email: zjjpark@outlook.com
         </a>
       </div>
 
       <!-- Trust signals -->
       <div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-white/50 text-sm">
-        <span class="flex items-center gap-1.5"><span class="text-gold">&#10003;</span> Reply within 24 hours</span>
-        <span class="hidden sm:inline text-white/30">|</span>
         <span class="flex items-center gap-1.5"><span class="text-gold">&#10003;</span> Free personalized itinerary</span>
-        <span class="hidden sm:inline text-white/30">|</span>
-        <span class="flex items-center gap-1.5"><span class="text-gold">&#10003;</span> No obligation, no spam</span>
       </div>
     </div>
   </section>
 
 <!-- ========== Footer ========== -->
-  <footer class="relative bg-[#0c3c46] text-white/60 py-14 px-6">
+  </main>
+<footer class="relative bg-[#0c3c46] text-white/60 py-14 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
         <!-- Brand -->
@@ -727,29 +1099,30 @@
 
         <!-- Explore -->
         <div>
-          <h4 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Explore</h4>
+          <h3 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Explore</h4>
           <ul class="space-y-3 text-sm">
-            <li><a href="#attraction" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Attractions</a></li>
-            <li><a href="#experience" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Experiences</a></li>
-            <li><a href="#tour" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Tours &amp; Itineraries</a></li>
+            <li><a href="attractions/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Attractions</a></li>
+            <li><a href="experiences/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Experiences</a></li>
+            <li><a href="tours/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Tours &amp; Itineraries</a></li>
             <li><a href="#hotel" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Hotels</a></li>
             <li><a href="#food" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Local Food</a></li>
+            <li><a href="plan/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Plan Like a Local</a></li>
           </ul>
         </div>
 
         <!-- Contact -->
         <div>
-          <h4 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Contact</h4>
+          <h3 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Contact</h4>
           <ul class="space-y-3 text-sm">
-            <li>WhatsApp: +86 187 7735 8302</li>
-            <li>Email: willyumi2026@outlook.com</li>
-            <li>Reply within 24 hours</li>
+            
+            <li><a href="mailto:zjjpark@outlook.com" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block py-3">Email: zjjpark@outlook.com</a></li>
+            
           </ul>
         </div>
 
         <!-- Follow -->
         <div>
-          <h4 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Follow</h4>
+          <h3 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Follow</h4>
           <div class="flex gap-3">
             <a href="#" aria-label="Twitter/X" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors duration-200">
               <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
@@ -775,9 +1148,11 @@
 
   <!-- ========== Scripts ========== -->
   <script>
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
+    function renderIcons() {
+      window.addEventListener('load', function(){  });
     }
+    renderIcons();
+    window.addEventListener('load', renderIcons);
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -843,39 +1218,19 @@
         <!-- Label + Title (branded, mobile-first) -->
         <p class="text-gold-dark font-semibold text-xs sm:text-sm tracking-widest uppercase mb-2">Let's Plan Together</p>
         <h3 id="modalTitle" class="font-display text-2xl sm:text-3xl text-slate-800 mb-2 leading-tight">Ready for Your Zhangjiajie Adventure?</h3>
-        <p class="text-slate-500 text-sm mb-5 leading-relaxed">We reply within <span class="font-semibold text-slate-700">24 hours</span> &mdash; no obligation, no spam.</p>
+        <p class="text-slate-500 text-sm mb-5 leading-relaxed">We reply by email with a personalized itinerary.</p>
 
         <!-- Unified contact actions: channel info + external jump in one set -->
         <div class="space-y-2.5 mb-5 text-left">
-          <!-- WhatsApp — instant chat, external -->
-          <a href="https://wa.me/8618777358302" target="_blank" rel="noopener noreferrer"
-             class="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white transition-all active:scale-[0.99] shadow-lg shadow-green-500/20">
-            <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-white/20 shrink-0">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.148-.644-.099-.297-.247-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884 9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="text-[10px] uppercase tracking-wider text-white/80 font-medium">WhatsApp</div>
-              <div class="text-sm font-semibold">Chat now &middot; +86 187 7735 8302</div>
-            </div>
-          </a>
-          <!-- Phone / WeChat -->
-          <a href="tel:+8618777358302" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-stone-50 hover:bg-stone-100 transition-all active:scale-[0.99]">
-            <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-forest/10 text-forest shrink-0">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Phone / WeChat</div>
-              <div class="text-sm font-semibold text-slate-800">+86 187 7735 8302</div>
-            </div>
-          </a>
+
           <!-- Email -->
-          <a href="mailto:willyumi2026@outlook.com" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-stone-50 hover:bg-stone-100 transition-all active:scale-[0.99]">
+          <a href="mailto:zjjpark@outlook.com" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-stone-50 hover:bg-stone-100 transition-all active:scale-[0.99]">
             <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 shrink-0">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             </div>
             <div class="flex-1 min-w-0">
               <div class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Email</div>
-              <div class="text-sm font-semibold text-slate-800 break-all">willyumi2026@outlook.com</div>
+              <div class="text-sm font-semibold text-slate-800 break-all">zjjpark@outlook.com</div>
             </div>
           </a>
         </div>

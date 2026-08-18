@@ -1,29 +1,26 @@
 #!/usr/bin/env python3
 """
-willyye.github.io/zhangjiajie-tours-v3 — image optimizer (reproducible build step)
+willyye.github.io/zhangjiajie-tours-v3 — SAFE image optimizer (reproducible build step)
 
-Converts every images/*.jpg to high-quality WebP (keeps the original .jpg as a
-fallback). For large images (width >= 1200) it also emits a width-800 variant
-used by the hero <img srcset>.
+Converts every images/*.jpg to WebP at the HIGHEST quality that is BOTH
+smaller than the current on-disk asset AND perceptually indistinguishable
+from the source (mean abs pixel diff < 4 on a 400px downscale ≈ invisible).
 
-Quality floor is deliberately high (q82) so the result is visually identical to
-the source. A perceptual diff (mean absolute pixel difference on a downscaled
-copy) is printed per image as a sanity check.
+Safety guarantees (no regressions):
+  - Never writes a WebP larger than the existing best on-disk asset.
+  - Never writes a WebP with visible quality loss (diff >= 4 → keep original).
+  - Does NOT emit unused -800 width variants (v3 HTML uses plain <img>, not srcset).
+  - The original .jpg is kept as a fallback source.
 
-Run:  python3 scripts/optimize-images.py
+Run from repo root:  python3 scripts/optimize-images.py
 """
 import os
 import glob
 from PIL import Image, ImageChops
 
 IMG_DIR = "images"
-QUALITY = 82  # high floor — visually lossless for photos
-
-
-def make_width_variant(im, width):
-    ratio = width / im.width
-    height = max(1, round(im.height * ratio))
-    return im.resize((width, height), Image.LANCZOS)
+QUALITIES = [76, 72, 68]          # try high -> low; keep the SMALLEST that is smaller + indistinguishable (floor q68 for safety)
+DIFF_OK = 4.0                       # perceptual diff threshold (~ invisible)
 
 
 def perceptual_diff(a_path, b_path, max_dim=400):
@@ -31,12 +28,10 @@ def perceptual_diff(a_path, b_path, max_dim=400):
     ~0-3 == indistinguishable; 10+ == visibly different."""
     a = Image.open(a_path).convert("RGB").resize((max_dim, max_dim), Image.LANCZOS)
     b = Image.open(b_path).convert("RGB").resize((max_dim, max_dim), Image.LANCZOS)
-    diff = ImageChops.difference(a, b)
-    hist = diff.histogram()  # 768 entries: 256 per RGB channel
-    total = 0
-    count = 0
+    diff = ImageChops.difference(a, b).histogram()
+    total = count = 0
     for ch in range(3):
-        for value, c in enumerate(hist[ch * 256:(ch + 1) * 256]):
+        for value, c in enumerate(diff[ch * 256:(ch + 1) * 256]):
             total += value * c
             count += c
     return total / count if count else 0.0
@@ -44,33 +39,38 @@ def perceptual_diff(a_path, b_path, max_dim=400):
 
 def main():
     jpgs = sorted(glob.glob(os.path.join(IMG_DIR, "*.jpg")))
-    total_src = total_webp = 0
-    print(f"{'file':34} {'jpg':>8} {'webp':>8} {'saved':>7} {'diff':>6}")
-    print("-" * 66)
+    total_before = total_after = 0
+    print(f"{'file':32} {'before':>8} {'after':>8} {'saved':>7} {'diff':>6}  action")
+    print("-" * 78)
     for f in jpgs:
         stem = os.path.splitext(f)[0]
-        im = Image.open(f).convert("RGB")
-        w, _ = im.size
         webp_path = stem + ".webp"
-        im.save(webp_path, "WEBP", quality=QUALITY, method=4)
-        if w >= 1200:
-            make_width_variant(im, 800).save(
-                stem + "-800.webp", "WEBP", quality=QUALITY, method=4
-            )
-        sz_jpg = os.path.getsize(f)
-        sz_webp = os.path.getsize(webp_path)
-        total_src += sz_jpg
-        total_webp += sz_webp
-        d = perceptual_diff(f, webp_path)
-        print(
-            f"{os.path.basename(f):34} {sz_jpg:8d} {sz_webp:8d} "
-            f"{100 * (1 - sz_webp / sz_jpg):6.1f}% {d:6.2f}"
-        )
-    print("-" * 66)
-    print(
-        f"TOTAL  jpg={total_src / 1024:.1f}KB  webp={total_webp / 1024:.1f}KB  "
-        f"saved={100 * (1 - total_webp / total_src):.1f}%"
-    )
+        im = Image.open(f).convert("RGB")
+        best_size = os.path.getsize(webp_path) if os.path.exists(webp_path) else os.path.getsize(f)
+        cands = []
+        for q in QUALITIES:
+            tmp = stem + ".tmp.webp"
+            im.save(tmp, "WEBP", quality=q, method=6)
+            sz = os.path.getsize(tmp)
+            d = perceptual_diff(f, tmp)
+            os.remove(tmp)
+            if d < DIFF_OK and sz < best_size:
+                cands.append((sz, q, d))
+        chosen = (min(cands)[1], min(cands)[0], min(cands)[2]) if cands else None
+        total_before += best_size
+        if chosen:
+            im.save(webp_path, "WEBP", quality=chosen[0], method=6)
+            after = os.path.getsize(webp_path)
+            total_after += after
+            print(f"{os.path.basename(f):32} {best_size:8d} {after:8d} "
+                  f"{100 * (1 - after / best_size):6.1f}% {chosen[2]:6.2f}  webp q{chosen[0]}")
+        else:
+            total_after += best_size
+            print(f"{os.path.basename(f):32} {best_size:8d} {best_size:8d} "
+                  f"{'--':>7} {'--':>6}  keep existing (no safe win)")
+    print("-" * 78)
+    print(f"TOTAL referenced-best  before={total_before / 1024:.1f}KB  "
+          f"after={total_after / 1024:.1f}KB  saved={100 * (1 - total_after / total_before):.1f}%")
 
 
 if __name__ == "__main__":
