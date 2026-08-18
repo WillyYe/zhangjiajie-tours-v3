@@ -180,20 +180,20 @@
     .nav-link {
       position: relative;
     }
-    .nav-link::after {
+    a.nav-link::after {
       content: '';
       position: absolute;
-      bottom: 6px;
+      bottom: 16px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
-      height: 1.5px;
-      background: #2d6a4f;
+      height: 2px;
+      background: #1a3a2a;
       border-radius: 1px;
       transition: width 0.3s ease;
     }
-    .nav-link:hover::after {
-      width: calc(100% - 32px);
+    a.nav-link:hover::after {
+      width: calc(100% - 40px);
     }
 
     /* ===== Mega-menu navigation ===== */
@@ -345,8 +345,8 @@
 <body class="bg-sand text-stone antialiased">
 
   <!-- ========== Navigation ========== -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sand-dark" style="height:68px;">
-    <div class="max-w-[1280px] mx-auto px-8 h-full flex items-center justify-between">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-sand-dark" style="height:66px; box-shadow: 0 1px 4px rgba(26,58,42,0.06);">
+    <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-between">
 
       <!-- Logo -->
       <a href="#home" class="flex items-center gap-2.5 shrink-0 group">
@@ -360,12 +360,12 @@
 
           <!-- 1. Home -->
           <li class="nav-item h-full flex items-center">
-            <a href="#home" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center transition-colors duration-200">Home</a>
+            <a href="#home" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center transition-colors duration-200">Home</a>
           </li>
 
           <!-- 2. Attraction -->
           <li class="nav-item h-full flex items-center">
-            <a href="attractions/index.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="attractions/index.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Attractions
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -396,7 +396,7 @@
 
           <!-- 3. Experience -->
           <li class="nav-item h-full flex items-center">
-            <a href="experiences/index.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="experiences/index.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Experiences
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -414,7 +414,7 @@
 
           <!-- 4. Tours -->
           <li class="nav-item h-full flex items-center">
-            <a href="tours/index.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="tours/index.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Tours
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -443,7 +443,7 @@
 
           <!-- 5. Hotels -->
           <li class="nav-item h-full flex items-center">
-            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium text-stone hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
               Hotels
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -480,8 +480,8 @@
           -->
 
           <!-- 6. Contact -->
-          <li class="nav-item h-full flex items-center ml-2">
-            <button type="button" onclick="openContactModal(event)" class="nav-link text-[13px] font-semibold text-white bg-forest hover:bg-forest-light px-5 h-full flex items-center rounded-full transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md">Contact Us</button>
+          <li class="nav-item h-full flex items-center">
+            <button type="button" onclick="openContactModal(event)" class="text-[13.5px] font-semibold border border-forest text-forest hover:bg-forest hover:text-white px-5 py-2 rounded-full transition-all duration-200 cursor-pointer">Contact Us</button>
           </li>
         </ul>
       </nav>
