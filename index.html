@@ -410,16 +410,15 @@
 
   <!-- ========== Navigation ========== -->
   <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="height:66px;">
+    <!-- Logo: independent of nav centering, placed 10φ left of center -->
+    <a href="#home" class="absolute left-[calc(50%-16.18rem)] top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 shrink-0 group">
+      <span class="text-[24px] group-hover:scale-110 transition-transform duration-300">⛰</span>
+      <span class="font-display text-lg tracking-wide header-logo-text transition-colors duration-300">Visit Zhangjiajie</span>
+    </a>
+
     <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-center">
 
-      <!-- Logo + Nav as one centered unit -->
-      <div class="flex items-center h-full ml-[-8.09rem]">
-
-        <!-- Logo -->
-        <a href="#home" class="relative right-[25.888rem] flex items-center gap-2 shrink-0 group mr-16">
-          <span class="text-[24px] group-hover:scale-110 transition-transform duration-300">⛰</span>
-          <span class="font-display text-lg tracking-wide header-logo-text transition-colors duration-300">Visit Zhangjiajie</span>
-        </a>
+      <!-- Desktop nav — centered independently -->
 
         <!-- Desktop nav — centered, golden-ratio spacing -->
         <nav class="hidden lg:flex items-center h-full">
@@ -552,7 +551,6 @@
           </li>
         </ul>
       </nav>
-      </div>
 
       <!-- Mobile toggle (absolute right) -->
       <button class="lg:hidden header-mobile-toggle absolute right-6" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
