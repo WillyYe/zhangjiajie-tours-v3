@@ -210,7 +210,7 @@
       transition: width 0.3s ease;
     }
     a.nav-link:hover::after {
-      width: calc(100% - 40px);
+      width: calc(100% - 24px);
     }
 
     /* ===== Mega-menu navigation ===== */
@@ -410,26 +410,29 @@
 
   <!-- ========== Navigation ========== -->
   <header id="main-header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="height:66px;">
-    <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-between">
+    <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-center">
 
-      <!-- Logo -->
-      <a href="#home" class="flex items-center gap-2.5 shrink-0 group">
-        <span class="text-[26px] group-hover:scale-110 transition-transform duration-300">⛰</span>
-        <span class="font-display text-xl tracking-wide header-logo-text transition-colors duration-300">Visit Zhangjiajie</span>
-      </a>
+      <!-- Logo + Nav as one centered unit -->
+      <div class="flex items-center h-full">
 
-      <!-- Desktop nav -->
-      <nav class="hidden lg:flex items-center h-full">
-        <ul class="flex items-center h-full gap-1">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center gap-2 shrink-0 group mr-10">
+          <span class="text-[24px] group-hover:scale-110 transition-transform duration-300">⛰</span>
+          <span class="font-display text-lg tracking-wide header-logo-text transition-colors duration-300">Visit Zhangjiajie</span>
+        </a>
+
+        <!-- Desktop nav — centered, golden-ratio spacing -->
+        <nav class="hidden lg:flex items-center h-full">
+          <ul class="flex items-center h-full" style="gap:1.618rem;">
 
           <!-- 1. Home -->
           <li class="nav-item h-full flex items-center">
-            <a href="#home" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center transition-colors duration-200">Home</a>
+            <a href="#home" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Home</a>
           </li>
 
           <!-- 2. Attraction -->
           <li class="nav-item h-full flex items-center">
-            <a href="attractions/index.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="attractions/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
               Attractions
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -460,7 +463,7 @@
 
           <!-- 3. Experience -->
           <li class="nav-item h-full flex items-center">
-            <a href="experiences/index.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="experiences/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
               Experiences
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -478,7 +481,7 @@
 
           <!-- 4. Tours -->
           <li class="nav-item h-full flex items-center">
-            <a href="tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
               Tours
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -507,7 +510,7 @@
 
           <!-- 5. Hotels -->
           <li class="nav-item h-full flex items-center">
-            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium header-nav-link px-4 h-full flex items-center gap-1 transition-colors duration-200">
+            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
               Hotels
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
@@ -545,16 +548,14 @@
 
           <!-- 6. Contact -->
           <li class="nav-item h-full flex items-center">
-            <button type="button" onclick="openContactModal(event)" class="text-[13.5px] font-semibold border px-5 py-2 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
+            <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
           </li>
         </ul>
       </nav>
+      </div>
 
-      <!-- Right CTA -->
-      
-
-      <!-- Mobile toggle -->
-      <button class="lg:hidden header-mobile-toggle" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <!-- Mobile toggle (absolute right) -->
+      <button class="lg:hidden header-mobile-toggle absolute right-6" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
     </div>
