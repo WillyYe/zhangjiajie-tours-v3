@@ -183,20 +183,22 @@
     .nav-link::after {
       content: '';
       position: absolute;
-      bottom: -4px;
-      left: 0;
+      bottom: 6px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 0;
-      height: 2px;
-      background: #c9a96e;
+      height: 1.5px;
+      background: #2d6a4f;
+      border-radius: 1px;
       transition: width 0.3s ease;
     }
     .nav-link:hover::after {
-      width: 100%;
+      width: calc(100% - 32px);
     }
 
-    /* ===== Three-layer mega-menu navigation ===== */
-    html { scroll-padding-top: 80px; }
-    section[id] { scroll-margin-top: 80px; }
+    /* ===== Mega-menu navigation ===== */
+    html { scroll-padding-top: 84px; }
+    section[id] { scroll-margin-top: 84px; }
 
     .nav-item { position: relative; }
     .dropdown-caret {
@@ -208,15 +210,16 @@
       position: absolute;
       top: 100%;
       left: 50%;
-      transform: translateX(-50%) translateY(10px);
+      transform: translateX(-50%) translateY(8px);
       background: #ffffff;
-      border-radius: 0 0 1rem 1rem;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.14);
-      padding: 2.25rem 2rem;
+      border-radius: 0.875rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.04);
+      padding: 1.75rem 1.75rem;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      transition: opacity 0.28s ease, transform 0.28s ease, visibility 0.28s;
       z-index: 60;
+      border: 1px solid rgba(0,0,0,0.05);
     }
     .nav-item:hover .mega-menu,
     .nav-item:focus-within .mega-menu {
@@ -341,30 +344,30 @@
 </head>
 <body class="bg-sand text-stone antialiased">
 
-  <!-- ========== Navigation (mind map: 7 main items) ========== -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sand-dark" style="height:64px;">
-    <div class="max-w-[1400px] mx-auto px-6 h-full flex items-center">
+  <!-- ========== Navigation ========== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sand-dark" style="height:68px;">
+    <div class="max-w-[1280px] mx-auto px-8 h-full flex items-center justify-between">
 
       <!-- Logo -->
-      <a href="#home" class="flex items-center gap-2 shrink-0">
-        <span class="text-2xl">⛰</span>
+      <a href="#home" class="flex items-center gap-2.5 shrink-0 group">
+        <span class="text-[26px] group-hover:scale-110 transition-transform duration-300">⛰</span>
         <span class="font-display text-xl text-forest tracking-wide">Visit Zhangjiajie</span>
       </a>
 
       <!-- Desktop nav -->
-      <nav class="hidden lg:flex items-center h-full flex-1 ml-8">
-        <ul class="flex items-center h-full justify-between w-full">
+      <nav class="hidden lg:flex items-center h-full">
+        <ul class="flex items-center h-full gap-1">
 
           <!-- 1. Home -->
           <li class="nav-item h-full flex items-center">
-            <a href="#home" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Home</a>
+            <a href="#home" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center transition-colors duration-200">Home</a>
           </li>
 
-          <!-- 2. Attraction (7 sub-items) -->
+          <!-- 2. Attraction -->
           <li class="nav-item h-full flex items-center">
-            <a href="attractions/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Attraction
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="attractions/index.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+              Attractions
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:700px;">
               <div class="grid grid-cols-2 gap-x-10 gap-y-1">
@@ -391,11 +394,11 @@
             </div>
           </li>
 
-          <!-- 3. Experience (3 sub-items) -->
+          <!-- 3. Experience -->
           <li class="nav-item h-full flex items-center">
-            <a href="experiences/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Experience
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="experiences/index.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+              Experiences
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:480px;">
               <div class="grid grid-cols-2 gap-x-8 gap-y-1">
@@ -409,11 +412,11 @@
             </div>
           </li>
 
-          <!-- 4. Things to do & Tour (4 sub-items) -->
+          <!-- 4. Tours -->
           <li class="nav-item h-full flex items-center">
-            <a href="tours/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Things to do &amp; Tour
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="tours/index.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+              Tours
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:600px;">
               <div class="grid grid-cols-2 gap-8">
@@ -438,11 +441,11 @@
             </div>
           </li>
 
-          <!-- 5. Hotel -->
+          <!-- 5. Hotels -->
           <li class="nav-item h-full flex items-center">
-            <a href="hotels/mountain-lodges.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Hotel
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium text-stone-600 hover:text-forest px-4 h-full flex items-center gap-1 transition-colors duration-200">
+              Hotels
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:480px;">
               <div class="grid grid-cols-2 gap-x-8 gap-y-1">
@@ -476,9 +479,9 @@
           </li>
           -->
 
-          <!-- 7. Contact us -->
-          <li class="nav-item h-full flex items-center">
-            <button type="button"  onclick="openContactModal(event)" class="nav-link text-sm font-semibold text-forest hover:bg-forest hover:text-white px-4 h-full flex items-center rounded-full transition-colors cursor-pointer">Contact us</button>
+          <!-- 6. Contact -->
+          <li class="nav-item h-full flex items-center ml-2">
+            <button type="button" onclick="openContactModal(event)" class="nav-link text-[13px] font-semibold text-white bg-forest hover:bg-forest-light px-5 h-full flex items-center rounded-full transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md">Contact Us</button>
           </li>
         </ul>
       </nav>
