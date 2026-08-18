@@ -1,3 +1,199 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom component styles migrated from inline <style> in index.html */
+html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    .hero-bg {
+      background-image: linear-gradient(to bottom, rgba(26,58,42,0.3) 0%, rgba(26,58,42,0.5) 50%, rgba(26,58,42,0.85) 100%), url('images/hero-tianzi-clouds.webp');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .card-hover {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 0.75rem;
+    }
+    .gallery-item img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #c9a96e;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* ===== Three-layer mega-menu navigation ===== */
+    html { scroll-padding-top: 80px; }
+    section[id] { scroll-margin-top: 80px; }
+
+    .nav-item { position: relative; }
+    .dropdown-caret {
+      transition: transform 0.25s ease;
+    }
+    .nav-item:hover .dropdown-caret { transform: rotate(180deg); }
+
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #ffffff;
+      border-radius: 0 0 1rem 1rem;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.14);
+      padding: 2.25rem 2rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      z-index: 60;
+    }
+    .nav-item:hover .mega-menu,
+    .nav-item:focus-within .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .mega-menu::before {
+      content: '';
+      position: absolute;
+      top: -14px;
+      left: 0;
+      right: 0;
+      height: 14px;
+    }
+    .mega-col-title {
+      color: #b08d4f;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+    .mega-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #3a3a3a;
+      font-size: 0.9rem;
+      padding: 0.32rem 0;
+      transition: color 0.2s, padding-left 0.2s;
+    }
+    .mega-link:hover { color: #1a3a2a; padding-left: 0.3rem; }
+    .mega-feature {
+      border-radius: 0.85rem;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+    .mega-feature .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,58,42,0.85) 0%, rgba(26,58,42,0) 60%);
+    }
+
+    /* ===== Quick guide cards ===== */
+    .quick-card {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .quick-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .quick-card:hover img { transform: scale(1.06); }
+    .quick-card .quick-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26,58,42,0.85) 0%, rgba(26,58,42,0.1) 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.25rem;
+    }
+
+    /* ===== Comparison table ===== */
+    .compare-table { width: 100%; border-collapse: collapse; }
+    .compare-table th, .compare-table td {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #e8e0d4;
+      font-size: 0.92rem;
+    }
+    .compare-table thead th {
+      background: #1a3a2a;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .compare-table tbody tr:nth-child(even) { background: #faf7f1; }
+    .compare-table tbody tr:hover { background: #f0ece2; }
+
+    .season-card {
+      border-radius: 1rem;
+      overflow: hidden;
+      position: relative;
+      min-height: 220px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .season-card img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .season-card .season-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 55%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem;
+    }
+
+    .tip-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.25rem 0;
+      border-bottom: 1px dashed #e8e0d4;
+    }
+    .tip-item:last-child { border-bottom: none; }
+    .tip-icon {
+      flex-shrink: 0;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: #1a3a2a;
+      display: flex; align-items: center; justify-content: center;
+    }
