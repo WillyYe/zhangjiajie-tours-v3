@@ -1,4 +1,7 @@
-import { getConfig, setConfig, isConfigured, getFile, putFile } from './github.js';
+import {
+  getConfig, setConfig, isConfigured,
+  getFile, putFile, verifyToken, verifyRepo,
+} from './github.js';
 import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor, renderPreview } from './modules/hotels.js';
 
@@ -103,21 +106,60 @@ function openSettings() {
 function closeSettings() {
   $('settingsModal').hidden = true;
 }
-function saveSettings() {
-  setConfig({
-    token: $('cfgToken').value.trim(),
-    repo: $('cfgRepo').value.trim(),
-    branch: $('cfgBranch').value.trim() || 'main',
+async function validateAndRun(onOk) {
+  const token = $('cfgToken').value.trim();
+  const repo = $('cfgRepo').value.trim();
+  const branch = $('cfgBranch').value.trim() || 'main';
+
+  $('settingsStatus').textContent = '正在测试连接...';
+  $('settingsStatus').className = 'hint';
+
+  try {
+    if (token) await verifyToken(token);
+    await verifyRepo(repo, branch, token);
+    if (onOk) {
+      onOk({ token, repo, branch });
+    } else {
+      $('settingsStatus').textContent = '✅ 连接成功，可以保存。';
+      $('settingsStatus').className = 'hint status-ok';
+      toast('连接测试通过', 'ok');
+    }
+  } catch (e) {
+    console.error(e);
+    $('settingsStatus').textContent = '❌ ' + e.message;
+    $('settingsStatus').className = 'hint status-err';
+    toast('连接失败：' + e.message, 'err');
+  }
+}
+
+async function saveSettings() {
+  await validateAndRun(({ token, repo, branch }) => {
+    setConfig({ token, repo, branch });
+    $('settingsStatus').textContent = '✅ 连接成功，设置已保存。';
+    $('settingsStatus').className = 'hint status-ok';
+    toast('设置已保存', 'ok');
+    closeSettings();
+    if (!state.hotels) load(); // 首次配置后自动加载
   });
-  $('settingsStatus').textContent = '已保存本机配置。';
-  toast('设置已保存', 'ok');
-  closeSettings();
-  if (!state.hotels) load(); // 首次配置后自动加载
+}
+
+function toggleToken() {
+  const input = $('cfgToken');
+  const btn = $('toggleToken');
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈 隐藏';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁 显示';
+  }
 }
 
 // ---------- Wire up ----------
 $('openSettings').addEventListener('click', openSettings);
 $('closeSettings').addEventListener('click', closeSettings);
+$('toggleToken').addEventListener('click', toggleToken);
+$('testSettings').addEventListener('click', () => validateAndRun(null));
 $('saveSettings').addEventListener('click', saveSettings);
 $('saveBtn').addEventListener('click', save);
 $('reloadBtn').addEventListener('click', load);

@@ -22,6 +22,43 @@ export function isConfigured() {
   return Boolean(c.token && c.repo && c.branch);
 }
 
+export async function verifyToken(token) {
+  const res = await fetch(`${API}/user`, {
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(`Token 校验失败 (${res.status}) ${msg.slice(0, 200)}`);
+  }
+  return await res.json();
+}
+
+export async function verifyRepo(repo, branch, token) {
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  if (!/^[^/]+\/.+$/.test(repo)) throw new Error('仓库格式需为 owner/repo');
+
+  const repoRes = await fetch(`${API}/repos/${repo}`, { headers });
+  if (!repoRes.ok) {
+    const msg = await repoRes.text().catch(() => '');
+    throw new Error(`仓库不存在或不可访问 (${repoRes.status}) ${msg.slice(0, 200)}`);
+  }
+  if (!branch) return { repo: true };
+
+  const branchRes = await fetch(
+    `${API}/repos/${repo}/branches/${encodeURIComponent(branch)}`,
+    { headers }
+  );
+  if (!branchRes.ok) {
+    const msg = await branchRes.text().catch(() => '');
+    throw new Error(`分支不存在 (${branchRes.status}) ${msg.slice(0, 200)}`);
+  }
+  return { repo: true, branch: true };
+}
+
 // UTF-8 安全的 base64 编解码
 function b64encode(str) {
   return btoa(unescape(encodeURIComponent(str)));

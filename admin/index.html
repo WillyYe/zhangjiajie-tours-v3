@@ -56,17 +56,18 @@
 <div class="modal-mask" id="settingsModal" hidden>
   <div class="modal">
     <h2>GitHub 连接设置</h2>
-    <label>GitHub Token（PAT）
+    <label class="fld">GitHub Token（PAT）<span class="tip">写入必须有 Token；只读可不填</span></label>
+    <div class="token-field">
       <input id="cfgToken" type="password" placeholder="ghp_xxx 或 github_pat_xxx">
-    </label>
+      <button id="toggleToken" type="button" class="btn-ghost btn-sm">👁 显示</button>
+    </div>
     <p class="hint">在 <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> 生成，需有本仓库 <code>Contents: read &amp; write</code>。令牌只存本浏览器，不会上传到任何服务器。</p>
-    <label>仓库（owner/repo）
-      <input id="cfgRepo" placeholder="WillyYe/zhangjiajie-tours-v3">
-    </label>
-    <label>分支
-      <input id="cfgBranch" placeholder="main">
-    </label>
+    <label class="fld">仓库（owner/repo）</label>
+    <input id="cfgRepo" placeholder="WillyYe/zhangjiajie-tours-v3">
+    <label class="fld">分支</label>
+    <input id="cfgBranch" placeholder="main">
     <div class="modal-actions">
+      <button id="testSettings" class="btn">测试连接</button>
       <button id="saveSettings" class="btn primary">保存设置</button>
       <button id="closeSettings" class="btn">关闭</button>
     </div>

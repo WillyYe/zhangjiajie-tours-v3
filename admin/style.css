@@ -80,6 +80,8 @@ body {
 .btn.primary { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
 .btn.primary:hover:not(:disabled) { background: #1d4ed8; }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
 
 .editor-grid { flex: 1; display: grid; grid-template-columns: 1fr 360px; gap: 0; min-height: 0; }
 .editor { padding: 24px 28px; overflow: auto; }
@@ -134,6 +136,9 @@ legend small { font-weight: 400; color: var(--muted); font-size: 11px; margin-le
 .modal input { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; }
 .modal input:focus { outline: none; border-color: var(--brand); }
 .modal code { background: #f1f5f9; padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+.token-field { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; }
+.token-field input { flex: 1; }
+.token-field .btn-ghost { flex: none; padding: 7px 12px; }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
 
 /* ---------- Toast ---------- */
@@ -145,3 +150,6 @@ legend small { font-weight: 400; color: var(--muted); font-size: 11px; margin-le
 .toast[hidden] { display: none; }
 .toast.ok { background: #15803d; }
 .toast.err { background: #b42318; }
+
+.status-ok { color: #16a34a; font-weight: 500; }
+.status-err { color: #b42318; font-weight: 500; }
