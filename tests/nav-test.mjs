@@ -231,7 +231,9 @@ try {
     ok(`Subpage ${p}: top-nav hides Food (consistent with homepage)`, !foodVisible, `foodVisible=${foodVisible}`);
     ok(`Subpage ${p}: top-nav hides Plan (consistent with homepage)`, !planVisible, `planVisible=${planVisible}`);
     const foodMob = await sp.locator('#mobile-menu a[href*="food/"]').first().isVisible().catch(() => false);
+    const planMob = await sp.locator('#mobile-menu a[href*="plan/"]').first().isVisible().catch(() => false);
     ok(`Subpage ${p}: mobile menu hides Food`, !foodMob, `foodMobVisible=${foodMob}`);
+    ok(`Subpage ${p}: mobile menu hides Plan`, !planMob, `planMobVisible=${planMob}`);
     await sp.screenshot({ path: path.join(SHOT_DIR, 'subpage-' + p.replace(/\//g, '-').replace('.html', '') + '.png') });
     await sctx.close();
   }

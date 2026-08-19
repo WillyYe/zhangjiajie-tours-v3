@@ -200,10 +200,12 @@ html { scroll-behavior: smooth; }
 
     /* ===== Hide Food & Plan top-nav items site-wide (consistent with homepage decision) ===== */
     /* Desktop header nav — matches both homepage #main-header and subpage <header> */
-    header nav li:has(> a[href*="food/"]),
-    header nav li:has(> a[href*="plan/"]) {
+    header nav li:has(a[href*="food/"]),
+    header nav li:has(a[href*="plan/"]) {
       display: none !important;
     }
-    /* Mobile hamburger menu: hide Food links and the "Food" group header */
+    /* Mobile hamburger menu: hide Food/Plan links and their group headers */
     #mobile-menu a[href*="food/"] { display: none !important; }
     #mobile-menu p:has(~ a[href*="food/"]) { display: none !important; }
+    #mobile-menu a[href*="plan/"] { display: none !important; }
+    #mobile-menu p:has(~ a[href*="plan/"]) { display: none !important; }
