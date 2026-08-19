@@ -10,10 +10,21 @@
 <div class="app">
   <aside class="sidebar">
     <div class="brand">⛰ 张家界后台</div>
+
+    <div class="settings-card">
+      <div class="settings-card-head">
+        <span id="settingsDot" class="dot"></span>
+        <span id="settingsText">未配置</span>
+        <button id="openSettings" class="icon-btn" title="GitHub 设置">⚙</button>
+      </div>
+      <div class="settings-card-body">
+        <div class="settings-summary" id="settingsSummary">点击 ⚙ 设置 GitHub</div>
+      </div>
+    </div>
+
     <div class="sidebar-status">
       <span id="statusDot" class="dot ok"></span>
       <span id="statusText">就绪</span>
-      <button id="openSettings" class="icon-btn" title="GitHub 设置">⚙</button>
     </div>
 
     <div class="nav-group-title">内容模块</div>
@@ -28,6 +39,10 @@
       <button class="module disabled" disabled>📖 指南 Guides</button>
       <button class="module disabled" disabled>🍜 美食 Food</button>
     </nav>
+
+    <div class="sidebar-footer">
+      <button class="module settings-module" data-action="settings" id="openSettings2">⚙ 设置 Settings</button>
+    </div>
   </aside>
 
   <main class="content">
@@ -54,24 +69,48 @@
 
 <!-- 设置弹窗 -->
 <div class="modal-mask" id="settingsModal" hidden>
-  <div class="modal">
-    <h2>GitHub 连接设置</h2>
-    <label class="fld">GitHub Token（PAT）<span class="tip">写入必须有 Token；只读可不填</span></label>
-    <div class="token-field">
-      <input id="cfgToken" type="password" placeholder="ghp_xxx 或 github_pat_xxx">
-      <button id="toggleToken" type="button" class="btn-ghost btn-sm">👁 显示</button>
+  <div class="modal settings-modal">
+    <div class="modal-header">
+      <div class="modal-icon">⚙️</div>
+      <div>
+        <h2>GitHub 连接设置</h2>
+        <p class="modal-subtitle">配置后可直接在后台保存并发布内容</p>
+      </div>
     </div>
-    <p class="hint">在 <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> 生成，需有本仓库 <code>Contents: read &amp; write</code>。令牌只存本浏览器，不会上传到任何服务器。</p>
-    <label class="fld">仓库（owner/repo）</label>
-    <input id="cfgRepo" placeholder="WillyYe/zhangjiajie-tours-v3">
-    <label class="fld">分支</label>
-    <input id="cfgBranch" placeholder="main">
+
+    <div class="settings-section">
+      <h3 class="section-title">🔐 访问令牌</h3>
+      <p class="section-desc">Token 只保存在本浏览器，不会上传任何服务器。不填 Token 时仍可读取数据。</p>
+      <div class="token-field">
+        <input id="cfgToken" type="password" placeholder="ghp_xxx 或 github_pat_xxx">
+        <button id="toggleToken" type="button" class="btn-ghost btn-sm">👁 显示</button>
+      </div>
+      <p class="hint">在 <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> 生成，需有本仓库 <code>Contents: read &amp; write</code> 权限。</p>
+    </div>
+
+    <div class="settings-section">
+      <h3 class="section-title">📦 仓库与分支</h3>
+      <div class="field-row">
+        <div class="field">
+          <label>仓库 <span class="tip">owner/repo</span></label>
+          <input id="cfgRepo" placeholder="如 WillyYe/zhangjiajie-tours-v3">
+        </div>
+        <div class="field field-sm">
+          <label>分支</label>
+          <input id="cfgBranch" placeholder="main">
+        </div>
+      </div>
+    </div>
+
+    <div class="status-box" id="settingsStatusBox" hidden>
+      <span id="settingsStatus"></span>
+    </div>
+
     <div class="modal-actions">
+      <button id="closeSettings" class="btn">关闭</button>
       <button id="testSettings" class="btn">测试连接</button>
       <button id="saveSettings" class="btn primary">保存设置</button>
-      <button id="closeSettings" class="btn">关闭</button>
     </div>
-    <p id="settingsStatus" class="hint"></p>
   </div>
 </div>
 

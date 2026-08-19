@@ -1,9 +1,12 @@
-import {
-  getConfig, setConfig, isConfigured,
-  getFile, putFile, verifyToken, verifyRepo,
-} from './github.js';
+import { getConfig, isConfigured, getFile, putFile } from './github.js';
 import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor, renderPreview } from './modules/hotels.js';
+import {
+  initSettings,
+  openSettings,
+  renderStatus as renderSettingsStatus,
+  setStatus as setSettingsStatus,
+} from './modules/settings.js';
 
 const FILE_PATH = 'hotels-data.mjs';
 
@@ -94,75 +97,20 @@ async function save() {
   }
 }
 
-// ---------- Settings modal ----------
-function openSettings() {
-  const c = getConfig();
-  $('cfgToken').value = c.token;
-  $('cfgRepo').value = c.repo;
-  $('cfgBranch').value = c.branch || 'main';
-  $('settingsStatus').textContent = '';
-  $('settingsModal').hidden = false;
-}
-function closeSettings() {
-  $('settingsModal').hidden = true;
-}
-async function validateAndRun(onOk) {
-  const token = $('cfgToken').value.trim();
-  const repo = $('cfgRepo').value.trim();
-  const branch = $('cfgBranch').value.trim() || 'main';
-
-  $('settingsStatus').textContent = '正在测试连接...';
-  $('settingsStatus').className = 'hint';
-
-  try {
-    if (token) await verifyToken(token);
-    await verifyRepo(repo, branch, token);
-    if (onOk) {
-      onOk({ token, repo, branch });
-    } else {
-      $('settingsStatus').textContent = '✅ 连接成功，可以保存。';
-      $('settingsStatus').className = 'hint status-ok';
-      toast('连接测试通过', 'ok');
-    }
-  } catch (e) {
-    console.error(e);
-    $('settingsStatus').textContent = '❌ ' + e.message;
-    $('settingsStatus').className = 'hint status-err';
-    toast('连接失败：' + e.message, 'err');
-  }
-}
-
-async function saveSettings() {
-  await validateAndRun(({ token, repo, branch }) => {
-    setConfig({ token, repo, branch });
-    $('settingsStatus').textContent = '✅ 连接成功，设置已保存。';
-    $('settingsStatus').className = 'hint status-ok';
-    toast('设置已保存', 'ok');
-    closeSettings();
-    if (!state.hotels) load(); // 首次配置后自动加载
-  });
-}
-
-function toggleToken() {
-  const input = $('cfgToken');
-  const btn = $('toggleToken');
-  if (input.type === 'password') {
-    input.type = 'text';
-    btn.textContent = '🙈 隐藏';
-  } else {
-    input.type = 'password';
-    btn.textContent = '👁 显示';
-  }
-}
-
 // ---------- Wire up ----------
-$('openSettings').addEventListener('click', openSettings);
-$('closeSettings').addEventListener('click', closeSettings);
-$('toggleToken').addEventListener('click', toggleToken);
-$('testSettings').addEventListener('click', () => validateAndRun(null));
-$('saveSettings').addEventListener('click', saveSettings);
+initSettings({ toast });
 $('saveBtn').addEventListener('click', save);
 $('reloadBtn').addEventListener('click', load);
+
+// 设置保存成功后刷新主内容
+let settingsSavedFired = false;
+document.addEventListener('settings:saved', () => {
+  if (!settingsSavedFired) {
+    settingsSavedFired = true;
+    if (!state.hotels) load();
+    setTimeout(() => (settingsSavedFired = false), 500);
+  }
+});
 
 // 模块切换（规划中模块给提示）
 document.querySelectorAll('.module').forEach((btn) => {
@@ -176,10 +124,11 @@ document.querySelectorAll('.module').forEach((btn) => {
 
 // ---------- Boot ----------
 (function boot() {
+  renderSettingsStatus();
   const c = getConfig();
   if (!c.repo || !c.branch) {
     openSettings();
-    $('settingsStatus').textContent = '请先填写仓库与分支（写入需要 GitHub Token）。';
+    setSettingsStatus('仓库与分支已预填默认值，填入 Token 后点保存即可。', 'idle');
   } else {
     load();
   }
