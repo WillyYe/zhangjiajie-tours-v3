@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>后台演示 · 酒店三级分级编辑器</title>
+  <link rel="stylesheet" href="./style.css?v=3" />
+  <style>
+    .demo-banner {
+      background: #0f172a; color: #cbd5e1; font-size: 12px;
+      padding: 8px 28px; letter-spacing: .03em;
+    }
+    .demo-banner b { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="demo-banner">本地演示页 · 复用真实 <b>hotels.js</b> 逻辑与 <b>style.css</b> 样式，数据内嵌（无需 GitHub Token）。编辑会实时同步右侧预览。</div>
+
+  <div class="content">
+    <div class="content-head">
+      <div>
+        <h1>🏨 酒店 Hotels — 三级分级编辑器</h1>
+        <p class="hint">① 分类 → ② 酒店 → ③ 编辑表单。编辑窗口聚焦单家酒店，字号与输入框已放大。</p>
+      </div>
+      <div class="sidebar-status" style="border:0;margin:0;padding:0;background:#fff;">
+        <span class="dot ok"></span>
+        <span id="statusText">就绪（演示）</span>
+      </div>
+    </div>
+    <div class="editor-grid">
+      <div class="editor"><div id="editor"></div></div>
+      <div class="preview">
+        <h3>实时预览 Live Preview</h3>
+        <div id="preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { renderEditor, renderPreview } from './modules/hotels.js';
+
+    const hotels = {
+      jimo: { name: 'JiMO Boutique Hotel', zh: '几木酒店', area: 'Wulingyuan Core', tier: 'Boutique', img: 'hotel-jimo-1', alt: 'JiMO boutique hotel exterior at blue hour by the river', blurb: 'A design-led retreat tucked into the Wulingyuan valley, minutes from the east gate. Quiet rooms, a riverside terrace, and the kind of calm that makes early park mornings effortless.', features: ['5–10 min drive to the Wulingyuan east gate', 'Riverside terrace & garden', 'Design-led rooms with local timber'] },
+      hetianye: { name: 'Hetianye Hotel', zh: '和田野酒店', area: 'Wulingyuan · Mountain side', tier: 'Mountain Lodge', img: 'hotel-hetianye-1', alt: 'Hetianye hotel surrounded by green peaks', blurb: 'A hillside lodge with balcony rooms that open straight onto the quartz-sandstone peaks. Built for travellers who want the scenery from the pillow, not just the trail.', features: ['Balcony rooms with peak views', 'Quiet mountain setting', 'Family & suite layouts'] },
+      vienna: { name: 'Vienna International Hotel', zh: '维也纳国际酒店', area: 'Near Tianmen Cable Car', tier: 'Curated', img: 'hotel-vienna-1', alt: 'Vienna International Hotel daytime exterior', blurb: 'A polished international-standard hotel a short hop from the Tianmen Mountain cable-car station. Reliable comfort, a proper breakfast spread, and easy airport/train links.', features: ['Near Tianmen cable-car station', 'Full breakfast & business facilities', 'International service standard'] },
+      boutique: { name: 'Homeinn Boutique (Ziwu Park)', zh: '如家精品酒店（紫舞公园店）', area: 'Zhangjiajie City · Ziwu Park', tier: 'Design', img: 'hotel-boutique-1', alt: 'Homeinn Boutique hotel interior at Ziwu Park', blurb: 'The refreshed Homeinn Boutique format — warmer materials, smarter rooms, and a location by Ziwu Park that keeps you close to the city’s eats and transport without the noise.', features: ['Newly refreshed boutique format', 'By Ziwu Park, city centre', 'Smart, compact rooms'] },
+      'homeinn-plus': { name: 'Homeinn Plus (Ziwu Road)', zh: '如家酒店（子午路店）', area: 'Zhangjiajie City · Ziwu Road', tier: 'Value', img: 'hotel-homeinn-plus-1', alt: 'Homeinn Plus hotel at Ziwu Road', blurb: 'Clean, predictable, and easy on the wallet — the Homeinn Plus format gives you a dependable base in the city with the basics done right and nothing you pay for but don’t use.', features: ['Dependable value stay', 'City-centre Ziwu Road', 'Great for longer trips'] },
+      '72qilou': { name: 'Homeinn (72 Qilou)', zh: '如家酒店（七十二奇楼店）', area: 'Zhangjiajie City · 72 Qilou', tier: 'Value', img: 'hotel-72qilou-1', alt: 'Homeinn hotel near the 72 Qilou towers', blurb: 'Steps from the 72 Qilou (Seven-Twelve Towers) night-life and dining district. The practical pick if you want the city’s buzz within walking distance of your room.', features: ['Walking distance to 72 Qilou district', 'Lively dining & night-life nearby', 'Straightforward, comfortable rooms'] },
+      huatian: { name: 'Huatiancheng Suites', zh: '华天城', area: 'Zhangjiajie City Centre', tier: 'City', img: 'hotel-huatian-1', alt: 'Huatiancheng city-centre suites', blurb: 'Spacious apartment-style suites in the heart of the city — a smart base for families and longer stays that want kitchen space, a living area, and doorstep access to transit.', features: ['Apartment-style suites', 'City-centre location', 'Good for families & long stays'] },
+    };
+
+    const hotelCategories = [
+      { slug: 'mountain-lodges', title: 'Mountain & Forest Lodges', hotels: ['jimo', 'hetianye'] },
+      { slug: 'selected-stays', title: 'Curated & Design Stays', hotels: ['vienna', 'boutique'] },
+      { slug: 'value-hotels', title: 'Great-Value Hotels', hotels: ['homeinn-plus', '72qilou'] },
+      { slug: 'by-area', title: 'City & By-Area Stays', hotels: ['huatian'] },
+    ];
+
+    const statusText = document.getElementById('statusText');
+    renderEditor(
+      document.getElementById('editor'),
+      hotels,
+      hotelCategories,
+      () => { statusText.textContent = '● 未保存（演示）'; },
+      (key) => renderPreview(document.getElementById('preview'), hotels[key])
+    );
+  </script>
+</body>
+</html>

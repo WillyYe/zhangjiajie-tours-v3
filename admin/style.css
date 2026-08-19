@@ -104,8 +104,60 @@ body {
 .btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
 .btn-sm { padding: 6px 12px; font-size: 12px; }
 
-.editor-grid { flex: 1; display: grid; grid-template-columns: 1fr 360px; gap: 0; min-height: 0; }
-.editor { padding: 24px 28px; overflow: auto; }
+.editor-grid { flex: 1; display: grid; grid-template-columns: 1fr 460px; gap: 0; min-height: 0; }
+.editor { padding: 24px 28px; overflow: auto; font-size: 15px; }
+.editor .hint { color: var(--muted); font-size: 13px; }
+
+/* ---------- 酒店三级分级编辑器 ---------- */
+.he { display: flex; flex-direction: column; gap: 22px; max-width: 720px; }
+.he-level { }
+.he-step {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--brand); background: #eff6ff; border: 1px solid #dbeafe;
+  border-radius: 999px; padding: 5px 14px; margin-bottom: 12px;
+}
+.he-cats { display: flex; flex-wrap: wrap; gap: 12px; }
+.he-cat {
+  padding: 14px 20px; border-radius: 12px; border: 1px solid var(--line);
+  background: #fff; font-size: 15px; font-weight: 600; color: var(--ink);
+  cursor: pointer; text-align: left; line-height: 1.3;
+}
+.he-cat:hover { border-color: var(--brand); }
+.he-cat.active { background: var(--brand); color: #fff; border-color: var(--brand); box-shadow: 0 6px 16px rgba(37,99,235,.25); }
+.he-hotels { display: flex; flex-wrap: wrap; gap: 12px; }
+.he-hotel {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  padding: 14px 18px; border-radius: 12px; border: 1px solid var(--line);
+  background: #fff; cursor: pointer; min-width: 180px; max-width: 240px;
+}
+.he-hotel:hover { border-color: var(--brand); }
+.he-hotel.active { border-color: var(--brand); background: #f8fafc; box-shadow: 0 0 0 3px rgba(37,99,235,.14); }
+.he-hotel-zh { font-size: 16px; font-weight: 700; }
+.he-hotel-en { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+/* 三级：编辑表单 —— 窗口聚焦、字体与方框放大 */
+.he-form {
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 22px 24px 26px; max-width: 600px;
+}
+.he-form-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line);
+}
+.he-form-zh { font-size: 20px; font-weight: 800; }
+.he-form-key { font-size: 12px; color: var(--muted); font-family: ui-monospace, monospace; }
+.he-form .field { margin: 16px 0; }
+.he-form .field > label { display: block; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.he-form .field .tip { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 6px; }
+.he-form .field input, .he-form .field textarea {
+  width: 100%; padding: 14px 16px; border: 1px solid var(--line);
+  border-radius: 10px; font-size: 16px; font-family: inherit; color: var(--ink); background: #fff;
+}
+.he-form .field input:focus, .he-form .field textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 4px rgba(37,99,235,.14); }
+.he-form .field textarea { min-height: 130px; resize: vertical; line-height: 1.6; }
+.he-form .feature-row .del { width: 46px; font-size: 18px; }
+.he-form .add-feature { font-size: 14px; padding: 10px 14px; }
 .preview {
   border-left: 1px solid var(--line); background: #f8fafc;
   padding: 24px; overflow: auto;
@@ -140,13 +192,32 @@ legend small { font-weight: 400; color: var(--muted); font-size: 11px; margin-le
 
 /* ---------- Preview cards ---------- */
 .pv-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 14px; }
-.pv-img { height: 120px; background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 60%, #0369a1 100%); display: flex; align-items: flex-end; padding: 10px; color: #fff; font-size: 12px; }
-.pv-body { padding: 12px 14px; }
-.pv-name { font-weight: 700; font-size: 14px; }
-.pv-zh { color: var(--muted); font-size: 12px; }
-.pv-meta { font-size: 11px; color: var(--brand); margin: 6px 0; }
-.pv-blurb { font-size: 12px; color: #334155; line-height: 1.5; }
-.pv-features { margin: 8px 0 0; padding-left: 16px; font-size: 11px; color: var(--muted); }
+.pv-img { height: 180px; background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 60%, #0369a1 100%); display: flex; align-items: flex-end; padding: 12px; color: #fff; font-size: 13px; overflow: hidden; }
+.pv-img-el { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pv-body { padding: 14px 16px; }
+.pv-name { font-weight: 700; font-size: 16px; }
+.pv-zh { color: var(--muted); font-size: 14px; }
+.pv-meta { font-size: 12px; color: var(--brand); margin: 6px 0; }
+.pv-blurb { font-size: 13px; color: #334155; line-height: 1.55; }
+.pv-features { margin: 10px 0 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
+
+/* ---------- 编辑表单图片字段 + 缩略图 ---------- */
+.img-field { display: flex; gap: 14px; align-items: center; }
+.img-field input { flex: 1; }
+.he-thumb-box { position: relative; width: 180px; height: 135px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f1f5f9; flex: none; }
+.he-thumb-box .he-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.he-thumb-box.no-img::after { content: '无图'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); }
+.he-thumb-box.no-img .he-thumb { opacity: 0; }
+
+/* ---------- 图片库 modal ---------- */
+.img-lib-modal { width: 780px; max-width: 94vw; max-height: 86vh; display: flex; flex-direction: column; }
+.img-lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; overflow: auto; padding: 6px 2px; max-height: 60vh; }
+.img-lib-item { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; cursor: pointer; padding: 0; text-align: left; }
+.img-lib-item img { width: 100%; height: 88px; object-fit: cover; display: block; }
+.img-lib-item:hover { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(37,99,235,.14); }
+.img-lib-name { display: block; font-size: 10px; color: var(--muted); padding: 5px 7px; word-break: break-all; line-height: 1.35; }
+.img-lib-item.broken img { opacity: .25; }
+.img-lib-loading, .img-lib-err { padding: 24px; color: var(--muted); font-size: 13px; }
 
 /* ---------- Modal / Settings ---------- */
 .modal-mask { position: fixed; inset: 0; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(2px); }

@@ -14,6 +14,7 @@ const state = {
   preamble: '',
   blocks: [],
   hotels: null,
+  categories: [],
   sha: null,
   dirty: false,
 };
@@ -60,12 +61,19 @@ async function load() {
     const { preamble, blocks } = parseMjs(text);
     const hotelsBlock = blocks.find((b) => b.name === 'hotels');
     if (!hotelsBlock || !hotelsBlock.value) throw new Error('未在文件中找到 hotels 数据');
+    const catsBlock = blocks.find((b) => b.name === 'hotelCategories');
     state.preamble = preamble;
     state.blocks = blocks;
     state.hotels = hotelsBlock.value;
+    state.categories = catsBlock ? catsBlock.value : [];
     state.sha = sha;
-    renderEditor(editorEl, state.hotels, () => setStatus(true));
-    renderPreview(previewEl, state.hotels);
+    renderEditor(
+      editorEl,
+      state.hotels,
+      state.categories,
+      () => setStatus(true),
+      (key) => renderPreview(previewEl, state.hotels[key])
+    );
     setStatus(false);
   } catch (e) {
     console.error(e);
