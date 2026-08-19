@@ -97,7 +97,7 @@ html { scroll-behavior: smooth; }
       height: 14px;
     }
     .mega-col-title {
-      color: #b08d4f;
+      color: #8a6d2f;
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.12em;
@@ -197,3 +197,13 @@ html { scroll-behavior: smooth; }
       background: #1a3a2a;
       display: flex; align-items: center; justify-content: center;
     }
+
+    /* ===== Hide Food & Plan top-nav items site-wide (consistent with homepage decision) ===== */
+    /* Desktop header nav — matches both homepage #main-header and subpage <header> */
+    header nav li:has(> a[href*="food/"]),
+    header nav li:has(> a[href*="plan/"]) {
+      display: none !important;
+    }
+    /* Mobile hamburger menu: hide Food links and the "Food" group header */
+    #mobile-menu a[href*="food/"] { display: none !important; }
+    #mobile-menu p:has(~ a[href*="food/"]) { display: none !important; }

@@ -106,7 +106,13 @@
     }
 
     // ========== Header: transparent → solid on scroll ==========
-    (function() {
+    // Deferred until the DOM is parsed: this <script> lives in <head>, so
+    // #main-header does not exist yet at parse time. Running inside
+    // DOMContentLoaded (or immediately when the doc is already loaded) ensures
+    // the scroll listener actually attaches — otherwise the header stays
+    // transparent forever and the white nav text becomes invisible over light
+    // content sections.
+    function initHeaderScroll() {
       var header = document.getElementById('main-header');
       if (!header) return;
       var threshold = 60; // px scrolled before switching
@@ -119,7 +125,12 @@
       }
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll(); // run once in case page is already scrolled
-    })();
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHeaderScroll);
+    } else {
+      initHeaderScroll();
+    }
   </script>
 
   <!-- Self-hosted latin fonts -->
@@ -253,7 +264,7 @@
       height: 14px;
     }
     .mega-col-title {
-      color: #b08d4f;
+      color: #8a6d2f;
       font-size: 0.7rem;
       font-weight: 700;
       letter-spacing: 0.12em;
