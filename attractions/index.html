@@ -215,45 +215,47 @@
 </head>
 <body class="bg-sand text-stone antialiased">
 
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sand-dark" style="height:64px;">
-    <div class="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-between">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-sand-dark transition-all duration-300" style="height:66px;">
+    <!-- Logo: independent of nav centering, placed well left of center -->
+    <a href="../" class="absolute flex items-center gap-2 shrink-0 group" style="left: 1.5rem; top: 50%; transform: translateY(-50%);">
+      <span class="text-[24px] group-hover:scale-110 transition-transform duration-300">⛰</span>
+      <span class="font-display text-lg tracking-wide header-logo-text transition-colors duration-300">Visit Zhangjiajie</span>
+    </a>
 
-      <!-- Logo -->
-      <a href="../" class="flex items-center gap-2 shrink-0">
-        <span class="text-2xl">⛰</span>
-        <span class="font-display text-xl text-forest tracking-wide">Visit Zhangjiajie</span>
-      </a>
+    <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-center">
 
-      <!-- Desktop nav -->
-      <nav class="hidden lg:flex items-center h-full">
-        <ul class="flex items-center h-full">
+      <!-- Desktop nav — centered independently -->
+
+        <!-- Desktop nav — centered, golden-ratio spacing -->
+        <nav class="hidden lg:flex items-center h-full">
+          <ul class="flex items-center h-full" style="gap:1.618rem;">
 
           <!-- 1. Home -->
           <li class="nav-item h-full flex items-center">
-            <a href="../" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Home</a>
+            <a href="../" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Home</a>
           </li>
 
-          <!-- 2. Attraction (links to the new listing page + detail pages) -->
+          <!-- 2. Attraction -->
           <li class="nav-item h-full flex items-center">
-            <a href="../attractions/index.html" class="nav-link active text-sm font-semibold text-forest hover:text-forest px-4 h-full flex items-center gap-1" aria-current="page">
-              Attraction
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="../attractions/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
+              Attractions
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:700px;">
               <div class="grid grid-cols-2 gap-x-10 gap-y-1">
                 <div>
                   <p class="mega-col-title">Wulingyuan Core</p>
-                  <a href="../attractions/index.html" class="mega-link">🏔️ All Attractions</a>
-                  <a href="../attractions/tianzi.html" class="mega-link">⛰️ Tianzi Mountain (天子山)</a>
-                  <a href="../attractions/jinbian.html" class="mega-link">🐒 Golden Whip Stream (金鞭溪)</a>
-                  <a href="../attractions/huangshizhai.html" class="mega-link">🔭 Huangshizhai (黄石寨)</a>
+                  <a href="../attractions/yuanjiajie.html" class="mega-link">🏔️ Yuanjiajie / Avatar Mountains</a>
+                  <a href="../attractions/tianzi.html" class="mega-link">⛰️ Tianzi Mountain</a>
+                  <a href="../attractions/jinbian.html" class="mega-link">🐒 Golden Whip Stream</a>
+                  <a href="../attractions/huangshizhai.html" class="mega-link">🔭 Huangshizhai</a>
                 </div>
                 <div>
                   <p class="mega-col-title">Scenic Spots Around</p>
-                  <a href="../attractions/tianmen.html" class="mega-link">🚠 Tianmen Mountain (天门山)</a>
+                  <a href="../attractions/tianmen.html" class="mega-link">🚠 Tianmen Mountain</a>
                   <a href="../attractions/grand-canyon.html" class="mega-link">🌉 Grand Canyon Glass Bridge</a>
-                  <a href="../attractions/baofeng.html" class="mega-link">🚣 Baofeng Lake (宝峰湖)</a>
-                  <a href="../attractions/yellow-dragon.html" class="mega-link">🐉 Yellow Dragon Cave (黄龙洞)</a>
+                  <a href="../attractions/baofeng.html" class="mega-link">🚣 Baofeng Lake</a>
+                  <a href="../attractions/yellow-dragon.html" class="mega-link">🐉 Yellow Dragon Cave</a>
                 </div>
               </div>
               <div class="mt-4 pt-4 border-t border-sand-dark">
@@ -266,9 +268,9 @@
 
           <!-- 3. Experience -->
           <li class="nav-item h-full flex items-center">
-            <a href="../experiences/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Experience
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="../experiences/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
+              Experiences
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:480px;">
               <div class="grid grid-cols-2 gap-x-8 gap-y-1">
@@ -282,40 +284,40 @@
             </div>
           </li>
 
-          <!-- 4. Things to do & Tour -->
+          <!-- 4. Tours -->
           <li class="nav-item h-full flex items-center">
-            <a href="../tours/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Things to do &amp; Tour
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="../tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
+              Tours
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:600px;">
               <div class="grid grid-cols-2 gap-8">
                 <div>
                   <p class="mega-col-title">Top Ranked</p>
-                  <a href="../tours/index.html-ranking" class="mega-link">🏆 Top 8 Must-See Spots</a>
+                  <a href="#tour-ranking" class="mega-link">🏆 Top 8 Must-See Spots</a>
                   <p class="mega-col-title mt-4">Tour Types</p>
-                  <a href="../tours/index.html-day" class="mega-link">📅 Day Tours</a>
-                  <a href="../tours/index.html-private-card" class="mega-link">🎒 Private Tours</a>
-                  <a href="../tours/index.html-vip-card" class="mega-link">💎 VIP Tours</a>
+                  <a href="#tour-day" class="mega-link">📅 Day Tours</a>
+                  <a href="#tour-private-card" class="mega-link">🎒 Private Tours</a>
+                  <a href="#tour-vip-card" class="mega-link">💎 VIP Tours</a>
                 </div>
                 <div>
                   <p class="mega-col-title">Featured</p>
                   <a href="../tours/index.html" class="mega-feature block mb-3">
-                    <img loading="lazy" decoding="async" src="../images/peaks-panorama.webp" alt="" class="h-28 w-full object-cover">
+                    <img width="1200" height="815" loading="lazy" decoding="async" src="../images/peaks-panorama.webp" alt="" class="h-28 w-full object-cover">
                     <div class="overlay"></div>
                     <span class="absolute bottom-2 left-3 text-white text-sm font-semibold">All Tours →</span>
                   </a>
-                  <a href="../tours/index.html-private-card" class="mega-link text-forest font-semibold">Most Popular: Private Guide + Car</a>
+                  <a href="#tour-private-card" class="mega-link text-forest font-semibold">Most Popular: Private Guide + Car</a>
                 </div>
               </div>
             </div>
           </li>
 
-                    <!-- 5. Hotel -->
+          <!-- 5. Hotels -->
           <li class="nav-item h-full flex items-center">
-            <a href="../hotels/mountain-lodges.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
-              Hotel
-              <svg class="dropdown-caret" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+            <a href="../hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
+              Hotels
+              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </a>
             <div class="mega-menu" style="width:480px;">
               <div class="grid grid-cols-2 gap-x-8 gap-y-1">
@@ -327,7 +329,7 @@
             </div>
           </li>
 
-          <!-- 6. Food -->
+          <!-- [HIDDEN] 6. Food + Plan - commented out, restore when needed
           <li class="nav-item h-full flex items-center">
             <a href="../food/zhangjiajie-cuisine.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center gap-1">
               Food
@@ -344,23 +346,20 @@
             </div>
           </li>
 
-          <!-- 6.5 Plan (Plan Like a Local) -->
           <li class="nav-item h-full flex items-center">
             <a href="../plan/index.html" class="nav-link text-sm font-semibold text-stone hover:text-forest px-4 h-full flex items-center">Plan</a>
           </li>
+          -->
 
-          <!-- 7. Contact us -->
+          <!-- 6. Contact -->
           <li class="nav-item h-full flex items-center">
-            <button type="button"  onclick="openContactModal(event)" class="nav-link text-sm font-semibold text-forest hover:bg-forest hover:text-white px-4 h-full flex items-center rounded-full transition-colors cursor-pointer">Contact us</button>
+            <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
           </li>
         </ul>
       </nav>
 
-      <!-- Right CTA -->
-      
-
-      <!-- Mobile toggle -->
-      <button class="lg:hidden text-forest" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <!-- Mobile toggle (absolute right) -->
+      <button class="lg:hidden header-mobile-toggle absolute right-6" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
       </button>
     </div>
@@ -369,7 +368,8 @@
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
       <a href="../" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">1. Home</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">2. Attraction</p>
-      <a href="../attractions/index.html" class="block text-forest font-bold py-1 pl-3 text-sm" onclick="closeMobileMenu()">All Attractions ✓</a>
+      <a href="../attractions/index.html" class="block text-forest font-semibold py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Attractions</a>
+      <a href="../attractions/yuanjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yuanjiajie / Avatar Mtn</a>
       <a href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianzi Mountain</a>
       <a href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
       <a href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Golden Whip Stream</a>
@@ -378,7 +378,7 @@
       <a href="../attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Baofeng Lake</a>
       <a href="../attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yellow Dragon Cave</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">3. Experience</p>
-      <a href="../experiences/index.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Experiences</a>
+      <a href="../experiences/index.html" class="block text-forest font-semibold py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Experiences</a>
       <a href="../experiences/avatar-bailong-elevator.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Avatar &amp; Bailong</a>
       <a href="../experiences/glass-bridge-bungee.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Glass Bridge &amp; Bungee</a>
       <a href="../experiences/tianmen-mountain.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
@@ -386,22 +386,26 @@
       <a href="../experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
       <a href="../experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">4. Things to do &amp; Tour</p>
-      <a href="../tours/index.html-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
-      <a href="../tours/index.html-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
-      <a href="../tours/index.html-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
-      <a href="../tours/index.html-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
-            <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">5. Hotel</p>
+      <a href="../tours/index.html" class="block text-forest font-semibold py-1 pl-3 text-sm" onclick="closeMobileMenu()">→ All Tours</a>
+      <a href="#tour-ranking" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Top 8 Must-See Spots</a>
+      <a href="#tour-day" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Day Tours</a>
+      <a href="#tour-private-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Private Tours</a>
+      <a href="#tour-vip-card" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">VIP Tours</a>
+      <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">5. Hotel</p>
       <a href="../hotels/mountain-lodges.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏔️ Mountain Lodges</a>
       <a href="../hotels/selected-stays.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">⭐ Selected Stays</a>
       <a href="../hotels/value-hotels.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">💡 Value Hotels</a>
       <a href="../hotels/by-area.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">📍 By Area</a>
+      <!-- [HIDDEN] Food + Plan - commented out, restore when needed
       <p class="text-gold-dark text-xs font-bold uppercase tracking-wide pt-3 pb-1">6. Food</p>
       <a href="../food/zhangjiajie-cuisine.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🍜 Zhangjiajie Cuisine</a>
       <a href="../food/featured-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">⭐ Featured Restaurants</a>
       <a href="../food/chinese-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🥢 Chinese Restaurants</a>
       <a href="../food/western-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🍕 Western Restaurants</a>
       <a href="../food/must-eat-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏆 Must-Eat Restaurants</a>
-      <button type="button"  onclick="openContactModal(event);closeMobileMenu()" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</button>
+      <a href="../plan/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Plan Like a Local</a>
+      -->
+      <button type="button"  onclick="openContactModal(event);document.getElementById('mobile-menu').classList.add('hidden')" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</button>
       
     </div>
   </header>

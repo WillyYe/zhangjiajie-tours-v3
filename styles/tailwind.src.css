@@ -209,3 +209,24 @@ html { scroll-behavior: smooth; }
     #mobile-menu p:has(~ a[href*="food/"]) { display: none !important; }
     #mobile-menu a[href*="plan/"] { display: none !important; }
     #mobile-menu p:has(~ a[href*="plan/"]) { display: none !important; }
+
+    /* ===== Header components (solid default; homepage overrides in index.html inline style) ===== */
+    .header-logo-text { color: #1a3a2a; }
+    .header-nav-link { color: #57534e; }
+    .header-nav-link:hover { color: #1a3a2a; }
+    .header-cta {
+      border: 1px solid #1a3a2a;
+      color: #1a3a2a;
+      background: transparent;
+    }
+    .header-cta:hover {
+      background: #1a3a2a;
+      color: #ffffff;
+    }
+    .header-mobile-toggle { color: #1a3a2a; }
+    /* Dropdown caret on subpage header (solid) */
+    header:not(#main-header) .dropdown-caret { stroke: #57534e; }
+    /* Tighten nav spacing on medium desktop widths to avoid logo overlap */
+    @media (max-width: 1100px) {
+      header nav > ul { gap: 1rem !important; }
+    }
