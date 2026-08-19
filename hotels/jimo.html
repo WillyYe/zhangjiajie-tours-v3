@@ -353,7 +353,7 @@
 
           <!-- 6. Contact -->
           <li class="nav-item h-full flex items-center">
-            <a href="mailto:zjjpark@outlook.com" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</a>
+            <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
           </li>
         </ul>
       </nav>
@@ -405,7 +405,7 @@
       <a href="../food/must-eat-restaurants.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏆 Must-Eat Restaurants</a>
       <a href="../plan/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Plan Like a Local</a>
       -->
-      <a href="mailto:zjjpark@outlook.com" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</a>
+      <button type="button"  onclick="openContactModal(event);document.getElementById('mobile-menu').classList.add('hidden')" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">7. Contact us</button>
       
     </div>
   </header>
@@ -724,24 +724,49 @@
 
   <!-- ========== Contact Modal ========== -->
   <div id="contactModal" class="fixed inset-0 z-[100] hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <!-- Backdrop -->
     <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onclick="closeContactModal()"></div>
+    <!-- Modal panel -->
     <div class="absolute inset-0 flex items-center justify-center p-4 pointer-events-none">
-      <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 md:p-10 text-center transform scale-95 opacity-0 transition-all duration-300 pointer-events-auto" id="contactModalPanel">
-        <button onclick="closeContactModal()" aria-label="Close" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-stone-100 hover:bg-stone-200 text-stone-600 hover:text-stone-700 transition-colors">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4l8 8M12 4L4 12"/></svg>
+      <div class="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-md w-full p-6 sm:p-8 md:p-10 text-center transform scale-95 opacity-0 transition-all duration-300 pointer-events-auto max-h-[90vh] overflow-y-auto" id="contactModalPanel">
+        <!-- Close button -->
+        <button onclick="closeContactModal()" aria-label="Close contact dialog" class="absolute top-3 right-3 sm:top-4 sm:right-4 w-11 h-11 flex items-center justify-center rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-700 transition-colors active:scale-95">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M4 4l8 8M12 4L4 12"/></svg>
         </button>
-        <div class="w-14 h-14 bg-teal-50 rounded-full flex items-center justify-center mx-auto mb-5">
-          <svg width="24" height="24" fill="none" stroke="#0f766e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+
+        <!-- Icon (on-brand forest gradient) -->
+        <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-forest to-forest-light rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-5 shadow-lg shadow-forest/20">
+          <span class="text-2xl sm:text-3xl" aria-hidden="true">⛰️</span>
         </div>
-        <h3 id="modalTitle" class="font-display text-2xl text-slate-800 mb-2">Get in Touch</h3>
-        <p class="text-slate-500 text-sm mb-8 leading-relaxed">We reply by email with a personalized itinerary.</p>
-        
-        <a href="mailto:zjjpark@outlook.com"
-           class="flex items-center justify-center gap-3 w-full bg-white border-2 border-slate-200 hover:border-slate-300 text-slate-700 font-semibold py-3.5 rounded-xl transition-all hover:-translate-y-0.5">
-          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          Send Email
-        </a>
-        <p class="mt-6 text-xs text-slate-400">&#10003; Free itinerary &nbsp; &#10003; No obligation &nbsp; &#10003; Reply within 24h</p>
+
+        <!-- Label + Title (branded, mobile-first) -->
+        <p class="text-gold-dark font-semibold text-xs sm:text-sm tracking-widest uppercase mb-2">Let's Plan Together</p>
+        <h3 id="modalTitle" class="font-display text-2xl sm:text-3xl text-slate-800 mb-2 leading-tight">Ready for Your Zhangjiajie Adventure?</h3>
+        <p class="text-slate-500 text-sm mb-5 leading-relaxed">We reply by email with a personalized itinerary.</p>
+
+        <!-- Unified contact actions: channel info + external jump in one set -->
+        <div class="space-y-2.5 mb-5 text-left">
+
+          <!-- Email -->
+          <a href="mailto:zjjpark@outlook.com" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-stone-50 hover:bg-stone-100 transition-all active:scale-[0.99]">
+            <div class="w-9 h-9 flex items-center justify-center rounded-lg bg-blue-50 text-blue-600 shrink-0">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Email</div>
+              <div class="text-sm font-semibold text-slate-800 break-all">zjjpark@outlook.com</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Trust signals (responsive, stacked on mobile) -->
+        <div class="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs sm:text-sm text-slate-400">
+          <span class="flex items-center gap-1"><span class="text-gold-dark font-bold">&#10003;</span> Free itinerary</span>
+          <span class="hidden sm:inline text-slate-300">&middot;</span>
+          <span class="flex items-center gap-1"><span class="text-gold-dark font-bold">&#10003;</span> No obligation</span>
+          <span class="hidden sm:inline text-slate-300">&middot;</span>
+          <span class="flex items-center gap-1"><span class="text-gold-dark font-bold">&#10003;</span> Reply within 24h</span>
+        </div>
       </div>
     </div>
   </div>
