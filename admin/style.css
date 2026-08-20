@@ -109,7 +109,7 @@ body {
 .editor .hint { color: var(--muted); font-size: 13px; }
 
 /* ---------- 酒店三级分级编辑器 ---------- */
-.he { display: grid; grid-template-columns: 240px 1fr; gap: 0; min-height: 0; align-items: stretch; }
+.he { display: grid; grid-template-columns: minmax(170px, 210px) 1fr; gap: 0; min-height: 0; align-items: stretch; }
 .he-step {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
@@ -117,42 +117,43 @@ body {
   border-radius: 999px; padding: 5px 14px; margin-bottom: 12px;
 }
 
-/* 左：折叠树（分类 ▸ 酒店） */
+/* 左：折叠树（分类 ▸ 酒店）—— 紧凑，宽度随内容自适应 */
 .he-tree {
   border-right: 1px solid var(--line);
-  padding: 18px 14px; min-width: 0; overflow: auto; background: #fafbfc;
+  padding: 14px 10px; min-width: 0; overflow: auto; background: #fafbfc;
 }
 .he-tree-title {
-  font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 12px; padding: 0 6px;
+  font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px; padding: 0 4px;
 }
-.he-tree-cat { margin-bottom: 4px; }
+.he-tree-cat { margin-bottom: 2px; }
 .he-tree-cat-head {
-  display: flex; align-items: center; gap: 8px; width: 100%;
-  padding: 10px; border: none; background: transparent; cursor: pointer;
-  font-size: 15px; font-weight: 700; color: var(--ink); border-radius: 10px; text-align: left;
+  display: flex; align-items: flex-start; gap: 6px; width: 100%;
+  padding: 7px 6px; border: none; background: transparent; cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--ink); border-radius: 8px; text-align: left;
+  line-height: 1.35;
 }
 .he-tree-cat-head:hover { background: #eef2f7; }
-.he-chevron { display: inline-block; transition: transform .18s ease; color: var(--muted); font-size: 11px; width: 12px; text-align: center; }
+.he-chevron { display: inline-block; transition: transform .18s ease; color: var(--muted); font-size: 10px; width: 12px; text-align: center; margin-top: 3px; flex: none; }
 .he-tree-cat.open > .he-tree-cat-head .he-chevron { transform: rotate(90deg); }
-.he-tree-cat-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.he-tree-count { font-size: 11px; font-weight: 700; color: var(--muted); background: #e2e8f0; border-radius: 999px; padding: 1px 8px; flex: none; }
-.he-tree-cat-body { display: none; padding: 2px 0 6px 16px; }
+.he-tree-cat-name { flex: 1; min-width: 0; word-break: break-word; }
+.he-tree-count { font-size: 10px; font-weight: 700; color: var(--muted); background: #e2e8f0; border-radius: 999px; padding: 1px 6px; flex: none; margin-top: 1px; }
+.he-tree-cat-body { display: none; padding: 0 0 4px 14px; }
 .he-tree-cat.open > .he-tree-cat-body { display: block; }
 .he-tree-hotel {
-  display: flex; flex-direction: column; gap: 2px; width: 100%;
-  padding: 9px 12px; margin: 2px 0; border: 1px solid transparent; border-radius: 9px;
+  display: flex; flex-direction: column; gap: 1px; width: 100%;
+  padding: 7px 9px; margin: 1px 0; border: 1px solid transparent; border-radius: 8px;
   background: transparent; cursor: pointer; text-align: left;
 }
 .he-tree-hotel:hover { background: #fff; border-color: var(--line); }
 .he-tree-hotel.active { background: #fff; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(37,99,235,.14); }
-.he-tree-hotel-zh { font-size: 14px; font-weight: 700; color: var(--ink); }
-.he-tree-hotel-en { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.he-tree-hotel-zh { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.35; }
+.he-tree-hotel-en { font-size: 10px; color: var(--muted); line-height: 1.3; word-break: break-word; }
 
 /* 右：编辑表单宿主（③ 编辑） */
 .he-form-host {
   border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--panel); padding: 22px 24px 26px; max-width: 640px;
+  background: var(--panel); padding: 22px 24px 26px; max-width: none;
   margin: 18px; overflow: auto;
 }
 .he-empty { color: var(--muted); font-size: 15px; padding: 40px 8px; text-align: center; }
