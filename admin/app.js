@@ -72,7 +72,7 @@ async function load() {
       state.hotels,
       state.categories,
       () => setStatus(true),
-      (key) => renderPreview(previewEl, state.hotels[key])
+      (key) => renderPreview(previewEl, state.hotels[key], key)
     );
     setStatus(false);
   } catch (e) {

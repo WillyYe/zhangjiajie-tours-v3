@@ -4,9 +4,9 @@
 
 import { getFileSha, putImage, deleteFile, putFile } from '../github.js';
 
-// 图片基准路径：相对本模块（admin/modules/）→ 仓库根 images/（即 ../../images/）。
-// 用 import.meta.url 解析，避免 ES module 内相对路径被误解析到 admin/modules/。
-const IMG_BASE = new URL('../../images/', import.meta.url).href;
+// 图片基准路径：相对本模块（admin/modules/）→ 仓库根 images/。
+// 物理隔离：每家酒店图片位于 images/<slug>/，用 import.meta.url 解析避免路径误判。
+const imgUrl = (slug, name) => new URL(`../../images/${slug}/`, import.meta.url).href + name + '.webp';
 
 const FIELDS = [
   { key: 'name', label: '英文名 / Name', tip: '酒店英文名（用于英文页面）' },
@@ -100,9 +100,9 @@ function featuresField(value, onChange) {
 }
 
 // 图片字段：缩略图 + 文本框 + 图片库浏览按钮
-function imageField(field, value, onInput, hotels) {
+function imageField(field, value, onInput, hotels, categories, slug) {
   const thumbBox = el('div', { class: 'he-thumb-box' + (value ? '' : ' no-img') });
-  const thumb = el('img', { class: 'he-thumb', src: value ? IMG_BASE + value + '.webp' : '' });
+  const thumb = el('img', { class: 'he-thumb', src: value ? imgUrl(slug, value) : '' });
   thumb.addEventListener('error', () => thumbBox.classList.add('no-img'));
   thumb.addEventListener('load', () => thumbBox.classList.remove('no-img'));
   thumbBox.append(thumb);
@@ -118,7 +118,7 @@ function imageField(field, value, onInput, hotels) {
     type: 'button',
     class: 'btn btn-sm btn-ghost',
     text: '🖼 浏览图片库',
-    onclick: () => openImageLib(thumbBox, thumb, input, onInput, hotels),
+    onclick: () => openImageLib(thumbBox, thumb, input, onInput, hotels, categories, slug),
   });
 
   const row = el('div', { class: 'img-field' }, [thumbBox, input, btn]);
@@ -148,7 +148,7 @@ function buildLibModal() {
     el('div', { class: 'modal-icon', text: '🖼' }),
     el('div', {}, [
       el('h2', { text: '图片库' }),
-      el('p', { class: 'modal-subtitle', text: '点击选择主图 · 可上传 / 删除（images/ 下的 webp）' }),
+      el('p', { class: 'modal-subtitle', id: 'libSubtitle', text: '本酒店图片库（images/<slug>/）· 可上传 / 删除' }),
     ]),
     closeBtn,
   ]);
@@ -165,36 +165,43 @@ function buildLibModal() {
   return { mask, grid, toolbar, status };
 }
 
-// 扫描哪些酒店引用了某张图（用于删除保护）
-function findReferences(hotels, name) {
+// 扫描哪些酒店 / 分类引用了某张图（用于删除保护）
+function findReferences(hotels, categories, name) {
   const refs = [];
-  if (!hotels) return refs;
-  for (const [k, h] of Object.entries(hotels)) {
+  for (const [k, h] of Object.entries(hotels || {})) {
     if (h && typeof h === 'object' && h.img === name) {
       refs.push(h.zh || h.name || k);
     }
   }
+  // 分类 hero 也可能复用该图（如 mountain-lodges 用 hetianye 主图），删除会破前台分类页
+  for (const c of categories || []) {
+    if (c && c.heroImg === name) refs.push('分类「' + (c.title || c.slug) + '」hero');
+  }
   return refs;
 }
 
-// 把 list 写回仓库 image-list.json（保持排序）
-async function syncImageList(list) {
+const LIB_BASE = 'admin/imglib/';
+// 把某酒店的图片清单写回仓库 admin/imglib/<slug>.json（保持排序；文件不存在则新建）
+async function syncHotelList(slug, list) {
   const content = JSON.stringify([...list].sort(), null, 2) + '\n';
-  const sha = await getFileSha('admin/image-list.json');
-  await putFile('admin/image-list.json', content, sha, 'Update image list via admin');
+  const sha = await getFileSha(LIB_BASE + slug + '.json');
+  await putFile(LIB_BASE + slug + '.json', content, sha, `Update ${slug} image list via admin`);
 }
 
-async function openImageLib(thumbBox, thumb, input, onInput, hotels) {
+async function openImageLib(thumbBox, thumb, input, onInput, hotels, categories, slug) {
   if (!libModal) libModal = buildLibModal();
-  libState = { list: [], hotels, thumbBox, thumb, input, onInput };
+  libState = { list: [], hotels, categories, slug, thumbBox, thumb, input, onInput };
   libModal.grid.replaceChildren(el('div', { class: 'img-lib-loading', text: '加载中…' }));
   setStatus(libModal.status, '', '');
+  const sub = libModal.mask.querySelector('#libSubtitle');
+  if (sub) sub.textContent = `本酒店图片库 · images/${slug}/（仅显示 ${slug} 的图片）`;
   try {
-    const list = await (await fetch(new URL('../image-list.json', import.meta.url))).json();
-    libState.list = list;
+    const res = await fetch(new URL(`../imglib/${slug}.json`, import.meta.url));
+    libState.list = res.ok ? await res.json() : [];
     renderLibGrid(input.value);
   } catch (e) {
-    libModal.grid.replaceChildren(el('div', { class: 'img-lib-err', text: '图片库清单不可用（缺少 admin/image-list.json）' }));
+    libState.list = [];
+    renderLibGrid(input.value);
   }
   libModal.mask.hidden = false;
 }
@@ -210,7 +217,7 @@ function renderLibGrid(currentName) {
   let selectedEl = null;
   for (const name of filtered) {
     const cell = el('div', { class: 'img-lib-item' + (name === currentName ? ' selected' : '') });
-    const im = el('img', { src: IMG_BASE + name + '.webp', loading: 'lazy', alt: name });
+    const im = el('img', { src: imgUrl(libState.slug, name), loading: 'lazy', alt: name });
     im.addEventListener('error', () => cell.classList.add('broken'));
     const delBtn = el('button', {
       type: 'button',
@@ -231,31 +238,32 @@ function renderLibGrid(currentName) {
 }
 
 function pickImage(name) {
-  const { input, thumb, thumbBox, onInput } = libState;
+  const { input, thumb, thumbBox, onInput, slug } = libState;
   input.value = name;
-  thumb.src = IMG_BASE + name + '.webp';
+  thumb.src = imgUrl(slug, name);
   thumbBox.classList.remove('no-img');
   onInput(name);
   libModal.mask.hidden = true;
 }
 
 async function confirmDelete(name) {
-  const refs = findReferences(libState.hotels, name);
+  const refs = findReferences(libState.hotels, libState.categories, name);
   if (refs.length) {
-    setStatus(libModal.status, `⚠️ 无法删除：${name}.webp 正被 ${refs.length} 家酒店引用（${refs.join('、')}）。删除会导致前台破图。`, 'err');
+    setStatus(libModal.status, `⚠️ 无法删除：${name}.webp 正被引用（${refs.join('、')}）。删除会导致前台破图。`, 'err');
     return;
   }
   if (!confirm(`确认删除 ${name}.webp？此操作不可撤销。`)) return;
   setStatus(libModal.status, '删除中…', 'info');
   try {
-    const sha = await getFileSha(`images/${name}.webp`);
+    const path = `images/${libState.slug}/${name}.webp`;
+    const sha = await getFileSha(path);
     if (!sha) {
-      setStatus(libModal.status, `文件不存在：${name}.webp`, 'err');
+      setStatus(libModal.status, `文件不存在：${path}`, 'err');
       return;
     }
-    await deleteFile(`images/${name}.webp`, sha, `Delete ${name}.webp via admin`);
+    await deleteFile(path, sha, `Delete ${name}.webp via admin`);
     const newList = libState.list.filter((n) => n !== name);
-    await syncImageList(newList);
+    await syncHotelList(libState.slug, newList);
     libState.list = newList;
     renderLibGrid(libState.input.value);
     setStatus(libModal.status, `已删除 ${name}.webp`, 'ok');
@@ -369,21 +377,24 @@ function openUploadPanel() {
 }
 
 async function doUpload(state, refs) {
-  const finalName = sanitizeName(state.finalName);
-  if (!finalName) { setStatus(refs.status, '请填写有效的文件名', 'err'); return; }
+  const raw = sanitizeName(state.finalName);
+  if (!raw) { setStatus(refs.status, '请填写有效的文件名', 'err'); return; }
   if (!state.blob) { setStatus(refs.status, '请先选择图片', 'err'); return; }
-  const path = `images/${finalName}.webp`;
+  // 物理隔离：自动加 hotel-<slug>- 前缀，确保新图归入当前酒店图片库
+  const prefix = `hotel-${libState.slug}-`;
+  const finalName = raw.startsWith(prefix) ? raw : prefix + raw;
+  const path = `images/${libState.slug}/${finalName}.webp`;
   setStatus(refs.status, '上传中…', 'info');
   refs.confirmBtn.disabled = true;
   try {
     const existingSha = await getFileSha(path);
     if (existingSha) {
-      const ok = confirm(`images/${finalName}.webp 已存在，是否覆盖？`);
+      const ok = confirm(`images/${libState.slug}/${finalName}.webp 已存在，是否覆盖？`);
       if (!ok) { setStatus(refs.status, '已取消', 'info'); refs.confirmBtn.disabled = false; return; }
     }
     await putImage(path, state.blob, existingSha, `Upload ${finalName}.webp via admin`);
     const newList = libState.list.includes(finalName) ? libState.list : [...libState.list, finalName].sort();
-    await syncImageList(newList);
+    await syncHotelList(libState.slug, newList);
     libState.list = newList;
     renderLibGrid(libState.input.value);
     setStatus(refs.status, `已上传 ${finalName}.webp`, 'ok');
@@ -518,7 +529,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
         onSelect && onSelect(ui.hotelKey);
       };
       if (f.key === 'img') {
-        formHost.append(imageField(f, h.img, commit, hotels));
+        formHost.append(imageField(f, h.img, commit, hotels, categories, ui.hotelKey));
       } else {
         formHost.append(textField(f, h[f.key], commit));
       }
@@ -540,12 +551,12 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
   renderForm();
 }
 
-export function renderPreview(container, hotel) {
+export function renderPreview(container, hotel, slug) {
   container.replaceChildren();
   if (!hotel) return;
   const imgWrap = el('div', { class: 'pv-img' });
   if (hotel.img) {
-    const im = el('img', { class: 'pv-img-el', src: IMG_BASE + hotel.img + '.webp', alt: hotel.alt || '' });
+    const im = el('img', { class: 'pv-img-el', src: slug ? imgUrl(slug, hotel.img) : hotel.img + '.webp', alt: hotel.alt || '' });
     im.addEventListener('error', () => (imgWrap.textContent = '(图片加载失败: ' + hotel.img + ')'));
     imgWrap.append(im);
   } else {

@@ -62,7 +62,7 @@
       hotels,
       hotelCategories,
       () => { statusText.textContent = '● 未保存（演示）'; },
-      (key) => renderPreview(document.getElementById('preview'), hotels[key])
+      (key) => renderPreview(document.getElementById('preview'), hotels[key], key)
     );
   </script>
 </body>

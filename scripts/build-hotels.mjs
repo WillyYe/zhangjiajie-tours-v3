@@ -16,18 +16,22 @@ const IMAGES_DIR = path.join(ROOT, 'images');
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
-const imgSrc = (n) => '../images/' + imgName(n);
+// slug 指定 → 落到该酒店物理隔离目录 images/<slug>/；否则回退根目录（兜底）
+const imgSrc = (n, slug) => '../images/' + (slug ? slug + '/' : '') + imgName(n);
+// 分类 hero 图复用某家酒店的 img，据此反查其 slug 以便解析到 images/<slug>/
+const heroSlugFor = (cat) =>
+  Object.keys(hotels).find((k) => hotels[k] && hotels[k].img === cat.heroImg) || null;
 
 const ACTIVE = 'text-forest font-bold';
 const NORMAL = '';
 
-function hotelCard(h) {
+function hotelCard(h, slug) {
   const feats = h.features.map((f) =>
     `<li class="flex items-start gap-2 text-sm text-stone-600"><span class="text-gold-dark mt-0.5">✓</span><span>${escHtml(f)}</span></li>`
   ).join('');
   return `          <article class="card-hover group bg-white rounded-2xl overflow-hidden border border-sand-dark flex flex-col">
             <div class="overflow-hidden h-56">
-              <img loading="lazy" decoding="async" src="${imgSrc(h.img)}" alt="${escAttr(h.alt)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+              <img loading="lazy" decoding="async" src="${imgSrc(h.img, slug)}" alt="${escAttr(h.alt)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
             </div>
             <div class="p-6 flex flex-col flex-1">
               <div class="flex items-start justify-between gap-3 mb-1">
@@ -43,7 +47,7 @@ function hotelCard(h) {
 }
 
 function categoryBody(cat) {
-  const cards = cat.hotels.map((id) => hotelCard(hotels[id])).join('\n');
+  const cards = cat.hotels.map((id) => hotelCard(hotels[id], id)).join('\n');
   const main = `  <!-- ========== Stays in this category ========== -->
   <section class="py-16 lg:py-20 px-6">
     <div class="max-w-[1400px] mx-auto">
@@ -59,7 +63,7 @@ ${cards}
 
 function categoryCard(cat) {
   return `          <a href="${cat.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
-            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="${imgSrc(cat.heroImg)}" alt="${escAttr(cat.heroAlt)}"></div>
+            <div class="overflow-hidden"><img loading="lazy" decoding="async" class="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-105" src="${imgSrc(cat.heroImg, heroSlugFor(cat))}" alt="${escAttr(cat.heroAlt)}"></div>
             <div class="p-6">
               <p class="module-tag">${escAttr(cat.tag)}</p>
               <h3 class="font-display text-xl text-forest mb-2 leading-snug">${escHtml(cat.title)}</h3>
@@ -125,9 +129,9 @@ function fill(tpl, map) {
   return out;
 }
 
-function validateImage(n) {
-  const p = path.join(IMAGES_DIR, imgName(n));
-  if (!fs.existsSync(p)) { console.error('  ✗ missing image: ' + imgName(n)); process.exitCode = 1; return false; }
+function validateImage(n, slug) {
+  const p = path.join(IMAGES_DIR, slug || '', imgName(n));
+  if (!fs.existsSync(p)) { console.error('  ✗ missing image: ' + (slug ? slug + '/' : '') + imgName(n)); process.exitCode = 1; return false; }
   return true;
 }
 
@@ -138,8 +142,9 @@ const base = 'https://willyye.github.io/zhangjiajie-tours-v3';
 
 // category pages
 for (const cat of hotelCategories) {
-  if (!validateImage(cat.heroImg)) continue;
-  cat.hotels.forEach((id) => validateImage(hotels[id].img));
+  const heroSlug = heroSlugFor(cat);
+  if (!validateImage(cat.heroImg, heroSlug)) continue;
+  cat.hotels.forEach((id) => validateImage(hotels[id].img, id));
 
   const body = categoryBody(cat);
   const jsonLd = itemListJsonLd(cat.hotels.map((id) => ({
@@ -154,7 +159,7 @@ for (const cat of hotelCategories) {
     HOTEL_NAV: ACTIVE,
     FOOD_NAV: NORMAL,
     BREADCRUMB: escHtml(cat.title),
-    HERO_IMG: imgSrc(cat.heroImg),
+    HERO_IMG: imgSrc(cat.heroImg, heroSlug),
     HERO_ALT: escAttr(cat.heroAlt),
     HERO_TAG: escHtml(cat.heroTag),
     H1: escHtml(cat.h1),
