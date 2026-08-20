@@ -106,3 +106,82 @@ export async function putFile(path, text, sha, message) {
   const data = await res.json();
   return { sha: data.content.sha };
 }
+
+// 查询文件 SHA；不存在返回 null（用于「新建 vs 更新」判断，以及删除时必填）
+export async function getFileSha(path) {
+  const { token, repo, branch } = getConfig();
+  const url = `${API}/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(url, { headers });
+  if (res.status === 404) return null;
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(`查询 ${path} 失败 (${res.status}) ${msg.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  return data.sha;
+}
+
+// Blob → 纯 base64（去掉 data: 前缀）
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result || '';
+      const comma = result.indexOf(',');
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(new Error('文件读取失败'));
+    reader.onabort = () => reject(new Error('文件读取被中止'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+// 上传/更新二进制图片（blob 为浏览器 Blob，如 canvas.toBlob 结果）
+export async function putImage(path, blob, sha, message) {
+  const { token, repo, branch } = getConfig();
+  const url = `${API}/repos/${repo}/contents/${path}`;
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const content = await blobToBase64(blob);
+  const body = JSON.stringify({
+    message: message || `Upload ${path} via admin`,
+    content,
+    branch,
+    ...(sha ? { sha } : {}),
+  });
+  const res = await fetch(url, { method: 'PUT', headers, body });
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(`上传 ${path} 失败 (${res.status}) ${msg.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  return { sha: data.content.sha };
+}
+
+// 删除文件（sha 必填）
+export async function deleteFile(path, sha, message) {
+  const { token, repo, branch } = getConfig();
+  const url = `${API}/repos/${repo}/contents/${path}`;
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const body = JSON.stringify({
+    message: message || `Delete ${path} via admin`,
+    sha,
+    branch,
+  });
+  const res = await fetch(url, { method: 'DELETE', headers, body });
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(`删除 ${path} 失败 (${res.status}) ${msg.slice(0, 200)}`);
+  }
+  return true;
+}
