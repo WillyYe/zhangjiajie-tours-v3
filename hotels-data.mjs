@@ -9,7 +9,7 @@ export const hotels = {
     zh: '几木酒店',
     area: 'Wulingyuan Core',
     tier: 'Boutique',
-    img: 'hotel-jimo-1',
+    img: 'hotel-jimo-hero',
     alt: 'JiMO boutique hotel exterior at blue hour by the river',
     blurb: 'A design-led retreat tucked into the Wulingyuan valley, minutes from the east gate. Quiet rooms, a riverside terrace, and the kind of calm that makes early park mornings effortless.',
     features: ['5–10 min drive to the Wulingyuan east gate', 'Riverside terrace & garden', 'Design-led rooms with local timber'],
