@@ -29,6 +29,7 @@
     </div>
     <div class="editor-grid">
       <div class="editor"><div id="editor"></div></div>
+      <div class="resizer" data-resizer="preview" title="左右拖动调整预览区宽度"></div>
       <div class="preview">
         <h3>实时预览 Live Preview</h3>
         <div id="preview"></div>
@@ -38,6 +39,9 @@
 
   <script type="module">
     import { renderEditor, renderPreview } from './modules/hotels.js';
+    import { initResizers } from './resizer.js';
+
+    initResizers();
 
     const hotels = {
       jimo: { name: 'JiMO Boutique Hotel', zh: '几木酒店', area: 'Wulingyuan Core', tier: 'Boutique', img: 'hotel-jimo-1', alt: 'JiMO boutique hotel exterior at blue hour by the river', blurb: 'A design-led retreat tucked into the Wulingyuan valley, minutes from the east gate. Quiet rooms, a riverside terrace, and the kind of calm that makes early park mornings effortless.', features: ['5–10 min drive to the Wulingyuan east gate', 'Riverside terrace & garden', 'Design-led rooms with local timber'] },

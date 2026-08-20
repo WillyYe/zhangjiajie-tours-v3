@@ -3,6 +3,7 @@
 // 编辑直接 mutate 传入的 hotels 对象（app.js 持有引用，保存时整体序列化）。
 
 import { getFileSha, putImage, deleteFile, putFile } from '../github.js';
+import { bindResizer, initResizers } from '../resizer.js';
 
 // 图片基准路径：相对本模块（admin/modules/）→ 仓库根 images/。
 // 物理隔离：每家酒店图片位于 images/<slug>/，用 import.meta.url 解析避免路径误判。
@@ -438,11 +439,16 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
   // 左：可折叠树（① 分类 ▸ ② 酒店）
   const tree = el('div', { class: 'he-tree' });
 
+  // 中：tree / form 分隔条
+  const treeResizer = el('div', { class: 'resizer', 'data-resizer': 'tree', title: '左右拖动调整分类树宽度' });
+  bindResizer(treeResizer);
+
   // 右：编辑表单宿主（③ 编辑）
   const formHost = el('div', { class: 'he-form-host' });
 
-  wrap.append(tree, formHost);
+  wrap.append(tree, treeResizer, formHost);
   container.append(wrap);
+  initResizers(); // 对新渲染出的 tree 分隔条应用已保存宽度并确保事件绑定
 
   function renderTree() {
     tree.replaceChildren();

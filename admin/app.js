@@ -1,6 +1,7 @@
 import { getConfig, isConfigured, getFile, putFile } from './github.js';
 import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor, renderPreview } from './modules/hotels.js';
+import { initResizers } from './resizer.js';
 import {
   initSettings,
   openSettings,
@@ -132,6 +133,7 @@ document.querySelectorAll('.module').forEach((btn) => {
 
 // ---------- Boot ----------
 (function boot() {
+  initResizers();
   renderSettingsStatus();
   const c = getConfig();
   if (!c.repo || !c.branch) {

@@ -23,16 +23,17 @@ body {
   color: var(--ink);
   font-size: 14px;
 }
-.app { display: flex; min-height: 100vh; }
+.app { display: flex; min-height: 100vh; overflow: hidden; }
 
 /* ---------- Sidebar ---------- */
 .sidebar {
-  width: 248px; flex: none;
+  flex: none; width: 248px;
   background: var(--sidebar-bg);
   color: var(--sidebar-ink);
   padding: 18px 14px;
   display: flex; flex-direction: column;
   gap: 6px;
+  overflow: hidden;
 }
 .brand { font-weight: 700; font-size: 16px; color: #fff; padding: 0 6px 14px; }
 .sidebar-status {
@@ -104,12 +105,12 @@ body {
 .btn-ghost { background: #fff; color: var(--ink); border-color: var(--line); }
 .btn-sm { padding: 6px 12px; font-size: 12px; }
 
-.editor-grid { flex: 1; display: grid; grid-template-columns: 1fr 460px; gap: 0; min-height: 0; }
-.editor { padding: 24px 28px; overflow: auto; font-size: 15px; }
+.editor-grid { flex: 1; display: flex; min-height: 0; overflow: hidden; }
+.editor { flex: 1; min-width: 0; padding: 24px 28px; overflow: auto; font-size: 15px; }
 .editor .hint { color: var(--muted); font-size: 13px; }
 
 /* ---------- 酒店三级分级编辑器 ---------- */
-.he { display: grid; grid-template-columns: minmax(170px, 210px) 1fr; gap: 0; min-height: 0; align-items: stretch; }
+.he { display: flex; min-height: 0; align-items: stretch; }
 .he-step {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
@@ -117,8 +118,9 @@ body {
   border-radius: 999px; padding: 5px 14px; margin-bottom: 12px;
 }
 
-/* 左：折叠树（分类 ▸ 酒店）—— 紧凑，宽度随内容自适应 */
+/* 左：折叠树（分类 ▸ 酒店）—— 紧凑，宽度可拖拽调整 */
 .he-tree {
+  flex: none; width: 210px;
   border-right: 1px solid var(--line);
   padding: 14px 10px; min-width: 0; overflow: auto; background: #fafbfc;
 }
@@ -152,17 +154,19 @@ body {
 
 /* 右：编辑表单宿主（③ 编辑） */
 .he-form-host {
+  flex: 1; min-width: 0;
   border: 1px solid var(--line); border-radius: var(--radius);
   background: var(--panel); padding: 22px 24px 26px; max-width: none;
   margin: 18px; overflow: auto;
 }
 .he-empty { color: var(--muted); font-size: 15px; padding: 40px 8px; text-align: center; }
 
-/* 窄屏：树堆叠在表单上方 */
+/* 窄屏：树堆叠在表单上方，隐藏 tree/form 分隔条 */
 @media (max-width: 960px) {
-  .he { grid-template-columns: 1fr; }
-  .he-tree { border-right: none; border-bottom: 1px solid var(--line); }
+  .he { flex-direction: column; }
+  .he-tree { border-right: none; border-bottom: 1px solid var(--line); width: auto !important; }
   .he-form-host { margin: 14px; max-width: none; }
+  .he > .resizer { display: none; }
 }
 
 /* 三级：编辑表单 —— 窗口聚焦、字体与方框放大 */
@@ -184,6 +188,7 @@ body {
 .he-form-host .feature-row .del { width: 46px; font-size: 18px; }
 .he-form-host .add-feature { font-size: 14px; padding: 10px 14px; }
 .preview {
+  flex: none; width: 460px;
   border-left: 1px solid var(--line); background: #f8fafc;
   padding: 24px; overflow: auto;
 }
@@ -265,6 +270,31 @@ legend small { font-weight: 400; color: var(--muted); font-size: 11px; margin-le
 .upload-meta { font-size: 12px; color: var(--muted); }
 .btn-primary { background: var(--brand); color: #fff; border: 1px solid var(--brand); }
 .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ---------- Resizer ---------- */
+.resizer {
+  flex: none; width: 8px;
+  cursor: col-resize;
+  position: relative;
+  z-index: 5;
+  background: transparent;
+  transition: background .15s ease;
+}
+.resizer::before {
+  content: '';
+  position: absolute; top: 0; bottom: 0; left: 50%;
+  width: 1px; background: var(--line);
+  transform: translateX(-50%);
+  transition: background .15s ease, width .15s ease;
+}
+.resizer:hover,
+.resizer.dragging {
+  background: rgba(37,99,235,.10);
+}
+.resizer:hover::before,
+.resizer.dragging::before {
+  width: 2px; background: var(--brand);
+}
 
 /* ---------- Modal / Settings ---------- */
 .modal-mask { position: fixed; inset: 0; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(2px); }
