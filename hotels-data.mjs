@@ -51,7 +51,7 @@ export const hotels = {
     tier: 'Value',
     img: 'hotel-homeinn-plus-1',
     alt: 'Homeinn Plus hotel at Ziwu Road',
-    blurb: 'Clean, predictable, and easy on the wallet — the Homeinn Plus format gives you a dependable base in the city with the basics done right and nothing you pay for but don’t use.',
+    blurb: 'Bright, reliable and budget‑friendly, Homeinn Plus offers you a solid retreat against Zhangjiajie’s legendary peak‑forest scenery. Every travel essential is thoughtfully covered, free of superfluous add‑ons, so you can savour the magic of mist‑shrouded stone pillars without distractions.',
     features: ['Dependable value stay', 'City-centre Ziwu Road', 'Great for longer trips'],
   },
   '72qilou': {
