@@ -14,8 +14,8 @@ const FIELDS = [
   { key: 'alt', label: '图片 alt 描述', tip: '英文 alt 文本，利于无障碍与 SEO' },
 ];
 
-// 当前选中的 一级/二级（UI 状态）
-const ui = { catSlug: null, hotelKey: null };
+// 当前选中的 一级/二级/展开分类（UI 状态）
+const ui = { catSlug: null, hotelKey: null, openCat: null };
 
 function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
@@ -199,89 +199,98 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
 
   ui.catSlug = tiers[0].slug;
   ui.hotelKey = tiers[0].hotels[0];
+  ui.openCat = ui.catSlug; // 默认展开选中酒店所在分类
+
+  const catBySlug = (slug) => tiers.find((c) => c.slug === slug);
+  const catOfHotel = (key) => tiers.find((c) => c.hotels.includes(key));
 
   const wrap = el('div', { class: 'he' });
 
-  // 一级：分类
-  const lvl1 = el('div', { class: 'he-level' });
-  lvl1.append(el('div', { class: 'he-step', text: '① 分类 Category' }));
-  const catRow = el('div', { class: 'he-cats' });
-  lvl1.append(catRow);
+  // 左：可折叠树（① 分类 ▸ ② 酒店）
+  const tree = el('div', { class: 'he-tree' });
 
-  // 二级：酒店
-  const lvl2 = el('div', { class: 'he-level' });
-  lvl2.append(el('div', { class: 'he-step', text: '② 酒店 Hotel' }));
-  const hotelRow = el('div', { class: 'he-hotels' });
-  lvl2.append(hotelRow);
+  // 右：编辑表单宿主（③ 编辑）
+  const formHost = el('div', { class: 'he-form-host' });
 
-  // 三级：编辑表单
-  const lvl3 = el('div', { class: 'he-level' });
-  lvl3.append(el('div', { class: 'he-step', text: '③ 编辑 Edit' }));
-  const formHost = el('div', { class: 'he-form' });
-  lvl3.append(formHost);
-
-  wrap.append(lvl1, lvl2, lvl3);
+  wrap.append(tree, formHost);
   container.append(wrap);
 
-  const catBySlug = (slug) => tiers.find((c) => c.slug === slug);
-
-  function renderCats() {
-    catRow.replaceChildren();
+  function renderTree() {
+    tree.replaceChildren();
+    tree.append(el('div', { class: 'he-tree-title', text: '酒店分类 · Hotels' }));
     for (const c of tiers) {
-      catRow.append(
-        el('button', {
-          class: 'he-cat' + (c.slug === ui.catSlug ? ' active' : ''),
-          type: 'button',
-          text: c.title,
-          onclick: () => {
-            ui.catSlug = c.slug;
-            ui.hotelKey = c.hotels[0];
-            renderCats();
-            renderHotels();
-            renderForm();
-          },
-        })
-      );
+      const open = c.slug === ui.openCat;
+      const catNode = el('div', { class: 'he-tree-cat' + (open ? ' open' : '') });
+
+      const head = el('button', {
+        class: 'he-tree-cat-head',
+        type: 'button',
+        onclick: () => {
+          if (open) {
+            // 收起当前分类：同时清空选择，主区回到提示
+            ui.openCat = null;
+            ui.hotelKey = null;
+          } else {
+            // 单开：展开本分类、收起其它
+            ui.openCat = c.slug;
+            // 若当前选中酒店不在本分类，自动选第一家，保持表单与展开分类一致
+            if (!c.hotels.includes(ui.hotelKey)) {
+              ui.hotelKey = c.hotels[0];
+              ui.catSlug = c.slug;
+            }
+          }
+          renderTree();
+          renderForm();
+        },
+      }, [
+        el('span', { class: 'he-chevron', text: '▸' }),
+        el('span', { class: 'he-tree-cat-name', text: c.title }),
+        el('span', { class: 'he-tree-count', text: String(c.hotels.length) }),
+      ]);
+
+      const body = el('div', { class: 'he-tree-cat-body' });
+      for (const k of c.hotels) {
+        const h = hotels[k];
+        body.append(
+          el('button', {
+            class: 'he-tree-hotel' + (k === ui.hotelKey ? ' active' : ''),
+            type: 'button',
+            onclick: () => selectHotel(k),
+          }, [
+            el('span', { class: 'he-tree-hotel-zh', text: h.zh || '' }),
+            el('span', { class: 'he-tree-hotel-en', text: h.name || k }),
+          ])
+        );
+      }
+
+      catNode.append(head, body);
+      tree.append(catNode);
     }
   }
 
-  function renderHotels() {
-    hotelRow.replaceChildren();
-    const c = catBySlug(ui.catSlug);
-    if (!c) return;
-    for (const k of c.hotels) {
-      const h = hotels[k];
-      hotelRow.append(
-        el(
-          'button',
-          {
-            class: 'he-hotel' + (k === ui.hotelKey ? ' active' : ''),
-            type: 'button',
-            onclick: () => {
-              ui.hotelKey = k;
-              renderHotels();
-              renderForm();
-            },
-          },
-          [
-            el('span', { class: 'he-hotel-zh', text: h.zh || '' }),
-            el('span', { class: 'he-hotel-en', text: h.name || k }),
-          ]
-        )
-      );
-    }
+  function selectHotel(key) {
+    ui.hotelKey = key;
+    const cat = catOfHotel(key);
+    ui.catSlug = cat ? cat.slug : ui.catSlug;
+    ui.openCat = ui.catSlug; // 确保父分类展开（单开）
+    renderTree();
+    renderForm();
   }
 
   function renderForm() {
     formHost.replaceChildren();
     const h = hotels[ui.hotelKey];
-    if (!h) return;
+    if (!h) {
+      formHost.append(el('div', { class: 'he-empty', text: '请选择一个酒店进行编辑。' }));
+      return;
+    }
 
     formHost.append(
       el('div', { class: 'he-form-head' }, [
         el('span', { class: 'he-form-zh', text: h.zh || '' }),
         el('span', { class: 'he-form-key', text: ui.hotelKey }),
-      ])
+      ]),
+      el('div', { class: 'he-step', text: '③ 编辑 Edit' })
     );
 
     for (const f of FIELDS) {
@@ -309,8 +318,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
     onSelect && onSelect(ui.hotelKey);
   }
 
-  renderCats();
-  renderHotels();
+  renderTree();
   renderForm();
 }
 
