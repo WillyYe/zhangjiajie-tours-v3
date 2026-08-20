@@ -1,0 +1,44 @@
+name: Rebuild hotel pages
+
+# 当后台通过 GitHub Contents API 修改 hotels-data.mjs 后，
+# 自动重新生成静态 hotels/*.html，避免前端显示旧内容。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hotels-data.mjs'
+
+concurrency:
+  group: rebuild-hotels-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Regenerate hotels/*.html
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build hotel pages
+        run: node scripts/build-hotels.mjs
+
+      - name: Commit and push regenerated pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- hotels/; then
+            echo "No hotel HTML changes to commit."
+            exit 0
+          fi
+          git add hotels/
+          git commit -m "chore: rebuild hotels/*.html from hotels-data.mjs [skip ci]"
+          git push
