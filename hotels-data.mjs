@@ -6,7 +6,7 @@
 export const hotels = {
   jimo: {
     name: 'JiMO Boutique Hotel',
-    zh: '几木酒店',
+    zh: '积木酒店',
     area: 'Wulingyuan Core',
     tier: 'Boutique',
     img: 'hotel-jimo-hero',
