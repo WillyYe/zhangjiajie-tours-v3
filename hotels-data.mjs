@@ -69,7 +69,7 @@ export const hotels = {
     zh: '华天城',
     area: 'Zhangjiajie City Centre',
     tier: 'City',
-    img: 'hotel-huatian-1',
+    img: 'hotel-huatian-g1',
     alt: 'Huatiancheng city-centre suites',
     blurb: 'Spacious apartment-style suites in the heart of the city — a smart base for families and longer stays that want kitchen space, a living area, and doorstep access to transit.',
     features: ['Apartment-style suites', 'City-centre location', 'Good for families & long stays'],
