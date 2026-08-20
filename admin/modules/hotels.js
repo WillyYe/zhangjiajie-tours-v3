@@ -406,10 +406,14 @@ async function doUpload(state, refs) {
   }
 }
 
-// 由 categories 推导出 一级(分类) → 二级(酒店) 的映射，并把游离酒店归入「未分类」
+// 由 categories 推导出 一级(分类) → 二级(酒店) 的映射，并把游离酒店归入「未分类」。
+// 注意：保留对原始 cat 对象的引用（不拷贝），以便树操作直接 mutate 并随保存落盘。
 function buildTiers(hotels, categories) {
   const cats = (categories && Array.isArray(categories) ? categories : [])
-    .map((c) => ({ ...c, hotels: (c.hotels || []).filter((k) => hotels[k]) }))
+    .map((c) => {
+      c.hotels = (c.hotels || []).filter((k) => hotels[k]);
+      return c;
+    })
     .filter((c) => c.hotels.length);
 
   const placed = new Set(cats.flatMap((c) => c.hotels));
@@ -421,7 +425,7 @@ function buildTiers(hotels, categories) {
 
 export function renderEditor(container, hotels, categories, onChange, onSelect) {
   container.replaceChildren();
-  const tiers = buildTiers(hotels, categories);
+  let tiers = buildTiers(hotels, categories);
   if (!tiers.length) {
     container.append(el('p', { class: 'hint', text: '暂无酒店数据。' }));
     return;
@@ -450,25 +454,181 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
   container.append(wrap);
   initResizers(); // 对新渲染出的 tree 分隔条应用已保存宽度并确保事件绑定
 
+  // ===== 树操作：隐藏 / 删除 / 新增 / 编辑分类 / 拖拽排序 =====
+  function notify(msg, type) {
+    if (typeof window !== 'undefined' && typeof window.__adminToast === 'function') window.__adminToast(msg, type);
+    else console.log('[hotels] ' + msg);
+  }
+  function iconBtn(icon, title, handler) {
+    return el('button', { class: 'he-act', type: 'button', title, text: icon, onclick: (e) => { e.stopPropagation(); handler(); } });
+  }
+  function slugify(s) {
+    return (s || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+  function fieldRow(label, input) {
+    return el('div', { class: 'field' }, [el('label', { text: label }), input]);
+  }
+  function markDirty() { onChange(); }
+
+  function toggleHotelHidden(key) {
+    const h = hotels[key]; if (!h) return;
+    h.hidden = !h.hidden; markDirty(); renderTree();
+  }
+  function toggleCatHidden(cat) {
+    if (cat.slug === '__uncat') return;
+    cat.hidden = !cat.hidden; markDirty(); renderTree();
+  }
+  function deleteHotel(key) {
+    const h = hotels[key]; if (!h) return;
+    if (!confirm(`确认删除酒店「${h.zh || h.name || key}」？\n\n只删除数据、不删除图片。该酒店将从所有分类移除。`)) return;
+    const usedByCats = categories.filter((c) => c.heroImg === h.img);
+    delete hotels[key];
+    for (const c of categories) {
+      const i = (c.hotels || []).indexOf(key);
+      if (i >= 0) c.hotels.splice(i, 1);
+      if (h.img && c.heroImg === h.img) c.heroImg = '';
+    }
+    if (ui.hotelKey === key) ui.hotelKey = null;
+    markDirty(); renderTree(); renderForm();
+    if (usedByCats.length) notify(`已删除。提示：${usedByCats.map((c) => c.title).join('、')} 的分类封面图已清空（曾复用该酒店主图）。`, 'info');
+  }
+  function deleteCat(cat) {
+    if (cat.slug === '__uncat') return;
+    if (!confirm(`确认删除分类「${cat.title}」？\n\n旗下酒店不会删除，会落入「未分类」。`)) return;
+    const i = categories.indexOf(cat);
+    if (i >= 0) categories.splice(i, 1);
+    if (ui.catSlug === cat.slug) { ui.catSlug = null; ui.openCat = null; }
+    markDirty(); renderTree(); renderForm();
+  }
+  function reorderHotel(cat, srcKey, targetKey) {
+    const arr = cat.hotels; if (!arr) return;
+    const si = arr.indexOf(srcKey), ti = arr.indexOf(targetKey);
+    if (si < 0 || ti < 0 || si === ti) return;
+    arr.splice(si, 1); arr.splice(ti, 0, srcKey);
+    markDirty(); renderTree();
+  }
+
+  // 新增酒店弹窗
+  let addHotelModal = null;
+  function openAddHotel(cat) {
+    if (!addHotelModal) addHotelModal = buildAddHotelModal();
+    const m = addHotelModal; m.cat = cat;
+    m.zh.value = ''; m.name.value = ''; m.key.value = '';
+    setStatus(m.status, '', '');
+    m.mask.hidden = false;
+    setTimeout(() => m.zh.focus(), 50);
+  }
+  function buildAddHotelModal() {
+    const mask = el('div', { class: 'modal-mask', 'data-modal': 'add-hotel', hidden: true });
+    const panel = el('div', { class: 'modal' });
+    const closeBtn = el('button', { type: 'button', class: 'icon-btn', text: '✕', onclick: () => (mask.hidden = true) });
+    const header = el('div', { class: 'modal-header' }, [
+      el('div', { class: 'modal-icon', text: '➕' }),
+      el('div', {}, [el('h2', { text: '新增酒店' }), el('p', { class: 'modal-subtitle', text: '加入当前分类，并创建默认字段（保存后生效）' })]),
+      closeBtn,
+    ]);
+    const zh = el('input', { type: 'text', placeholder: '中文名（必填），如 山水酒店' });
+    const name = el('input', { type: 'text', placeholder: '英文名（必填），如 Shanshui Hotel' });
+    const key = el('input', { type: 'text', class: 'upload-name', placeholder: 'key（默认由英文名生成，可手动改成拼音）' });
+    name.addEventListener('input', () => { const s = slugify(name.value); key.value = s ? 'hotel-' + s : ''; });
+    const status = el('div', { class: 'img-lib-status', hidden: true });
+    const confirmBtn = el('button', { type: 'button', class: 'btn btn-primary', text: '创建' });
+    const cancelBtn = el('button', { type: 'button', class: 'btn btn-ghost', text: '取消', onclick: () => (mask.hidden = true) });
+    const actions = el('div', { class: 'modal-actions' }, [cancelBtn, confirmBtn]);
+    panel.append(header, el('div', { class: 'modal-body' }, [
+      fieldRow('中文名 / 名称', zh), fieldRow('英文名 / Name', name), fieldRow('Key（可改成拼音，如 hotel-shanshui-jiudian）', key),
+    ]), actions);
+    mask.append(panel);
+    mask.addEventListener('click', (e) => { if (e.target === mask) mask.hidden = true; });
+    document.body.append(mask);
+    const m = { mask, zh, name, key, status, cat: null };
+    confirmBtn.addEventListener('click', () => {
+      const zhV = zh.value.trim(), nameV = name.value.trim();
+      if (!zhV || !nameV) { setStatus(status, '请填写中文名与英文名', 'err'); return; }
+      const keyV = key.value.trim() || ('hotel-' + slugify(nameV));
+      if (!/^[A-Za-z_$][\w$-]*$/.test(keyV)) { setStatus(status, 'Key 需以字母/下划线开头，仅含字母数字、下划线和连字符', 'err'); return; }
+      if (hotels[keyV]) { setStatus(status, '该 Key 已存在，请换一个', 'err'); return; }
+      hotels[keyV] = { name: nameV, zh: zhV, area: '', tier: '', img: '', alt: '', blurb: '', features: [] };
+      if (!m.cat.hotels) m.cat.hotels = [];
+      m.cat.hotels.push(keyV);
+      ui.hotelKey = keyV; ui.catSlug = m.cat.slug; ui.openCat = m.cat.slug;
+      markDirty(); renderTree(); renderForm();
+      mask.hidden = true;
+      notify('已新增酒店（未保存，点保存并发布后生效）', 'info');
+    });
+    return m;
+  }
+
+  // 编辑分类弹窗
+  let editCatModal = null;
+  function openEditCat(cat) {
+    if (cat.slug === '__uncat') return;
+    if (!editCatModal) editCatModal = buildEditCatModal();
+    const m = editCatModal; m.cat = cat;
+    const map = { title: 'title', tag: 'tag', slug: 'slug', heroImg: 'heroImg', heroAlt: 'heroAlt', heroTag: 'heroTag', h1: 'h1', subtitle: 'subtitle', hubDesc: 'hubDesc', metaDesc: 'metaDesc', intro: 'intro', bodyIntro: 'bodyIntro' };
+    for (const k of Object.keys(map)) m.inputs[k].value = cat[map[k]] || '';
+    setStatus(m.status, '', '');
+    m.mask.hidden = false;
+  }
+  function buildEditCatModal() {
+    const mask = el('div', { class: 'modal-mask', 'data-modal': 'edit-cat', hidden: true });
+    const panel = el('div', { class: 'modal' });
+    const closeBtn = el('button', { type: 'button', class: 'icon-btn', text: '✕', onclick: () => (mask.hidden = true) });
+    const header = el('div', { class: 'modal-header' }, [
+      el('div', { class: 'modal-icon', text: '⚙' }),
+      el('div', {}, [el('h2', { text: '编辑分类' }), el('p', { class: 'modal-subtitle', text: '修改分类信息（保存后生效）' })]),
+      closeBtn,
+    ]);
+    const inputs = {
+      title: el('input', { type: 'text' }), tag: el('input', { type: 'text' }), slug: el('input', { type: 'text' }),
+      heroImg: el('input', { type: 'text' }), heroAlt: el('input', { type: 'text' }), heroTag: el('input', { type: 'text' }),
+      h1: el('input', { type: 'text' }),
+      subtitle: el('textarea', {}), hubDesc: el('textarea', {}), metaDesc: el('textarea', {}), intro: el('textarea', {}), bodyIntro: el('textarea', {}),
+    };
+    const status = el('div', { class: 'img-lib-status', hidden: true });
+    const confirmBtn = el('button', { type: 'button', class: 'btn btn-primary', text: '保存' });
+    const cancelBtn = el('button', { type: 'button', class: 'btn btn-ghost', text: '取消', onclick: () => (mask.hidden = true) });
+    const actions = el('div', { class: 'modal-actions' }, [cancelBtn, confirmBtn]);
+    panel.append(header, el('div', { class: 'modal-body' }, [
+      fieldRow('标题 Title', inputs.title), fieldRow('标签 Tag', inputs.tag), fieldRow('Slug（影响 URL，谨慎）', inputs.slug),
+      fieldRow('封面图 Hero Image', inputs.heroImg), fieldRow('封面 Alt', inputs.heroAlt), fieldRow('封面标签 Hero Tag', inputs.heroTag),
+      fieldRow('H1', inputs.h1), fieldRow('副标题 Subtitle', inputs.subtitle), fieldRow('简介卡片 Hub Desc', inputs.hubDesc),
+      fieldRow('Meta Description', inputs.metaDesc), fieldRow('导语 Intro', inputs.intro), fieldRow('正文导语 Body Intro', inputs.bodyIntro),
+    ]), status, actions);
+    mask.append(panel);
+    mask.addEventListener('click', (e) => { if (e.target === mask) mask.hidden = true; });
+    document.body.append(mask);
+    const m = { mask, inputs, status, cat: null };
+    confirmBtn.addEventListener('click', () => {
+      const slugV = inputs.slug.value.trim();
+      if (slugV && !/^[a-z0-9-]+$/.test(slugV)) { setStatus(status, 'Slug 仅含小写字母、数字和连字符', 'err'); return; }
+      const data = {};
+      for (const k of Object.keys(inputs)) data[k] = inputs[k].value.trim();
+      Object.assign(m.cat, data);
+      markDirty(); renderTree();
+      mask.hidden = true;
+      notify('分类已更新（未保存，点保存并发布后生效）', 'info');
+    });
+    return m;
+  }
+
   function renderTree() {
+    tiers = buildTiers(hotels, categories); // 每次用最新数据重算
     tree.replaceChildren();
     tree.append(el('div', { class: 'he-tree-title', text: '酒店分类 · Hotels' }));
     for (const c of tiers) {
       const open = c.slug === ui.openCat;
-      const catNode = el('div', { class: 'he-tree-cat' + (open ? ' open' : '') });
+      const isUncat = c.slug === '__uncat';
+      const catNode = el('div', { class: 'he-tree-cat' + (open ? ' open' : '') + (c.hidden ? ' is-hidden' : '') });
 
-      const head = el('button', {
+      const head = el('div', {
         class: 'he-tree-cat-head',
-        type: 'button',
         onclick: () => {
           if (open) {
-            // 收起当前分类：同时清空选择，主区回到提示
             ui.openCat = null;
             ui.hotelKey = null;
           } else {
-            // 单开：展开本分类、收起其它
             ui.openCat = c.slug;
-            // 若当前选中酒店不在本分类，自动选第一家，保持表单与展开分类一致
             if (!c.hotels.includes(ui.hotelKey)) {
               ui.hotelKey = c.hotels[0];
               ui.catSlug = c.slug;
@@ -482,20 +642,40 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
         el('span', { class: 'he-tree-cat-name', text: c.title }),
         el('span', { class: 'he-tree-count', text: String(c.hotels.length) }),
       ]);
+      if (!isUncat) {
+        head.append(el('span', { class: 'he-tree-actions' }, [
+          iconBtn(c.hidden ? '🚫' : '👁', c.hidden ? '显示分类' : '隐藏分类', () => toggleCatHidden(c)),
+          iconBtn('➕', '新增酒店', () => openAddHotel(c)),
+          iconBtn('⚙', '编辑分类', () => openEditCat(c)),
+          iconBtn('🗑', '删除分类', () => deleteCat(c)),
+        ]));
+      }
 
       const body = el('div', { class: 'he-tree-cat-body' });
       for (const k of c.hotels) {
         const h = hotels[k];
-        body.append(
-          el('button', {
-            class: 'he-tree-hotel' + (k === ui.hotelKey ? ' active' : ''),
-            type: 'button',
-            onclick: () => selectHotel(k),
-          }, [
-            el('span', { class: 'he-tree-hotel-zh', text: h.zh || '' }),
-            el('span', { class: 'he-tree-hotel-en', text: h.name || k }),
-          ])
-        );
+        const hotelBtn = el('div', {
+          class: 'he-tree-hotel' + (k === ui.hotelKey ? ' active' : '') + (h && h.hidden ? ' is-hidden' : ''),
+          draggable: true,
+          onclick: () => selectHotel(k),
+          ondragstart: (e) => { e.dataTransfer.setData('text/plain', k); e.dataTransfer.effectAllowed = 'move'; },
+          ondragover: (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; hotelBtn.classList.add('drag-over'); },
+          ondragleave: () => hotelBtn.classList.remove('drag-over'),
+          ondrop: (e) => {
+            e.preventDefault();
+            hotelBtn.classList.remove('drag-over');
+            const src = e.dataTransfer.getData('text/plain');
+            if (src && src !== k) reorderHotel(c, src, k);
+          },
+        }, [
+          el('span', { class: 'he-tree-hotel-zh', text: h ? (h.zh || '') : k }),
+          el('span', { class: 'he-tree-hotel-en', text: h ? (h.name || k) : '(已删除)' }),
+        ]);
+        hotelBtn.append(el('span', { class: 'he-tree-hotel-acts' }, [
+          iconBtn(h && h.hidden ? '🚫' : '👁', h && h.hidden ? '显示酒店' : '隐藏酒店', () => toggleHotelHidden(k)),
+          iconBtn('🗑', '删除酒店', () => deleteHotel(k)),
+        ]));
+        body.append(hotelBtn);
       }
 
       catNode.append(head, body);

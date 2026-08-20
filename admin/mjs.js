@@ -56,11 +56,17 @@ export function parseMjs(text) {
 }
 
 // 用编辑后的 value 替换对应块，其余原样保留，重建整文件文本
-export function rebuild(preamble, blocks, editedName, editedValue) {
+// 重写被编辑的块。edited 可以是：
+//  - { name: value, ... } 映射（推荐）：只重写列出的块，其余原样保留，保证 diff 最小
+//  - (兼容旧调用) editedName: string, editedValue: any → 等价于 { [editedName]: editedValue }
+export function rebuild(preamble, blocks, edited, editedValue) {
+  let map;
+  if (typeof edited === 'string') map = { [edited]: editedValue };
+  else map = edited || {};
   const serialized = blocks
     .map((b) =>
-      b.name === editedName
-        ? `export const ${editedName} = ${jsSerialize(editedValue, 0)};`
+      Object.prototype.hasOwnProperty.call(map, b.name)
+        ? `export const ${b.name} = ${jsSerialize(map[b.name], 0)};`
         : b.raw
     )
     .join('\n\n');

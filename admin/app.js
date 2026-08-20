@@ -39,6 +39,7 @@ function toast(msg, type = '') {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => (toastEl.hidden = true), 2800);
 }
+window.__adminToast = toast;
 
 // ---------- Status ----------
 function setStatus(dirty) {
@@ -94,8 +95,13 @@ async function save() {
   }
   saveBtn.disabled = true;
   try {
-    const newText = rebuild(state.preamble, state.blocks, 'hotels', state.hotels);
-    const { sha } = await putFile(FILE_PATH, newText, state.sha, 'Update hotels via admin');
+    const edited = {};
+    const hotelsBlock = state.blocks.find((b) => b.name === 'hotels');
+    const catsBlock = state.blocks.find((b) => b.name === 'hotelCategories');
+    if (hotelsBlock) edited.hotels = state.hotels;
+    if (catsBlock) edited.hotelCategories = state.categories;
+    const newText = rebuild(state.preamble, state.blocks, edited);
+    const { sha } = await putFile(FILE_PATH, newText, state.sha, 'Update hotels & categories via admin');
     state.sha = sha;
     setStatus(false);
     toast('已保存并发布 🎉', 'ok');

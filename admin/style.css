@@ -152,6 +152,23 @@ body {
 .he-tree-hotel-zh { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.35; }
 .he-tree-hotel-en { font-size: 10px; color: var(--muted); line-height: 1.3; word-break: break-word; }
 
+/* 树操作按钮（hover 显示） */
+.he-tree-cat-head { position: relative; }
+.he-tree-cat-name { padding-right: 92px; }
+.he-tree-hotel { position: relative; }
+.he-tree-hotel-zh { padding-right: 56px; }
+.he-tree-actions, .he-tree-hotel-acts { position: absolute; display: inline-flex; gap: 1px; opacity: 0; transition: opacity .12s ease; }
+.he-tree-actions { top: 4px; right: 4px; }
+.he-tree-hotel-acts { top: 6px; right: 4px; }
+.he-tree-cat-head:hover .he-tree-actions, .he-tree-hotel:hover .he-tree-hotel-acts { opacity: 1; }
+.he-act { border: 0; background: transparent; cursor: pointer; font-size: 13px; line-height: 1; padding: 3px 4px; border-radius: 6px; }
+.he-act:hover { background: rgba(37,99,235,.14); }
+/* 隐藏项灰显 */
+.he-tree-cat.is-hidden > .he-tree-cat-head .he-tree-cat-name,
+.he-tree-hotel.is-hidden .he-tree-hotel-zh { opacity: .45; text-decoration: line-through; }
+/* 拖拽排序高亮 */
+.he-tree-hotel.drag-over { outline: 2px dashed var(--brand); outline-offset: -2px; background: rgba(37,99,235,.08); }
+
 /* 右：编辑表单宿主（③ 编辑） */
 .he-form-host {
   flex: 1; min-width: 0;
@@ -309,10 +326,11 @@ body.resizing, body.resizing * {
 /* ---------- Modal / Settings ---------- */
 .modal-mask { position: fixed; inset: 0; background: rgba(15,23,42,.55); display: flex; align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(2px); }
 .modal-mask[hidden] { display: none; }
-.modal { background: #fff; border-radius: 14px; padding: 28px; width: 520px; max-width: 92vw; box-shadow: 0 20px 60px rgba(15,23,42,.25); }
+.modal { background: #fff; border-radius: 14px; padding: 28px; width: 520px; max-width: 92vw; max-height: 90vh; box-shadow: 0 20px 60px rgba(15,23,42,.25); display: flex; flex-direction: column; }
+.modal-body { overflow-y: auto; flex: 1 1 auto; margin: 0 -4px; padding: 0 4px; }
 
 .settings-modal { width: 600px; }
-.modal-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.modal-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; flex: none; }
 .modal-icon { width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; display: flex; align-items: center; justify-content: center; font-size: 22px; }
 .modal h2 { margin: 0; font-size: 20px; }
 .modal-subtitle { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
@@ -346,7 +364,7 @@ body.resizing, body.resizing * {
 .status-box.status-err { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
 .status-box.status-idle { background: #f8fafc; border-color: var(--line); color: var(--muted); }
 
-.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; flex: none; margin-top: 18px; }
 
 /* ---------- Toast ---------- */
 .toast {

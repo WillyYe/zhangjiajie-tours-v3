@@ -19,8 +19,13 @@ const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp'
 // slug 指定 → 落到该酒店物理隔离目录 images/<slug>/；否则回退根目录（兜底）
 const imgSrc = (n, slug) => '../images/' + (slug ? slug + '/' : '') + imgName(n);
 // 分类 hero 图复用某家酒店的 img，据此反查其 slug 以便解析到 images/<slug>/
-const heroSlugFor = (cat) =>
-  Object.keys(hotels).find((k) => hotels[k] && hotels[k].img === cat.heroImg) || null;
+// 优先按 hotels[k].img 精确匹配；匹配不到时（hero 图可能与某酒店主图不同名）按文件名前缀 hotel-<slug>- 推断
+const heroSlugFor = (cat) => {
+  const byImg = Object.keys(hotels).find((k) => hotels[k] && hotels[k].img === cat.heroImg);
+  if (byImg) return byImg;
+  const m = /^hotel-([a-z0-9-]+)-/.exec(cat.heroImg || '');
+  return m ? m[1] : null;
+};
 
 const ACTIVE = 'text-forest font-bold';
 const NORMAL = '';
@@ -47,7 +52,7 @@ function hotelCard(h, slug) {
 }
 
 function categoryBody(cat) {
-  const cards = cat.hotels.map((id) => hotelCard(hotels[id], id)).join('\n');
+  const cards = cat.hotels.filter((id) => hotels[id] && !hotels[id].hidden).map((id) => hotelCard(hotels[id], id)).join('\n');
   const main = `  <!-- ========== Stays in this category ========== -->
   <section class="py-16 lg:py-20 px-6">
     <div class="max-w-[1400px] mx-auto">
@@ -103,7 +108,7 @@ function relatedCard(cat) {
 }
 
 function relatedSection(cats, current, label) {
-  const cards = cats.filter((c) => c.slug !== current.slug).map(relatedCard).join('\n');
+  const cards = cats.filter((c) => !c.hidden && c.slug !== current.slug).map(relatedCard).join('\n');
   return `  <!-- ========== Related categories ========== -->
   <section class="max-w-[1400px] mx-auto px-6 pb-20">
     <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">${escHtml(label)}</h2>
@@ -142,12 +147,19 @@ const base = 'https://willyye.github.io/zhangjiajie-tours-v3';
 
 // category pages
 for (const cat of hotelCategories) {
+  if (cat.hidden) {
+    // 隐藏分类：删除其已生成的页面，彻底从站点移除
+    const stale = path.join(OUT_DIR, cat.slug + '.html');
+    if (fs.existsSync(stale)) { fs.unlinkSync(stale); console.log(`  ✓ removed hidden hotels/${cat.slug}.html`); }
+    continue;
+  }
   const heroSlug = heroSlugFor(cat);
   if (!validateImage(cat.heroImg, heroSlug)) continue;
-  cat.hotels.forEach((id) => validateImage(hotels[id].img, id));
+  const visibleIds = cat.hotels.filter((id) => hotels[id] && !hotels[id].hidden);
+  visibleIds.forEach((id) => validateImage(hotels[id].img, id));
 
   const body = categoryBody(cat);
-  const jsonLd = itemListJsonLd(cat.hotels.map((id) => ({
+  const jsonLd = itemListJsonLd(visibleIds.map((id) => ({
     name: hotels[id].name,
     url: `${base}/hotels/${cat.slug}.html#${id}`,
   })));
