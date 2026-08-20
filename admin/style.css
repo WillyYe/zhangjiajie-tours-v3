@@ -279,21 +279,31 @@ legend small { font-weight: 400; color: var(--muted); font-size: 11px; margin-le
   z-index: 5;
   background: transparent;
   transition: background .15s ease;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .resizer::before {
   content: '';
   position: absolute; top: 0; bottom: 0; left: 50%;
-  width: 1px; background: var(--line);
+  width: 2px; background: var(--line);
   transform: translateX(-50%);
   transition: background .15s ease, width .15s ease;
 }
+/* sidebar 分隔条在深色背景旁需要更高对比度 */
+.resizer[data-resizer="sidebar"]::before { background: #334155; }
 .resizer:hover,
 .resizer.dragging {
-  background: rgba(37,99,235,.10);
+  background: rgba(37,99,235,.14);
 }
 .resizer:hover::before,
 .resizer.dragging::before {
-  width: 2px; background: var(--brand);
+  width: 3px; background: var(--brand);
+}
+body.resizing, body.resizing * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  cursor: col-resize !important;
 }
 
 /* ---------- Modal / Settings ---------- */

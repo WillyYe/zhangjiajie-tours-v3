@@ -1,12 +1,13 @@
 // 可拖拽调整面板宽度。支持三条分隔线：sidebar、preview、tree。
 // 宽度持久化到 localStorage，刷新后自动恢复。
+// 使用 Pointer Events + setPointerCapture，保证 Windows/macOS 鼠标移出窗口仍能拖动。
 
 const STORAGE_KEY = 'admin-resizer-widths';
 
 const CONFIG = {
-  sidebar: { selector: '.sidebar', min: 180, max: 380, default: 248 },
-  preview: { selector: '.preview', min: 300, max: 800, default: 460 },
-  tree:    { selector: '.he-tree', min: 150, max: 360, default: 210 },
+  sidebar: { selector: '.sidebar', min: 180, max: 380, default: 248, direction: 1 },
+  preview: { selector: '.preview', min: 300, max: 800, default: 460, direction: -1 },
+  tree:    { selector: '.he-tree', min: 150, max: 360, default: 210, direction: 1 },
 };
 
 function readSaved() {
@@ -32,7 +33,7 @@ export function initResizers() {
 export function bindResizer(bar) {
   if (bar._resizerBound) return;
   bar._resizerBound = true;
-  bar.addEventListener('mousedown', onMouseDown);
+  bar.addEventListener('pointerdown', onPointerDown);
 
   // 动态创建的 resizer（如 hotels.js 里的 tree/form 分隔条）
   // 绑定事件时同步应用已保存的宽度，避免 initResizers 时元素尚不存在。
@@ -49,8 +50,10 @@ function clamp(v, min, max) {
   return Math.max(min, Math.min(max, v));
 }
 
-function onMouseDown(e) {
+function onPointerDown(e) {
+  if (e.button !== 0) return;
   e.preventDefault();
+
   const bar = e.currentTarget;
   const key = bar.dataset.resizer;
   const cfg = CONFIG[key];
@@ -59,36 +62,37 @@ function onMouseDown(e) {
   const el = document.querySelector(cfg.selector);
   if (!el) return;
 
+  bar.setPointerCapture(e.pointerId);
+  bar.classList.add('dragging');
+  document.body.classList.add('resizing');
+
   const startX = e.clientX;
   const startW = el.getBoundingClientRect().width;
-  bar.classList.add('dragging');
-
-  // 全屏遮罩避免鼠标移出窗口时丢失事件，同时显示 resize 光标
-  const mask = document.createElement('div');
-  mask.style.cssText = 'position:fixed;inset:0;z-index:2000;cursor:col-resize;';
-  document.body.appendChild(mask);
+  const direction = cfg.direction ?? 1;
 
   function onMove(ev) {
+    if (ev.pointerId !== e.pointerId) return;
     const delta = ev.clientX - startX;
-    const w = clamp(startW + delta, cfg.min, cfg.max);
+    const w = clamp(startW + delta * direction, cfg.min, cfg.max);
     el.style.width = w + 'px';
   }
 
-  function onUp() {
-    document.removeEventListener('mousemove', onMove);
-    document.removeEventListener('mouseup', onUp);
-    window.removeEventListener('mouseup', onUp);
-    mask.removeEventListener('mouseup', onUp);
+  function onUp(ev) {
+    if (ev && ev.pointerId !== e.pointerId) return;
+    bar.releasePointerCapture(e.pointerId);
     bar.classList.remove('dragging');
-    mask.remove();
+    document.body.classList.remove('resizing');
 
     const saved = readSaved();
     saved[key] = el.getBoundingClientRect().width;
     writeSaved(saved);
+
+    bar.removeEventListener('pointermove', onMove);
+    bar.removeEventListener('pointerup', onUp);
+    bar.removeEventListener('pointercancel', onUp);
   }
 
-  document.addEventListener('mousemove', onMove);
-  document.addEventListener('mouseup', onUp);
-  window.addEventListener('mouseup', onUp);
-  mask.addEventListener('mouseup', onUp);
+  bar.addEventListener('pointermove', onMove);
+  bar.addEventListener('pointerup', onUp);
+  bar.addEventListener('pointercancel', onUp);
 }
