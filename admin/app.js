@@ -18,12 +18,18 @@ const state = {
   categories: [],
   sha: null,
   dirty: false,
+  // 预览模式：'card' = 酒店卡片(默认)，'detail' = 三级详情页
+  previewMode: 'card',
+  // 当前编辑项：{ type: 'hotel'|'cat', key }
+  selection: null,
 };
 
 // ---------- DOM ----------
 const $ = (id) => document.getElementById(id);
 const editorEl = $('editor');
 const previewEl = $('preview');
+const previewTabsEl = $('previewTabs');
+const previewTitleEl = $('previewTitle');
 const saveBtn = $('saveBtn');
 const reloadBtn = $('reloadBtn');
 const statusDot = $('statusDot');
@@ -40,6 +46,44 @@ function toast(msg, type = '') {
   toastTimer = setTimeout(() => (toastEl.hidden = true), 2800);
 }
 window.__adminToast = toast;
+
+// ---------- Preview routing (🃏 卡片 / 📄 详情 切换) ----------
+function setPreviewMode(mode) {
+  state.previewMode = mode;
+  for (const b of previewTabsEl.querySelectorAll('.ptab')) {
+    b.classList.toggle('active', b.dataset.mode === mode);
+  }
+  renderCurrentPreview();
+}
+
+function renderCurrentPreview() {
+  const sel = state.selection;
+  if (!sel) return;
+  if (sel.type === 'cat') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 分类页';
+    const cat = state.categories.find((c) => c.slug === sel.key);
+    if (cat) renderCategoryPreview(previewEl, cat, state.hotels, state.categories);
+    return;
+  }
+  // hotel
+  const h = state.hotels[sel.key];
+  const hasDetail = !!(h && h.detail);
+  previewTabsEl.hidden = !hasDetail;
+  if (hasDetail && state.previewMode === 'detail') {
+    previewTitleEl.textContent = '实时预览 · 三级详情页';
+    renderDetailPreview(previewEl, h, sel.key, state.categories);
+  } else {
+    previewTitleEl.textContent = '实时预览 · 酒店卡片';
+    renderPreview(previewEl, h, sel.key);
+  }
+}
+
+previewTabsEl.addEventListener('click', (e) => {
+  const b = e.target.closest('.ptab');
+  if (!b) return;
+  setPreviewMode(b.dataset.mode);
+});
 
 // ---------- Status ----------
 function setStatus(dirty) {
@@ -75,11 +119,13 @@ async function load() {
       state.categories,
       () => setStatus(true),
       (key) => {
-        const h = state.hotels[key];
-        if (h && h.detail) renderDetailPreview(previewEl, h, key, state.categories);
-        else renderPreview(previewEl, h, key);
+        state.selection = { type: 'hotel', key };
+        renderCurrentPreview();
       },
-      (cat) => renderCategoryPreview(previewEl, cat, state.hotels, state.categories)
+      (cat) => {
+        state.selection = { type: 'cat', key: cat.slug };
+        renderCurrentPreview();
+      }
     );
     setStatus(false);
   } catch (e) {

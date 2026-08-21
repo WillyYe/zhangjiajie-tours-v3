@@ -1213,6 +1213,8 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
 }
 
 export function renderPreview(container, hotel, slug) {
+  // 切到卡片预览时，清理详情模式可能残留的滚动同步 IO
+  if (container._pvIO) { container._pvIO.disconnect(); container._pvIO = null; }
   container.classList.remove('detail-mode');
   container.replaceChildren();
   if (!hotel) return;

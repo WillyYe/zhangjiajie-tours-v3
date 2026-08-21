@@ -63,7 +63,13 @@
       <section class="editor" id="editor"></section>
       <div class="resizer" data-resizer="preview" title="左右拖动调整预览区宽度"></div>
       <aside class="preview">
-        <h3>实时预览 · 酒店</h3>
+        <div class="preview-head">
+          <h3 id="previewTitle">实时预览 · 酒店</h3>
+          <div class="preview-tabs" id="previewTabs" hidden>
+            <button type="button" class="ptab active" data-mode="card" title="酒店卡片预览（用于分类列表）">🃏 卡片</button>
+            <button type="button" class="ptab" data-mode="detail" title="三级详情页预览（独立页面）">📄 详情</button>
+          </div>
+        </div>
         <div id="preview"></div>
       </aside>
     </div>
