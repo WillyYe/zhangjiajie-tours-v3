@@ -1083,7 +1083,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
 
   // 二级：简介 & SEO 字段
   function buildDetailMetaEditor(d, sync) {
-    const wrap = el('div', { class: 'he-sub' });
+    const wrap = el('div', { class: 'he-sub', 'data-pv-anchor': 'pv-hero' });
     wrap.append(el('p', { class: 'he-sub-title', text: '📝 简介 & SEO' }));
     function detailField(label, tip, key, type) {
       const input = type === 'textarea' ? el('textarea', {}) : el('input', { type: 'text' });
@@ -1117,7 +1117,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
   // 二级：Rooms 全结构化（图 + 英文名 + 中文名 + 特色）
   function buildRoomsEditor(d, slug, sync) {
     d.rooms = d.rooms || [];
-    const wrap = el('div', { class: 'he-sub' });
+    const wrap = el('div', { class: 'he-sub', 'data-pv-anchor': 'pv-rooms' });
     wrap.append(el('p', { class: 'he-sub-title', text: '🛏 Rooms（全结构化：图 + 英文名 + 中文名 + 特色）' }));
     const list = el('div', { class: 'he-room-list' });
     function renderList() {
@@ -1145,7 +1145,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
   // 二级：Gallery（图 + alt）
   function buildGalleryEditor(d, slug, sync) {
     d.gallery = d.gallery || [];
-    const wrap = el('div', { class: 'he-sub' });
+    const wrap = el('div', { class: 'he-sub', 'data-pv-anchor': 'pv-gallery' });
     wrap.append(el('p', { class: 'he-sub-title', text: '🖼 Gallery（每张：图 + alt 描述）' }));
     const list = el('div', { class: 'he-gallery-list' });
     function renderList() {
@@ -1173,7 +1173,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
   // 二级：FAQ（中英文问题与答案，可拖拽排序）
   function buildDetailFaqEditor(d, sync) {
     d.faq = d.faq || [];
-    const wrap = el('div', { class: 'he-sub' });
+    const wrap = el('div', { class: 'he-sub', 'data-pv-anchor': 'pv-faq' });
     wrap.append(el('p', { class: 'he-sub-title', text: '❓ FAQ（中英文问题与答案）' }));
     const list = el('div', { class: 'faq-list' });
     function renderList() {
@@ -1342,7 +1342,7 @@ function _faqSection(items) {
             <p class="text-stone/80 leading-relaxed text-sm md:text-base">${_escHtml(it.a)}</p>
           </div>`).join('\n');
   return `  <!-- ========== FAQ ========== -->
-  <section class="max-w-[1400px] mx-auto px-6 pb-16">
+  <section id="pv-faq" class="max-w-[1400px] mx-auto px-6 pb-16">
     <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">Frequently asked questions</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 ${cards}
@@ -1362,7 +1362,7 @@ function _relatedCard(c) {
 function _relatedSection(cats, current, label) {
   const cards = (cats || []).filter((c) => !c.hidden && c.slug !== current.slug).map(_relatedCard).join('\n');
   return `  <!-- ========== Related categories ========== -->
-  <section class="max-w-[1400px] mx-auto px-6 pb-20">
+  <section id="pv-other" class="max-w-[1400px] mx-auto px-6 pb-20">
     <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">${_escHtml(label)}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 ${cards}
@@ -1401,6 +1401,8 @@ function _fillDetailTpl(tpl, hotel, key, categories) {
   };
   let out = tpl;
   for (const [k, v] of Object.entries(map)) out = out.split(`{{${k}}}`).join(v);
+  // 注入 <base>：iframe 在 admin/ 下，需把相对路径(CSS/字体/图片/导航)解析到仓库根
+  out = out.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n  <base href="../">');
   const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
   if (leftovers.length) console.warn('[detail-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
   return out;
@@ -1409,6 +1411,7 @@ function _fillDetailTpl(tpl, hotel, key, categories) {
 export function renderDetailPreview(container, hotel, key, categories) {
   if (!hotel || !hotel.detail) {
     container.classList.remove('detail-mode');
+    if (container._pvIO) { container._pvIO.disconnect(); container._pvIO = null; }
     container.replaceChildren(el('div', { class: 'pv-empty', text: '该酒店暂无详情页数据（在左侧「详情页」模块点「创建详情页」）。' }));
     return;
   }
@@ -1416,9 +1419,47 @@ export function renderDetailPreview(container, hotel, key, categories) {
   const run = () => {
     if (!_detailTpl) return;
     const html = _fillDetailTpl(_detailTpl, hotel, key, categories);
+    // 清理旧滚动同步 IO
+    if (container._pvIO) { container._pvIO.disconnect(); container._pvIO = null; }
+    // 建滚动同步状态：编辑器 4 子区(pv-hero/rooms/gallery/faq) → iframe 对应锚点
+    const mainDoc = container.ownerDocument;
+    const editorRoot = mainDoc.getElementById('editor');
+    const subs = mainDoc.querySelectorAll('.he-sub[data-pv-anchor]');
+    const syncState = { active: null, anchors: null, iwin: null };
+    const tryScroll = () => {
+      const t = syncState.active && syncState.anchors ? syncState.anchors[syncState.active] : null;
+      if (t && syncState.iwin) syncState.iwin.scrollTo({ top: t.offsetTop - 8, behavior: 'smooth' });
+    };
+    if (editorRoot && subs.length) {
+      const ratios = new Map();
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) ratios.set(e.target, e.isIntersecting ? e.intersectionRatio : 0);
+        let best = null, bestR = 0;
+        for (const [el, r] of ratios) if (r > bestR) { bestR = r; best = el; }
+        if (!best) return;
+        const a = best.getAttribute('data-pv-anchor');
+        if (a !== syncState.active) { syncState.active = a; tryScroll(); }
+      }, { root: editorRoot, rootMargin: '0px 0px -60% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] });
+      subs.forEach((s) => io.observe(s));
+      container._pvIO = io;
+    }
     container.replaceChildren();
     const iframe = el('iframe', { class: 'pv-detail-iframe', title: 'detail-preview' });
     container.append(iframe);
+    iframe.addEventListener('load', () => {
+      const idoc = iframe.contentDocument;
+      if (!idoc) return;
+      syncState.anchors = {
+        'pv-hero': idoc.getElementById('hero'),
+        'pv-intro': idoc.getElementById('pv-intro'),
+        'pv-rooms': idoc.getElementById('pv-rooms'),
+        'pv-gallery': idoc.getElementById('pv-gallery'),
+        'pv-faq': idoc.getElementById('pv-faq'),
+        'pv-other': idoc.getElementById('pv-other'),
+      };
+      syncState.iwin = idoc.defaultView;
+      tryScroll();
+    }, { once: true });
     iframe.srcdoc = html;
   };
   if (_detailTpl) {

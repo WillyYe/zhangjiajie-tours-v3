@@ -95,7 +95,7 @@ function faqSection(items) {
           </div>`;
   }).join('\n');
   return `  <!-- ========== FAQ ========== -->
-  <section class="max-w-[1400px] mx-auto px-6 pb-16">
+  <section id="pv-faq" class="max-w-[1400px] mx-auto px-6 pb-16">
     <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">Frequently asked questions</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 ${cards}
@@ -119,7 +119,7 @@ function relatedCard(cat) {
 function relatedSection(cats, current, label) {
   const cards = cats.filter((c) => !c.hidden && c.slug !== current.slug).map(relatedCard).join('\n');
   return `  <!-- ========== Related categories ========== -->
-  <section class="max-w-[1400px] mx-auto px-6 pb-20">
+  <section id="pv-other" class="max-w-[1400px] mx-auto px-6 pb-20">
     <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">${escHtml(label)}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 ${cards}
