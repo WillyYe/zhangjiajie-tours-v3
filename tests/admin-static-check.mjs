@@ -10,12 +10,17 @@ const checks = [
   // and used the 404 body as the template, so the preview pane rendered GitHub's 404.
   ['fetch uses ../../templates/ (not ../)', /fetch\(new URL\(['"]\.\.\/\.\.\/templates\/hotel-detail\.html['"]/],
   ['fetch checks r.ok before reading body', /fetch\([\s\S]{0,200}\.ok[\s\S]{0,200}throw new Error/],
-  // 2026-08-21: <base> injection for relative resource resolution under admin/
-  ['_fillDetailTpl injects <base href="../">', /replace\(['"]<meta charset="UTF-8">['"], ['"]<meta charset="UTF-8">\\n  <base href="\.\.\/">['"]\)/],
+  // 2026-08-21 (rollback): <base href="../"> injection is WRONG.
+  // iframe srcdoc inherits parent URL = /admin/, so the template's ../styles/tailwind.css
+  // already resolves to root /styles/tailwind.css correctly. Adding <base href="../">
+  // shifts base from /admin/ up to /zhangjiajie-tours-v3/, and then ../styles/ resolves
+  // to /styles/ (drops the repo segment), causing CSS/fonts/images to 404 → unstyled preview.
+  ['NO <base href="../"> injection (would break CSS)', (s) => !/<base href=["']\.\.\/["']/.test(s.replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, ''))],
 ];
 let pass = 0, fail = 0;
-for (const [name, re] of checks) {
-  if (re.test(src)) { console.log('  ✓', name); pass++; }
+for (const [name, check] of checks) {
+  const ok = typeof check === 'function' ? check(src) : check.test(src);
+  if (ok) { console.log('  ✓', name); pass++; }
   else { console.log('  ✗', name); fail++; }
 }
 console.log(`\n  admin-${pass}-${fail}`);

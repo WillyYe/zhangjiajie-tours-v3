@@ -1401,8 +1401,10 @@ function _fillDetailTpl(tpl, hotel, key, categories) {
   };
   let out = tpl;
   for (const [k, v] of Object.entries(map)) out = out.split(`{{${k}}}`).join(v);
-  // 注入 <base>：iframe 在 admin/ 下，需把相对路径(CSS/字体/图片/导航)解析到仓库根
-  out = out.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n  <base href="../">');
+  // 注意：不要注入 <base href="../">。iframe srcdoc 继承父 URL = /admin/，
+  // 模板里所有路径已用 ../(如 ../styles/tailwind.css)，从 /admin/ 出发 = 根/... 正确解析。
+  // 若再加 <base href="../">，base 会先升一层到 /zhangjiajie-tours-v3/，再叠 ../ 就把
+  // zhangjiajie-tours-v3/ 这层 segment 吞掉，CSS/字体/图片全部 404。
   const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
   if (leftovers.length) console.warn('[detail-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
   return out;
