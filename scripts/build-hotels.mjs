@@ -46,7 +46,7 @@ function hotelCard(h, slug) {
               <p class="text-gold-dark text-xs font-semibold uppercase tracking-wide mb-2">${escAttr(h.zh)} · ${escAttr(h.area)}</p>
               <p class="text-sm text-stone-600 leading-relaxed mb-4 flex-1">${escHtml(h.blurb)}</p>
               <ul class="space-y-1.5 mb-5">${feats}</ul>
-              <a href="mailto:zjjpark@outlook.com" class="mt-auto inline-flex items-center justify-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-5 py-3 rounded-full transition-colors">Ask about ${escAttr(h.name)} →</a>
+              <a href="${escAttr(slug)}.html" class="mt-auto inline-flex items-center justify-center gap-2 bg-forest hover:bg-forest-light text-white font-semibold px-5 py-3 rounded-full transition-colors">View ${escAttr(h.name)} →</a>
             </div>
           </article>`;
 }
@@ -210,12 +210,14 @@ for (const cat of hotelCategories) {
   expectedSlugs.add(cat.slug);
 }
 
-// 孤儿页清理：删除 hotels/ 下所有不在 expectedSlugs 中的 .html。
-// 覆盖后台删除/改名分类后残留的旧页，以及历史 schema 生成过的酒店页（jimo/hetianye/...）。
+// 孤儿页清理：删除 hotels/ 下所有不在 expectedSlugs ∪ detailSlugs 中的 .html。
+// expectedSlugs = 4 个分类页；detailSlugs = 各酒店独立详情页（jimo/hetianye/...，由仓库静态托管，非构建生成）。
+// 覆盖后台删除/改名分类后残留的旧页；但务必保留这 7 个酒店详情页，否则三级界面点不进去。
+const detailSlugs = new Set(Object.keys(hotels));
 for (const f of fs.readdirSync(OUT_DIR)) {
   if (!f.endsWith('.html')) continue;
   const slug = f.slice(0, -5);
-  if (!expectedSlugs.has(slug)) {
+  if (!expectedSlugs.has(slug) && !detailSlugs.has(slug)) {
     fs.unlinkSync(path.join(OUT_DIR, f));
     console.log(`  ✓ removed orphan hotels/${f} (not in current data)`);
   }
