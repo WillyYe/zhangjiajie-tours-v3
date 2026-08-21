@@ -687,27 +687,34 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       const catNode = el('div', { class: 'he-tree-cat' + (open ? ' open' : '') + (c.hidden ? ' is-hidden' : '') });
 
       const head = el('div', {
-        class: 'he-tree-cat-head',
+        class: 'he-tree-cat-head' + (ui.view === 'cat' && c.slug === ui.catSlug ? ' active' : ''),
+      });
+      const chevron = el('span', {
+        class: 'he-chevron', text: '▸',
         onclick: () => {
-          if (open) {
-            // 折叠：退回酒店视图
-            ui.openCat = null;
-            ui.view = 'hotel';
-            if (!ui.hotelKey) ui.hotelKey = tiers[0].hotels[0];
-          } else {
-            // 展开：展示分类编辑表单（方案 A：表单与预览同层级，所见即所得）
-            ui.openCat = c.slug;
-            ui.view = 'cat';
-            ui.catSlug = c.slug;
-          }
+          // 仅折叠/展开，不改变当前编辑层级（FAQ 等分类内容不因此丢失）
+          ui.openCat = open ? null : c.slug;
           renderTree();
           renderForm();
         },
-      }, [
-        el('span', { class: 'he-chevron', text: '▸' }),
-        el('span', { class: 'he-tree-cat-name', text: c.title }),
+      });
+      const nameSpan = el('span', {
+        class: 'he-tree-cat-name', text: c.title,
+        onclick: () => {
+          // 选中该分类：展开 + 切换到分类编辑表单（含 FAQ / 跨链接简介）
+          ui.openCat = c.slug;
+          ui.view = 'cat';
+          ui.catSlug = c.slug;
+          renderTree();
+          renderForm();
+          onSelectCat && onSelectCat(c);
+        },
+      });
+      head.append(
+        chevron,
+        nameSpan,
         el('span', { class: 'he-tree-count', text: String(c.hotels.length) }),
-      ]);
+      );
       if (!isUncat) {
         head.append(el('span', { class: 'he-tree-actions' }, [
           iconBtn(c.hidden ? '🚫' : '👁', c.hidden ? '显示分类' : '隐藏分类', () => toggleCatHidden(c)),
@@ -721,7 +728,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       for (const k of c.hotels) {
         const h = hotels[k];
         const hotelBtn = el('div', {
-          class: 'he-tree-hotel' + (k === ui.hotelKey ? ' active' : '') + (h && h.hidden ? ' is-hidden' : ''),
+          class: 'he-tree-hotel' + (ui.view === 'hotel' && k === ui.hotelKey ? ' active' : '') + (h && h.hidden ? ' is-hidden' : ''),
           draggable: true,
           onclick: () => selectHotel(k),
           ondragstart: (e) => { e.dataTransfer.setData('text/plain', k); e.dataTransfer.effectAllowed = 'move'; },
