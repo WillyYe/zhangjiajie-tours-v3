@@ -10,8 +10,10 @@ import { hotels, hotelCategories } from '../hotels-data.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const TEMPLATE = path.join(ROOT, 'templates', 'hotel-category.html');
+const TEMPLATE_DETAIL = path.join(ROOT, 'templates', 'hotel-detail.html');
 const OUT_DIR = path.join(ROOT, 'hotels');
 const IMAGES_DIR = path.join(ROOT, 'images');
+const base = 'https://willyye.github.io/zhangjiajie-tours-v3';
 
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -147,10 +149,83 @@ function validateImage(n, slug) {
   return true;
 }
 
+// ---------- detail pages (3rd level) ----------
+const tplDetail = fs.readFileSync(TEMPLATE_DETAIL, 'utf8');
+
+function findCatOf(key) {
+  return hotelCategories.find((c) => (c.hotels || []).includes(key));
+}
+
+function roomCard(r, slug) {
+  const feats = (r.features || []).map((f) =>
+    `<li class="flex gap-2"><span class="text-gold-dark">✓</span><span>${escHtml(f)}</span></li>`
+  ).join('');
+  const zh = r.nameZh
+    ? `            <p class="text-gold-dark text-xs font-semibold uppercase tracking-wide mb-2">${escAttr(r.nameZh)}</p>\n`
+    : '';
+  return `        <article class="card-hover group bg-white rounded-2xl overflow-hidden border border-sand-dark flex flex-col">
+          <div class="overflow-hidden h-56"><img loading="lazy" decoding="async" src="${imgSrc(r.img, slug)}" alt="${escAttr(r.alt || r.name)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display text-xl text-forest leading-snug">${escHtml(r.name)}</h3>
+${zh}            <ul class="space-y-1.5 text-sm text-stone-600">${feats}</ul>
+          </div>
+        </article>`;
+}
+
+function galleryImg(g, slug) {
+  const img = typeof g === 'string' ? g : g.img;
+  const alt = (typeof g === 'string' ? '' : g.alt) || '';
+  return `        <img loading="lazy" decoding="async" src="${imgSrc(img, slug)}" alt="${escAttr(alt)}" class="w-full h-48 object-cover rounded-xl">`;
+}
+
+function hotelJsonLd(h, key, detail) {
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Hotel',
+    name: h.name,
+    alternateName: (detail && detail.alternateName) || h.zh || '',
+    description: ((detail && (detail.jsonDesc || detail.intro)) || h.blurb || ''),
+    url: `${base}/hotels/${key}.html`,
+    address: { '@type': 'PostalAddress', addressRegion: 'Hunan', addressCountry: 'CN' },
+    areaServed: (detail && detail.areaServed) || h.area || '',
+  };
+  return JSON.stringify(data, null, 2);
+}
+
+function generateDetail(key, h, cat, detail) {
+  const slug = key;
+  const catLink = cat ? `${cat.slug}.html` : '#';
+  const catName = cat ? cat.title : 'Hotels';
+  const metaDesc = detail.metaDesc || detail.intro || h.blurb || '';
+  return fill(tplDetail, {
+    TITLE: escHtml(`${h.name} | Visit Zhangjiajie`),
+    META_DESC: escAttr(metaDesc),
+    CANONICAL: `${base}/hotels/${key}.html`,
+    OG_IMAGE: `${base}/images/${slug}/${imgName(h.img)}`,
+    HERO_IMG: imgSrc(h.img, slug),
+    HERO_ALT: escAttr(detail.heroAlt || h.alt || ''),
+    CAT_LINK: catLink,
+    CAT_NAME: escHtml(catName),
+    HOTEL_NAME: escHtml(h.name),
+    TAGLINE: escHtml(detail.tagline || h.tier || ''),
+    HERO_LEAD: escHtml(detail.heroLead || h.blurb || ''),
+    AREA_TIER: escHtml(detail.areaTier || `${h.area || ''} · ${h.tier || ''}`),
+    INTRO_TEXT: escHtml(detail.intro || h.blurb || ''),
+    ROOMS_TITLE: escHtml(detail.roomsTitle || 'Rooms & suites'),
+    ROOMS_SUB: escHtml(detail.roomsSub || ''),
+    ROOMS: (detail.rooms || []).map((r) => roomCard(r, slug)).join('\n'),
+    GALLERY_TITLE: escHtml(detail.galleryTitle || `Inside ${h.name}`),
+    GALLERY_SUB: escHtml(detail.gallerySub || ''),
+    GALLERY: (detail.gallery || []).map((g) => galleryImg(g, slug)).join('\n'),
+    FAQ_SECTION: faqSection(detail.faq),
+    OTHER_WAYS: relatedSection(hotelCategories, cat, 'Other ways to browse hotels'),
+    JSONLD: hotelJsonLd(h, key, detail),
+  });
+}
+
 // ---------- main ----------
 const tpl = fs.readFileSync(TEMPLATE, 'utf8');
 fs.mkdirSync(OUT_DIR, { recursive: true });
-const base = 'https://willyye.github.io/zhangjiajie-tours-v3';
 
 // category pages
 // 记录本次应当存在的页面 slug，循环结束后据此清理孤儿页（删除/改名分类、历史 schema 残留等）。
@@ -210,10 +285,28 @@ for (const cat of hotelCategories) {
   expectedSlugs.add(cat.slug);
 }
 
+// 三级酒店详情页：凡 hotels[key].detail 存在即生成 hotels/<key>.html（数据驱动，可被后台编辑）
+for (const key of Object.keys(hotels)) {
+  const h = hotels[key];
+  if (!h || !h.detail) continue;
+  const cat = findCatOf(key);
+  if (cat && cat.hidden) continue;
+  if (!validateImage(h.img, key)) {
+    console.log(`  ✗ skipped detail hotels/${key}.html (hero image missing)`);
+    continue;
+  }
+  (h.detail.rooms || []).forEach((r) => validateImage(r.img, key));
+  (h.detail.gallery || []).forEach((g) => validateImage((typeof g === 'string' ? g : g.img), key));
+  const html = generateDetail(key, h, cat, h.detail);
+  fs.writeFileSync(path.join(OUT_DIR, key + '.html'), html, 'utf8');
+  console.log(`  ✓ wrote hotels/${key}.html (detail, ${html.length} bytes)`);
+  expectedSlugs.add(key);
+}
+
 // 孤儿页清理：删除 hotels/ 下所有不在 expectedSlugs ∪ detailSlugs 中的 .html。
-// expectedSlugs = 4 个分类页；detailSlugs = 各酒店独立详情页（jimo/hetianye/...，由仓库静态托管，非构建生成）。
-// 覆盖后台删除/改名分类后残留的旧页；但务必保留这 7 个酒店详情页，否则三级界面点不进去。
-const detailSlugs = new Set(Object.keys(hotels));
+// expectedSlugs = 4 个分类页 + 含 detail 的酒店详情页（由本脚本生成）；detailSlugs = 含 detail 的酒店（兜底保护）。
+// 现在三级页由 hotels[key].detail 数据驱动生成；若某酒店被后台移除 detail 或改名，其旧静态页会被清理。
+const detailSlugs = new Set(Object.keys(hotels).filter((k) => hotels[k] && hotels[k].detail));
 for (const f of fs.readdirSync(OUT_DIR)) {
   if (!f.endsWith('.html')) continue;
   const slug = f.slice(0, -5);

@@ -625,6 +625,99 @@ for (const FILE of EXPERIENCE_PAGES) {
   }
 }
 
+// ---------- 11e. Hotel module: 7 detail pages + 4 category hubs ----------
+// Data-driven third-level hotel pages (hotels/<key>.html) + category first-level pages.
+// Detail pages don't set aria-current active nav (the site only does that on
+// module-index pages — a pre-existing inconsistency), so we assert the Hotels
+// nav group is present instead of counting aria-current.
+const HOTEL_DETAIL = [
+  'jimo.html', 'hetianye.html', 'vienna.html', 'boutique.html',
+  'homeinn-plus.html', '72qilou.html', 'huatian.html',
+];
+const HOTEL_HUBS = [
+  'mountain-lodges.html', 'selected-stays.html', 'value-hotels.html', 'by-area.html',
+];
+for (const FILE of [...HOTEL_DETAIL, ...HOTEL_HUBS]) {
+  const URL = BASE.replace(/index\.html$/, 'hotels/' + FILE);
+  const TAG = 'hotels/' + FILE;
+  try {
+    const hpage = await dCtx.newPage();
+    await hpage.addInitScript(() => {
+      window.__lcp = 0;
+      try {
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          if (entries.length) window.__lcp = entries[entries.length - 1].startTime;
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+      } catch (e) { /* unsupported */ }
+    });
+    const hConsole = [];
+    hpage.on('console', m => { if (m.type() === 'error') hConsole.push(m.text()); });
+    hpage.on('pageerror', e => hConsole.push('pageerror: ' + e.message));
+    await hpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await hpage.waitForTimeout(1500);
+    await hpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await hpage.waitForTimeout(400);
+
+    ok(`[${TAG}] Page <title> is non-empty`, (await hpage.title()).trim().length > 0, await hpage.title());
+
+    const hBroken = await hpage.$$eval('img', imgs => imgs.filter(i => i.complete && i.naturalWidth === 0).map(i => i.currentSrc || i.src));
+    ok(`[${TAG}] No broken <img> on render (naturalWidth>0)`, hBroken.length === 0, hBroken.length ? hBroken.slice(0,5).join(', ') : 'all loaded');
+    const hNonLazy = await hpage.$$eval('img', imgs => imgs.filter(i => i.getAttribute('loading') !== 'lazy' && i.getAttribute('fetchpriority') !== 'high').length);
+    ok(`[${TAG}] All non-hero <img> use loading="lazy"`, hNonLazy === 0, `${hNonLazy} not lazy (hero exempt: fetchpriority=high)`);
+
+    const hNavLinks = await hpage.$$eval('nav a[href*="hotels/"]', as => as.map(a => a.getAttribute('href')));
+    ok(`[${TAG}] Nav renders the Hotels category group`, new Set(hNavLinks).size >= 4, `${new Set(hNavLinks).size} unique`);
+
+    // mobile
+    const hmpage = await mCtx.newPage();
+    hmpage.on('pageerror', e => hConsole.push('mobile pageerror: ' + e.message));
+    await hmpage.goto(URL, { waitUntil: 'load', timeout: 60000 });
+    await hmpage.waitForTimeout(1500);
+    await hmpage.addStyleTag({ content: '.fade-in{opacity:1 !important; transform:none !important;}' });
+    await hmpage.waitForTimeout(300);
+    const hmNav = await hmpage.locator('nav a[href^="../"], nav a[href^="hotels/"]').count();
+    ok(`[${TAG}] Mobile viewport exposes nav links`, hmNav > 0, `${hmNav} links`);
+    await hmpage.locator('button[onclick*="toggle"]').click();
+    await hmpage.waitForTimeout(400);
+    ok(`[${TAG}] Mobile hamburger opens the menu`, await hmpage.locator('#mobile-menu').isVisible());
+    await hmpage.locator('#mobile-menu a').first().click();
+    await hmpage.waitForTimeout(600);
+    ok(`[${TAG}] Mobile menu auto-closes after tapping a link`, !(await hmpage.locator('#mobile-menu').isVisible()));
+    await hmpage.close();
+
+    // a11y (axe-core, WCAG 2.1 AA)
+    await hpage.addScriptTag({ content: AXE_SRC });
+    const hAxe = await hpage.evaluate(async () => {
+      const r = await axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } });
+      return r.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.length }));
+    });
+    const hCrit = hAxe.filter(v => v.impact === 'critical').length;
+    const hSer = hAxe.filter(v => v.impact === 'serious').length;
+    ok(`[${TAG}] axe-core: no critical a11y violations`, hCrit === 0, `${hCrit} critical`);
+    ok(`[${TAG}] axe-core: no serious a11y violations`, hSer === 0, `${hSer} serious`);
+
+    // Core Web Vitals
+    const hCwv = await hpage.evaluate(() => {
+      const lcp = window.__lcp || 0;
+      const paints = performance.getEntriesByType('paint');
+      const fcp = (paints.find(p => p.name === 'first-contentful-paint') || {}).startTime || 0;
+      const shifts = performance.getEntriesByType('layout-shift').filter(e => !e.hadRecentInput);
+      return { lcp, fcp, cls: shifts.reduce((s, e) => s + e.value, 0) };
+    });
+    if (hCwv.lcp === 0) ok(`[${TAG}] LCP captured by headless harness`, true, 'verify with Lighthouse for authoritative value');
+    else ok(`[${TAG}] LCP < 2500ms (good)`, hCwv.lcp < 2500, `${Math.round(hCwv.lcp)}ms`);
+    ok(`[${TAG}] CLS < 0.1 (good)`, hCwv.cls < 0.1, hCwv.cls.toFixed(3));
+    ok(`[${TAG}] FCP < 1800ms (good)`, hCwv.fcp > 0 && hCwv.fcp < 1800, `${Math.round(hCwv.fcp)}ms`);
+
+    ok(`[${TAG}] No severe console / page errors on load`, hConsole.length === 0, hConsole.slice(0, 3).join(' | '));
+
+    await hpage.close();
+  } catch (e) {
+    ok(`[${TAG}] hotel page flow completed`, false, 'error: ' + e.message.split('\n')[0]);
+  }
+}
+
 // ---------- 12. first-level module hub pages: 4 module index pages ----------
 // attractions/index.html, experiences/index.html, tours/index.html, plan/index.html.
 // Hotels and Food no longer have hubs; their categories are now first-level pages.

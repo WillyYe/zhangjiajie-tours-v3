@@ -19,7 +19,15 @@ const FIELDS = [
 ];
 
 // 当前选中的 一级/二级/展开分类（UI 状态）
-const ui = { catSlug: null, hotelKey: null, openCat: null, view: 'hotel', faqOpen: true, otherOpen: true };
+const ui = { catSlug: null, hotelKey: null, openCat: null, view: 'hotel', faqOpen: true, otherOpen: true, detailOpen: true };
+
+// 数组项上下移动（详情页 Rooms/Gallery/FAQ 排序用）
+function moveItem(arr, i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= arr.length) return;
+  const [x] = arr.splice(i, 1);
+  arr.splice(j, 0, x);
+}
 
 function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
@@ -808,6 +816,9 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
     );
     formHost.append(featuresField(h.features, () => onChange()));
 
+    // ===== 三级详情页编辑器（可折叠） =====
+    appendDetailModule(formHost, h);
+
     // 初次/切换时同步右侧预览
     onSelect && onSelect(ui.hotelKey);
   }
@@ -1015,11 +1026,194 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
     ]);
   }
 
+  // ===== 三级详情页编辑器（可折叠一级；二级 = 简介 / Rooms / Gallery / FAQ） =====
+  function appendDetailModule(host, h) {
+    const slug = ui.hotelKey;
+    const sync = () => { markDirty(); onSelect && onSelect(ui.hotelKey); };
+    const sec = el('section', { class: 'he-catsec he-catsec-detail' });
+    const isOpen = ui.detailOpen !== false;
+
+    const body = el('div', { class: 'he-catsec-body' + (isOpen ? '' : ' collapsed') });
+    const head = el('div', {
+      class: 'he-catsec-head' + (isOpen ? ' open' : ''),
+      onclick: (e) => {
+        if (e.target.closest('.he-catsec-actions')) return;
+        ui.detailOpen = !isOpen;
+        body.classList.toggle('collapsed', !ui.detailOpen);
+        head.classList.toggle('open', ui.detailOpen);
+      },
+    }, [
+      el('span', { class: 'he-chevron', text: isOpen ? '▾' : '▸' }),
+      el('span', { class: 'he-catsec-emoji', text: '🏨' }),
+      el('span', { class: 'he-catsec-name', text: '详情页 Detail page' }),
+      el('span', { class: 'he-catsec-count', text: h.detail ? '已建' : '未建' }),
+    ]);
+
+    if (!h.detail) {
+      body.append(el('p', { class: 'he-catsec-empty', text: '该酒店暂无三级详情页。点下方按钮基于当前酒店创建空白详情页（含 Rooms / Gallery / FAQ 空数组），保存后前端即生成该详情页。' }));
+      body.append(el('button', {
+        type: 'button', class: 'btn btn-primary', text: '➕ 创建详情页',
+        onclick: () => {
+          h.detail = {
+            tagline: '', heroLead: '', areaTier: '', intro: '', metaDesc: '', heroAlt: '',
+            alternateName: '', jsonDesc: '', areaServed: '',
+            roomsTitle: '', roomsSub: '', rooms: [],
+            galleryTitle: '', gallerySub: '', gallery: [],
+            faq: [],
+          };
+          markDirty();
+          renderForm(); // 重新渲染整表以展开详情编辑区
+        },
+      }));
+    } else {
+      const d = h.detail;
+      body.append(buildDetailMetaEditor(d, sync));
+      body.append(buildRoomsEditor(d, slug, sync));
+      body.append(buildGalleryEditor(d, slug, sync));
+      body.append(buildDetailFaqEditor(d, sync));
+    }
+
+    sec.append(
+      head,
+      el('p', { class: 'he-catsec-hint', text: '详填并保存后，前端即生成 hotels/' + slug + '.html 三级页（与构建脚本同源）。可删除 / 上下移动排序。' }),
+      body
+    );
+    host.append(sec);
+  }
+
+  // 二级：简介 & SEO 字段
+  function buildDetailMetaEditor(d, sync) {
+    const wrap = el('div', { class: 'he-sub' });
+    wrap.append(el('p', { class: 'he-sub-title', text: '📝 简介 & SEO' }));
+    function detailField(label, tip, key, type) {
+      const input = type === 'textarea' ? el('textarea', {}) : el('input', { type: 'text' });
+      input.value = d[key] || '';
+      input.addEventListener('input', () => { d[key] = input.value; sync(); });
+      return el('div', { class: 'field' }, [el('label', {}, [label, el('span', { class: 'tip', text: ' ' + tip })]), input]);
+    }
+    const introDefs = [
+      ['Tagline（徽标小字）', '如 Boutique retreat', 'tagline'],
+      ['Hero 导语 Hero Lead', '首屏大段英文介绍（默认回退 blurb）', 'heroLead', 'textarea'],
+      ['区域·档次 Area·Tier', '如 Wulingyuan · Boutique', 'areaTier'],
+      ['简介 Intro', '首屏下方导语段落', 'intro', 'textarea'],
+      ['Rooms 标题', '如 Rooms & suites', 'roomsTitle'],
+      ['Rooms 副标题', '房间区小字', 'roomsSub', 'textarea'],
+      ['Gallery 标题', '如 Inside JiMO', 'galleryTitle'],
+      ['Gallery 副标题', '图集区小字', 'gallerySub', 'textarea'],
+    ];
+    const seoDefs = [
+      ['Meta Description', 'SEO 描述（留空回退 intro/blurb）', 'metaDesc', 'textarea'],
+      ['Hero Alt', '首图 alt 描述', 'heroAlt'],
+      ['Alternate Name', '中文别名（JSON-LD）', 'alternateName'],
+      ['JSON-LD Description', '结构化数据描述（留空回退 intro）', 'jsonDesc', 'textarea'],
+      ['Area Served', 'JSON-LD 服务区域', 'areaServed'],
+    ];
+    for (const [label, tip, key, type] of introDefs) wrap.append(detailField(label, tip, key, type));
+    wrap.append(el('p', { class: 'he-sub-note', text: '— SEO 字段（留空则前端回退默认值）—' }));
+    for (const [label, tip, key, type] of seoDefs) wrap.append(detailField(label, tip, key, type));
+    return wrap;
+  }
+
+  // 二级：Rooms 全结构化（图 + 英文名 + 中文名 + 特色）
+  function buildRoomsEditor(d, slug, sync) {
+    d.rooms = d.rooms || [];
+    const wrap = el('div', { class: 'he-sub' });
+    wrap.append(el('p', { class: 'he-sub-title', text: '🛏 Rooms（全结构化：图 + 英文名 + 中文名 + 特色）' }));
+    const list = el('div', { class: 'he-room-list' });
+    function renderList() {
+      list.replaceChildren();
+      d.rooms.forEach((r, i) => {
+        const card = el('div', { class: 'he-room-card' });
+        card.append(imageField({ label: '房间主图 / Image', tip: 'webp 文件名（不含扩展名）' }, r.img || '', (v) => { r.img = v; sync(); }, hotels, categories, slug));
+        card.append(textField({ label: '英文名 / Name', tip: '如 Mansi Deluxe Twin' }, r.name || '', (v) => { r.name = v; sync(); }));
+        card.append(textField({ label: '中文名 / 名称', tip: '如 漫时光豪华双床房' }, r.nameZh || '', (v) => { r.nameZh = v; sync(); }));
+        card.append(featuresField(r.features || (r.features = []), () => sync()));
+        card.append(el('div', { class: 'he-item-ctrls' }, [
+          iconBtn('↑', '上移', () => { moveItem(d.rooms, i, -1); sync(); renderList(); }),
+          iconBtn('↓', '下移', () => { moveItem(d.rooms, i, 1); sync(); renderList(); }),
+          iconBtn('🗑', '删除房间', () => { if (confirm('删除该房间？')) { d.rooms.splice(i, 1); sync(); renderList(); } }),
+        ]));
+        list.append(card);
+      });
+      if (!d.rooms.length) list.append(el('p', { class: 'he-catsec-empty', text: '暂无房间，点下方添加。' }));
+    }
+    renderList();
+    wrap.append(list, el('button', { type: 'button', class: 'btn btn-dashed', text: '+ 添加房间', onclick: () => { d.rooms.push({ img: '', name: '', nameZh: '', features: [] }); sync(); renderList(); } }));
+    return wrap;
+  }
+
+  // 二级：Gallery（图 + alt）
+  function buildGalleryEditor(d, slug, sync) {
+    d.gallery = d.gallery || [];
+    const wrap = el('div', { class: 'he-sub' });
+    wrap.append(el('p', { class: 'he-sub-title', text: '🖼 Gallery（每张：图 + alt 描述）' }));
+    const list = el('div', { class: 'he-gallery-list' });
+    function renderList() {
+      list.replaceChildren();
+      d.gallery.forEach((g, i) => {
+        const obj = typeof g === 'string' ? { img: g, alt: '' } : g;
+        if (typeof g === 'string') d.gallery[i] = obj;
+        const card = el('div', { class: 'he-gallery-card' });
+        card.append(imageField({ label: '图片 / Image', tip: 'webp 文件名（不含扩展名）' }, obj.img || '', (v) => { obj.img = v; sync(); }, hotels, categories, slug));
+        card.append(textField({ label: 'Alt 描述', tip: '英文 alt' }, obj.alt || '', (v) => { obj.alt = v; sync(); }));
+        card.append(el('div', { class: 'he-item-ctrls' }, [
+          iconBtn('↑', '上移', () => { moveItem(d.gallery, i, -1); sync(); renderList(); }),
+          iconBtn('↓', '下移', () => { moveItem(d.gallery, i, 1); sync(); renderList(); }),
+          iconBtn('🗑', '删除', () => { d.gallery.splice(i, 1); sync(); renderList(); }),
+        ]));
+        list.append(card);
+      });
+      if (!d.gallery.length) list.append(el('p', { class: 'he-catsec-empty', text: '暂无图片，点下方添加。' }));
+    }
+    renderList();
+    wrap.append(list, el('button', { type: 'button', class: 'btn btn-dashed', text: '+ 添加图片', onclick: () => { d.gallery.push({ img: '', alt: '' }); sync(); renderList(); } }));
+    return wrap;
+  }
+
+  // 二级：FAQ（中英文问题与答案，可拖拽排序）
+  function buildDetailFaqEditor(d, sync) {
+    d.faq = d.faq || [];
+    const wrap = el('div', { class: 'he-sub' });
+    wrap.append(el('p', { class: 'he-sub-title', text: '❓ FAQ（中英文问题与答案）' }));
+    const list = el('div', { class: 'faq-list' });
+    function renderList() {
+      list.replaceChildren();
+      d.faq.forEach((it, i) => {
+        const q = el('input', { type: 'text', value: it.q || '', placeholder: 'Question (EN)' });
+        const qZh = el('input', { type: 'text', value: it.qZh || '', placeholder: '问题 (ZH)' });
+        const a = el('textarea', { placeholder: 'Answer (EN)' }); a.value = it.a || '';
+        const aZh = el('textarea', { placeholder: '答案 (ZH)' }); aZh.value = it.aZh || '';
+        q.addEventListener('input', () => { d.faq[i].q = q.value; sync(); });
+        qZh.addEventListener('input', () => { d.faq[i].qZh = qZh.value; sync(); });
+        a.addEventListener('input', () => { d.faq[i].a = a.value; sync(); });
+        aZh.addEventListener('input', () => { d.faq[i].aZh = aZh.value; sync(); });
+        const del = iconBtn('🗑', '删除', () => { if (confirm('删除该问题？')) { d.faq.splice(i, 1); sync(); renderList(); } });
+        const card = el('div', { class: 'faq-item', draggable: true }, [
+          el('div', { class: 'faq-item-head' }, [el('span', { class: 'faq-grip', text: '⠿' }), el('span', { class: 'faq-idx', text: 'Q' + (i + 1) }), del]),
+          fieldRow('问题 EN', q), fieldRow('问题 ZH', qZh), fieldRow('答案 EN', a), fieldRow('答案 ZH', aZh),
+        ]);
+        card.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', String(i)));
+        card.addEventListener('dragover', (e) => e.preventDefault());
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
+          if (!isNaN(src) && src !== i) { const [x] = d.faq.splice(src, 1); d.faq.splice(i, 0, x); sync(); renderList(); }
+        });
+        list.append(card);
+      });
+      if (!d.faq.length) list.append(el('p', { class: 'faq-empty', text: '暂无常见问题。' }));
+    }
+    renderList();
+    wrap.append(list, el('button', { type: 'button', class: 'btn btn-dashed', text: '+ 添加问题', onclick: () => { d.faq.push({ q: '', a: '', qZh: '', aZh: '' }); sync(); renderList(); } }));
+    return wrap;
+  }
+
   renderTree();
   renderForm();
 }
 
 export function renderPreview(container, hotel, slug) {
+  container.classList.remove('detail-mode');
   container.replaceChildren();
   if (!hotel) return;
   const imgWrap = el('div', { class: 'pv-img' });
@@ -1049,6 +1243,7 @@ export function renderPreview(container, hotel, slug) {
 
 // 分类页实时预览（方案 A）：编辑分类时在右栏渲染该分类页片段，所见即所得
 export function renderCategoryPreview(container, cat, hotels, categories) {
+  container.classList.remove('detail-mode');
   container.replaceChildren();
   if (!cat) return;
   const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -1101,4 +1296,139 @@ export function renderCategoryPreview(container, cat, hotels, categories) {
       <div class="pv-cat-rels">${others}</div>
     </section>
   </div>`;
+}
+
+// ---------- 三级详情页 实时预览（复用 hotel-detail.html 模板，iframe srcdoc 所见即所得） ----------
+const BASE = 'https://willyye.github.io/zhangjiajie-tours-v3';
+let _detailTpl = null;
+let _detailFillTimer = null;
+const _escHtml = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const _escAttr = (s) => _escHtml(s).replace(/"/g, '&quot;');
+const _imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
+const _imgSrc = (n, slug) => '../images/' + (slug ? slug + '/' : '') + _imgName(n);
+const _findCatOf = (key, cats) => (cats || []).find((c) => (c.hotels || []).includes(key));
+
+function _roomCard(r, slug) {
+  const feats = (r.features || []).map((f) => `<li class="flex gap-2"><span class="text-gold-dark">✓</span><span>${_escHtml(f)}</span></li>`).join('');
+  const zh = r.nameZh ? `            <p class="text-gold-dark text-xs font-semibold uppercase tracking-wide mb-2">${_escAttr(r.nameZh)}</p>\n` : '';
+  return `        <article class="card-hover group bg-white rounded-2xl overflow-hidden border border-sand-dark flex flex-col">
+          <div class="overflow-hidden h-56"><img loading="lazy" decoding="async" src="${_imgSrc(r.img, slug)}" alt="${_escAttr(r.alt || r.name)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+          <div class="p-6 flex flex-col flex-1">
+            <h3 class="font-display text-xl text-forest leading-snug">${_escHtml(r.name)}</h3>
+${zh}            <ul class="space-y-1.5 text-sm text-stone-600">${feats}</ul>
+          </div>
+        </article>`;
+}
+function _galleryImg(g, slug) {
+  const img = typeof g === 'string' ? g : g.img;
+  const alt = (typeof g === 'string' ? '' : g.alt) || '';
+  return `        <img loading="lazy" decoding="async" src="${_imgSrc(img, slug)}" alt="${_escAttr(alt)}" class="w-full h-48 object-cover rounded-xl">`;
+}
+function _hotelJsonLd(h, key, detail) {
+  const data = {
+    '@context': 'https://schema.org', '@type': 'Hotel', name: h.name,
+    alternateName: (detail && detail.alternateName) || h.zh || '',
+    description: (detail && (detail.jsonDesc || detail.intro)) || h.blurb || '',
+    url: `${BASE}/hotels/${key}.html`,
+    address: { '@type': 'PostalAddress', addressRegion: 'Hunan', addressCountry: 'CN' },
+    areaServed: (detail && detail.areaServed) || h.area || '',
+  };
+  return JSON.stringify(data, null, 2);
+}
+function _faqSection(items) {
+  if (!items || !items.length) return '';
+  const cards = items.map((it) => `          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+            <h3 class="font-display text-lg md:text-xl text-forest mb-2">${_escHtml(it.q)}</h3>
+            <p class="text-stone/80 leading-relaxed text-sm md:text-base">${_escHtml(it.a)}</p>
+          </div>`).join('\n');
+  return `  <!-- ========== FAQ ========== -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-16">
+    <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">Frequently asked questions</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+${cards}
+    </div>
+  </section>`;
+}
+function _relatedCard(c) {
+  const desc = _escHtml(c.cardBlurb || c.hubDesc);
+  return `          <a href="${c.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
+            <div class="p-6">
+              <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-1">${_escAttr(c.tag)}</p>
+              <h3 class="font-display text-lg text-forest group-hover:text-gold-dark transition-colors">${_escHtml(c.title)}</h3>
+              <p class="text-sm text-stone-600 mt-1">${desc}</p>
+            </div>
+          </a>`;
+}
+function _relatedSection(cats, current, label) {
+  const cards = (cats || []).filter((c) => !c.hidden && c.slug !== current.slug).map(_relatedCard).join('\n');
+  return `  <!-- ========== Related categories ========== -->
+  <section class="max-w-[1400px] mx-auto px-6 pb-20">
+    <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">${_escHtml(label)}</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+${cards}
+    </div>
+  </section>`;
+}
+function _fillDetailTpl(tpl, hotel, key, categories) {
+  const detail = hotel.detail || {};
+  const slug = key;
+  const cat = _findCatOf(key, categories);
+  const catLink = cat ? cat.slug + '.html' : '#';
+  const metaDesc = detail.metaDesc || detail.intro || hotel.blurb || '';
+  const map = {
+    TITLE: _escHtml(`${hotel.name} | Visit Zhangjiajie`),
+    META_DESC: _escAttr(metaDesc),
+    CANONICAL: `${BASE}/hotels/${key}.html`,
+    OG_IMAGE: `${BASE}/images/${slug}/${_imgName(hotel.img)}`,
+    HERO_IMG: _imgSrc(hotel.img, slug),
+    HERO_ALT: _escAttr(detail.heroAlt || hotel.alt || ''),
+    CAT_LINK: catLink,
+    CAT_NAME: _escHtml(cat ? cat.title : ''),
+    HOTEL_NAME: _escHtml(hotel.name),
+    TAGLINE: _escHtml(detail.tagline || hotel.tier || ''),
+    HERO_LEAD: _escHtml(detail.heroLead || hotel.blurb || ''),
+    AREA_TIER: _escHtml(detail.areaTier || `${hotel.area || ''} · ${hotel.tier || ''}`),
+    INTRO_TEXT: _escHtml(detail.intro || hotel.blurb || ''),
+    ROOMS_TITLE: _escHtml(detail.roomsTitle || 'Rooms & suites'),
+    ROOMS_SUB: _escHtml(detail.roomsSub || ''),
+    ROOMS: (detail.rooms || []).map((r) => _roomCard(r, slug)).join('\n'),
+    GALLERY_TITLE: _escHtml(detail.galleryTitle || `Inside ${hotel.name}`),
+    GALLERY_SUB: _escHtml(detail.gallerySub || ''),
+    GALLERY: (detail.gallery || []).map((g) => _galleryImg(g, slug)).join('\n'),
+    FAQ_SECTION: _faqSection(detail.faq),
+    OTHER_WAYS: _relatedSection(categories, cat, 'Other ways to browse hotels'),
+    JSONLD: _hotelJsonLd(hotel, key, detail),
+  };
+  let out = tpl;
+  for (const [k, v] of Object.entries(map)) out = out.split(`{{${k}}}`).join(v);
+  const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
+  if (leftovers.length) console.warn('[detail-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
+  return out;
+}
+
+export function renderDetailPreview(container, hotel, key, categories) {
+  if (!hotel || !hotel.detail) {
+    container.classList.remove('detail-mode');
+    container.replaceChildren(el('div', { class: 'pv-empty', text: '该酒店暂无详情页数据（在左侧「详情页」模块点「创建详情页」）。' }));
+    return;
+  }
+  container.classList.add('detail-mode');
+  const run = () => {
+    if (!_detailTpl) return;
+    const html = _fillDetailTpl(_detailTpl, hotel, key, categories);
+    container.replaceChildren();
+    const iframe = el('iframe', { class: 'pv-detail-iframe', title: 'detail-preview' });
+    container.append(iframe);
+    iframe.srcdoc = html;
+  };
+  if (_detailTpl) {
+    clearTimeout(_detailFillTimer);
+    _detailFillTimer = setTimeout(run, 120);
+  } else {
+    container.replaceChildren(el('div', { class: 'pv-loading', text: '加载详情页模板…' }));
+    fetch(new URL('../templates/hotel-detail.html', import.meta.url))
+      .then((r) => r.text())
+      .then((t) => { _detailTpl = t; run(); })
+      .catch((e) => { container.replaceChildren(el('div', { class: 'pv-empty', text: '详情页模板加载失败：' + e.message })); });
+  }
 }
