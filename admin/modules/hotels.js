@@ -1467,9 +1467,16 @@ export function renderDetailPreview(container, hotel, key, categories) {
     _detailFillTimer = setTimeout(run, 120);
   } else {
     container.replaceChildren(el('div', { class: 'pv-loading', text: '加载详情页模板…' }));
-    fetch(new URL('../templates/hotel-detail.html', import.meta.url))
-      .then((r) => r.text())
+    // templates/ 在仓库根；admin/modules/hotels.js → 上两级到根
+    fetch(new URL('../../templates/hotel-detail.html', import.meta.url))
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}（路径错或文件不在）`);
+        return r.text();
+      })
       .then((t) => { _detailTpl = t; run(); })
-      .catch((e) => { container.replaceChildren(el('div', { class: 'pv-empty', text: '详情页模板加载失败：' + e.message })); });
+      .catch((e) => {
+        console.error('[detail-preview] 模板加载失败:', e);
+        container.replaceChildren(el('div', { class: 'pv-empty', text: '详情页模板加载失败：' + e.message + '（请确认 admin/ → 仓库根 templates/hotel-detail.html 路径）' }));
+      });
   }
 }
