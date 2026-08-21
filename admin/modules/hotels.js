@@ -499,10 +499,16 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
     if (!confirm(`确认删除分类「${cat.title}」？\n\n旗下酒店不会删除，会落入「未分类」。`)) return;
     const i = categories.indexOf(cat);
     if (i >= 0) categories.splice(i, 1);
-    if (ui.catSlug === cat.slug) { ui.catSlug = null; ui.openCat = null; }
-    ui.view = 'hotel';
-    markDirty(); renderTree();
-    if (!ui.hotelKey) { ui.hotelKey = tiers[0] && tiers[0].hotels[0]; ui.catSlug = ui.hotelKey ? catOfHotel(ui.hotelKey).slug : null; }
+    markDirty();
+    // A：删除当前分类后保持【分类级】视图，自动跳到下一个有效分类，FAQ/跨链接编辑入口不消失
+    if (ui.catSlug === cat.slug) {
+      const remaining = categories.filter((c) => c.slug !== '__uncat');
+      const next = remaining[0] || null;
+      ui.view = 'cat';
+      if (next) { ui.catSlug = next.slug; ui.openCat = next.slug; }
+      else { ui.catSlug = null; ui.openCat = null; }
+    }
+    renderTree();
     renderForm();
   }
   function reorderHotel(cat, srcKey, targetKey) {
@@ -816,6 +822,9 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       ]),
       el('div', { class: 'he-step', text: '③ 编辑分类 Edit' })
     );
+
+    // C：明确层级，避免被误认为酒店内容
+    formHost.append(el('p', { class: 'he-cat-note', text: '本页编辑【分类级】内容（含 FAQ 与跨链接简介），对所有该分类生成的页面生效。' }));
 
     function catField(label, tip, key, type) {
       const input = type === 'textarea' ? el('textarea', {}) : el('input', { type: 'text' });

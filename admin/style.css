@@ -118,6 +118,12 @@ body {
   border-radius: 999px; padding: 5px 14px; margin-bottom: 12px;
 }
 
+.he-cat-note {
+  margin: 0 0 14px; padding: 8px 12px;
+  font-size: 12px; line-height: 1.5; color: #1e40af;
+  background: #eff6ff; border: 1px solid #dbeafe; border-radius: 8px;
+}
+
 /* 左：折叠树（分类 ▸ 酒店）—— 紧凑，宽度可拖拽调整 */
 .he-tree {
   flex: none; width: 210px;
