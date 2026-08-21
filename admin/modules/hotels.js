@@ -423,7 +423,7 @@ function buildTiers(hotels, categories) {
   return cats;
 }
 
-export function renderEditor(container, hotels, categories, onChange, onSelect) {
+export function renderEditor(container, hotels, categories, onChange, onSelect, onSelectCat) {
   container.replaceChildren();
   let tiers = buildTiers(hotels, categories);
   if (!tiers.length) {
@@ -565,8 +565,10 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
     if (cat.slug === '__uncat') return;
     if (!editCatModal) editCatModal = buildEditCatModal();
     const m = editCatModal; m.cat = cat;
-    const map = { title: 'title', tag: 'tag', slug: 'slug', heroImg: 'heroImg', heroAlt: 'heroAlt', heroTag: 'heroTag', h1: 'h1', subtitle: 'subtitle', hubDesc: 'hubDesc', metaDesc: 'metaDesc', intro: 'intro', bodyIntro: 'bodyIntro' };
+    const map = { title: 'title', tag: 'tag', slug: 'slug', heroImg: 'heroImg', heroAlt: 'heroAlt', heroTag: 'heroTag', h1: 'h1', subtitle: 'subtitle', hubDesc: 'hubDesc', metaDesc: 'metaDesc', intro: 'intro', bodyIntro: 'bodyIntro', cardBlurb: 'cardBlurb', cardBlurbZh: 'cardBlurbZh' };
     for (const k of Object.keys(map)) m.inputs[k].value = cat[map[k]] || '';
+    m.faqItems = (cat.faq || []).map((it) => ({ q: it.q || '', a: it.a || '', qZh: it.qZh || '', aZh: it.aZh || '' }));
+    m.renderFaqList();
     setStatus(m.status, '', '');
     m.mask.hidden = false;
   }
@@ -584,8 +586,49 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
       heroImg: el('input', { type: 'text' }), heroAlt: el('input', { type: 'text' }), heroTag: el('input', { type: 'text' }),
       h1: el('input', { type: 'text' }),
       subtitle: el('textarea', {}), hubDesc: el('textarea', {}), metaDesc: el('textarea', {}), intro: el('textarea', {}), bodyIntro: el('textarea', {}),
+      cardBlurb: el('input', { type: 'text' }), cardBlurbZh: el('input', { type: 'text' }),
     };
+    const faqList = el('div', { class: 'faq-list' });
     const status = el('div', { class: 'img-lib-status', hidden: true });
+    const m = { mask, inputs, status, cat: null, faqItems: [] };
+
+    function renderFaqList() {
+      faqList.replaceChildren();
+      m.faqItems.forEach((it, i) => {
+        const q = el('input', { type: 'text', value: it.q || '', placeholder: 'Question (EN)' });
+        const qZh = el('input', { type: 'text', value: it.qZh || '', placeholder: '问题 (ZH)' });
+        const a = el('textarea', { placeholder: 'Answer (EN)' }, it.a || '');
+        const aZh = el('textarea', { placeholder: '答案 (ZH)' }, it.aZh || '');
+        q.addEventListener('input', () => { m.faqItems[i].q = q.value; });
+        qZh.addEventListener('input', () => { m.faqItems[i].qZh = qZh.value; });
+        a.addEventListener('input', () => { m.faqItems[i].a = a.value; });
+        aZh.addEventListener('input', () => { m.faqItems[i].aZh = aZh.value; });
+        const del = iconBtn('🗑', '删除该条', () => { m.faqItems.splice(i, 1); renderFaqList(); });
+        const card = el('div', { class: 'faq-item', draggable: true }, [
+          el('div', { class: 'faq-item-head' }, [el('span', { class: 'faq-grip', text: '⠿' }), el('span', { class: 'faq-idx', text: 'Q' + (i + 1) }), del]),
+          fieldRow('问题 EN', q),
+          fieldRow('问题 ZH', qZh),
+          fieldRow('答案 EN', a),
+          fieldRow('答案 ZH', aZh),
+        ]);
+        card.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text/plain', String(i)); });
+        card.addEventListener('dragover', (e) => e.preventDefault());
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
+          if (!isNaN(src) && src !== i) {
+            const [x] = m.faqItems.splice(src, 1);
+            m.faqItems.splice(i, 0, x);
+            renderFaqList();
+          }
+        });
+        faqList.append(card);
+      });
+      if (!m.faqItems.length) faqList.append(el('p', { class: 'faq-empty', text: '暂无常见问题，保存后该区块不在前端显示。' }));
+    }
+    m.renderFaqList = renderFaqList;
+
+    const addFaqBtn = el('button', { type: 'button', class: 'btn btn-dashed', text: '+ 添加问题', onclick: () => { m.faqItems.push({ q: '', a: '', qZh: '', aZh: '' }); renderFaqList(); } });
     const confirmBtn = el('button', { type: 'button', class: 'btn btn-primary', text: '保存' });
     const cancelBtn = el('button', { type: 'button', class: 'btn btn-ghost', text: '取消', onclick: () => (mask.hidden = true) });
     const actions = el('div', { class: 'modal-actions' }, [cancelBtn, confirmBtn]);
@@ -594,19 +637,30 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
       fieldRow('封面图 Hero Image', inputs.heroImg), fieldRow('封面 Alt', inputs.heroAlt), fieldRow('封面标签 Hero Tag', inputs.heroTag),
       fieldRow('H1', inputs.h1), fieldRow('副标题 Subtitle', inputs.subtitle), fieldRow('简介卡片 Hub Desc', inputs.hubDesc),
       fieldRow('Meta Description', inputs.metaDesc), fieldRow('导语 Intro', inputs.intro), fieldRow('正文导语 Body Intro', inputs.bodyIntro),
+      fieldRow('跨链接简介 Card Blurb (EN)', inputs.cardBlurb),
+      fieldRow('跨链接简介 Card Blurb (ZH)', inputs.cardBlurbZh),
+      el('div', { class: 'faq-section' }, [
+        el('p', { class: 'faq-section-title', text: 'FAQ 常见问题' }),
+        el('p', { class: 'faq-section-hint', text: '每条含中英文问题与答案；留空则前端不显示该区块。可拖拽排序、逐条删除。' }),
+        faqList,
+        addFaqBtn,
+      ]),
     ]), status, actions);
     mask.append(panel);
     mask.addEventListener('click', (e) => { if (e.target === mask) mask.hidden = true; });
     document.body.append(mask);
-    const m = { mask, inputs, status, cat: null };
     confirmBtn.addEventListener('click', () => {
       const slugV = inputs.slug.value.trim();
       if (slugV && !/^[a-z0-9-]+$/.test(slugV)) { setStatus(status, 'Slug 仅含小写字母、数字和连字符', 'err'); return; }
       const data = {};
       for (const k of Object.keys(inputs)) data[k] = inputs[k].value.trim();
       Object.assign(m.cat, data);
+      m.cat.faq = m.faqItems
+        .filter((it) => (it.q || '').trim() && (it.a || '').trim())
+        .map((it) => ({ q: it.q.trim(), a: it.a.trim(), qZh: (it.qZh || '').trim(), aZh: (it.aZh || '').trim() }));
       markDirty(); renderTree();
       mask.hidden = true;
+      onSelectCat && onSelectCat(m.cat);
       notify('分类已更新（未保存，点保存并发布后生效）', 'info');
     });
     return m;
@@ -636,6 +690,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect) 
           }
           renderTree();
           renderForm();
+          onSelectCat && onSelectCat(c);
         },
       }, [
         el('span', { class: 'he-chevron', text: '▸' }),
@@ -763,4 +818,60 @@ export function renderPreview(container, hotel, slug) {
     ]),
   ]);
   container.append(card);
+}
+
+// 分类页实时预览（方案 A）：编辑分类时在右栏渲染该分类页片段，所见即所得
+export function renderCategoryPreview(container, cat, hotels, categories) {
+  container.replaceChildren();
+  if (!cat) return;
+  const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const escAttr = (s) => esc(s).replace(/"/g, '&quot;');
+  const heroSlug = (() => {
+    const byImg = Object.keys(hotels).find((k) => hotels[k] && hotels[k].img === cat.heroImg);
+    if (byImg) return byImg;
+    const mm = /^hotel-([a-z0-9-]+)-/.exec(cat.heroImg || '');
+    return mm ? mm[1] : null;
+  })();
+  const heroSrc = `../images/${heroSlug ? heroSlug + '/' : ''}${esc(cat.heroImg)}.webp`;
+  const cards = (cat.hotels || []).filter((id) => hotels[id] && !hotels[id].hidden).map((id) => {
+    const h = hotels[id];
+    return `<article class="pv-cat-card">
+      <img class="pv-cat-card-img" src="../images/${id}/${esc(h.img)}.webp" alt="${escAttr(h.alt)}" onerror="this.style.display='none'">
+      <div class="pv-cat-card-body">
+        <h4>${esc(h.name)}</h4>
+        <p class="pv-cat-card-zh">${esc(h.zh)} · ${esc(h.area)}</p>
+        <p class="pv-cat-card-blurb">${esc(h.blurb)}</p>
+      </div>
+    </article>`;
+  }).join('');
+  const faqHtml = (cat.faq && cat.faq.length)
+    ? cat.faq.map((it) => `<div class="pv-cat-faq"><h5>${esc(it.q)}</h5><p>${esc(it.a)}</p>${it.qZh ? `<h6>${esc(it.qZh)}</h6>` : ''}${it.aZh ? `<p class="pv-zh">${esc(it.aZh)}</p>` : ''}</div>`).join('')
+    : '<p class="pv-empty">暂无常见问题（保存后该区块不显示）</p>';
+  const others = categories.filter((c) => !c.hidden && c.slug !== cat.slug).map((c) => {
+    const desc = c.cardBlurb || c.hubDesc;
+    return `<a class="pv-cat-rel" href="#"><p class="pv-cat-rel-tag">${esc(c.tag)}</p><h4>${esc(c.title)}</h4><p>${esc(desc)}</p></a>`;
+  }).join('');
+  container.innerHTML = `<div class="pv-cat">
+    <div class="pv-cat-hero">
+      <img src="${heroSrc}" alt="${escAttr(cat.heroAlt)}" onerror="this.style.display='none'">
+      <div class="pv-cat-hero-ov"></div>
+      <div class="pv-cat-hero-txt">
+        <span class="pv-cat-tag">${esc(cat.heroTag)}</span>
+        <h3>${esc(cat.h1)}</h3>
+        <p>${esc(cat.subtitle)}</p>
+      </div>
+    </div>
+    <section class="pv-cat-sec">
+      <h3 class="pv-cat-h2">Our ${esc(cat.title.toLowerCase())}</h3>
+      <div class="pv-cat-grid">${cards}</div>
+    </section>
+    <section class="pv-cat-sec">
+      <h3 class="pv-cat-h2">Frequently asked questions</h3>
+      <div class="pv-cat-faqs">${faqHtml}</div>
+    </section>
+    <section class="pv-cat-sec">
+      <h3 class="pv-cat-h2">Other ways to browse hotels</h3>
+      <div class="pv-cat-rels">${others}</div>
+    </section>
+  </div>`;
 }

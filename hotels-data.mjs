@@ -90,6 +90,11 @@ export const hotelCategories = [
     intro: 'These are the stays that trade city convenience for scenery. Both sit close to the Wulingyuan gates, so sunrise at the pillars is a short transfer rather than a long drive.',
     bodyIntro: 'Two lodges that put you inside the landscape rather than looking at it from afar.',
     hubDesc: 'Boutique and hillside stays inside Wulingyuan — balcony rooms with peak views.',
+    faq: [
+      { q: "Which area should I stay in?", a: "Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain." },
+      { q: "Do you book hotels for me?", a: "We don’t take payment, but message us by email and we’ll recommend and help reserve the right stay for your dates — free, no obligation." },
+      { q: "What’s the price range?", a: "From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead." },
+    ],
     hotels: ['jimo', 'hetianye'],
   },
   {
@@ -105,6 +110,11 @@ export const hotelCategories = [
     intro: 'When you want the stay itself to feel good, not just the location. These two balance service standard with a bit of design.',
     bodyIntro: 'Two stays we confidently recommend for comfort and consistency.',
     hubDesc: 'International-standard and design-led hotels we routinely recommend.',
+    faq: [
+      { q: "Which area should I stay in?", a: "Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain." },
+      { q: "Do you book hotels for me?", a: "We don’t take payment, but message us by email and we’ll recommend and help reserve the right stay for your dates — free, no obligation." },
+      { q: "What’s the price range?", a: "From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead." },
+    ],
     hotels: ['vienna', 'boutique'],
   },
   {
@@ -120,6 +130,11 @@ export const hotelCategories = [
     intro: 'Value doesn’t mean compromise on the basics. Both deliver a comfortable, predictable night with the city’s eats and transit close by.',
     bodyIntro: 'Two dependable, easy-on-the-wallet bases in the city.',
     hubDesc: 'Dependable, budget-friendly stays in Zhangjiajie city.',
+    faq: [
+      { q: "Which area should I stay in?", a: "Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain." },
+      { q: "Do you book hotels for me?", a: "We don’t take payment, but message us by email and we’ll recommend and help reserve the right stay for your dates — free, no obligation." },
+      { q: "What’s the price range?", a: "From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead." },
+    ],
     hotels: ['homeinn-plus', '72qilou'],
   },
   {
@@ -135,6 +150,11 @@ export const hotelCategories = [
     intro: 'For families and longer trips, a city base with space and transit access often beats a scenic but remote room. Huatiancheng gives you suites in the centre.',
     bodyIntro: 'Apartment-style suites for travellers who want space and a central address.',
     hubDesc: 'Spacious city-centre suites close to transit and dining.',
+    faq: [
+      { q: "Which area should I stay in?", a: "Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain." },
+      { q: "Do you book hotels for me?", a: "We don’t take payment, but message us by email and we’ll recommend and help reserve the right stay for your dates — free, no obligation." },
+      { q: "What’s the price range?", a: "From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead." },
+    ],
     hotels: ['huatian'],
   },
 ];

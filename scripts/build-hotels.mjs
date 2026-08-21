@@ -63,7 +63,7 @@ ${cards}
       </div>
     </div>
   </section>`;
-  return main + '\n' + faqSection(HOTEL_FAQ) + '\n' + relatedSection(hotelCategories, cat, 'Other ways to browse hotels');
+  return main + '\n' + faqSection(cat.faq) + '\n' + relatedSection(hotelCategories, cat, 'Other ways to browse hotels');
 }
 
 function categoryCard(cat) {
@@ -77,17 +77,21 @@ function categoryCard(cat) {
           </a>`;
 }
 
-const HOTEL_FAQ = [
-  ['Which area should I stay in?', 'Wulingyuan puts you minutes from the park gates — best for early sunrise starts. Zhangjiajie city (Yongding) is better for the train station, airport and Tianmen Mountain.'],
-  ['Do you book hotels for me?', 'We don’t take payment, but message us by email and we’ll recommend and help reserve the right stay for your dates — free, no obligation.'],
-  ['What’s the price range?', 'From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead.'],
-];
+// FAQ 现在按分类存放在 hotelCategories[].faq（见 hotels-data.mjs），
+// 每条 { q, a, qZh?, aZh? }；EN 必填，ZH 可选。cat.faq 为空则整段不渲染。
 
 function faqSection(items) {
-  const cards = items.map(([q, a]) => `          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
-            <h3 class="font-display text-lg md:text-xl text-forest mb-2">${escHtml(q)}</h3>
-            <p class="text-stone/80 leading-relaxed text-sm md:text-base">${escHtml(a)}</p>
-          </div>`).join('\n');
+  if (!items || !items.length) return '';
+  const cards = items.map((it) => {
+    const zh = [];
+    if (it.qZh) zh.push(`          <h4 class="font-display text-base text-stone-500 mt-3">${escHtml(it.qZh)}</h4>`);
+    if (it.aZh) zh.push(`          <p class="text-stone/70 leading-relaxed text-sm md:text-base mt-1">${escHtml(it.aZh)}</p>`);
+    const zhBlock = zh.length ? '\n' + zh.join('\n') : '';
+    return `          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+            <h3 class="font-display text-lg md:text-xl text-forest mb-2">${escHtml(it.q)}</h3>
+            <p class="text-stone/80 leading-relaxed text-sm md:text-base">${escHtml(it.a)}</p>${zhBlock}
+          </div>`;
+  }).join('\n');
   return `  <!-- ========== FAQ ========== -->
   <section class="max-w-[1400px] mx-auto px-6 pb-16">
     <h2 class="font-display text-2xl md:text-3xl text-forest mb-6">Frequently asked questions</h2>
@@ -98,11 +102,14 @@ ${cards}
 }
 
 function relatedCard(cat) {
+  const desc = [escHtml(cat.cardBlurb || cat.hubDesc)];
+  const zhDesc = cat.cardBlurbZh || cat.hubDescZh;
+  if (zhDesc) desc.push(`<span class="block text-stone-500 mt-1">${escHtml(zhDesc)}</span>`);
   return `          <a href="${cat.slug}.html" class="card-hover group block bg-white rounded-2xl overflow-hidden border border-sand-dark">
             <div class="p-6">
               <p class="text-xs font-semibold uppercase tracking-wide text-gold-dark mb-1">${escAttr(cat.tag)}</p>
               <h3 class="font-display text-lg text-forest group-hover:text-gold-dark transition-colors">${escHtml(cat.title)}</h3>
-              <p class="text-sm text-stone-600 mt-1">${escHtml(cat.hubDesc)}</p>
+              <p class="text-sm text-stone-600 mt-1">${desc.join('')}</p>
             </div>
           </a>`;
 }

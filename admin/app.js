@@ -1,6 +1,6 @@
 import { getConfig, isConfigured, getFile, putFile, getFileSha } from './github.js';
 import { parseMjs, rebuild } from './mjs.js';
-import { renderEditor, renderPreview } from './modules/hotels.js';
+import { renderEditor, renderPreview, renderCategoryPreview } from './modules/hotels.js';
 import { initResizers } from './resizer.js';
 import {
   initSettings,
@@ -74,7 +74,8 @@ async function load() {
       state.hotels,
       state.categories,
       () => setStatus(true),
-      (key) => renderPreview(previewEl, state.hotels[key], key)
+      (key) => renderPreview(previewEl, state.hotels[key], key),
+      (cat) => renderCategoryPreview(previewEl, cat, state.hotels, state.categories)
     );
     setStatus(false);
   } catch (e) {

@@ -248,6 +248,56 @@ legend small { font-weight: 400; color: var(--muted); font-size: 11px; margin-le
 .pv-blurb { font-size: 13px; color: #334155; line-height: 1.55; }
 .pv-features { margin: 10px 0 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
 
+/* ---------- FAQ 编辑器（分类弹窗内） ---------- */
+.faq-section { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); }
+.faq-section-title { margin: 0 0 2px; font-size: 15px; font-weight: 700; }
+.faq-section-hint { margin: 0 0 12px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+.faq-list { display: flex; flex-direction: column; gap: 12px; }
+.faq-item { border: 1px solid var(--line); border-radius: 12px; background: #fbfdff; padding: 12px 14px; cursor: grab; }
+.faq-item:active { cursor: grabbing; }
+.faq-item-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.faq-grip { color: var(--muted); font-size: 15px; line-height: 1; cursor: grab; }
+.faq-idx { font-size: 12px; font-weight: 800; color: var(--brand); background: #eff6ff; border: 1px solid #dbeafe; border-radius: 999px; padding: 2px 9px; }
+.faq-item-head .icon-btn { margin-left: auto; font-size: 14px; }
+.faq-item .field { margin: 8px 0; }
+.faq-item .field > label { font-size: 12px; }
+.faq-item textarea { min-height: 58px; }
+.faq-empty { font-size: 12px; color: var(--muted); font-style: italic; margin: 4px 0; }
+.btn-dashed { border: 1px dashed var(--brand); background: #fff; color: var(--brand); border-radius: 9px; padding: 9px 14px; font-size: 13px; cursor: pointer; font-weight: 600; }
+.btn-dashed:hover { background: #eff6ff; }
+
+/* ---------- 分类页实时预览（方案 A） ---------- */
+.pv-cat { font-size: 13px; }
+.pv-cat-hero { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 60%, #0369a1 100%); margin-bottom: 16px; }
+.pv-cat-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pv-cat-hero-ov { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,.05) 0%, rgba(15,23,42,.55) 100%); pointer-events: none; }
+.pv-cat-hero-txt { position: absolute; left: 16px; right: 16px; bottom: 14px; color: #fff; }
+.pv-cat-tag { display: inline-block; font-size: 11px; font-weight: 700; background: rgba(255,255,255,.22); padding: 3px 9px; border-radius: 999px; margin-bottom: 6px; }
+.pv-cat-hero-txt h3 { margin: 0; font-size: 19px; line-height: 1.2; }
+.pv-cat-hero-txt p { margin: 4px 0 0; font-size: 12px; opacity: .92; }
+.pv-cat-sec { margin-bottom: 18px; }
+.pv-cat-h2 { margin: 0 0 10px; font-size: 14px; font-weight: 800; }
+.pv-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pv-cat-card { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; }
+.pv-cat-card-img { width: 100%; height: 86px; object-fit: cover; display: block; background: #cbd5e1; }
+.pv-cat-card-body { padding: 8px 10px; }
+.pv-cat-card-body h4 { margin: 0; font-size: 13px; }
+.pv-cat-card-zh { margin: 2px 0; font-size: 11px; color: var(--muted); }
+.pv-cat-card-blurb { margin: 0; font-size: 11px; color: #334155; line-height: 1.45; }
+.pv-cat-faqs { display: flex; flex-direction: column; gap: 10px; }
+.pv-cat-faq { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; }
+.pv-cat-faq h5 { margin: 0 0 4px; font-size: 13px; }
+.pv-cat-faq p { margin: 0; font-size: 12px; color: #334155; line-height: 1.5; }
+.pv-cat-faq h6 { margin: 8px 0 2px; font-size: 12px; color: var(--ink); }
+.pv-cat-faq .pv-zh { color: var(--muted); }
+.pv-empty { font-size: 12px; color: var(--muted); font-style: italic; }
+.pv-cat-rels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pv-cat-rel { display: block; border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; text-decoration: none; color: inherit; }
+.pv-cat-rel:hover { border-color: var(--brand); background: #eff6ff; }
+.pv-cat-rel-tag { margin: 0 0 3px; font-size: 10px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .04em; }
+.pv-cat-rel h4 { margin: 0 0 3px; font-size: 13px; }
+.pv-cat-rel p { margin: 0; font-size: 11px; color: var(--muted); line-height: 1.45; }
+
 /* ---------- 编辑表单图片字段 + 缩略图 ---------- */
 .img-field { display: flex; gap: 14px; align-items: center; }
 .img-field input { flex: 1; }
