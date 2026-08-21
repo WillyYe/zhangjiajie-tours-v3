@@ -146,16 +146,32 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 const base = 'https://willyye.github.io/zhangjiajie-tours-v3';
 
 // category pages
+// 记录本次应当存在的页面 slug，循环结束后据此清理孤儿页（删除/改名分类、历史 schema 残留等）。
+const expectedSlugs = new Set();
+// 统一删除可能残留的旧页，避免线上显示过期内容
+function removeStale(slug, reason) {
+  const stale = path.join(OUT_DIR, slug + '.html');
+  if (fs.existsSync(stale)) { fs.unlinkSync(stale); console.log(`  ✓ removed stale hotels/${slug}.html (${reason})`); }
+}
+
 for (const cat of hotelCategories) {
   if (cat.hidden) {
     // 隐藏分类：删除其已生成的页面，彻底从站点移除
-    const stale = path.join(OUT_DIR, cat.slug + '.html');
-    if (fs.existsSync(stale)) { fs.unlinkSync(stale); console.log(`  ✓ removed hidden hotels/${cat.slug}.html`); }
+    removeStale(cat.slug, 'category hidden');
     continue;
   }
   const heroSlug = heroSlugFor(cat);
-  if (!validateImage(cat.heroImg, heroSlug)) continue;
+  if (!validateImage(cat.heroImg, heroSlug)) {
+    // hero 图缺失：删掉可能残留的旧页（否则线上会停留在上一次成功构建的内容）
+    removeStale(cat.slug, 'hero image missing');
+    continue;
+  }
   const visibleIds = cat.hotels.filter((id) => hotels[id] && !hotels[id].hidden);
+  if (!visibleIds.length) {
+    // 空分类（酒店被删光或全隐藏）：不再生成空白页，并清理旧页
+    removeStale(cat.slug, 'no visible hotels');
+    continue;
+  }
   visibleIds.forEach((id) => validateImage(hotels[id].img, id));
 
   const body = categoryBody(cat);
@@ -184,6 +200,18 @@ for (const cat of hotelCategories) {
   const dest = path.join(OUT_DIR, cat.slug + '.html');
   fs.writeFileSync(dest, html, 'utf8');
   console.log(`  ✓ wrote hotels/${cat.slug}.html (${html.length} bytes)`);
+  expectedSlugs.add(cat.slug);
+}
+
+// 孤儿页清理：删除 hotels/ 下所有不在 expectedSlugs 中的 .html。
+// 覆盖后台删除/改名分类后残留的旧页，以及历史 schema 生成过的酒店页（jimo/hetianye/...）。
+for (const f of fs.readdirSync(OUT_DIR)) {
+  if (!f.endsWith('.html')) continue;
+  const slug = f.slice(0, -5);
+  if (!expectedSlugs.has(slug)) {
+    fs.unlinkSync(path.join(OUT_DIR, f));
+    console.log(`  ✓ removed orphan hotels/${f} (not in current data)`);
+  }
 }
 
 // No hub page generated — categories are first-level.

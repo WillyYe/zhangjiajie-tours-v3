@@ -1,4 +1,4 @@
-import { getConfig, isConfigured, getFile, putFile } from './github.js';
+import { getConfig, isConfigured, getFile, putFile, getFileSha } from './github.js';
 import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor, renderPreview } from './modules/hotels.js';
 import { initResizers } from './resizer.js';
@@ -85,6 +85,35 @@ async function load() {
   }
 }
 
+// 保存前校验所有被引用的图片是否真实存在于仓库，避免发布破图
+// （分类 hero 缺失会导致 build 静默跳过整页；酒店主图缺失则卡片破图）。
+// 校验失败（网络/鉴权）不阻断保存，仅 404 缺失才拦截。
+async function validateReferencedImages() {
+  const fileExists = async (p) => {
+    try { return Boolean(await getFileSha(p)); } catch { return true; }
+  };
+  // 与 build-hotels.mjs 的 heroSlugFor 保持一致：优先按酒店 img 精确匹配，否则按文件名前缀 hotel-<slug>- 推断
+  const heroSlugFor = (cat) => {
+    const byImg = Object.keys(state.hotels).find((k) => state.hotels[k] && state.hotels[k].img === cat.heroImg);
+    if (byImg) return byImg;
+    const m = /^hotel-([a-z0-9-]+)-/.exec(cat.heroImg || '');
+    return m ? m[1] : null;
+  };
+  const missing = [];
+  for (const cat of state.categories) {
+    if (cat.hidden || !cat.heroImg) continue;
+    const slug = heroSlugFor(cat);
+    const p = `images/${slug ? slug + '/' : ''}${cat.heroImg}.webp`;
+    if (!(await fileExists(p))) missing.push(`分类「${cat.title || cat.slug}」封面图 ${p}`);
+  }
+  for (const [k, h] of Object.entries(state.hotels)) {
+    if (!h || h.hidden || !h.img) continue;
+    const p = `images/${k}/${h.img}.webp`;
+    if (!(await fileExists(p))) missing.push(`酒店「${h.zh || h.name || k}」主图 ${p}`);
+  }
+  return missing;
+}
+
 // ---------- Save ----------
 async function save() {
   if (!state.dirty) return;
@@ -95,6 +124,12 @@ async function save() {
   }
   saveBtn.disabled = true;
   try {
+    const missing = await validateReferencedImages();
+    if (missing.length) {
+      toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
+      saveBtn.disabled = false;
+      return;
+    }
     const edited = {};
     const hotelsBlock = state.blocks.find((b) => b.name === 'hotels');
     const catsBlock = state.blocks.find((b) => b.name === 'hotelCategories');
