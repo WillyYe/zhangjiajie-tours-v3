@@ -19,7 +19,7 @@ const FIELDS = [
 ];
 
 // 当前选中的 一级/二级/展开分类（UI 状态）
-const ui = { catSlug: null, hotelKey: null, openCat: null };
+const ui = { catSlug: null, hotelKey: null, openCat: null, view: 'hotel' };
 
 function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
@@ -434,6 +434,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
   ui.catSlug = tiers[0].slug;
   ui.hotelKey = tiers[0].hotels[0];
   ui.openCat = ui.catSlug; // 默认展开选中酒店所在分类
+  ui.view = 'cat'; // 方案 A：初始展示第一个分类的编辑表单（含 FAQ）
 
   const catBySlug = (slug) => tiers.find((c) => c.slug === slug);
   const catOfHotel = (key) => tiers.find((c) => c.hotels.includes(key));
@@ -489,6 +490,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       if (h.img && c.heroImg === h.img) c.heroImg = '';
     }
     if (ui.hotelKey === key) ui.hotelKey = null;
+    if (ui.view === 'hotel' && !ui.hotelKey) ui.view = 'cat';
     markDirty(); renderTree(); renderForm();
     if (usedByCats.length) notify(`已删除。提示：${usedByCats.map((c) => c.title).join('、')} 的分类封面图已清空（曾复用该酒店主图）。`, 'info');
   }
@@ -498,7 +500,10 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
     const i = categories.indexOf(cat);
     if (i >= 0) categories.splice(i, 1);
     if (ui.catSlug === cat.slug) { ui.catSlug = null; ui.openCat = null; }
-    markDirty(); renderTree(); renderForm();
+    ui.view = 'hotel';
+    markDirty(); renderTree();
+    if (!ui.hotelKey) { ui.hotelKey = tiers[0] && tiers[0].hotels[0]; ui.catSlug = ui.hotelKey ? catOfHotel(ui.hotelKey).slug : null; }
+    renderForm();
   }
   function reorderHotel(cat, srcKey, targetKey) {
     const arr = cat.hotels; if (!arr) return;
@@ -551,7 +556,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       hotels[keyV] = { name: nameV, zh: zhV, area: '', tier: '', img: '', alt: '', blurb: '', features: [] };
       if (!m.cat.hotels) m.cat.hotels = [];
       m.cat.hotels.push(keyV);
-      ui.hotelKey = keyV; ui.catSlug = m.cat.slug; ui.openCat = m.cat.slug;
+      ui.hotelKey = keyV; ui.catSlug = m.cat.slug; ui.openCat = m.cat.slug; ui.view = 'hotel';
       markDirty(); renderTree(); renderForm();
       mask.hidden = true;
       notify('已新增酒店（未保存，点保存并发布后生效）', 'info');
@@ -658,7 +663,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       m.cat.faq = m.faqItems
         .filter((it) => (it.q || '').trim() && (it.a || '').trim())
         .map((it) => ({ q: it.q.trim(), a: it.a.trim(), qZh: (it.qZh || '').trim(), aZh: (it.aZh || '').trim() }));
-      markDirty(); renderTree();
+      markDirty(); renderTree(); renderForm();
       mask.hidden = true;
       onSelectCat && onSelectCat(m.cat);
       notify('分类已更新（未保存，点保存并发布后生效）', 'info');
@@ -679,18 +684,18 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
         class: 'he-tree-cat-head',
         onclick: () => {
           if (open) {
+            // 折叠：退回酒店视图
             ui.openCat = null;
-            ui.hotelKey = null;
+            ui.view = 'hotel';
+            if (!ui.hotelKey) ui.hotelKey = tiers[0].hotels[0];
           } else {
+            // 展开：展示分类编辑表单（方案 A：表单与预览同层级，所见即所得）
             ui.openCat = c.slug;
-            if (!c.hotels.includes(ui.hotelKey)) {
-              ui.hotelKey = c.hotels[0];
-              ui.catSlug = c.slug;
-            }
+            ui.view = 'cat';
+            ui.catSlug = c.slug;
           }
           renderTree();
           renderForm();
-          onSelectCat && onSelectCat(c);
         },
       }, [
         el('span', { class: 'he-chevron', text: '▸' }),
@@ -740,6 +745,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
 
   function selectHotel(key) {
     ui.hotelKey = key;
+    ui.view = 'hotel';
     const cat = catOfHotel(key);
     ui.catSlug = cat ? cat.slug : ui.catSlug;
     ui.openCat = ui.catSlug; // 确保父分类展开（单开）
@@ -748,6 +754,11 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
   }
 
   function renderForm() {
+    if (ui.view === 'cat') { renderCatForm(); return; }
+    renderHotelForm();
+  }
+
+  function renderHotelForm() {
     formHost.replaceChildren();
     const h = hotels[ui.hotelKey];
     if (!h) {
@@ -786,6 +797,110 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
 
     // 初次/切换时同步右侧预览
     onSelect && onSelect(ui.hotelKey);
+  }
+
+  // 方案 A：分类级编辑表单（内联，含 FAQ 编辑器 + 跨链接简介），与右栏分类页预览同层级
+  function renderCatForm() {
+    const cat = catBySlug(ui.catSlug);
+    formHost.replaceChildren();
+    if (!cat) {
+      formHost.append(el('div', { class: 'he-empty', text: '请选择一个分类。' }));
+      return;
+    }
+    const sync = () => onSelectCat && onSelectCat(cat);
+
+    formHost.append(
+      el('div', { class: 'he-form-head' }, [
+        el('span', { class: 'he-form-zh', text: cat.title || '' }),
+        el('span', { class: 'he-form-key', text: 'category/' + cat.slug }),
+      ]),
+      el('div', { class: 'he-step', text: '③ 编辑分类 Edit' })
+    );
+
+    function catField(label, tip, key, type) {
+      const input = type === 'textarea' ? el('textarea', {}) : el('input', { type: 'text' });
+      input.value = cat[key] || '';
+      input.addEventListener('input', () => { cat[key] = input.value; markDirty(); sync(); });
+      return el('div', { class: 'field' }, [
+        el('label', {}, [label, el('span', { class: 'tip', text: ' ' + tip })]),
+        input,
+      ]);
+    }
+
+    const fieldDefs = [
+      ['标题 Title', '分类标题', 'title'],
+      ['标签 Tag', '如 Mountain Lodges', 'tag'],
+      ['Slug（影响 URL，谨慎）', '仅小写字母、数字和连字符', 'slug'],
+      ['封面图 Hero Image', 'webp 文件名（不含扩展名）', 'heroImg'],
+      ['封面 Alt', '英文 alt 描述', 'heroAlt'],
+      ['封面标签 Hero Tag', '如 Where to stay', 'heroTag'],
+      ['H1', '页面主标题', 'h1'],
+      ['副标题 Subtitle', 'H1 下方小字', 'subtitle', 'textarea'],
+      ['简介卡片 Hub Desc', '分类卡片描述', 'hubDesc', 'textarea'],
+      ['Meta Description', 'SEO 描述', 'metaDesc', 'textarea'],
+      ['导语 Intro', '分类页导语', 'intro', 'textarea'],
+      ['正文导语 Body Intro', '正文上方导语', 'bodyIntro', 'textarea'],
+      ['跨链接简介 Card Blurb (EN)', '“其他浏览方式”中本分类描述；留空则回退 Hub Desc', 'cardBlurb'],
+      ['跨链接简介 Card Blurb (ZH)', '中文描述', 'cardBlurbZh'],
+    ];
+    for (const [label, tip, key, type] of fieldDefs) {
+      formHost.append(catField(label, tip, key, type));
+    }
+
+    // FAQ 编辑器（内联）
+    const faqList = el('div', { class: 'faq-list' });
+    function renderFaq() {
+      faqList.replaceChildren();
+      cat.faq = cat.faq || [];
+      cat.faq.forEach((it, i) => {
+        const q = el('input', { type: 'text', value: it.q || '', placeholder: 'Question (EN)' });
+        const qZh = el('input', { type: 'text', value: it.qZh || '', placeholder: '问题 (ZH)' });
+        const a = el('textarea', { placeholder: 'Answer (EN)' }, it.a || '');
+        const aZh = el('textarea', { placeholder: '答案 (ZH)' }, it.aZh || '');
+        q.addEventListener('input', () => { cat.faq[i].q = q.value; markDirty(); sync(); });
+        qZh.addEventListener('input', () => { cat.faq[i].qZh = qZh.value; markDirty(); sync(); });
+        a.addEventListener('input', () => { cat.faq[i].a = a.value; markDirty(); sync(); });
+        aZh.addEventListener('input', () => { cat.faq[i].aZh = aZh.value; markDirty(); sync(); });
+        const del = iconBtn('🗑', '删除该条', () => { cat.faq.splice(i, 1); renderFaq(); markDirty(); sync(); });
+        const card = el('div', { class: 'faq-item', draggable: true }, [
+          el('div', { class: 'faq-item-head' }, [
+            el('span', { class: 'faq-grip', text: '⠿' }),
+            el('span', { class: 'faq-idx', text: 'Q' + (i + 1) }),
+            del,
+          ]),
+          fieldRow('问题 EN', q),
+          fieldRow('问题 ZH', qZh),
+          fieldRow('答案 EN', a),
+          fieldRow('答案 ZH', aZh),
+        ]);
+        card.addEventListener('dragstart', (e) => e.dataTransfer.setData('text/plain', String(i)));
+        card.addEventListener('dragover', (e) => e.preventDefault());
+        card.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
+          if (!isNaN(src) && src !== i) {
+            const [x] = cat.faq.splice(src, 1);
+            cat.faq.splice(i, 0, x);
+            renderFaq(); markDirty(); sync();
+          }
+        });
+        faqList.append(card);
+      });
+      if (!cat.faq.length) faqList.append(el('p', { class: 'faq-empty', text: '暂无常见问题，保存后该区块不在前端显示。' }));
+    }
+    renderFaq();
+    const addFaqBtn = el('button', {
+      type: 'button', class: 'btn btn-dashed', text: '+ 添加问题',
+      onclick: () => { cat.faq = cat.faq || []; cat.faq.push({ q: '', a: '', qZh: '', aZh: '' }); renderFaq(); markDirty(); sync(); },
+    });
+    formHost.append(el('div', { class: 'faq-section' }, [
+      el('p', { class: 'faq-section-title', text: 'FAQ 常见问题' }),
+      el('p', { class: 'faq-section-hint', text: '每条含中英文问题与答案；留空则前端不显示该区块。可拖拽排序、逐条删除。' }),
+      faqList,
+      addFaqBtn,
+    ]));
+
+    sync();
   }
 
   renderTree();
