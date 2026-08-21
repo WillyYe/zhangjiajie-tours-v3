@@ -289,6 +289,7 @@ for (const cat of hotelCategories) {
 for (const key of Object.keys(hotels)) {
   const h = hotels[key];
   if (!h || !h.detail) continue;
+  if (h.hidden) continue; // 后台隐藏的酒店：hub 卡片已不显示，其三级详情页也不应生成
   const cat = findCatOf(key);
   if (cat && cat.hidden) continue;
   if (!validateImage(h.img, key)) {
@@ -306,7 +307,7 @@ for (const key of Object.keys(hotels)) {
 // 孤儿页清理：删除 hotels/ 下所有不在 expectedSlugs ∪ detailSlugs 中的 .html。
 // expectedSlugs = 4 个分类页 + 含 detail 的酒店详情页（由本脚本生成）；detailSlugs = 含 detail 的酒店（兜底保护）。
 // 现在三级页由 hotels[key].detail 数据驱动生成；若某酒店被后台移除 detail 或改名，其旧静态页会被清理。
-const detailSlugs = new Set(Object.keys(hotels).filter((k) => hotels[k] && hotels[k].detail));
+const detailSlugs = new Set(Object.keys(hotels).filter((k) => hotels[k] && hotels[k].detail && !hotels[k].hidden));
 for (const f of fs.readdirSync(OUT_DIR)) {
   if (!f.endsWith('.html')) continue;
   const slug = f.slice(0, -5);

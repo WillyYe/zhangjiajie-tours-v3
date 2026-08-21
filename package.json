@@ -8,7 +8,10 @@
     "build:plan-guides": "node scripts/build-plan-guides.mjs",
     "build:experiences": "node scripts/build-experiences.mjs",
     "test:static": "node tests/static-audit.mjs",
-    "test:e2e": "node tests/browser-test.mjs"
+    "test:e2e": "node tests/browser-test.mjs",
+    "test:hotel": "node tests/hotel-detail-test.mjs",
+    "test:mapping": "node tests/data-mapping-test.mjs",
+    "test:admin": "node tests/admin-static-check.mjs"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.0",
