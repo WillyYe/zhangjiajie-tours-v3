@@ -17,6 +17,7 @@
     "test:top-attractions": "node tests/top-attractions-loop.mjs",
     "test:welcome": "node tests/welcome-loop.mjs",
     "test:nav": "node tests/nav-loop.mjs",
+    "cache-bust": "node scripts/cache-bust-admin.mjs",
     "test:preview": "node tests/preview-loop.mjs",
     "test:publish": "node tests/publish-loop.mjs"
   },

@@ -131,6 +131,27 @@
 
 <div id="toast" class="toast" hidden></div>
 
-<script type="module" src="app.js"></script>
+<!-- 缓存破坏：所有 ES 模块映射到 ?v=<content-hash>，入口 app.js 也带版本。
+     由 scripts/cache-bust-admin.mjs 在提交/CI 时注入真实 hash，避免「HTML 更新但 JS 仍是旧缓存」的混合态。 -->
+<script type="importmap" id="admin-importmap">
+{
+  "imports": {
+    "./github.js": "./github.js?v=c3d1f5df40",
+    "./imglib-core.js": "./imglib-core.js?v=c3d1f5df40",
+    "./mjs.js": "./mjs.js?v=c3d1f5df40",
+    "./modules/hero.js": "./modules/hero.js?v=c3d1f5df40",
+    "./modules/hotels.js": "./modules/hotels.js?v=c3d1f5df40",
+    "./modules/nav-render.js": "./modules/nav-render.js?v=c3d1f5df40",
+    "./modules/nav.js": "./modules/nav.js?v=c3d1f5df40",
+    "./modules/settings.js": "./modules/settings.js?v=c3d1f5df40",
+    "./modules/top-attractions-render.js": "./modules/top-attractions-render.js?v=c3d1f5df40",
+    "./modules/top-attractions.js": "./modules/top-attractions.js?v=c3d1f5df40",
+    "./modules/welcome-render.js": "./modules/welcome-render.js?v=c3d1f5df40",
+    "./modules/welcome.js": "./modules/welcome.js?v=c3d1f5df40",
+    "./resizer.js": "./resizer.js?v=c3d1f5df40"
+  }
+}
+</script>
+<script type="module" src="app.js?v=c3d1f5df40"></script>
 </body>
 </html>

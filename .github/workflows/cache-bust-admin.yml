@@ -1,0 +1,48 @@
+name: Cache-bust admin static assets
+
+# 后台是纯静态直接 serve 源分支的 admin/ 目录，不会被 rebuild-hotels.yml 重建。
+# 为避免「index.html 更新了但浏览器/CDN 仍用旧缓存 app.js」的混合态（表现为点击新放出的
+# 模块按钮报 "Cannot read properties of undefined (reading 'file')"），这里对所有后台 JS
+# 计算内容哈希，自动注入 admin/index.html 的 import map 与入口查询串。
+# 仅当 admin/** 或本脚本变更时触发；内容没变则 hash 不变、HTML 不变、不产生空 commit。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/**'
+      - 'scripts/cache-bust-admin.mjs'
+
+concurrency:
+  group: cache-bust-admin-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  bust:
+    name: Inject cache-bust hash into admin/index.html
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Inject cache-bust tags
+        run: node scripts/cache-bust-admin.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- admin/index.html; then
+            git add admin/index.html
+            git commit -m "chore: cache-bust admin assets [skip ci]"
+            git push
+          else
+            echo "No admin/index.html change."
+          fi
