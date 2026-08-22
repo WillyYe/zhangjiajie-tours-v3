@@ -8,11 +8,9 @@ export const hero = {
   h1Line1: 'Where Mountains',
   h1Line2: 'Float in the Clouds',
   desc: 'Discover the surreal sandstone peaks that inspired *Avatar*. Walk quiet streams beneath towering pillars, and see the real landscape behind the floating mountains — with local guides who know every trail.',
-  // 背景图：仅限 images/hero/ 目录（hero 模块独立图库），不放根目录或其他模块
-  bgImg: 'hero-tianzi-clouds',
+  bgImg: 'chunjingbiaoxi',
 };
 
-// ========== 欢迎区 Welcome（后台 📝 欢迎区 模块，待建） ==========
 export const welcome = {
   eyebrow: 'UNESCO World Heritage · Hunan Province, China',
   h2: 'Welcome to Zhangjiajie',
@@ -31,8 +29,6 @@ export const welcome = {
   bgImg: 'intro-bg',
 };
 
-// ========== 顶部导航 Nav（后台 🧭 顶部导航 模块，待建） ==========
-// items = 一级菜单；children = 二级子项（mega 下拉）。hidden=true 的菜单前台不渲染（用于无真实页面的占位）。
 export const siteNav = {
   items: [
     { label: 'Home', url: 'index.html', hidden: false, children: [] },
