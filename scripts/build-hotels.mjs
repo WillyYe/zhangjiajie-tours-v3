@@ -6,7 +6,9 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { hotels, hotelCategories } from '../hotels-data.mjs';
+import { hero as homeHero } from '../home-data.mjs';
 import { buildIndexNav, applyIndexNav } from './index-nav.mjs';
+import { applyHome } from './build-home.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -325,13 +327,14 @@ for (const f of fs.readdirSync(OUT_DIR)) {
 try {
   const INDEX = path.join(ROOT, 'index.html');
   if (fs.existsSync(INDEX)) {
-    const html = fs.readFileSync(INDEX, 'utf8');
-    const out = applyIndexNav(html, buildIndexNav(hotelCategories));
-    fs.writeFileSync(INDEX, out, 'utf8');
-    console.log('  ✓ rewrote index.html hotel-nav blocks (B4)');
+    let html = fs.readFileSync(INDEX, 'utf8');
+    html = applyIndexNav(html, buildIndexNav(hotelCategories));
+    html = applyHome(html, { hero: homeHero });
+    fs.writeFileSync(INDEX, html, 'utf8');
+    console.log('  ✓ rewrote index.html blocks (B4 hotel-nav + home hero)');
   }
 } catch (e) {
-  console.error('  ✗ index.html hotel-nav rewrite failed: ' + e.message);
+  console.error('  ✗ index.html rewrite failed: ' + e.message);
   process.exitCode = 1;
 }
 

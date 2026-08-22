@@ -12,7 +12,8 @@
     "test:hotel": "node tests/hotel-detail-test.mjs",
     "test:mapping": "node tests/data-mapping-test.mjs",
     "test:admin": "node tests/admin-static-check.mjs",
-    "test:index-nav": "node tests/index-nav-loop.mjs"
+    "test:index-nav": "node tests/index-nav-loop.mjs",
+    "test:home": "node tests/home-loop.mjs"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.0",

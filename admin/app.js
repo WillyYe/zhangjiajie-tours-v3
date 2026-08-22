@@ -1,6 +1,7 @@
 import { getConfig, isConfigured, getFile, putFile, getFileSha } from './github.js';
 import { parseMjs, rebuild } from './mjs.js';
-import { renderEditor, renderPreview, renderCategoryPreview, renderDetailPreview } from './modules/hotels.js';
+import { renderEditor as renderHotelsEditor, renderPreview as renderHotelCard, renderCategoryPreview, renderDetailPreview } from './modules/hotels.js';
+import { renderEditor as renderHeroEditor, renderPreview as renderHeroPreview } from './modules/hero.js';
 import { initResizers } from './resizer.js';
 import {
   initSettings,
@@ -9,18 +10,31 @@ import {
   setStatus as setSettingsStatus,
 } from './modules/settings.js';
 
-const FILE_PATH = 'hotels-data.mjs';
+// ---------- 模块注册表 ----------
+const MODULES = {
+  hotels: {
+    file: 'hotels-data.mjs',
+    title: '酒店 Hotels',
+    hint: '改完右侧实时预览，满意后点「保存并发布」即可上线。',
+  },
+  hero: {
+    file: 'home-data.mjs',
+    title: '首屏 Hero',
+    hint: '编辑首屏大图与文案，保存即上线。背景图仅限本模块图库。',
+  },
+};
 
 const state = {
+  module: 'hotels',
   preamble: '',
   blocks: [],
   hotels: null,
   categories: [],
+  hero: null,
   sha: null,
   dirty: false,
-  // 预览模式：'card' = 酒店卡片(默认)，'detail' = 三级详情页
+  // 酒店预览模式：'card' = 卡片(默认)，'detail' = 三级详情页
   previewMode: 'card',
-  // 当前编辑项：{ type: 'hotel'|'cat', key }
   selection: null,
 };
 
@@ -47,38 +61,14 @@ function toast(msg, type = '') {
 }
 window.__adminToast = toast;
 
-// ---------- Preview routing (🃏 卡片 / 📄 详情 切换) ----------
+// ---------- Preview tabs (🃏 卡片 / 📄 详情) ----------
 function setPreviewMode(mode) {
   state.previewMode = mode;
   for (const b of previewTabsEl.querySelectorAll('.ptab')) {
     b.classList.toggle('active', b.dataset.mode === mode);
   }
-  renderCurrentPreview();
+  renderPreviewForCurrent();
 }
-
-function renderCurrentPreview() {
-  const sel = state.selection;
-  if (!sel) return;
-  if (sel.type === 'cat') {
-    previewTabsEl.hidden = true;
-    previewTitleEl.textContent = '实时预览 · 分类页';
-    const cat = state.categories.find((c) => c.slug === sel.key);
-    if (cat) renderCategoryPreview(previewEl, cat, state.hotels, state.categories);
-    return;
-  }
-  // hotel
-  const h = state.hotels[sel.key];
-  const hasDetail = !!(h && h.detail);
-  previewTabsEl.hidden = !hasDetail;
-  if (hasDetail && state.previewMode === 'detail') {
-    previewTitleEl.textContent = '实时预览 · 三级详情页';
-    renderDetailPreview(previewEl, h, sel.key, state.categories);
-  } else {
-    previewTitleEl.textContent = '实时预览 · 酒店卡片';
-    renderPreview(previewEl, h, sel.key);
-  }
-}
-
 previewTabsEl.addEventListener('click', (e) => {
   const b = e.target.closest('.ptab');
   if (!b) return;
@@ -100,33 +90,28 @@ function setStatus(dirty) {
 }
 
 // ---------- Load ----------
-async function load() {
+async function loadModule(name) {
+  state.module = name;
   saveBtn.disabled = true;
+  const mod = MODULES[name];
   try {
-    const { text, sha } = await getFile(FILE_PATH);
+    const { text, sha } = await getFile(mod.file);
     const { preamble, blocks } = parseMjs(text);
-    const hotelsBlock = blocks.find((b) => b.name === 'hotels');
-    if (!hotelsBlock || !hotelsBlock.value) throw new Error('未在文件中找到 hotels 数据');
-    const catsBlock = blocks.find((b) => b.name === 'hotelCategories');
     state.preamble = preamble;
     state.blocks = blocks;
-    state.hotels = hotelsBlock.value;
-    state.categories = catsBlock ? catsBlock.value : [];
     state.sha = sha;
-    renderEditor(
-      editorEl,
-      state.hotels,
-      state.categories,
-      () => setStatus(true),
-      (key) => {
-        state.selection = { type: 'hotel', key };
-        renderCurrentPreview();
-      },
-      (cat) => {
-        state.selection = { type: 'cat', key: cat.slug };
-        renderCurrentPreview();
-      }
-    );
+    if (name === 'hotels') {
+      const hotelsBlock = blocks.find((b) => b.name === 'hotels');
+      const catsBlock = blocks.find((b) => b.name === 'hotelCategories');
+      state.hotels = hotelsBlock ? hotelsBlock.value : {};
+      state.categories = catsBlock ? catsBlock.value : [];
+      state.selection = null;
+    } else if (name === 'hero') {
+      const heroBlock = blocks.find((b) => b.name === 'hero');
+      state.hero = heroBlock ? heroBlock.value : {};
+    }
+    renderEditorForCurrent();
+    renderPreviewForCurrent();
     setStatus(false);
   } catch (e) {
     console.error(e);
@@ -136,14 +121,55 @@ async function load() {
   }
 }
 
-// 保存前校验所有被引用的图片是否真实存在于仓库，避免发布破图
-// （分类 hero 缺失会导致 build 静默跳过整页；酒店主图缺失则卡片破图）。
-// 校验失败（网络/鉴权）不阻断保存，仅 404 缺失才拦截。
-async function validateReferencedImages() {
-  const fileExists = async (p) => {
-    try { return Boolean(await getFileSha(p)); } catch { return true; }
-  };
-  // 与 build-hotels.mjs 的 heroSlugFor 保持一致：优先按酒店 img 精确匹配，否则按文件名前缀 hotel-<slug>- 推断
+// ---------- Editor ----------
+function renderEditorForCurrent() {
+  const mod = MODULES[state.module];
+  $('modTitle').textContent = mod.title;
+  $('modHint').textContent = mod.hint;
+  if (state.module === 'hotels') {
+    renderHotelsEditor(
+      editorEl, state.hotels, state.categories,
+      () => setStatus(true),
+      (key) => { state.selection = { type: 'hotel', key }; renderPreviewForCurrent(); },
+      (cat) => { state.selection = { type: 'cat', key: cat.slug }; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'hero') {
+    renderHeroEditor(editorEl, state.hero, () => setStatus(true));
+  }
+}
+
+// ---------- Preview routing ----------
+function renderPreviewForCurrent() {
+  if (state.module === 'hotels') {
+    const sel = state.selection;
+    if (!sel) { previewTabsEl.hidden = true; previewTitleEl.textContent = '实时预览'; previewEl.replaceChildren(); return; }
+    if (sel.type === 'cat') {
+      previewTabsEl.hidden = true;
+      previewTitleEl.textContent = '实时预览 · 分类页';
+      const cat = state.categories.find((c) => c.slug === sel.key);
+      if (cat) renderCategoryPreview(previewEl, cat, state.hotels, state.categories);
+      return;
+    }
+    const h = state.hotels[sel.key];
+    const hasDetail = !!(h && h.detail);
+    previewTabsEl.hidden = !hasDetail;
+    if (hasDetail && state.previewMode === 'detail') {
+      previewTitleEl.textContent = '实时预览 · 三级详情页';
+      renderDetailPreview(previewEl, h, sel.key, state.categories);
+    } else {
+      previewTitleEl.textContent = '实时预览 · 酒店卡片';
+      renderHotelCard(previewEl, h, sel.key);
+    }
+  } else if (state.module === 'hero') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 首屏';
+    renderHeroPreview(previewEl, state.hero);
+  }
+}
+
+// 酒店保存前校验图片引用
+async function validateHotelsImages() {
+  const fileExists = async (p) => { try { return Boolean(await getFileSha(p)); } catch { return true; } };
   const heroSlugFor = (cat) => {
     const byImg = Object.keys(state.hotels).find((k) => state.hotels[k] && state.hotels[k].img === cat.heroImg);
     if (byImg) return byImg;
@@ -165,7 +191,6 @@ async function validateReferencedImages() {
   return missing;
 }
 
-// ---------- Save ----------
 async function save() {
   if (!state.dirty) return;
   if (!getConfig().token) {
@@ -175,20 +200,26 @@ async function save() {
   }
   saveBtn.disabled = true;
   try {
-    const missing = await validateReferencedImages();
-    if (missing.length) {
-      toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
-      saveBtn.disabled = false;
-      return;
+    if (state.module === 'hotels') {
+      const missing = await validateHotelsImages();
+      if (missing.length) {
+        toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
+        saveBtn.disabled = false;
+        return;
+      }
+      const edited = {};
+      const hotelsBlock = state.blocks.find((b) => b.name === 'hotels');
+      const catsBlock = state.blocks.find((b) => b.name === 'hotelCategories');
+      if (hotelsBlock) edited.hotels = state.hotels;
+      if (catsBlock) edited.hotelCategories = state.categories;
+      const newText = rebuild(state.preamble, state.blocks, edited);
+      const { sha } = await putFile(MODULES.hotels.file, newText, state.sha, 'Update hotels & categories via admin');
+      state.sha = sha;
+    } else if (state.module === 'hero') {
+      const newText = rebuild(state.preamble, state.blocks, { hero: state.hero });
+      const { sha } = await putFile(MODULES.hero.file, newText, state.sha, 'Update hero via admin');
+      state.sha = sha;
     }
-    const edited = {};
-    const hotelsBlock = state.blocks.find((b) => b.name === 'hotels');
-    const catsBlock = state.blocks.find((b) => b.name === 'hotelCategories');
-    if (hotelsBlock) edited.hotels = state.hotels;
-    if (catsBlock) edited.hotelCategories = state.categories;
-    const newText = rebuild(state.preamble, state.blocks, edited);
-    const { sha } = await putFile(FILE_PATH, newText, state.sha, 'Update hotels & categories via admin');
-    state.sha = sha;
     setStatus(false);
     toast('已保存并发布 🎉', 'ok');
   } catch (e) {
@@ -201,14 +232,14 @@ async function save() {
 // ---------- Wire up ----------
 initSettings({ toast });
 $('saveBtn').addEventListener('click', save);
-$('reloadBtn').addEventListener('click', load);
+$('reloadBtn').addEventListener('click', () => loadModule(state.module));
 
 // 设置保存成功后刷新主内容
 let settingsSavedFired = false;
 document.addEventListener('settings:saved', () => {
   if (!settingsSavedFired) {
     settingsSavedFired = true;
-    if (!state.hotels) load();
+    loadModule(state.module);
     setTimeout(() => (settingsSavedFired = false), 500);
   }
 });
@@ -218,8 +249,9 @@ document.querySelectorAll('.module').forEach((btn) => {
   if (btn.disabled) return;
   btn.addEventListener('click', () => {
     const mod = btn.dataset.module;
-    if (mod === 'hotels') return; // 当前唯一可用
-    toast('该模块规划中，敬请期待');
+    if (mod === state.module) return;
+    document.querySelectorAll('.module').forEach((b) => b.classList.toggle('active', b === btn));
+    loadModule(mod);
   });
 });
 
@@ -232,6 +264,6 @@ document.querySelectorAll('.module').forEach((btn) => {
     openSettings();
     setSettingsStatus('仓库与分支已预填默认值，填入 Token 后点保存即可。', 'idle');
   } else {
-    load();
+    loadModule('hotels');
   }
 })();
