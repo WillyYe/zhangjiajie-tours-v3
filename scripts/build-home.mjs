@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { buildTopAttractionsHtml, applyTopAttractions } from './build-top-attractions.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -45,17 +46,18 @@ export function applyHero(html, hero) {
   return html.replace(/<!--HOME:HERO:START-->[\s\S]*?<!--HOME:HERO:END-->/, `<!--HOME:HERO:START-->\n${block}\n  <!--HOME:HERO:END-->`);
 }
 
-// 调度：当前仅 hero；welcome / siteNav 后续模块接入（保持单一入口）
+// 调度：hero + topAttractions；welcome / siteNav 后续模块接入（保持单一入口）
 export function applyHome(html, data) {
   let out = html;
   if (data && data.hero) out = applyHero(out, data.hero);
+  if (data && data.topAttractions) out = applyTopAttractions(out, data.topAttractions);
   return out;
 }
 
 // CLI：node scripts/build-home.mjs 直接重写 index.html（供手动/串联调用）
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { hero } = await import('../home-data.mjs');
+  const { hero, topAttractions } = await import('../home-data.mjs');
   const html = fs.readFileSync(INDEX, 'utf8');
-  fs.writeFileSync(INDEX, applyHome(html, { hero }), 'utf8');
-  console.log('  ✓ rewrote index.html hero block (build-home)');
+  fs.writeFileSync(INDEX, applyHome(html, { hero, topAttractions }), 'utf8');
+  console.log('  ✓ rewrote index.html hero + top-attractions blocks (build-home)');
 }

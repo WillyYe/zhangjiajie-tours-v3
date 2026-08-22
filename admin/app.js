@@ -2,6 +2,8 @@ import { getConfig, isConfigured, getFile, putFile, getFileSha } from './github.
 import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor as renderHotelsEditor, renderPreview as renderHotelCard, renderCategoryPreview, renderDetailPreview } from './modules/hotels.js';
 import { renderEditor as renderHeroEditor, renderPreview as renderHeroPreview } from './modules/hero.js';
+import { renderEditor as renderTopAttractionsEditor, renderPreview as renderTopAttractionsPreview } from './modules/top-attractions.js';
+import { listTopAttractionImages } from './modules/top-attractions-render.js';
 import { initResizers } from './resizer.js';
 import {
   initSettings,
@@ -22,6 +24,11 @@ const MODULES = {
     title: '首屏 Hero',
     hint: '编辑首屏大图与文案，保存即上线。背景图仅限本模块图库。',
   },
+  topAttractions: {
+    file: 'home-data.mjs',
+    title: '🏞 景点 Top Attractions',
+    hint: '编辑首页景点卡片，保存即上线。图片仅限本模块图库 images/top-attractions/，不与其他模块混用。',
+  },
 };
 
 const state = {
@@ -31,6 +38,8 @@ const state = {
   hotels: null,
   categories: [],
   hero: null,
+  topAttractions: null,
+  topAttractionsSel: { type: 'block' },
   sha: null,
   dirty: false,
   // 酒店预览模式：'card' = 卡片(默认)，'detail' = 三级详情页
@@ -109,6 +118,10 @@ async function loadModule(name) {
     } else if (name === 'hero') {
       const heroBlock = blocks.find((b) => b.name === 'hero');
       state.hero = heroBlock ? heroBlock.value : {};
+    } else if (name === 'topAttractions') {
+      const taBlock = blocks.find((b) => b.name === 'topAttractions');
+      state.topAttractions = taBlock ? taBlock.value : { eyebrow: '', title: '', subtitle: '', items: [] };
+      state.topAttractionsSel = { type: 'block' };
     }
     renderEditorForCurrent();
     renderPreviewForCurrent();
@@ -135,6 +148,12 @@ function renderEditorForCurrent() {
     );
   } else if (state.module === 'hero') {
     renderHeroEditor(editorEl, state.hero, () => { setStatus(true); renderPreviewForCurrent(); });
+  } else if (state.module === 'topAttractions') {
+    renderTopAttractionsEditor(
+      editorEl, state.topAttractions,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (sel) => { state.topAttractionsSel = sel; renderPreviewForCurrent(); },
+    );
   }
 }
 
@@ -164,6 +183,10 @@ function renderPreviewForCurrent() {
     previewTabsEl.hidden = true;
     previewTitleEl.textContent = '实时预览 · 首屏';
     renderHeroPreview(previewEl, state.hero);
+  } else if (state.module === 'topAttractions') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 景点卡片';
+    renderTopAttractionsPreview(previewEl, state.topAttractions, state.topAttractionsSel || { type: 'block' });
   }
 }
 
@@ -187,6 +210,16 @@ async function validateHotelsImages() {
     if (!h || h.hidden || !h.img) continue;
     const p = `images/${k}/${h.img}.webp`;
     if (!(await fileExists(p))) missing.push(`酒店「${h.zh || h.name || k}」主图 ${p}`);
+  }
+  return missing;
+}
+
+// 景点保存前校验图片引用（仅可见卡片，hidden 不产生死链）
+async function validateTopAttractionImages() {
+  const fileExists = async (p) => { try { return Boolean(await getFileSha(p)); } catch { return true; } };
+  const missing = [];
+  for (const p of listTopAttractionImages(state.topAttractions)) {
+    if (!(await fileExists(p))) missing.push(`景点卡片图 ${p}`);
   }
   return missing;
 }
@@ -218,6 +251,16 @@ async function save() {
     } else if (state.module === 'hero') {
       const newText = rebuild(state.preamble, state.blocks, { hero: state.hero });
       const { sha } = await putFile(MODULES.hero.file, newText, state.sha, 'Update hero via admin');
+      state.sha = sha;
+    } else if (state.module === 'topAttractions') {
+      const missing = await validateTopAttractionImages();
+      if (missing.length) {
+        toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
+        saveBtn.disabled = false;
+        return;
+      }
+      const newText = rebuild(state.preamble, state.blocks, { topAttractions: state.topAttractions });
+      const { sha } = await putFile(MODULES.topAttractions.file, newText, state.sha, 'Update topAttractions via admin');
       state.sha = sha;
     }
     setStatus(false);

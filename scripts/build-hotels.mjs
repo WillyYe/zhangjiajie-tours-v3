@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { hotels, hotelCategories } from '../hotels-data.mjs';
-import { hero as homeHero } from '../home-data.mjs';
+import { hero as homeHero, topAttractions } from '../home-data.mjs';
 import { buildIndexNav, applyIndexNav } from './index-nav.mjs';
 import { applyHome } from './build-home.mjs';
 
@@ -329,7 +329,7 @@ try {
   if (fs.existsSync(INDEX)) {
     let html = fs.readFileSync(INDEX, 'utf8');
     html = applyIndexNav(html, buildIndexNav(hotelCategories));
-    html = applyHome(html, { hero: homeHero });
+    html = applyHome(html, { hero: homeHero, topAttractions });
     fs.writeFileSync(INDEX, html, 'utf8');
     console.log('  ✓ rewrote index.html blocks (B4 hotel-nav + home hero)');
   }

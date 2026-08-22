@@ -14,6 +14,7 @@
     "test:admin": "node tests/admin-static-check.mjs",
     "test:index-nav": "node tests/index-nav-loop.mjs",
     "test:home": "node tests/home-loop.mjs",
+    "test:top-attractions": "node tests/top-attractions-loop.mjs",
     "test:preview": "node tests/preview-loop.mjs",
     "test:publish": "node tests/publish-loop.mjs"
   },
