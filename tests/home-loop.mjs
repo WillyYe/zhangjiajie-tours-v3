@@ -39,7 +39,8 @@ try {
   const html = fs.readFileSync(INDEX, 'utf8');
   const out = applyHero(html, heroData);
   assert(/<!--HOME:HERO:START-->/.test(out) && /<!--HOME:HERO:END-->/.test(out), '① applyHero 保留 HOME:HERO 标记');
-  assert(out.includes("url('images/hero/hero-tianzi-clouds.webp')"), '① hero 背景图指向 images/hero/ 模块目录');
+  // 检查 url 指向模块目录 images/hero/（与 bgImg 解耦，运营改 bgImg 仍过）
+  assert(/url\('images\/hero\/[^']+'\)/.test(out), '① hero 背景图指向 images/hero/ 模块目录');
   assert(!/url\('images\/hero-tianzi-clouds\.webp'\)/.test(html), '① index.html 无遗留根目录 hero 背景引用');
 } catch (e) { no('① applyHero 失败', e.message); }
 

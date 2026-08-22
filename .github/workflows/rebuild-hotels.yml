@@ -1,15 +1,17 @@
-name: Rebuild hotel pages
+name: Rebuild front-end pages (hotels + home hero)
 
-# 当后台通过 GitHub Contents API 修改 hotels-data.mjs 后，
-# 自动重新生成静态 hotels/*.html，避免前端显示旧内容。
+# 当后台通过 GitHub Contents API 修改数据文件（hotels-data.mjs 或 home-data.mjs）后，
+# 自动重新生成静态 HTML（hotels/*.html、index.html 的酒店导航 + 首屏 Hero 区块），
+# 避免前端显示旧内容。新增数据文件时把路径加进 paths 即可。
 on:
   push:
     branches: [main]
     paths:
       - 'hotels-data.mjs'
+      - 'home-data.mjs'
 
 concurrency:
-  group: rebuild-hotels-${{ github.ref }}
+  group: rebuild-front-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -17,7 +19,7 @@ permissions:
 
 jobs:
   build:
-    name: Regenerate hotels/*.html
+    name: Regenerate front-end pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,17 +30,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build hotel pages
+      - name: Build front-end pages
         run: node scripts/build-hotels.mjs
 
       - name: Commit and push regenerated pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- hotels/; then
-            echo "No hotel HTML changes to commit."
-            exit 0
+          changed=0
+          if ! git diff --quiet -- hotels/ index.html; then
+            git add hotels/ index.html
+            changed=1
           fi
-          git add hotels/
-          git commit -m "chore: rebuild hotels/*.html from hotels-data.mjs [skip ci]"
-          git push
+          if [ "$changed" = "1" ]; then
+            git commit -m "chore: rebuild hotels/*.html + index.html from data files [skip ci]"
+            git push
+          else
+            echo "No front-end changes to commit."
+          fi
