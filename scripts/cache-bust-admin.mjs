@@ -46,15 +46,28 @@ for (const f of files) {
 let html = fs.readFileSync(INDEX, 'utf8');
 const before = html;
 
-// 注入 import map（占位 __ADMIN_IMPORTMAP__）→ 合法 JSON
+// 首次运行：占位符替换（新鲜 checkout 时 index.html 仍含占位符）
 if (html.includes('__ADMIN_IMPORTMAP__')) {
   const json = JSON.stringify({ imports }, null, 2);
   html = html.replace('__ADMIN_IMPORTMAP__', () => json);
 }
-
-// 入口脚本查询串占位 → 真实 hash
 if (html.includes('__ADMIN_CACHE__')) {
   html = html.replace(/app\.js\?__ADMIN_CACHE__/g, `app.js?v=${tag}`);
+}
+
+// ⚠️ 关键修复：首次注入后占位符已消失，必须始终按新哈希刷新，否则改动永不生效。
+// 入口脚本查询串：app.js?v=<旧> → app.js?v=<新>
+html = html.replace(/app\.js\?v=[a-f0-9]+/g, `app.js?v=${tag}`);
+
+// import map：整块重建 JSON（定位 <script type="importmap" id="admin-importmap"> … </script>）
+const IM_OPEN = '<script type="importmap" id="admin-importmap">';
+const imStart = html.indexOf(IM_OPEN);
+if (imStart !== -1) {
+  const imClose = html.indexOf('</script>', imStart);
+  if (imClose !== -1) {
+    const json = JSON.stringify({ imports }, null, 2);
+    html = html.slice(0, imStart + IM_OPEN.length) + '\n' + json + '\n' + html.slice(imClose);
+  }
 }
 
 if (html !== before) {

@@ -6,7 +6,7 @@ const STORAGE_KEY = 'admin-resizer-widths';
 
 const CONFIG = {
   sidebar: { selector: '.sidebar', min: 180, max: 380, default: 248, direction: 1 },
-  preview: { selector: '.preview', min: 300, max: 800, default: 460, direction: -1 },
+  preview: { selector: '.preview', min: 320, max: 1000, default: 560, direction: -1 },
   tree:    { selector: '.he-tree', min: 150, max: 360, default: 210, direction: 1 },
 };
 

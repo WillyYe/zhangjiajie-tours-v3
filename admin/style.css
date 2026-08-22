@@ -212,10 +212,15 @@ body {
 .he-form-host .feature-row .del { width: 46px; font-size: 18px; }
 .he-form-host .add-feature { font-size: 14px; padding: 10px 14px; }
 .preview {
-  flex: none; width: 460px;
+  flex: none; width: 560px;
   border-left: 1px solid var(--line); background: #f8fafc;
-  padding: 24px; overflow: auto;
+  padding: 24px;
+  display: flex; flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 }
+/* 预览主体：弹性撑满 .preview 的剩余高度，使内部 iframe 的 height:100% 有可解析的父高（修复塌缩成 ~150px 小窗） */
+.preview > #preview { flex: 1 1 auto; min-height: 0; overflow: auto; }
 .preview h3 { margin: 0 0 16px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
 .preview-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 16px; }
 .preview-head h3 { margin: 0; }
@@ -540,8 +545,8 @@ body.resizing, body.resizing * {
 .status-ok { color: #16a34a; font-weight: 500; }
 .status-err { color: #b42318; font-weight: 500; }
 
-/* ---------- 三级详情页 实时预览（iframe srcdoc） ---------- */
-.pv-detail-iframe { display: block; width: 100%; height: calc(100vh - 120px); border: 0; border-radius: 12px; background: #fff; }
+/* ---------- 三级详情页 / 景点 / 导航 / 欢迎区 实时预览（iframe srcdoc） ---------- */
+.pv-detail-iframe { display: block; width: 100%; height: 100%; border: 0; border-radius: 12px; background: #fff; }
 .preview.detail-mode { padding: 0; width: 580px; }
 .pv-loading { font-size: 13px; color: var(--muted); padding: 20px; }
 
