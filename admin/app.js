@@ -3,6 +3,8 @@ import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor as renderHotelsEditor, renderPreview as renderHotelCard, renderCategoryPreview, renderDetailPreview } from './modules/hotels.js';
 import { renderEditor as renderHeroEditor, renderPreview as renderHeroPreview } from './modules/hero.js';
 import { renderEditor as renderTopAttractionsEditor, renderPreview as renderTopAttractionsPreview } from './modules/top-attractions.js';
+import { renderEditor as renderWelcomeEditor, renderPreview as renderWelcomePreview } from './modules/welcome.js';
+import { renderEditor as renderNavEditor, renderPreview as renderNavPreview } from './modules/nav.js';
 import { listTopAttractionImages } from './modules/top-attractions-render.js';
 import { initResizers } from './resizer.js';
 import {
@@ -29,6 +31,16 @@ const MODULES = {
     title: '🏞 景点 Top Attractions',
     hint: '编辑首页景点卡片，保存即上线。图片仅限本模块图库 images/top-attractions/，不与其他模块混用。',
   },
+  welcome: {
+    file: 'home-data.mjs',
+    title: '欢迎区 Welcome',
+    hint: '编辑欢迎区的标题、介绍段落与数据指标，保存即上线。背景图仅限本模块图库 images/welcome/。',
+  },
+  nav: {
+    file: 'home-data.mjs',
+    title: '🧭 顶部导航 Nav',
+    hint: '编辑首页顶部导航菜单，保存即上线。隐藏项前台不渲染；Hotels 项自动输出酒店二级菜单。',
+  },
 };
 
 const state = {
@@ -40,6 +52,10 @@ const state = {
   hero: null,
   topAttractions: null,
   topAttractionsSel: { type: 'block' },
+  welcome: null,
+  welcomeSel: { type: 'block' },
+  nav: null,
+  navSel: { type: 'block' },
   sha: null,
   dirty: false,
   // 酒店预览模式：'card' = 卡片(默认)，'detail' = 三级详情页
@@ -122,6 +138,15 @@ async function loadModule(name) {
       const taBlock = blocks.find((b) => b.name === 'topAttractions');
       state.topAttractions = taBlock ? taBlock.value : { eyebrow: '', title: '', subtitle: '', items: [] };
       state.topAttractionsSel = { type: 'block' };
+    } else if (name === 'welcome') {
+      const wBlock = blocks.find((b) => b.name === 'welcome');
+      state.welcome = wBlock ? wBlock.value : { eyebrow: '', h2: '', paras: [], stats: [], bgImg: '' };
+      state.welcomeSel = { type: 'block' };
+    } else if (name === 'nav') {
+      const navBlock = blocks.find((b) => b.name === 'siteNav');
+      state.nav = navBlock ? navBlock.value : { items: [] };
+      if (!Array.isArray(state.nav.items)) state.nav.items = [];
+      state.navSel = { type: 'block' };
     }
     renderEditorForCurrent();
     renderPreviewForCurrent();
@@ -153,6 +178,18 @@ function renderEditorForCurrent() {
       editorEl, state.topAttractions,
       () => { setStatus(true); renderPreviewForCurrent(); },
       (sel) => { state.topAttractionsSel = sel; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'welcome') {
+    renderWelcomeEditor(
+      editorEl, state.welcome,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (sel) => { state.welcomeSel = sel; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'nav') {
+    renderNavEditor(
+      editorEl, state.nav,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (sel) => { state.navSel = sel; renderPreviewForCurrent(); },
     );
   }
 }
@@ -187,6 +224,14 @@ function renderPreviewForCurrent() {
     previewTabsEl.hidden = true;
     previewTitleEl.textContent = '实时预览 · 景点卡片';
     renderTopAttractionsPreview(previewEl, state.topAttractions, state.topAttractionsSel || { type: 'block' });
+  } else if (state.module === 'welcome') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 欢迎区';
+    renderWelcomePreview(previewEl, state.welcome, state.welcomeSel || { type: 'block' });
+  } else if (state.module === 'nav') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 顶部导航';
+    renderNavPreview(previewEl, state.nav, state.navSel || { type: 'block' });
   }
 }
 
@@ -261,6 +306,14 @@ async function save() {
       }
       const newText = rebuild(state.preamble, state.blocks, { topAttractions: state.topAttractions });
       const { sha } = await putFile(MODULES.topAttractions.file, newText, state.sha, 'Update topAttractions via admin');
+      state.sha = sha;
+    } else if (state.module === 'welcome') {
+      const newText = rebuild(state.preamble, state.blocks, { welcome: state.welcome });
+      const { sha } = await putFile(MODULES.welcome.file, newText, state.sha, 'Update welcome via admin');
+      state.sha = sha;
+    } else if (state.module === 'nav') {
+      const newText = rebuild(state.preamble, state.blocks, { siteNav: state.nav });
+      const { sha } = await putFile(MODULES.nav.file, newText, state.sha, 'Update siteNav via admin');
       state.sha = sha;
     }
     setStatus(false);

@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { hotels, hotelCategories } from '../hotels-data.mjs';
-import { hero as homeHero, topAttractions } from '../home-data.mjs';
+import { hero as homeHero, topAttractions, welcome, siteNav } from '../home-data.mjs';
 import { buildIndexNav, applyIndexNav } from './index-nav.mjs';
 import { applyHome } from './build-home.mjs';
 
@@ -328,8 +328,10 @@ try {
   const INDEX = path.join(ROOT, 'index.html');
   if (fs.existsSync(INDEX)) {
     let html = fs.readFileSync(INDEX, 'utf8');
+    // 顺序关键：先 applyHome/applyNav 生成 HOME:NAV 与 HOTEL-NAV 占位，
+    // 再 applyIndexNav 填充 HOTEL-NAV（酒店二级菜单），否则会被 applyNav 清空。
+    html = applyHome(html, { hero: homeHero, topAttractions, welcome, siteNav });
     html = applyIndexNav(html, buildIndexNav(hotelCategories));
-    html = applyHome(html, { hero: homeHero, topAttractions });
     fs.writeFileSync(INDEX, html, 'utf8');
     console.log('  ✓ rewrote index.html blocks (B4 hotel-nav + home hero)');
   }
