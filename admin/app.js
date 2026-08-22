@@ -129,12 +129,12 @@ function renderEditorForCurrent() {
   if (state.module === 'hotels') {
     renderHotelsEditor(
       editorEl, state.hotels, state.categories,
-      () => setStatus(true),
+      () => { setStatus(true); renderPreviewForCurrent(); },
       (key) => { state.selection = { type: 'hotel', key }; renderPreviewForCurrent(); },
       (cat) => { state.selection = { type: 'cat', key: cat.slug }; renderPreviewForCurrent(); },
     );
   } else if (state.module === 'hero') {
-    renderHeroEditor(editorEl, state.hero, () => setStatus(true));
+    renderHeroEditor(editorEl, state.hero, () => { setStatus(true); renderPreviewForCurrent(); });
   }
 }
 
