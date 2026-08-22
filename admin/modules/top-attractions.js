@@ -344,3 +344,34 @@ export function renderPreview(container, d, selection) {
   }, { once: true });
   iframe.srcdoc = doc;
 }
+
+// ============================================================
+// 详情页预览：渲染已有的独立详情页 attractions/<slug>.html（只读，不编辑详情内容）
+// 与酒店「三级详情页」预览同理，但景点详情页是独立部署页面，直接 fetch 线上真实页面注入 iframe。
+// 详情页资源用 ../styles、../images（相对 attractions/ 子目录），在 srcdoc（基址 /admin/）下解析正确。
+// ============================================================
+export async function renderAttractionDetailPreview(container, slug) {
+  container.replaceChildren();
+  if (!slug) {
+    container.replaceChildren(el('div', { class: 'pv-loading', text: '未选择景点卡片，无法预览详情页。' }));
+    return;
+  }
+  const iframe = el('iframe', {
+    class: 'pv-detail-iframe',
+    title: 'Attraction detail preview · ' + slug,
+    style: 'width:100%;height:100%;border:0;background:#fff',
+  });
+  container.append(iframe);
+  const loading = el('div', { class: 'pv-loading', text: '加载详情页…' });
+  container.append(loading);
+  try {
+    const res = await fetch(`../attractions/${encodeURIComponent(slug)}.html`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('not found (' + res.status + ')');
+    const html = await res.text();
+    loading.remove();
+    iframe.srcdoc = html;
+  } catch (e) {
+    loading.remove();
+    container.replaceChildren(el('div', { class: 'pv-loading', text: `暂无「${slug}」的详情页（attractions/${slug}.html 不存在或未部署）。` }));
+  }
+}

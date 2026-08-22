@@ -2,7 +2,7 @@ import { getConfig, isConfigured, getFile, putFile, getFileSha } from './github.
 import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor as renderHotelsEditor, renderPreview as renderHotelCard, renderCategoryPreview, renderDetailPreview } from './modules/hotels.js';
 import { renderEditor as renderHeroEditor, renderPreview as renderHeroPreview } from './modules/hero.js';
-import { renderEditor as renderTopAttractionsEditor, renderPreview as renderTopAttractionsPreview } from './modules/top-attractions.js';
+import { renderEditor as renderTopAttractionsEditor, renderPreview as renderTopAttractionsPreview, renderAttractionDetailPreview } from './modules/top-attractions.js';
 import { renderEditor as renderWelcomeEditor, renderPreview as renderWelcomePreview } from './modules/welcome.js';
 import { renderEditor as renderNavEditor, renderPreview as renderNavPreview } from './modules/nav.js';
 import { listTopAttractionImages } from './modules/top-attractions-render.js';
@@ -221,9 +221,19 @@ function renderPreviewForCurrent() {
     previewTitleEl.textContent = '实时预览 · 首屏';
     renderHeroPreview(previewEl, state.hero);
   } else if (state.module === 'topAttractions') {
-    previewTabsEl.hidden = true;
-    previewTitleEl.textContent = '实时预览 · 景点卡片';
-    renderTopAttractionsPreview(previewEl, state.topAttractions, state.topAttractionsSel || { type: 'block' });
+    const sel = state.topAttractionsSel || { type: 'block' };
+    const isCard = sel.type === 'card' && !!state.topAttractions.items[sel.index];
+    const isDetail = isCard && state.previewMode === 'detail';
+    // 仅选中某张景点卡片时才显示 卡片/详情 切换；区块设置（block）模式只有卡片预览
+    previewTabsEl.hidden = !isCard;
+    if (isDetail) {
+      previewTitleEl.textContent = '实时预览 · 景点详情页';
+      const slug = state.topAttractions.items[sel.index].slug;
+      renderAttractionDetailPreview(previewEl, slug);
+    } else {
+      previewTitleEl.textContent = '实时预览 · 景点卡片';
+      renderTopAttractionsPreview(previewEl, state.topAttractions, sel);
+    }
   } else if (state.module === 'welcome') {
     previewTabsEl.hidden = true;
     previewTitleEl.textContent = '实时预览 · 欢迎区';
