@@ -35,7 +35,12 @@ ${megaLinks}
   ).join('\n');
 
   const cards = vis.map((c) => {
-    const img = `images/${imgName(c.cardImg)}`;
+    // cardImg 形如 `hotel-jimo-1`，物理目录为文件名前缀 `hotel-<dir>-` 中的 <dir>
+    // （与 build-hotels.mjs 的 heroSlugFor 推断规则一致；分类 slug 如 mountain-lodges
+    // 并不等于图片目录 jimo，不能用 c.slug）。fallback 到 c.slug 仅作兜底。
+    const m = /^hotel-([a-z0-9-]+)-/.exec(c.cardImg || '');
+    const dir = (m && m[1]) || c.slug;
+    const img = `images/${dir}/${imgName(c.cardImg)}`;
     return `        <a href="hotels/${c.slug}.html" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
           <img src="${img}" alt="${escAttr(c.cardAlt)}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
           <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>

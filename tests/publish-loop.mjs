@@ -64,7 +64,11 @@ try {
   //     这次验证只关注 hero 段能否被 build 写到 index.html，不用全量 build
   fs.cpSync(path.join(ROOT, 'home-data.mjs'), path.join(tmp, 'home-data.mjs'));
   fs.cpSync(path.join(ROOT, 'index.html'), path.join(tmp, 'index.html'));
-  fs.cpSync(path.join(ROOT, 'scripts/build-home.mjs'), path.join(tmp, 'scripts/build-home.mjs'));
+  // 复制整棵 scripts/ 与 admin/modules/，使 build-home.mjs 的全部相对 import
+  // （build-top-attractions.mjs、admin/modules/*.js）在 /tmp 副本里也能解析，
+  // 否则会 ERR_MODULE_NOT_FOUND 导致验证器崩溃（Bug F）。
+  fs.cpSync(path.join(ROOT, 'scripts'), path.join(tmp, 'scripts'), { recursive: true });
+  fs.cpSync(path.join(ROOT, 'admin/modules'), path.join(tmp, 'admin/modules'), { recursive: true });
 
   // 5b. 直接调用 build-home.mjs 的 applyHome 函数（纯函数，零外部依赖）
   const { applyHome, buildHero } = await import(path.join(tmp, 'scripts/build-home.mjs'));

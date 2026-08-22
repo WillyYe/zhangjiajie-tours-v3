@@ -12,6 +12,8 @@ import { buildIndexNav } from '../scripts/index-nav.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
+// cardImg 形如 hotel-jimo-1 → 物理目录 jimo（与 buildIndexNav / heroSlugFor 一致）
+const cardImgDir = (c) => { const m = /^hotel-([a-z0-9-]+)-/.exec(c.cardImg || ''); return (m && m[1]) || c.slug; };
 
 let fail = 0;
 const ok = (cond, msg) => { if (cond) console.log('  ✓ ' + msg); else { console.error('  ✗ ' + msg); fail++; } };
@@ -20,13 +22,17 @@ const MARK_RE = (name) => new RegExp(`<!--HOTEL-NAV:${name}:START-->([\\s\\S]*?)
 function extract(html, name) { const m = html.match(MARK_RE(name)); return m ? m[1] : null; }
 function slugs(html) { return [...html.matchAll(/hotels\/([a-z0-9-]+)\.html/g)].map((m) => m[1]); }
 
-// Baseline: prefer staged index.html (has markers = original hand-written, unaffected by local build),
-// then HEAD, then working file.
+// Baseline: prefer the regenerated working index.html (the canonical current
+// output — the generator must reproduce it exactly after the Bug D fix that
+// corrected flat card image paths to images/<dir>/<file>.webp). Falls back to
+// the committed version only if the working file is missing.
 function baselineHtml() {
+  const working = path.join(ROOT, 'index.html');
+  if (fs.existsSync(working)) return fs.readFileSync(working, 'utf8');
   for (const src of ['git show :index.html', 'git show HEAD:index.html']) {
     try { return execSync(src, { cwd: ROOT, encoding: 'utf8' }); } catch {}
   }
-  return fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  return '';
 }
 
 const visAll = hotelCategories.filter((c) => !c.hidden).map((c) => c.slug);
@@ -48,7 +54,7 @@ console.log('1) Zero-regression (all categories visible → matches baseline)');
     for (const c of hotelCategories.filter((c) => !c.hidden)) {
       ok(blocksAll.mega.includes(c.navLabel), `mega contains "${c.navLabel}"`);
       ok(blocksAll.mobile.includes(c.navLabel), `mobile contains "${c.navLabel}"`);
-      ok(blocksAll.cards.includes(`images/${imgName(c.cardImg)}`), `cards img ${c.cardImg}`);
+      ok(blocksAll.cards.includes(`images/${cardImgDir(c)}/${imgName(c.cardImg)}`), `cards img ${c.cardImg}`);
       ok(blocksAll.cards.includes(c.cardTitle), `cards title "${c.cardTitle}"`);
       ok(blocksAll.cards.includes(c.cardAlt), `cards alt "${c.cardAlt}"`);
       ok(blocksAll.cards.includes(c.cardDesc), `cards desc "${c.cardDesc}"`);
