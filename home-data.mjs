@@ -8,7 +8,7 @@ export const hero = {
   h1Line1: 'Where Mountains',
   h1Line2: 'Float in the Clouds',
   desc: 'Discover the surreal sandstone peaks that inspired *Avatar*. Walk quiet streams beneath towering pillars, and see the real landscape behind the floating mountains — with local guides who know every trail.',
-  bgImg: 'chunjingbiaoxi',
+  bgImg: '20',
 };
 
 export const welcome = {
