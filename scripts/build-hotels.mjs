@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { hotels, hotelCategories } from '../hotels-data.mjs';
+import { buildIndexNav, applyIndexNav } from './index-nav.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -318,5 +319,20 @@ for (const f of fs.readdirSync(OUT_DIR)) {
 }
 
 // No hub page generated — categories are first-level.
+
+// Post-build: rewrite index.html hotel-nav blocks from hotelCategories (B4 fix).
+// Hidden/deleted categories are skipped → no dead links on the home page.
+try {
+  const INDEX = path.join(ROOT, 'index.html');
+  if (fs.existsSync(INDEX)) {
+    const html = fs.readFileSync(INDEX, 'utf8');
+    const out = applyIndexNav(html, buildIndexNav(hotelCategories));
+    fs.writeFileSync(INDEX, out, 'utf8');
+    console.log('  ✓ rewrote index.html hotel-nav blocks (B4)');
+  }
+} catch (e) {
+  console.error('  ✗ index.html hotel-nav rewrite failed: ' + e.message);
+  process.exitCode = 1;
+}
 
 process.exit(process.exitCode || 0);
