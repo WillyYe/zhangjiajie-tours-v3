@@ -1402,11 +1402,12 @@ function _fillDetailTpl(tpl, hotel, key, categories) {
     JSONLD: _hotelJsonLd(hotel, key, detail),
   };
   let out = tpl;
+  // 预览 base：iframe srcdoc 继承父 URL = /admin/，模板内「同目录相对链接」（OTHER_WAYS 卡片 slug.html
+  // 无 ../ 前缀）会解析到 admin/<slug>.html → 404。注入 ../hotels/ 后所有相对链接以真实页面目录为基准；
+  // ../styles|../images|../fonts 仍可正确回到仓库根（../hotels/ 从 /admin/ 解析为 /hotels/，不吞 repo 段）。
+  // 注意：仅可用带目录的 base，绝不能用裸 <base href="../">（会把 repo 段吞掉导致 CSS/字体/图片 404）。
+  out = out.replace(/<head>/i, `<head>\n    <base href="../hotels/">`);
   for (const [k, v] of Object.entries(map)) out = out.split(`{{${k}}}`).join(v);
-  // 注意：不要注入 <base href="../">。iframe srcdoc 继承父 URL = /admin/，
-  // 模板里所有路径已用 ../(如 ../styles/tailwind.css)，从 /admin/ 出发 = 根/... 正确解析。
-  // 若再加 <base href="../">，base 会先升一层到 /zhangjiajie-tours-v3/，再叠 ../ 就把
-  // zhangjiajie-tours-v3/ 这层 segment 吞掉，CSS/字体/图片全部 404。
   const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
   if (leftovers.length) console.warn('[detail-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
   return out;
