@@ -21,6 +21,7 @@
     "test:preview": "node tests/preview-loop.mjs",
     "test:preview-size": "node tests/preview-size-loop.mjs",
     "test:attraction-detail": "node tests/attraction-detail-preview-loop.mjs",
+    "test:preview-spot": "node tests/preview-spot-404-loop.mjs",
     "test:publish": "node tests/publish-loop.mjs"
   },
   "devDependencies": {
