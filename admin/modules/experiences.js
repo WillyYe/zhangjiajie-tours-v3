@@ -6,6 +6,7 @@ const editor = createSpotEditor({
   itemLabel: '体验',
   template: 'templates/experience-page.html',
   kind: 'experience',
+  imgBase: 'experiences',
 });
 
 export const { renderEditor, renderPreview } = editor;

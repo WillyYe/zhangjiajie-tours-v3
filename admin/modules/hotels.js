@@ -253,6 +253,12 @@ function pickImage(name) {
   thumbBox.classList.remove('no-img');
   onInput(name);
   libModal.mask.hidden = true;
+  // 选图后跳到对应字段并高亮，和景点/体验模块行为一致
+  requestAnimationFrame(() => {
+    thumbBox.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    thumbBox.classList.add('img-just-picked');
+    setTimeout(() => thumbBox.classList.remove('img-just-picked'), 1400);
+  });
 }
 
 async function confirmDelete(name) {

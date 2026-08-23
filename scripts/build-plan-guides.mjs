@@ -125,7 +125,7 @@ function collectImages(guide) {
     const r = guideMap.get(slug);
     if (r && r.coverImage) names.push(r.coverImage);
   }
-  return [...new Set(names)].map(imgSrc).map(p => p.replace('../', ''));
+  return [...new Set(names)].map((n) => imgSrc(n)).map(p => p.replace('../', ''));
 }
 function validateImages(guide) {
   const missing = collectImages(guide).filter(rel => !fs.existsSync(path.join(ROOT, rel)));

@@ -16,10 +16,12 @@ const escHtml = (s) => String(s)
 export const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
 
 // Always resolve to ../images/<name>.webp (data may omit the extension).
-export function imgSrc(name) {
+// `prefix` isolates a module's images into a subfolder, e.g. 'experiences/'
+// → ../images/experiences/<name>.webp (matches per-module physical isolation).
+export function imgSrc(name, prefix = '') {
   let n = String(name);
   if (!/\.(webp|jpg|jpeg|avif|png)$/i.test(n)) n += '.webp';
-  return '../images/' + n;
+  return '../images/' + prefix + n;
 }
 
 // ---------- fragment builders (identical shape for both content types) ----------
@@ -28,9 +30,9 @@ export function buildIntro(d) {
   return (d.introParas || []).map((p) => `          <p>${escHtml(p)}</p>`).join('\n');
 }
 
-export function buildHighlights(d) {
+export function buildHighlights(d, prefix = '') {
   return (d.highlights || []).map((h) => `            <article class="highlight-card card-hover bg-white rounded-2xl overflow-hidden border border-sand-dark">
-              <img loading="lazy" decoding="async" src="${imgSrc(h.img)}" alt="${escAttr(h.alt)}" class="highlight-img">
+              <img loading="lazy" decoding="async" src="${imgSrc(h.img, prefix)}" alt="${escAttr(h.alt)}" class="highlight-img">
               <div class="p-5">
                 <h3 class="font-display text-lg text-forest mb-1">${escHtml(h.title)}</h3>
                 <p class="text-gold-dark text-xs font-semibold uppercase tracking-wide mb-2">${escHtml(h.sub)}</p>
@@ -109,10 +111,10 @@ export function buildFacts(d) {
   ).join('\n');
 }
 
-export function buildGallery(d) {
+export function buildGallery(d, prefix = '') {
   return (d.gallery || []).map((g) =>
-    `          <a href="${imgSrc(g.img)}" class="gallery-item block" aria-label="${escAttr(g.alt)}">
-            <img loading="lazy" decoding="async" src="${imgSrc(g.img)}" alt="${escAttr(g.alt)}" class="w-full h-48 object-cover">
+    `          <a href="${imgSrc(g.img, prefix)}" class="gallery-item block" aria-label="${escAttr(g.alt)}">
+            <img loading="lazy" decoding="async" src="${imgSrc(g.img, prefix)}" alt="${escAttr(g.alt)}" class="w-full h-48 object-cover">
           </a>`
   ).join('\n');
 }
@@ -128,11 +130,11 @@ export function buildFaq(d) {
 
 // relatedPrefix: attraction pages link out with '../attractions/<slug>.html';
 // experience pages live in the same folder, so just '<slug>.html'.
-export function buildRelated(d, relatedPrefix) {
+export function buildRelated(d, relatedPrefix, prefix = '') {
   return (d.related || []).map((r) =>
     `          <a href="${relatedPrefix}${escAttr(r.slug)}.html" class="group block rounded-2xl overflow-hidden border border-sand-dark bg-white card-hover">
             <div class="h-40 overflow-hidden">
-              <img loading="lazy" decoding="async" src="${imgSrc(r.img)}" alt="${escAttr(r.alt)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <img loading="lazy" decoding="async" src="${imgSrc(r.img, prefix)}" alt="${escAttr(r.alt)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             </div>
             <div class="p-4">
               <h3 class="font-display text-base text-forest">${escHtml(r.title)}</h3>
@@ -143,17 +145,22 @@ export function buildRelated(d, relatedPrefix) {
 }
 
 // ---------- placeholder map (everything except JSON-LD) ----------
-// `kind` selects the related-link prefix.
+// `kind` selects the related-link prefix AND the image subfolder prefix
+// (experiences are physically isolated under images/experiences/).
 export function buildPageMap(d, kind) {
   const relatedPrefix = kind === 'experience' ? '../experiences/' : '../attractions/';
+  const imgPrefix = kind === 'experience' ? 'experiences/' : '';
+  // Templates hardcode `../images/{{HERO_IMG}}` / `../images/{{HERO_BG_IMG}}`,
+  // so these two bare-filename placeholders must carry the subfolder prefix.
+  const heroPath = (v) => (v ? imgSrc(v, imgPrefix).slice('../images/'.length) : '');
   return {
     PAGE_TITLE: escHtml(d.title),
     META_DESC: escAttr(d.metaDesc),
     CANONICAL: escAttr(d.canonical),
-    HERO_BG_IMG: escAttr(d.heroBgImg),
+    HERO_BG_IMG: escAttr(heroPath(d.heroBgImg)),
     SELF_SLUG: escAttr(d.slug),
     NAV_SELF: escHtml(d.breadcrumb),
-    HERO_IMG: escAttr(d.heroImg),
+    HERO_IMG: escAttr(heroPath(d.heroImg)),
     HERO_IMG_ALT: escAttr(d.heroImgAlt),
     BREADCRUMB: escHtml(d.breadcrumb),
     H1: escHtml(d.h1),
@@ -163,7 +170,7 @@ export function buildPageMap(d, kind) {
     INTRO_H2: escHtml(d.introH2),
     INTRO_BODY: buildIntro(d),
     HIGHLIGHTS_INTRO: escHtml(d.highlightsIntro),
-    HIGHLIGHTS: buildHighlights(d),
+    HIGHLIGHTS: buildHighlights(d, imgPrefix),
     ROUTES_INTRO: escHtml(d.routesIntro),
     ROUTES: buildRoutes(d),
     BEST_TIME: buildBestTime(d),
@@ -173,9 +180,9 @@ export function buildPageMap(d, kind) {
     FACTS: buildFacts(d),
     LOCAL_TIP: escHtml(d.localTip),
     GALLERY_TITLE: escHtml(d.galleryTitle),
-    GALLERY: buildGallery(d),
+    GALLERY: buildGallery(d, imgPrefix),
     FAQ: buildFaq(d),
-    RELATED: buildRelated(d, relatedPrefix),
+    RELATED: buildRelated(d, relatedPrefix, imgPrefix),
   };
 }
 

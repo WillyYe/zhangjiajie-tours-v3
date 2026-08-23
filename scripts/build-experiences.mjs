@@ -30,7 +30,7 @@ function collectImages(e) {
   e.highlights.forEach((h) => names.push(h.img));
   e.gallery.forEach((g) => names.push(g.img));
   e.related.forEach((r) => names.push(r.img));
-  return names.map(imgSrc).map((p) => p.replace('../', ''));
+  return names.map((n) => imgSrc(n, 'experiences/')).map((p) => p.replace('../', ''));
 }
 
 function validateImages(e) {

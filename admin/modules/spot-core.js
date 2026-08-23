@@ -15,7 +15,7 @@ import { applyNav } from './nav-render.js';
 import { applyIndexNav, buildIndexNav } from '../../scripts/index-nav.mjs';
 import { siteNav } from '../../home-data.mjs';
 import { hotelCategories } from '../../hotels-data.mjs';
-import { getFile, putImage, getFileSha, listDir } from '../github.js';
+import { getFile, putFile, putImage, getFileSha, listDir } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
 
 const imgName = Fragments.imgName;
@@ -143,23 +143,63 @@ const SCHEMA = [
 let _imgLibModal = null;
 let _imgLibListEl = null;
 let _imgLibLoading = false;
+// 当前图库所在子目录（'' = 根 images/；'experiences' = 隔离图库 images/experiences/）
+let _imgLibBase = '';
+// 当前图库已有的图片名（不含扩展名），用于上传后同步静态清单
+let _imgLibNames = [];
 
-async function ensureImageList() {
+// 隔离图库（imgBase 非空）与酒店模块同构：优先读静态清单 admin/imglib/<base>.json（秒开、免 API），
+// 清单缺失时回落到 GitHub listDir。根图库（景点）保持原有 listDir 行为不变。
+const LIB_BASE = 'admin/imglib/';
+async function loadLibNames(folder) {
+  if (_imgLibBase) {
+    try {
+      const res = await fetch(new URL('../imglib/' + _imgLibBase + '.json', import.meta.url));
+      if (res.ok) {
+        const arr = await res.json();
+        if (Array.isArray(arr) && arr.length) return arr.map((n) => (/\.[a-z0-9]+$/i.test(n) ? n : n + '.webp'));
+      }
+    } catch (e) { /* 回落 listDir */ }
+  }
+  return await listDir(folder);
+}
+
+// 上传/删除后把静态清单同步回仓库，避免下次打开还是旧列表（与酒店 syncHotelList 同构）
+async function syncLibList(names) {
+  if (!_imgLibBase) return;
+  const path = LIB_BASE + _imgLibBase + '.json';
+  const content = JSON.stringify([...new Set(names)].sort(), null, 2) + '\n';
+  const sha = await getFileSha(path);
+  await putFile(path, content, sha, `Update ${_imgLibBase} image list via admin`);
+}
+
+async function ensureImageList(currentName) {
   if (_imgLibLoading) return;
   _imgLibLoading = true;
+  const folder = 'images' + (_imgLibBase ? '/' + _imgLibBase : '');
+  const thumbBase = '../images/' + (_imgLibBase ? _imgLibBase + '/' : '');
   try {
-    const names = await listDir('images');
+    const names = await loadLibNames(folder);
     _imgLibListEl.replaceChildren();
     const webps = names.filter((n) => /\.(webp|jpg|jpeg|avif|png)$/i.test(n));
+    _imgLibNames = webps.map((n) => n.replace(/\.(webp|jpg|jpeg|avif|png)$/i, ''));
     if (!webps.length) _imgLibListEl.append(el('p', { class: 'hint', text: '图库为空，可上传图片。' }));
+    let selectedEl = null;
+    // 数据里 heroImg 等字段可能带扩展名（yuanjiajie-avatar.webp），列表项是去扩展名的，
+    // 必须两边都归一化，否则"当前已选图"永远匹配不上、定位失效。
+    const cur = String(currentName || '').replace(/\.(webp|jpg|jpeg|avif|png)$/i, '');
     for (const n of webps) {
       const name = n.replace(/\.(webp|jpg|jpeg|avif|png)$/i, '');
-      const card = el('button', { class: 'img-lib-item', type: 'button', onclick: () => _imgLibPick && _imgLibPick(name) }, [
-        el('img', { src: '../images/' + n, alt: name, loading: 'lazy', onerror: (e) => (e.target.style.visibility = 'hidden') }),
+      const isSel = !!cur && name === cur;
+      const card = el('button', { class: 'img-lib-item' + (isSel ? ' selected' : ''), type: 'button', onclick: () => _imgLibPick && _imgLibPick(name) }, [
+        el('img', { src: thumbBase + n, alt: name, loading: 'lazy', onerror: (e) => (e.target.style.visibility = 'hidden') }),
         el('span', { class: 'img-lib-name', text: name }),
       ]);
+      if (isSel) selectedEl = card;
       _imgLibListEl.append(card);
     }
+    // 选图后跳到对应图片：打开图库时把已选图片滚动到视野中央并显示出来
+    if (selectedEl) requestAnimationFrame(() => selectedEl.scrollIntoView({ block: 'center', behavior: 'smooth' }));
   } catch (e) {
     _imgLibListEl.replaceChildren(el('p', { class: 'hint', text: '加载图库失败：' + e.message }));
   } finally {
@@ -167,14 +207,15 @@ async function ensureImageList() {
   }
 }
 
-function openImageLibrary(currentName, onPick) {
+function openImageLibrary(currentName, onPick, base) {
+  _imgLibBase = base || '';
   if (!_imgLibModal) {
     const mask = el('div', { class: 'modal-mask', 'data-modal': 'img-lib', hidden: true });
     const panel = el('div', { class: 'modal modal-wide' });
     const closeBtn = el('button', { type: 'button', class: 'icon-btn', text: '✕', onclick: () => (mask.hidden = true) });
     const header = el('div', { class: 'modal-header' }, [
       el('div', { class: 'modal-icon', text: '🖼' }),
-      el('div', {}, [el('h2', { text: '选择图片' }), el('p', { class: 'modal-subtitle', text: '根目录 images/ 图库（景点与体验共用）' })]),
+      el('div', {}, [el('h2', { text: '选择图片' }), el('p', { class: 'modal-subtitle', id: 'spotLibSubtitle', text: _imgLibBase ? `本模块图片库 · images/${_imgLibBase}/（仅显示本模块图片）` : '根目录 images/ 图库（景点与体验共用）' })]),
       closeBtn,
     ]);
     const fileInput = el('input', { type: 'file', accept: 'image/*', class: 'img-upload-input' });
@@ -189,8 +230,9 @@ function openImageLibrary(currentName, onPick) {
         const blob = await fileToWebp(f);
         const base = (f.name || 'image').replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
         const name = base || ('img-' + Date.now());
-        await putImage('images/' + name + '.webp', blob, null, 'Upload image via admin');
-        setStatus(uploadStatus, '已上传 images/' + name + '.webp', 'ok');
+        await putImage('images/' + (_imgLibBase ? _imgLibBase + '/' : '') + name + '.webp', blob, null, 'Upload image via admin');
+        setStatus(uploadStatus, '已上传 images/' + (_imgLibBase ? _imgLibBase + '/' : '') + name + '.webp', 'ok');
+        if (_imgLibBase) await syncLibList([..._imgLibNames, name]);
         await ensureImageList();
       } catch (e) {
         setStatus(uploadStatus, '上传失败：' + e.message, 'err');
@@ -204,9 +246,18 @@ function openImageLibrary(currentName, onPick) {
     _imgLibModal = mask;
     _imgLibListEl = listEl;
   }
-  _imgLibPick = onPick;
+  // 副标题必须每次打开都刷新：同一弹窗被景点（根图库）与体验（隔离图库）复用
+  const sub = _imgLibModal.querySelector('#spotLibSubtitle');
+  if (sub) sub.textContent = _imgLibBase
+    ? `本模块图片库 · images/${_imgLibBase}/（仅显示本模块图片）`
+    : '根目录 images/ 图库（景点与体验共用）';
+  // 选图后：关闭弹窗，由字段侧回调把缩略图滚到视野并高亮，做到"直接跳到对应图片并显示出来"
+  _imgLibPick = (name) => {
+    _imgLibModal.hidden = true;
+    onPick(name);
+  };
   _imgLibModal.hidden = false;
-  ensureImageList();
+  ensureImageList(currentName);
 }
 
 let _imgLibPick = null;
@@ -242,7 +293,7 @@ function fileToWebp(file) {
 }
 
 // ---------- 单值字段编辑器 ----------
-function renderField(parent, obj, field, onChange) {
+function renderField(parent, obj, field, onChange, imgPrefix, imgBase) {
   const key = field.key;
   if (field.type === 'text') {
     const input = el('input', { type: 'text', value: obj[key] == null ? '' : String(obj[key]) });
@@ -259,7 +310,7 @@ function renderField(parent, obj, field, onChange) {
     ]);
     parent.append(wrap);
   } else if (field.type === 'image') {
-    parent.append(renderImageField(obj, key, onChange, field.label, field.tip));
+    parent.append(renderImageField(obj, key, onChange, field.label, field.tip, imgPrefix, imgBase));
   } else if (field.type === 'json') {
     const text = JSON.stringify(obj[key] == null ? {} : obj[key], null, 2);
     const ta = el('textarea', { class: 'json-area' }, text);
@@ -277,25 +328,33 @@ function renderField(parent, obj, field, onChange) {
   } else if (field.type === 'object') {
     const sub = el('fieldset', { class: 'sub-fields' }, [el('legend', { text: field.label })]);
     const target = obj[key] == null || typeof obj[key] !== 'object' ? (obj[key] = {}) : obj[key];
-    for (const sf of field.fields) renderField(sub, target, sf, onChange);
+    for (const sf of field.fields) renderField(sub, target, sf, onChange, imgPrefix, imgBase);
     parent.append(sub);
   } else if (field.type === 'list') {
-    parent.append(renderListField(obj, key, field, onChange));
+    parent.append(renderListField(obj, key, field, onChange, imgPrefix, imgBase));
   }
 }
 
-function renderImageField(obj, key, onChange, label, tip) {
+function renderImageField(obj, key, onChange, label, tip, imgPrefix, imgBase) {
   const val = obj[key] || '';
   const thumb = el('img', { class: 'img-thumb', alt: '' });
   const updateThumb = () => {
-    if (obj[key]) { thumb.src = '../images/' + imgName(obj[key]); thumb.classList.remove('img-broken'); }
+    if (obj[key]) { thumb.src = '../images/' + (imgPrefix || '') + imgName(obj[key]); thumb.classList.remove('img-broken'); }
     else { thumb.removeAttribute('src'); thumb.classList.add('img-broken'); }
   };
   updateThumb();
   thumb.addEventListener('error', () => thumb.classList.add('img-broken'));
   const input = el('input', { type: 'text', value: val, placeholder: '图片名（不含扩展名），如 tianzi-autumn' });
   input.addEventListener('input', () => { obj[key] = input.value.trim(); updateThumb(); onChange(); });
-  const browse = el('button', { type: 'button', class: 'btn btn-sm', text: '浏览图库', onclick: () => openImageLibrary(obj[key], (name) => { input.value = name; obj[key] = name; updateThumb(); onChange(); }) });
+  // 选图后：回填 → 立刻显示缩略图 → 滚动到该字段并短暂高亮，避免运营人员选完不知道改了哪一处
+  const jumpToThumb = () => {
+    requestAnimationFrame(() => {
+      thumb.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      thumb.classList.add('img-just-picked');
+      setTimeout(() => thumb.classList.remove('img-just-picked'), 1400);
+    });
+  };
+  const browse = el('button', { type: 'button', class: 'btn btn-sm', text: '浏览图库', onclick: () => openImageLibrary(obj[key], (name) => { input.value = name; obj[key] = name; updateThumb(); jumpToThumb(); onChange(); }, imgBase) });
   const clear = el('button', { type: 'button', class: 'btn btn-sm btn-ghost', text: '清空', onclick: () => { input.value = ''; obj[key] = ''; updateThumb(); onChange(); } });
   return fieldRow(label, el('div', { class: 'img-field' }, [
     thumb,
@@ -303,7 +362,7 @@ function renderImageField(obj, key, onChange, label, tip) {
   ]), tip);
 }
 
-function renderListField(obj, key, field, onChange) {
+function renderListField(obj, key, field, onChange, imgPrefix, imgBase) {
   if (!Array.isArray(obj[key])) obj[key] = [];
   const list = obj[key];
   const box = el('fieldset', { class: 'sub-fields' }, [el('legend', { text: field.label })]);
@@ -322,7 +381,7 @@ function renderListField(obj, key, field, onChange) {
       head.append(del);
       const body = el('div', { class: 'list-item-body' });
       if (field.of.type === 'object') {
-        for (const sf of field.of.fields) renderField(body, item, sf, onChange);
+        for (const sf of field.of.fields) renderField(body, item, sf, onChange, imgPrefix, imgBase);
       } else {
         const scalarType = field.of.type;
         const input = scalarType === 'textarea'
@@ -368,7 +427,8 @@ function listItemSummary(of, item) {
 
 // ---------- 编辑器（左树 + 中表单）----------
 export function createSpotEditor(config) {
-  const { title, itemLabel, template, kind } = config;
+  const { title, itemLabel, template, kind, imgBase } = config;
+  const imgPrefix = imgBase ? imgBase + '/' : '';
   const ui = { slug: null };
 
   function findItem(arr) { return arr.find((i) => i.slug === ui.slug); }
@@ -449,7 +509,7 @@ export function createSpotEditor(config) {
         el('div', { class: 'he-form-zh', text: item.h1 || item.slug }),
         el('div', { class: 'he-form-key', text: item.slug + (item.hidden ? ' · 已隐藏' : '') }),
       ]));
-      for (const f of SCHEMA) renderField(formHost, item, f, () => { onChange(); });
+      for (const f of SCHEMA) renderField(formHost, item, f, () => { onChange(); }, imgPrefix, imgBase);
     }
 
     renderTree();
