@@ -60,6 +60,17 @@ ok(consoleErrors.length === 0, 'admin 加载无控制台错误' + (consoleErrors
 const hasToast = await page.evaluate(() => typeof window.__adminToast === 'function');
 ok(hasToast, 'app.js 已执行（__adminToast 存在）');
 
+// A-2. 侧栏顺序：hotels 必须在 experiences 之后（2026-08-23 用户要求）
+// 仅统计带 data-module 的启用模块（忽略「规划中」灰显 disabled 按钮）
+const sidebarOrder = await page.evaluate(() =>
+  [...document.querySelectorAll('.module-list .module')]
+    .map((b) => b.dataset.module)
+    .filter((m) => m && m !== 'undefined'),
+);
+const idxHotels = sidebarOrder.indexOf('hotels');
+const idxExp = sidebarOrder.indexOf('experiences');
+ok(idxHotels > idxExp && idxHotels === sidebarOrder.length - 1, `侧栏顺序 hotels 在 experiences 之后（${(sidebarOrder.join(' > '))}）`);
+
 async function openModule(name, expectMin) {
   consoleErrors.length = 0;
   await page.click(`.module[data-module="${name}"]`);
