@@ -9,6 +9,8 @@ import { renderEditor as renderAttractionsEditor, renderPreview as renderAttract
 import { renderEditor as renderExperiencesEditor, renderPreview as renderExperiencesPreview } from './modules/experiences.js';
 import { collectImageNames } from './modules/spot-core.js';
 import { listTopAttractionImages } from './modules/top-attractions-render.js';
+import { listTourImages } from './modules/tours-render.js';
+import { renderEditor as renderToursEditor, renderPreview as renderToursPreview, renderTourDetailPreview } from './modules/tours.js';
 import { initResizers } from './resizer.js';
 import {
   initSettings,
@@ -54,6 +56,11 @@ const MODULES = {
     title: '🎢 体验 Experiences',
     hint: '编辑体验页（玻璃桥、天门山、直升机等），保存即上线。图片为根目录 images/ 图库。隐藏项前台不生成该页。',
   },
+  tours: {
+    file: 'tours-data.mjs',
+    title: '🎟 Tour Packages',
+    hint: '编辑套餐卡片与每套餐详情页（行程 / 包含 / 画廊 / FAQ）。图片仅限 images/tours/，不借图。',
+  },
 };
 
 const state = {
@@ -73,6 +80,8 @@ const state = {
   attractionsSel: null,
   experiences: null,
   experiencesSel: null,
+  tours: null,
+  toursSel: { type: 'block' },
   sha: null,
   dirty: false,
   // 酒店预览模式：'card' = 卡片(默认)，'detail' = 三级详情页
@@ -172,6 +181,10 @@ async function loadModule(name) {
       const eBlock = blocks.find((b) => b.name === 'experiences');
       state.experiences = eBlock ? eBlock.value : [];
       state.experiencesSel = state.experiences.length ? state.experiences[0].slug : null;
+    } else if (name === 'tours') {
+      const tBlock = blocks.find((b) => b.name === 'tours');
+      state.tours = tBlock ? tBlock.value : { eyebrow: '', title: '', subtitle: '', items: [] };
+      state.toursSel = { type: 'block' };
     }
     renderEditorForCurrent();
     renderPreviewForCurrent();
@@ -227,6 +240,12 @@ function renderEditorForCurrent() {
       editorEl, state.experiences,
       () => { setStatus(true); renderPreviewForCurrent(); },
       (slug) => { state.experiencesSel = slug; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'tours') {
+    renderToursEditor(
+      editorEl, state.tours,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (sel) => { state.toursSel = sel; renderPreviewForCurrent(); },
     );
   }
 }
@@ -287,6 +306,20 @@ function renderPreviewForCurrent() {
     previewTabsEl.hidden = true;
     previewTitleEl.textContent = '实时预览 · 体验页';
     renderExperiencesPreview(previewEl, state.experiences, state.experiencesSel);
+  } else if (state.module === 'tours') {
+    const sel = state.toursSel || { type: 'block' };
+    const isCard = sel.type === 'card' && !!state.tours.items[sel.index];
+    const isDetail = isCard && state.previewMode === 'detail';
+    // 仅选中某套餐卡片时才显示 卡片/详情 切换；区块设置（block）模式只有卡片预览
+    previewTabsEl.hidden = !isCard;
+    if (isDetail) {
+      previewTitleEl.textContent = '实时预览 · 套餐详情页';
+      const it = state.tours.items[sel.index];
+      renderTourDetailPreview(previewEl, it, it.slug);
+    } else {
+      previewTitleEl.textContent = '实时预览 · 套餐卡片';
+      renderToursPreview(previewEl, state.tours, sel);
+    }
   }
 }
 
@@ -331,6 +364,16 @@ async function validateSpotImages(arr) {
   for (const name of collectImageNames(arr)) {
     const p = `images/${name}.webp`;
     if (!(await fileExists(p))) missing.push(`图片 ${p}`);
+  }
+  return missing;
+}
+
+// 套餐保存前校验图片引用（仅可见套餐，hidden 不产生死链；图片落在 images/tours/）
+async function validateTourImages() {
+  const fileExists = async (p) => { try { return Boolean(await getFileSha(p)); } catch { return true; } };
+  const missing = [];
+  for (const p of listTourImages(state.tours)) {
+    if (!(await fileExists(p))) missing.push(`套餐图 ${p}`);
   }
   return missing;
 }
@@ -400,6 +443,16 @@ async function save() {
       }
       const newText = rebuild(state.preamble, state.blocks, { experiences: state.experiences });
       const { sha } = await putFile(MODULES.experiences.file, newText, state.sha, 'Update experiences via admin');
+      state.sha = sha;
+    } else if (state.module === 'tours') {
+      const missing = await validateTourImages();
+      if (missing.length) {
+        toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
+        saveBtn.disabled = false;
+        return;
+      }
+      const newText = rebuild(state.preamble, state.blocks, { tours: state.tours });
+      const { sha } = await putFile(MODULES.tours.file, newText, state.sha, 'Update tours via admin');
       state.sha = sha;
     }
     setStatus(false);

@@ -15,6 +15,7 @@
     "test:index-nav": "node tests/index-nav-loop.mjs",
     "test:home": "node tests/home-loop.mjs",
     "test:top-attractions": "node tests/top-attractions-loop.mjs",
+    "test:tours": "node tests/tours-loop.mjs",
     "test:welcome": "node tests/welcome-loop.mjs",
     "test:nav": "node tests/nav-loop.mjs",
     "cache-bust": "node scripts/cache-bust-admin.mjs",

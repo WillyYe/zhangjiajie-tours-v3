@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tour Packages in Zhangjiajie | Visit Zhangjiajie</title>
-  <meta name="description" content="Hand-picked multi-day tours and day trips, built around the Avatar mountains, glass bridge and Tianmen peak — with local guides, clear pricing and flexible pacing.">
+  <title>{{TITLE}}</title>
+  <meta name="description" content="{{META_DESC}}">
 
   <meta name="theme-color" content="#1a3a2a">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B0%EF%B8%8F%3C/text%3E%3C/svg%3E">
-  <link rel="canonical" href="https://willyye.github.io/zhangjiajie-tours-v3/tours/index.html">
+  <link rel="canonical" href="{{CANONICAL}}">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Tour Packages in Zhangjiajie | Visit Zhangjiajie">
-  <meta property="og:description" content="Hand-picked multi-day tours and day trips, built around the Avatar mountains, glass bridge and Tianmen peak — with local guides, clear pricing and flexible pacing.">
-  <meta property="og:url" content="https://willyye.github.io/zhangjiajie-tours-v3/tours/index.html">
+  <meta property="og:title" content="{{TITLE}}">
+  <meta property="og:description" content="{{META_DESC}}">
+  <meta property="og:url" content="{{CANONICAL}}">
   <meta property="og:site_name" content="Visit Zhangjiajie">
   <meta property="og:image" content="https://willyye.github.io/zhangjiajie-tours-v3/images/hero-tianzi-clouds.webp">
   <meta property="og:image:width" content="1200">
@@ -23,8 +23,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Tour Packages in Zhangjiajie | Visit Zhangjiajie">
-  <meta name="twitter:description" content="Hand-picked multi-day tours and day trips, built around the Avatar mountains, glass bridge and Tianmen peak — with local guides, clear pricing and flexible pacing.">
+  <meta name="twitter:title" content="{{TITLE}}">
+  <meta name="twitter:description" content="{{META_DESC}}">
   <meta name="twitter:image" content="https://willyye.github.io/zhangjiajie-tours-v3/images/hero-tianzi-clouds.webp">
 
   <!-- Tailwind CSS (prebuilt, static) -->
@@ -204,7 +204,7 @@
 
     .nav-link.active{font-weight:700;color:#1a3a2a;}
   </style>
-  <link rel="preload" as="image" href="../images/tours/peaks-panorama.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="{{HERO_IMG}}" fetchpriority="high">
 </head>
 <body class="bg-sand text-stone antialiased">
 
@@ -216,70 +216,7 @@
 
     <div class="max-w-[1280px] mx-auto px-6 h-full flex items-center justify-center">
         <!--HOME:NAV:MEGA:START-->
-        <nav class="hidden lg:flex items-center h-full">
-          <ul class="flex items-center h-full" style="gap:1.618rem;">
-          <li class="nav-item h-full flex items-center">
-            <a href="../index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Home</a>
-          </li>
-          <li class="nav-item h-full flex items-center">
-            <a href="../attractions/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
-              Attractions
-              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            </a>
-            <div class="mega-menu" style="width:560px;">
-              <div class="grid grid-cols-2 gap-x-10 gap-y-1">
-                <a href="../attractions/tianzi.html" class="mega-link">Tianzi Mountain</a>
-                <a href="../attractions/jinbian.html" class="mega-link">Golden Whip Stream</a>
-                <a href="../attractions/huangshizhai.html" class="mega-link">Huangshizhai</a>
-                <a href="../attractions/tianmen.html" class="mega-link">Tianmen Mountain</a>
-                <a href="../attractions/grand-canyon.html" class="mega-link">Grand Canyon Glass Bridge</a>
-                <a href="../attractions/baofeng.html" class="mega-link">Baofeng Lake</a>
-                <a href="../attractions/yellow-dragon.html" class="mega-link">Yellow Dragon Cave</a>
-                <a href="../attractions/yuanjiajie.html" class="mega-link">Yuanjiajie (Avatar)</a>
-              </div>
-            </div>
-          </li>
-          <li class="nav-item h-full flex items-center">
-            <a href="../experiences/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
-              Experiences
-              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            </a>
-            <div class="mega-menu" style="width:560px;">
-              <div class="grid grid-cols-2 gap-x-10 gap-y-1">
-                <a href="../experiences/avatar-bailong-elevator.html" class="mega-link">Avatar &amp; Bailong Elevator</a>
-                <a href="../experiences/glass-bridge-bungee.html" class="mega-link">Glass Bridge &amp; Bungee</a>
-                <a href="../experiences/tianmen-mountain.html" class="mega-link">Tianmen Mountain</a>
-                <a href="../experiences/helicopter-tour.html" class="mega-link">Helicopter Tour</a>
-                <a href="../experiences/cultural-shows.html" class="mega-link">Cultural Shows</a>
-                <a href="../experiences/minority-local-life.html" class="mega-link">Minority &amp; Local Life</a>
-              </div>
-            </div>
-          </li>
-          <li class="nav-item h-full flex items-center">
-            <a href="../tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Tours</a>
-          </li>
-          <!--HOTEL-NAV:MEGA:START-->
-          <li class="nav-item h-full flex items-center">
-            <a href="../hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
-              Hotels
-              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            </a>
-            <div class="mega-menu" style="width:480px;">
-              <div class="grid grid-cols-2 gap-x-8 gap-y-1">
-                <a href="../hotels/mountain-lodges.html" class="mega-link">🏔️ Mountain Lodges</a>
-                <a href="../hotels/selected-stays.html" class="mega-link">⭐ Selected Stays</a>
-                <a href="../hotels/value-hotels.html" class="mega-link">💡 Value Hotels</a>
-                <a href="../hotels/by-area.html" class="mega-link">📍 By Area</a>
-              </div>
-            </div>
-          </li>
-<!--HOTEL-NAV:MEGA:END-->
-          <li class="nav-item h-full flex items-center">
-            <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
-          </li>
-          </ul>
-        </nav>
-<!--HOME:NAV:MEGA:END-->
+        <!--HOME:NAV:MEGA:END-->
 
       <button class="lg:hidden header-mobile-toggle absolute right-6" aria-label="Open menu" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
         <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
@@ -288,40 +225,13 @@
 
     <!-- Mobile menu -->
         <!--HOME:NAV:MOBILE:START-->
-    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
-      <a href="../index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Home</a>
-      <a href="../attractions/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Attractions</a>
-      <a href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianzi Mountain</a>
-      <a href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Golden Whip Stream</a>
-      <a href="../attractions/huangshizhai.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Huangshizhai</a>
-      <a href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
-      <a href="../attractions/grand-canyon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Grand Canyon Glass Bridge</a>
-      <a href="../attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Baofeng Lake</a>
-      <a href="../attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yellow Dragon Cave</a>
-      <a href="../attractions/yuanjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yuanjiajie (Avatar)</a>
-      <a href="../experiences/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Experiences</a>
-      <a href="../experiences/avatar-bailong-elevator.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Avatar &amp; Bailong Elevator</a>
-      <a href="../experiences/glass-bridge-bungee.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Glass Bridge &amp; Bungee</a>
-      <a href="../experiences/tianmen-mountain.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
-      <a href="../experiences/helicopter-tour.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Helicopter Tour</a>
-      <a href="../experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
-      <a href="../experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
-      <a href="../tours/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Tours</a>
-      <!--HOTEL-NAV:MOBILE:START-->
-      <a href="../hotels/mountain-lodges.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏔️ Mountain Lodges</a>
-      <a href="../hotels/selected-stays.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">⭐ Selected Stays</a>
-      <a href="../hotels/value-hotels.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">💡 Value Hotels</a>
-      <a href="../hotels/by-area.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">📍 By Area</a>
-<!--HOTEL-NAV:MOBILE:END-->
-      <button type="button" onclick="openContactModal(event);document.getElementById('mobile-menu').classList.add('hidden')" class="block text-forest font-semibold py-2 pt-3 border-t border-sand-dark mt-2 cursor-pointer">Contact Us</button>
-    </div>
-<!--HOME:NAV:MOBILE:END-->
+    <!--HOME:NAV:MOBILE:END-->
   </header>
 <main>
 
   <!-- ========== HERO ========== -->
   <section id="hero" class="relative min-h-[70vh] flex items-end overflow-hidden">
-    <img id="heroImg" src="../images/tours/peaks-panorama.webp" fetchpriority="high" alt="Tour Packages in Zhangjiajie hero"
+    <img id="heroImg" src="{{HERO_IMG}}" fetchpriority="high" alt="{{HERO_ALT}}"
          class="absolute inset-0 w-full h-full object-cover" style="transform:scale(1.12);" />
     <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(26,58,42,0.35) 0%, rgba(26,58,42,0.45) 45%, rgba(26,58,42,0.85) 100%);"></div>
 
@@ -329,13 +239,13 @@
       <nav class="flex items-center gap-2 text-white/70 text-sm mb-5" aria-label="Breadcrumb">
         <a href="../" class="hover:text-white transition-colors">Home</a>
         <span class="text-white/40">/</span>
-        <span class="text-white font-medium">Tours</span>
+        <span class="text-white font-medium">{{BREADCRUMB}}</span>
       </nav>
 
-      <span class="inline-block bg-gold/90 text-forest text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-4">Curated Itineraries</span>
-      <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white leading-[1.05] mb-4">Tour Packages in Zhangjiajie</h1>
+      <span class="inline-block bg-gold/90 text-forest text-xs font-bold uppercase tracking-[0.15em] px-3.5 py-1.5 rounded-full mb-4">{{HERO_TAG}}</span>
+      <h1 class="font-display text-5xl sm:text-6xl md:text-7xl text-white leading-[1.05] mb-4">{{H1}}</h1>
       <p class="text-white/85 text-lg md:text-xl max-w-2xl leading-relaxed">
-        Hand-picked multi-day tours and day trips, built around the Avatar mountains, glass bridge and Tianmen peak — with local guides, clear pricing and flexible pacing.
+        {{SUBTITLE}}
       </p>
     </div>
   </section>
@@ -352,7 +262,7 @@
         <div>
           <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-2">At a glance</p>
           <p class="text-stone/85 text-base md:text-lg leading-relaxed max-w-3xl">
-            Hand-picked multi-day tours and day trips, built around the Avatar mountains, glass bridge and Tianmen peak — with local guides, clear pricing and flexible pacing.
+            {{INTRO_TEXT}}
           </p>
         </div>
       </div>
@@ -360,69 +270,7 @@
   </section>
 
   <!-- ========== Card grid (injected) ========== -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- 1. 3-Day Classic Zhangjiajie Tour -->
-        <a id="tour-3-day-classic" href="3-day-classic.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
-          <div class="relative h-52 overflow-hidden">
-            <img loading="lazy" decoding="async" src="../images/tours/yuanjiajie-avatar.webp" alt="Yuanjiajie Avatar mountains on a 3-day classic tour" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="absolute top-3 left-3 bg-forest/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">3 Days</div>
-          </div>
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <h3 class="font-display text-xl text-forest leading-snug">3-Day Classic Zhangjiajie Tour</h3>
-              <span class="text-xs font-semibold text-gold-dark bg-gold/10 px-2.5 py-1 rounded-full whitespace-nowrap">3 Days / 2 Nights</span>
-            </div>
-            <p class="text-stone-500 text-sm leading-relaxed">The essential Wulingyuan loop: Avatar mountains, Tianzi Sea of Clouds and Golden Whip Stream — paced for first-time visitors.</p>
-          </div>
-        </a>
-
-        <!-- 2. Glass Bridge & Avatar Adventure -->
-        <a id="tour-glass-bridge-avatar" href="glass-bridge-avatar.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
-          <div class="relative h-52 overflow-hidden">
-            <img loading="lazy" decoding="async" src="../images/tours/yangjiajie-wall.webp" alt="Grand Canyon Glass Bridge on the adventure tour" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="absolute top-3 left-3 bg-red-600/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">1 Day</div>
-          </div>
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <h3 class="font-display text-xl text-forest leading-snug">Glass Bridge &amp; Avatar Adventure</h3>
-              <span class="text-xs font-semibold text-gold-dark bg-gold/10 px-2.5 py-1 rounded-full whitespace-nowrap">1 Day</span>
-            </div>
-            <p class="text-stone-500 text-sm leading-relaxed">A full day of adrenaline: walk the world’s highest glass-bottom bridge, then ride the Bailong Elevator to the Avatar mountains.</p>
-          </div>
-        </a>
-
-        <!-- 3. Tianmen Mountain Day Tour -->
-        <a id="tour-tianmen-day" href="tianmen-day.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
-          <div class="relative h-52 overflow-hidden">
-            <img loading="lazy" decoding="async" src="../images/tours/tianzi-snow.webp" alt="Tianmen Mountain Heaven’s Gate natural arch" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="absolute top-3 left-3 bg-gold/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">1 Day</div>
-          </div>
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <h3 class="font-display text-xl text-forest leading-snug">Tianmen Mountain Day Tour</h3>
-              <span class="text-xs font-semibold text-gold-dark bg-gold/10 px-2.5 py-1 rounded-full whitespace-nowrap">1 Day</span>
-            </div>
-            <p class="text-stone-500 text-sm leading-relaxed">Ride the world’s longest cable car, walk the cliffside glass path and climb through Heaven’s Gate — a dramatic standalone peak.</p>
-          </div>
-        </a>
-
-        <!-- 4. 4-Day Zhangjiajie Highlights -->
-        <a id="tour-4-day-highlights" href="4-day-highlights.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
-          <div class="relative h-52 overflow-hidden">
-            <img loading="lazy" decoding="async" src="../images/tours/tianzi-autumn.webp" alt="Autumn peaks on the 4-day highlights tour" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-            <div class="absolute top-3 left-3 bg-emerald-600/90 text-white text-xs font-medium px-2.5 py-1 rounded-full">4 Days</div>
-          </div>
-          <div class="p-5">
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <h3 class="font-display text-xl text-forest leading-snug">4-Day Zhangjiajie Highlights</h3>
-              <span class="text-xs font-semibold text-gold-dark bg-gold/10 px-2.5 py-1 rounded-full whitespace-nowrap">4 Days / 3 Nights</span>
-            </div>
-            <p class="text-stone-500 text-sm leading-relaxed">The complete circuit — Avatar mountains, Glass Bridge, Tianmen Mountain and a Tujia village — with time to breathe.</p>
-          </div>
-        </a>
-
-      </div>
+{{BODY}}
 
   </main>
 <footer class="relative bg-[#0c3c46] text-white/60 py-14 px-6">
@@ -439,16 +287,7 @@
         </div>
 
                 <!--HOME:NAV:FOOTER:START-->
-        <div>
-          <h4 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Explore</h4>
-          <ul class="space-y-3 text-sm">
-            <li><a href="../attractions/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Attractions</a></li>
-            <li><a href="../experiences/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Experiences</a></li>
-            <li><a href="../tours/index.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Tours &amp; Itineraries</a></li>
-            <li><a href="../hotels/mountain-lodges.html" class="hover:text-white hover:pl-1 transition-all duration-200 inline-block">Hotels</a></li>
-          </ul>
-        </div>
-<!--HOME:NAV:FOOTER:END-->
+        <!--HOME:NAV:FOOTER:END-->
 
         <div>
           <h4 class="text-white/90 font-semibold text-sm uppercase tracking-wider mb-5">Contact</h4>
@@ -557,36 +396,7 @@
   </div>
 
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "3-Day Classic Zhangjiajie Tour",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/tours/3-day-classic.html"
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "Glass Bridge & Avatar Adventure",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/tours/glass-bridge-avatar.html"
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "Tianmen Mountain Day Tour",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/tours/tianmen-day.html"
-    },
-    {
-      "@type": "ListItem",
-      "position": 4,
-      "name": "4-Day Zhangjiajie Highlights",
-      "url": "https://willyye.github.io/zhangjiajie-tours-v3/tours/4-day-highlights.html"
-    }
-  ]
-}
+{{JSONLD}}
   </script>
 
 </body>
