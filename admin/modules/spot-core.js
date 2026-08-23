@@ -568,6 +568,9 @@ function fillTemplate(tpl, item, k = 'attraction') {
   );
   out = applyNav(out, siteNav, '../');
   out = applyIndexNav(out, buildIndexNav(hotelCategories, '../'));
+  // 后台预览：srcdoc iframe 里必须立即看到内容，不能依赖模板里的 JS setTimeout + CSS transition。
+  // 强制 .fade-in 元素处于最终可见状态，避免运营人员只看到 hero 渐变背景。
+  out = out.replace(/<head\b[^>]*>/i, (m) => m + '<style id="admin-preview-no-fade">.fade-in,.fade-in.visible{opacity:1!important;transform:none!important;transition:none!important}</style>');
   const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
   if (leftovers.length) console.warn('[spot-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
   return out;

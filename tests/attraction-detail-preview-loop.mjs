@@ -59,7 +59,7 @@ try {
     '① 详情预览动态 import 实时 attractions-data.mjs（不再 fetch 已部署页）');
   assert(/renderSpotDetailPreview\(container, arr, slug, 'attraction'\)/.test(TA),
     '① 用真实模板 templates/attraction-page.html 渲染详情页（所见即所得）');
-  assert(/未选择景点/.test(TA), '① 未选景点时给出友好提示');
+  assert(/未选择景点卡片/.test(TA), '① 未选卡片时给出友好提示');
   assert(/加载详情数据失败|未找到 slug=/.test(TA), '① 数据缺失/加载失败时给出友好提示');
 } catch (e) { no('① 静态门禁异常', e.message); }
 

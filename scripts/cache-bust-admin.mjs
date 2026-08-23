@@ -31,8 +31,11 @@ function collectJs(dir) {
 const files = collectJs(ADMIN);
 
 // 组合哈希：任一文件内容变化 → tag 变化
+// 同时纳入 style.css，避免只改 CSS 时浏览器仍缓存旧样式。
 const h = crypto.createHash('sha256');
 for (const f of files) h.update(fs.readFileSync(f, 'utf8'));
+const styleCss = path.join(ADMIN, 'style.css');
+if (fs.existsSync(styleCss)) h.update(fs.readFileSync(styleCss, 'utf8'));
 const tag = h.digest('hex').slice(0, 10);
 
 // 生成 import map（跳过入口 app.js，它由 <script src> 控制）
@@ -58,6 +61,9 @@ if (html.includes('__ADMIN_CACHE__')) {
 // ⚠️ 关键修复：首次注入后占位符已消失，必须始终按新哈希刷新，否则改动永不生效。
 // 入口脚本查询串：app.js?v=<旧> → app.js?v=<新>
 html = html.replace(/app\.js\?v=[a-f0-9]+/g, `app.js?v=${tag}`);
+
+// style.css 查询串同步刷新，防止只改 CSS 时缓存旧样式
+html = html.replace(/href="style\.css(?:\?v=[a-f0-9]+)?"/g, `href="style.css?v=${tag}"`);
 
 // import map：整块重建 JSON（定位 <script type="importmap" id="admin-importmap"> … </script>）
 const IM_OPEN = '<script type="importmap" id="admin-importmap">';

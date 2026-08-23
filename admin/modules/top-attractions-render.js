@@ -3,73 +3,62 @@
 // 因此后台“所见”与线上“所得”永远一致，杜绝前后台漂移。
 // 注意：本文件不得 import fs / path / 任何浏览器全局，否则浏览器端会崩溃、Node 端也会报错。
 
+const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-function tableRowHtml(it, idx) {
-  const rank = idx + 1;
-  return `          <tr id="attraction-${it.slug}" class="bg-white even:bg-stone-50 hover:bg-stone-100 transition-colors">
-            <td class="py-4 px-5 text-stone-500 font-display font-semibold w-12">${rank}</td>
-            <td class="py-4 px-5">
-              <a href="attractions/${it.slug}.html" class="font-display text-lg text-forest hover:text-gold-dark transition-colors">${escHtml(it.title)}</a>
-            </td>
-            <td class="py-4 px-5 text-stone-600">${escHtml(it.highlight)}</td>
-            <td class="py-4 px-5 text-stone-600 whitespace-nowrap">${escHtml(it.time)}</td>
-            <td class="py-4 px-5 text-stone-600"><span class="mr-2">${escHtml(it.vibeEmoji || '')}</span>${escHtml(it.vibe)}</td>
-          </tr>`;
+// 角标颜色：运营只选关键字，不写裸类名（与 index.html 现有 class 完全一致）
+export const BADGE = {
+  forest: 'bg-forest/90',
+  emerald: 'bg-emerald-600/90',
+  gold: 'bg-gold/90',
+  blue: 'bg-blue-600/90',
+  red: 'bg-red-600/90',
+  orange: 'bg-orange-500/90',
+  purple: 'bg-purple-700/90',
+};
+
+function cardHtml(it, i) {
+  const slug = it.slug;
+  const badgeClass = BADGE[it.badgeColor] || BADGE.forest;
+  return `        <!-- ${i + 1}. ${it.title} -->
+        <a id="attraction-${slug}" href="attractions/${slug}.html" class="card-hover bg-white rounded-2xl overflow-hidden shadow-sm fade-in block group">
+          <div class="relative h-52 overflow-hidden">
+            <img width="${it.imgW}" height="${it.imgH}" loading="lazy" decoding="async" src="images/top-attractions/${imgName(it.img)}" alt="${escAttr(it.imgAlt)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="absolute top-3 left-3 ${badgeClass} text-white text-xs font-medium px-2.5 py-1 rounded-full">${escHtml(it.badge)}</div>
+          </div>
+          <div class="p-5">
+            <h3 class="font-display text-xl text-forest mb-2 group-hover:text-gold-dark transition-colors">${escHtml(it.title)}</h3>
+            <p class="text-stone-500 text-sm leading-relaxed">${escHtml(it.desc)}</p>
+          </div>
+        </a>`;
 }
 
-// 纯函数：由 topAttractions 数据生成完整「Top 8 Must-See Spots」区块（标题 + 表格）。
+// 纯函数：由 topAttractions 数据生成卡片网格（含 grid 容器）。
 // hidden 项被跳过（不渲染、不产生死链）。缩进与 index.html 原硬编码一致 → 零回归。
 export function buildTopAttractionsHtml(data) {
-  const d = data || {};
-  const items = (d.items || []).filter((it) => !it.hidden);
-  const rows = items.map((it, i) => tableRowHtml(it, i)).join('\n');
-  return `  <section id="attraction" class="py-24 px-6 bg-sand">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-12 fade-in">
-        <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">${escHtml(d.eyebrow || '')}</p>
-        <h2 class="font-display text-4xl md:text-5xl text-forest mb-6">${escHtml(d.title || '')}</h2>
-        <p class="text-stone-600 text-lg max-w-2xl mx-auto">${escHtml(d.subtitle || '')}</p>
-      </div>
-      <div class="overflow-x-auto rounded-2xl shadow-sm fade-in">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-forest text-white">
-              <th class="py-4 px-5 font-semibold text-sm tracking-wide w-12">#</th>
-              <th class="py-4 px-5 font-semibold text-sm tracking-wide">Spot</th>
-              <th class="py-4 px-5 font-semibold text-sm tracking-wide">Highlight</th>
-              <th class="py-4 px-5 font-semibold text-sm tracking-wide">Time</th>
-              <th class="py-4 px-5 font-semibold text-sm tracking-wide">Vibe</th>
-            </tr>
-          </thead>
-          <tbody>
-${rows || '            <tr><td colspan="5" class="py-8 px-5 text-center text-stone-500">No spots published yet.</td></tr>'}
-          </tbody>
-        </table>
-      </div>
-      <div class="text-center mt-10 fade-in">
-        <a href="attractions/index.html" class="inline-flex items-center gap-2 bg-forest text-white font-semibold px-7 py-3.5 rounded-full hover:bg-forest-light transition-colors duration-300">View all ${items.length} attractions &rarr;</a>
-      </div>
-    </div>
-  </section>`;
+  const items = (data && data.items) || [];
+  const vis = items.filter((it) => !it.hidden);
+  const cards = vis.map((it, i) => cardHtml(it, i)).join('\n\n');
+  return `      <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">\n\n${cards}\n\n      </div>`;
 }
 
-// 按 TOP-ATTRACTION:START/END 标记重写 index.html（整区块由数据驱动）
+// 按 TOP-ATTRACTION:GRID 标记重写 index.html
 export function applyTopAttractions(html, data) {
   const block = buildTopAttractionsHtml(data);
   return html.replace(
-    /<!--TOP-ATTRACTION:START-->[\s\S]*?<!--TOP-ATTRACTION:END-->/,
-    `<!--TOP-ATTRACTION:START-->\n${block}\n  <!--TOP-ATTRACTION:END-->`
+    /<!--TOP-ATTRACTION:GRID:START-->[\s\S]*?<!--TOP-ATTRACTION:GRID:END-->/,
+    `<!--TOP-ATTRACTION:GRID:START-->\n${block}\n      <!--TOP-ATTRACTION:GRID:END-->`
   );
 }
 
-// Top 8 表格不使用图片；保持函数签名兼容，返回空数组。
+// 列出所有可见卡片引用的图片（images/top-attractions/<img>.webp），供保存前校验
 export function listTopAttractionImages(data) {
-  return [];
+  const items = (data && data.items) || [];
+  return items.filter((it) => !it.hidden).map((it) => `images/top-attractions/${imgName(it.img)}`);
 }
 
-// 列出所有可见行的详情页链接（attractions/<slug>.html），供无死链校验
+// 列出所有可见卡片的详情页链接（attractions/<slug>.html），供无死链校验
 export function listTopAttractionLinks(data) {
   const items = (data && data.items) || [];
   return items.filter((it) => !it.hidden).map((it) => `attractions/${it.slug}.html`);

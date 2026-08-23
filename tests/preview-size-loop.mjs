@@ -90,8 +90,8 @@ async function runtimeGate() {
   const welcome = await import('../admin/modules/welcome.js');
 
   const taData = {
-    eyebrow: "DON'T MISS THESE", title: 'Top 8 Must-See Spots', subtitle: 's',
-    items: [{ slug: 'tianzi', title: 'Tianzi', highlight: 'Sea of clouds', time: '3-4 hrs', vibeEmoji: '☁️', vibe: 'Dreamy', hidden: false }],
+    eyebrow: 'Explore', title: 'Top Attractions', subtitle: 's',
+    items: [{ slug: 'tianzi', img: 'tianzi', badge: '', badgeColor: 'forest', title: 'Tianzi', desc: 'd', hidden: false }],
   };
   const navData = {
     items: [

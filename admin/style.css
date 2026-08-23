@@ -23,7 +23,7 @@ body {
   color: var(--ink);
   font-size: 14px;
 }
-.app { display: flex; min-height: 100vh; overflow: hidden; }
+.app { display: flex; height: 100vh; min-height: 100vh; overflow: hidden; }
 
 /* ---------- Sidebar ---------- */
 .sidebar {

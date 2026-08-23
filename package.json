@@ -12,6 +12,7 @@
     "test:hotel": "node tests/hotel-detail-test.mjs",
     "test:mapping": "node tests/data-mapping-test.mjs",
     "test:admin": "node tests/admin-static-check.mjs",
+    "test:admin-spot": "node tests/admin-spot-smoke.mjs",
     "test:index-nav": "node tests/index-nav-loop.mjs",
     "test:home": "node tests/home-loop.mjs",
     "test:top-attractions": "node tests/top-attractions-loop.mjs",

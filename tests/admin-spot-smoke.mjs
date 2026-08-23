@@ -84,6 +84,29 @@ async function openModule(name, expectMin) {
   ok(info.fields > 5, `${name} 表单渲染 ${info.fields} 个字段控件`);
   ok(info.active === name, `${name} 切换后激活态正确（${info.active}）`);
   ok(consoleErrors.length === 0, `${name} 切换无控制台错误` + (consoleErrors.length ? '：' + consoleErrors.slice(0, 3).join(' | ') : ''));
+
+  // 回归：预览 iframe 必须有合理高度且 hero 内容在可视区（防止 .app min-height 导致 iframe 膨胀到数万 px）
+  await page.waitForSelector('#preview iframe', { timeout: 5000 });
+  await page.waitForTimeout(600);
+  const pv = await page.evaluate(() => {
+    const ifr = document.querySelector('#preview iframe');
+    if (!ifr) return { hasIframe: false };
+    const idoc = ifr.contentDocument;
+    const hero = idoc && idoc.getElementById('hero');
+    const h1 = hero && hero.querySelector('h1');
+    const h1Rect = h1 ? h1.getBoundingClientRect() : null;
+    return {
+      hasIframe: true,
+      iframeHeight: ifr.clientHeight,
+      h1Text: h1 ? h1.innerText : '',
+      h1Top: h1Rect ? h1Rect.top : -1,
+      heroHeight: hero ? hero.getBoundingClientRect().height : -1,
+    };
+  });
+  ok(pv.hasIframe, `${name} 预览 iframe 已渲染`);
+  ok(pv.iframeHeight > 200 && pv.iframeHeight < 3000, `${name} 预览 iframe 高度合理（${pv.iframeHeight}px）`);
+  ok(pv.h1Text.length > 0 && pv.h1Top >= 0 && pv.h1Top < pv.iframeHeight, `${name} hero H1 在可视区内（"${pv.h1Text.slice(0, 24)}..." @ ${Math.round(pv.h1Top)}px）`);
+  ok(pv.heroHeight > 100 && pv.heroHeight < 3000, `${name} hero 区高度合理（${Math.round(pv.heroHeight)}px）`);
 }
 
 console.log('B. Attractions 模块');
