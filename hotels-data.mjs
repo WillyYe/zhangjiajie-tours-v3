@@ -110,11 +110,11 @@ export const hotels = {
         },
         {
           img: 'hotel-jimo-garden',
-          alt: 'JiMO garden courtyard',
+          alt: 'Sun Valley garden courtyard',
         },
         {
           img: 'hotel-jimo-hero',
-          alt: 'JiMO exterior by the river',
+          alt: 'Sun Valley exterior by the river',
         },
       ],
       faq: [
