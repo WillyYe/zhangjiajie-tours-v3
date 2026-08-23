@@ -5,7 +5,10 @@
 //
 // 图片为根目录扁平存储 images/<name>.webp（与现有站点约定一致），提供根级图库浏览 + 上传。
 //
-// 浏览器 ESM：import 相对模块文件；fetch 相对文档（admin/index.html → ../../ 抵消 admin/index.html 两段 → 落到仓库根）。
+// 浏览器 ESM：import 语句的相对路径按「本模块文件」解析（admin/modules/spot-core.js → ../../ 落到仓库根，正确）。
+// 但运行时 fetch() 的相对路径是按「文档基准 location.href = admin/index.html」解析的，admin/ 只深 1 层，
+// 故 fetch('../../...') 在 GitHub Pages 子目录部署(/zhangjiajie-tours-v3/)下会多上一级、越出仓库落到用户名根 → 404。
+// 因此下方 loadTemplate 用 new URL('../../'+template, import.meta.url) 把相对路径改回按模块文件解析，本地/子目录部署都成立。
 
 import * as Fragments from '../../scripts/fragments.mjs';
 import { applyNav } from './nav-render.js';
@@ -457,7 +460,12 @@ export function createSpotEditor(config) {
   const tplCache = {};
   async function loadTemplate() {
     if (tplCache[template]) return tplCache[template];
-    const res = await fetch('../../' + template);
+    // 按本模块文件(admin/modules/spot-core.js)解析相对路径，而非文档基准(admin/index.html)。
+    // 这样 ../../ 在「本地根部署」与「GitHub Pages 子目录部署」(/zhangjiajie-tours-v3/) 下都正确回到仓库根，
+    // 避免请求越出仓库落到用户名根 → 404。参考 hotels.js:1471 同款写法。
+    const url = new URL('../../' + template, import.meta.url).href;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('模板加载失败 HTTP ' + res.status + ' @ ' + url);
     const t = await res.text();
     tplCache[template] = t;
     return t;
