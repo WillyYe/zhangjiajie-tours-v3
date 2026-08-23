@@ -42,7 +42,12 @@ const results = [];
 const ok = (name, cond, detail = '') => { results.push({ name, pass: !!cond, detail }); console.log(`  ${cond ? '✓' : '✗'} ${name}${detail ? '  [' + detail + ']' : ''}`); };
 const consoleErrors = [];
 
+// CHROME_PATH lets you point at a specific Chrome build (e.g. system Google Chrome)
+// and skip downloading Playwright's own chromium build. Mirrors hotel-detail-test.mjs /
+// browser-test.mjs so all three E2E harnesses accept the same override.
+const CHROME = process.env.CHROME_PATH;
 const launchOpts = { args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+if (CHROME) launchOpts.executablePath = CHROME;
 const browser = await chromium.launch(launchOpts);
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 1 });
 const page = await ctx.newPage();

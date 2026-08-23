@@ -64,8 +64,8 @@ export function applyHome(html, data) {
 
 // CLI：node scripts/build-home.mjs 直接重写 index.html（供手动/串联调用）
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { hero, topAttractions, welcome } = await import('../home-data.mjs');
+  const { hero, topAttractions, welcome, siteNav } = await import('../home-data.mjs');
   const html = fs.readFileSync(INDEX, 'utf8');
-  fs.writeFileSync(INDEX, applyHome(html, { hero, topAttractions, welcome }), 'utf8');
+  fs.writeFileSync(INDEX, applyHome(html, { hero, topAttractions, welcome, siteNav }), 'utf8');
   console.log('  ✓ rewrote index.html hero + top-attractions + welcome blocks (build-home)');
 }
