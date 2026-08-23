@@ -463,17 +463,9 @@ export function createSpotEditor(config) {
     return t;
   }
   function fillTemplate(tpl, item) {
-    const relatedPrefix = kind === 'experience' ? '' : '../attractions/';
     const cleaned = item.related ? { ...item, related: item.related } : item;
     const map = Fragments.buildPageMap(cleaned, kind);
     let out = tpl;
-    // 预览 base：iframe srcdoc 继承父 URL = /admin/，模板内「同目录相对链接」（如 experiences 的
-    // RELATED 卡片 slug.html，无 ../ 前缀）会解析到 admin/<slug>.html → 404。注入 ../<dir>/ 后，所有
-    // 相对链接以真实页面目录为基准解析；且 ../styles|../images|../fonts 仍可正确回到仓库根
-    // （../experiences/ 从 /admin/ 解析为 /experiences/，不吞掉 repo 段，故 CSS/字体/图片不 404）。
-    // 注意：仅可用带目录的 base（../experiences/ ../attractions/），绝不能用裸 <base href="../">。
-    const baseDir = kind === 'experience' ? '../experiences/' : '../attractions/';
-    out = out.replace(/<head>/i, `<head>\n    <base href="${baseDir}">`);
     for (const [k, v] of Object.entries(map)) out = out.split('{{' + k + '}}').join(v);
     const jsonld = kind === 'experience' ? Fragments.buildExperienceJsonLd(item) : Fragments.buildAttractionJsonLd(item);
     out = out.replace(

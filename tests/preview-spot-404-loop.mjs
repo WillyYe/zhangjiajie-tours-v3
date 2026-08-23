@@ -3,13 +3,13 @@
 // 背景（用户报告后台体验模块预览点相关链接 404）：
 //   预览用 iframe srcdoc 复用真实模板，iframe 继承父 URL = /admin/。
 //   experience 的 RELATED 卡片用同目录相对链接 slug.html → 在 /admin/ 下解析成
-//   admin/<slug>.html → 404。修复：在 <head> 注入带目录的 <base href="../experiences/">
-//   （attractions 同理 ../attractions/），让相对链接以真实页面目录为基准，且
-//   ../styles|../images|../fonts 仍回到仓库根（不吞 repo 段）。
+//   admin/<slug>.html → 404。修复：让 buildPageMap 给 experience 的相关链接也加
+//   ../experiences/ 前缀（与 attractions 的 ../attractions/ 一致），真实页面同目录等价，
+//   预览 iframe 也能正确解析到 /experiences/<slug>.html，不依赖 <base> 注入。
 //
 // 本 loop 用真实浏览器（Playwright + 系统 Chrome）验证两类 404：
 //   A. 预览初始加载（模板/CSS/字体/图片/hero）零 404
-//   B. 点击「同目录相对」相关链接后，零新增 404（验证 base 注入生效）
+//   B. 点击相关链接后，零新增 404
 // 覆盖 attractions 与 experiences 两个模块。
 
 import { chromium } from 'playwright';
@@ -85,11 +85,11 @@ async function checkModule(module, label) {
   assert(initBad.length === 0, `[${label}] 预览初始加载零 404/4xx（实际 ${initBad.length}）`);
   for (const b of initBad.slice(0, 5)) console.log(`     404 ${b.status} ${b.url}`);
 
-  // 点击一个「同目录相对」相关链接（无 ../ 前缀的 .html），验证 base 注入生效
+  // 点击第一个 RELATED 卡片链接（a.card-hover），验证跳转后零新增 404
   const clicked = await page.evaluate(() => {
     const f = document.querySelector('.pv-iframe');
     if (!f || !f.contentDocument) return null;
-    const a = [...f.contentDocument.querySelectorAll('a[href$=".html"]')].find((x) => !x.getAttribute('href').startsWith('..'));
+    const a = f.contentDocument.querySelector('a.card-hover[href$=".html"]');
     if (!a) return null;
     const href = a.getAttribute('href');
     a.click();
@@ -102,7 +102,7 @@ async function checkModule(module, label) {
     assert(newBad === 0, `[${label}] 点击相关链接「${clicked}」后零新增 404（实际新增 ${newBad}）`);
     for (const b of bad.filter((x) => x.frame.includes('/admin/')).slice(-3)) console.log(`     点击后 404 ${b.status} ${b.url}`);
   } else {
-    assert(true, `[${label}] 无同目录相对相关链接（无需点击验证）`);
+    assert(true, `[${label}] 无相关链接（无需点击验证）`);
   }
 }
 

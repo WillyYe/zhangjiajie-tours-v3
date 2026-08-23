@@ -145,7 +145,7 @@ export function buildRelated(d, relatedPrefix) {
 // ---------- placeholder map (everything except JSON-LD) ----------
 // `kind` selects the related-link prefix.
 export function buildPageMap(d, kind) {
-  const relatedPrefix = kind === 'experience' ? '' : '../attractions/';
+  const relatedPrefix = kind === 'experience' ? '../experiences/' : '../attractions/';
   return {
     PAGE_TITLE: escHtml(d.title),
     META_DESC: escAttr(d.metaDesc),
