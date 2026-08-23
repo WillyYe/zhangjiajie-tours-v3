@@ -3,8 +3,9 @@
 // 背景（2026-08-22 用户报告「后台景点的详情预览和卡片的预览都一样了，详情页要做出来」）：
 //   景点模块此前只有卡片预览（buildTopAttractionsHtml），没有详情预览 tab；
 //   详情页内容来自另一个数据文件 attractions-data.mjs + 模板，后台根本没接。
-//   按用户选定方案（只读预览已有详情页）：景点模块加「卡片/详情」tab，
-//   详情 tab 用 fetch('../attractions/<slug>.html') 渲染线上真实详情页。
+//   先加「卡片/详情」tab 用 fetch 已部署页（只读、易过期）；2026-08-23 轻量改造改为：
+//   详情 tab 动态 import 实时 attractions-data.mjs + 复用 spot-core 的 renderSpotDetailPreview
+//   用真实模板 templates/attraction-page.html 渲染（所见即所得，与「景点详情页」模块同源）。
 //
 // 验证分两层：
 //   ① 静态/源码门禁：app.js 接线、index.html 含详情 tab、top-attractions.js 实现走 fetch('../attractions/...)
@@ -49,13 +50,17 @@ try {
   assert(/class="ptab[^"]*"\s+data-mode="detail"/.test(INDEX) || /data-mode="detail"/.test(INDEX),
     '① admin/index.html 含 data-mode="detail" 的预览 tab');
 
-  // top-attractions.js 实现走 fetch('../attractions/...') 且导出函数
+  // top-attractions.js 实现：动态 import 真实详情数据 + 复用 spot-core 真实模板渲染（所见即所得）
   assert(/export async function renderAttractionDetailPreview/.test(TA),
     '① top-attractions.js 导出 async renderAttractionDetailPreview');
-  assert(/fetch\(`\.\.\/attractions\/\$\{encodeURIComponent\(slug\)\}\.html`/.test(TA),
-    '① 详情预览用 fetch("../attractions/<slug>.html") 渲染线上真实详情页');
-  assert(/iframe\.srcdoc = html/.test(TA), '① 详情页 HTML 注入 iframe.srcdoc（基址 /admin/，../styles 解析正确）');
-  assert(/暂无「\$\{slug\}」的详情页/.test(TA), '① 无详情页时给出友好提示（如 yuanjiajie / yellow-dragon）');
+  assert(/import \{ renderSpotDetailPreview \} from '\.\/spot-core\.js'/.test(TA),
+    '① 详情预览复用 spot-core 的 renderSpotDetailPreview（单一真源，与景点详情页模块一致）');
+  assert(/import\('\.\.\/\.\.\/attractions-data\.mjs'\)/.test(TA),
+    '① 详情预览动态 import 实时 attractions-data.mjs（不再 fetch 已部署页）');
+  assert(/renderSpotDetailPreview\(container, arr, slug, 'attraction'\)/.test(TA),
+    '① 用真实模板 templates/attraction-page.html 渲染详情页（所见即所得）');
+  assert(/未选择景点卡片/.test(TA), '① 未选卡片时给出友好提示');
+  assert(/加载详情数据失败|未找到 slug=/.test(TA), '① 数据缺失/加载失败时给出友好提示');
 } catch (e) { no('① 静态门禁异常', e.message); }
 
 // ============================================================

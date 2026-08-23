@@ -517,36 +517,8 @@ export function createSpotEditor(config) {
   }
 
   // ---------- 预览（iframe srcdoc，复用真实模板 + 共享片段）----------
-  const tplCache = {};
-  async function loadTemplate() {
-    if (tplCache[template]) return tplCache[template];
-    // 按本模块文件(admin/modules/spot-core.js)解析相对路径，而非文档基准(admin/index.html)。
-    // 这样 ../../ 在「本地根部署」与「GitHub Pages 子目录部署」(/zhangjiajie-tours-v3/) 下都正确回到仓库根，
-    // 避免请求越出仓库落到用户名根 → 404。参考 hotels.js:1471 同款写法。
-    const url = new URL('../../' + template, import.meta.url).href;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('模板加载失败 HTTP ' + res.status + ' @ ' + url);
-    const t = await res.text();
-    tplCache[template] = t;
-    return t;
-  }
-  function fillTemplate(tpl, item) {
-    const cleaned = item.related ? { ...item, related: item.related } : item;
-    const map = Fragments.buildPageMap(cleaned, kind);
-    let out = tpl;
-    for (const [k, v] of Object.entries(map)) out = out.split('{{' + k + '}}').join(v);
-    const jsonld = kind === 'experience' ? Fragments.buildExperienceJsonLd(item) : Fragments.buildAttractionJsonLd(item);
-    out = out.replace(
-      /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
-      '<script type="application/ld+json">\n' + JSON.stringify(jsonld, null, 2) + '\n  </script>'
-    );
-    out = applyNav(out, siteNav, '../');
-    out = applyIndexNav(out, buildIndexNav(hotelCategories, '../'));
-    const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
-    if (leftovers.length) console.warn('[spot-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
-    return out;
-  }
-
+  // 单模块实例内仍用 config.template
+  function loadTemplate() { return loadTemplateNamed(template); }
   async function renderPreview(container, arr, slug) {
     container.replaceChildren();
     const item = (arr || []).find((i) => i.slug === slug);
@@ -558,13 +530,66 @@ export function createSpotEditor(config) {
     container.append(iframe);
     try {
       const tpl = await loadTemplate();
-      iframe.srcdoc = fillTemplate(tpl, item);
+      iframe.srcdoc = fillTemplate(tpl, item, kind);
     } catch (e) {
       container.replaceChildren(el('div', { class: 'pv-empty', text: '预览加载失败：' + e.message }));
     }
   }
 
   return { renderEditor, renderPreview, title, itemLabel, kind, template };
+}
+
+// ============================================================
+// 模块级：详情页真实模板渲染（多模块复用，单一真源）
+// ============================================================
+// tplCache 模块级共享，key 为模板路径 → 多模块复用同一份缓存
+const tplCache = {};
+async function loadTemplateNamed(tplPath) {
+  if (tplCache[tplPath]) return tplCache[tplPath];
+  // 按本模块文件(admin/modules/spot-core.js)解析相对路径，而非文档基准(admin/index.html)。
+  // 这样 ../../ 在「本地根部署」与「GitHub Pages 子目录部署」(/zhangjiajie-tours-v3/) 下都正确回到仓库根，
+  // 避免请求越出仓库落到用户名根 → 404。参考 hotels.js:1471 同款写法。
+  const url = new URL('../../' + tplPath, import.meta.url).href;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('模板加载失败 HTTP ' + res.status + ' @ ' + url);
+  const t = await res.text();
+  tplCache[tplPath] = t;
+  return t;
+}
+function fillTemplate(tpl, item, k = 'attraction') {
+  const cleaned = item.related ? { ...item, related: item.related } : item;
+  const map = Fragments.buildPageMap(cleaned, k);
+  let out = tpl;
+  for (const [kk, v] of Object.entries(map)) out = out.split('{{' + kk + '}}').join(v);
+  const jsonld = k === 'experience' ? Fragments.buildExperienceJsonLd(item) : Fragments.buildAttractionJsonLd(item);
+  out = out.replace(
+    /<script type="application\/ld\+json">[\s\S]*?<\/script>/,
+    '<script type="application/ld+json">\n' + JSON.stringify(jsonld, null, 2) + '\n  </script>'
+  );
+  out = applyNav(out, siteNav, '../');
+  out = applyIndexNav(out, buildIndexNav(hotelCategories, '../'));
+  const leftovers = [...out.matchAll(/\{\{[A-Z_]+\}\}/g)].map((m) => m[0]);
+  if (leftovers.length) console.warn('[spot-preview] leftover placeholders:', [...new Set(leftovers)].join(', '));
+  return out;
+}
+
+// 供其它模块复用：用真实模板渲染某个 spot/experience 详情页（所见即所得）。
+// 例如 Top 8 模块的「详情页」tab 直接复用，避免只 fetch 已部署页（只读、易过期、与后台数据漂移）。
+export async function renderSpotDetailPreview(container, arr, slug, k = 'attraction', tplPath = 'templates/attraction-page.html') {
+  container.replaceChildren();
+  const item = (arr || []).find((i) => i.slug === slug);
+  if (!item) { container.append(el('div', { class: 'pv-empty', text: '未找到 slug=' + slug + ' 的详情数据。' })); return; }
+  const iframe = el('iframe', { class: 'pv-iframe', title: '实时预览 · ' + slug });
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = '0';
+  container.append(iframe);
+  try {
+    const tpl = await loadTemplateNamed(tplPath);
+    iframe.srcdoc = fillTemplate(tpl, item, k);
+  } catch (e) {
+    container.replaceChildren(el('div', { class: 'pv-empty', text: '预览加载失败：' + e.message }));
+  }
 }
 
 // 收集一个数组所有引用到的根图片名（用于保存前校验死链；跳过 hidden 项）

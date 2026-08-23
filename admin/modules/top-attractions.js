@@ -3,6 +3,7 @@
 // 右栏预览复用 top-attractions-render.js 的 buildTopAttractionsHtml（与 build 同源 → 所见即所得）。
 import { createImageLib } from '../imglib-core.js';
 import { buildTopAttractionsHtml, BADGE } from './top-attractions-render.js';
+import { renderSpotDetailPreview } from './spot-core.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -346,9 +347,9 @@ export function renderPreview(container, d, selection) {
 }
 
 // ============================================================
-// 详情页预览：渲染已有的独立详情页 attractions/<slug>.html（只读，不编辑详情内容）
-// 与酒店「三级详情页」预览同理，但景点详情页是独立部署页面，直接 fetch 线上真实页面注入 iframe。
-// 详情页资源用 ../styles、../images（相对 attractions/ 子目录），在 srcdoc（基址 /admin/）下解析正确。
+// 详情页预览：用真实模板 templates/attraction-page.html + 实时 attractions-data.mjs
+// 渲染（所见即所得），不再 fetch 已部署页（只读、易过期、与后台数据漂移）。
+// 复用 spot-core 的 renderSpotDetailPreview（单一真源 → 与「景点详情页」模块预览完全一致）。
 // ============================================================
 export async function renderAttractionDetailPreview(container, slug) {
   container.replaceChildren();
@@ -356,22 +357,11 @@ export async function renderAttractionDetailPreview(container, slug) {
     container.replaceChildren(el('div', { class: 'pv-loading', text: '未选择景点卡片，无法预览详情页。' }));
     return;
   }
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: 'Attraction detail preview · ' + slug,
-    style: 'width:100%;height:100%;border:0;background:#fff',
-  });
-  container.append(iframe);
-  const loading = el('div', { class: 'pv-loading', text: '加载详情页…' });
-  container.append(loading);
   try {
-    const res = await fetch(`../attractions/${encodeURIComponent(slug)}.html`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('not found (' + res.status + ')');
-    const html = await res.text();
-    loading.remove();
-    iframe.srcdoc = html;
+    const mod = await import('../../attractions-data.mjs');
+    const arr = mod.attractions || [];
+    await renderSpotDetailPreview(container, arr, slug, 'attraction');
   } catch (e) {
-    loading.remove();
-    container.replaceChildren(el('div', { class: 'pv-loading', text: `暂无「${slug}」的详情页（attractions/${slug}.html 不存在或未部署）。` }));
+    container.replaceChildren(el('div', { class: 'pv-loading', text: '加载详情数据失败：' + e.message }));
   }
 }
