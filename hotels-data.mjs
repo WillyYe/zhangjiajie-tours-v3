@@ -6,7 +6,7 @@
 export const hotels = {
   jimo: {
     name: 'Sun Valley Resort ',
-    zh: '积木酒店',
+    zh: '',
     area: 'Wulingyuan Core',
     tier: 'Boutique',
     img: 'hotel-jimo-dji_0423-hdr-3',
@@ -864,6 +864,7 @@ export const hotelCategories = [
       {
         q: 'What’s the price range?',
         a: 'From around ¥130/night at value stays to ¥600+ at scenic-view and international hotels. Peak season (May–Oct and holidays) books out early — reserve ahead.',
+        qZh: 'zhangjiajie2026',
       },
     ],
     cardTitle: 'Mountain Lodges',
