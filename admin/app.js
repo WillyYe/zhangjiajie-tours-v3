@@ -33,8 +33,8 @@ const MODULES = {
   },
   topAttractions: {
     file: 'home-data.mjs',
-    title: '🏞 景点 Top Attractions',
-    hint: '编辑首页景点卡片，保存即上线。图片仅限本模块图库 images/top-attractions/，不与其他模块混用。',
+    title: '⭐ Top 8 Must-See Spots',
+    hint: '编辑首页 Top 8 必看景点卡片，保存即上线。图片仅限本模块图库 images/top-attractions/，不与其他模块混用。',
   },
   welcome: {
     file: 'home-data.mjs',

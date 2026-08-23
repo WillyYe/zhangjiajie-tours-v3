@@ -115,7 +115,7 @@ async function runtimeGate() {
     }
   }
 
-  check(ta, ta.renderPreview, taData, '景点 Top Attractions');
+  check(ta, ta.renderPreview, taData, 'Top 8 Must-See Spots');
   check(nav, nav.renderPreview, navData, '顶部导航 Nav');
   check(welcome, welcome.renderPreview, welcomeData, '欢迎区 Welcome');
 }
