@@ -34,7 +34,7 @@ const MODULES = {
   topAttractions: {
     file: 'home-data.mjs',
     title: '⭐ Top 8 Must-See Spots',
-    hint: '编辑首页 Top 8 必看景点卡片，保存即上线。图片仅限本模块图库 images/top-attractions/，不与其他模块混用。',
+    hint: '编辑首页 Top 8 必看景点表格（Spot / Highlight / Time / Vibe），保存即上线。点击 Spot 进入 attractions/<slug>.html 详情页。',
   },
   welcome: {
     file: 'home-data.mjs',

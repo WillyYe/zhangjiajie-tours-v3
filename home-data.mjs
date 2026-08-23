@@ -71,17 +71,17 @@ export const siteNav = {
 // 仅管首页 #attraction 区块的 8 张卡片；详情页（attractions/<slug>.html）由 attractions-data.mjs 生成，互不耦合。
 // 角标颜色用关键字（badgeColor），运营不写裸类名；图片仅取自 images/top-attractions/。
 export const topAttractions = {
-  eyebrow: 'Explore',
-  title: 'Top Attractions in Zhangjiajie',
-  subtitle: 'Eight must-see destinations — the same iconic spots ranked in our Top 8 list, from the Avatar mountains to hidden caves.',
+  eyebrow: "DON'T MISS THESE",
+  title: 'Top 8 Must-See Spots',
+  subtitle: 'The spots our guests love most, ranked by how often they actually go.',
   items: [
-    { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', imgAlt: 'Yuanjiajie Avatar Mountains', imgW: 800, imgH: 450, badge: 'Avatar · Pandora', badgeColor: 'forest', title: 'Yuanjiajie (Avatar Mountains)', desc: 'The real-life Pandora — sandstone pillars that inspired Avatar\'s Hallelujah Mountains. Ride the Bailong Elevator and walk the Avatar viewpoint.', hidden: false },
-    { slug: 'tianzi', img: 'tianzi-autumn', imgAlt: 'Tianzi Mountain', imgW: 1200, imgH: 781, badge: 'Sea of Clouds', badgeColor: 'emerald', title: 'Tianzi Mountain', desc: 'Legendary peak forest with rolling seas of clouds and crimson sunrises. Named after Xiang Dakun, the Tujia "Son of Heaven". Best at dawn.', hidden: false },
-    { slug: 'tianmen', img: 'peaks-panorama', imgAlt: 'Tianmen Mountain', imgW: 1200, imgH: 815, badge: 'World Record', badgeColor: 'gold', title: 'Tianmen Mountain', desc: 'Ride the world\'s longest cable car (7.5 km), climb the 999-step Heavenly Stairway, and walk the glass skywalk at 1,500 m.', hidden: false },
-    { slug: 'jinbian', img: 'jinbianxi-stream', imgAlt: 'Golden Whip Stream', imgW: 800, imgH: 534, badge: 'Family Friendly', badgeColor: 'blue', title: 'Golden Whip Stream', desc: 'A flat 7.5 km valley walk along a crystal stream, shaded by peaks and home to playful wild macaques. Easy and perfect for families.', hidden: false },
-    { slug: 'grand-canyon', img: 'yangjiajie-wall', imgAlt: 'Grand Canyon Glass Bridge', imgW: 1200, imgH: 801, badge: 'Thrill Seeker', badgeColor: 'red', title: 'Grand Canyon Glass Bridge', desc: 'The world\'s highest & longest glass-bottom suspension bridge (430 m), 300 m above the canyon floor. Bungee jumping available!', hidden: false },
-    { slug: 'huangshizhai', img: 'huangshizhai-winter', imgAlt: 'Huangshizhai', imgW: 1200, imgH: 627, badge: 'Panorama', badgeColor: 'orange', title: 'Huangshizhai', desc: 'A classic loop trail with a 360° panorama of the quartz-sandstone peaks. "He who doesn\'t reach Huangshizhai hasn\'t seen Zhangjiajie."', hidden: false },
-    { slug: 'baofeng', img: 'gallery-painting', imgAlt: 'Baofeng Lake', imgW: 1200, imgH: 801, badge: 'Relaxing', badgeColor: 'blue', title: 'Baofeng Lake', desc: 'A pristine alpine lake surrounded by towering cliffs. Take a boat ride while local ethnic singers perform traditional folk songs. Pure serenity.', hidden: false },
-    { slug: 'yellow-dragon', img: 'jinbianxi-rock', imgAlt: 'Yellow Dragon Cave', imgW: 970, imgH: 1200, badge: 'Underground Wonder', badgeColor: 'purple', title: 'Yellow Dragon Cave', desc: 'One of China\'s largest karst cave systems — 13 levels, underground rivers, stalactites and waterfalls spanning 48 hectares beneath the earth.', hidden: false },
+    { slug: 'yuanjiajie', title: 'Yuanjiajie (Avatar Mountains)', highlight: 'Bailong Elevator, floating peaks', time: '3-4 hrs', vibeEmoji: '🌌', vibe: 'Epic', hidden: false },
+    { slug: 'tianzi', title: 'Tianzi Mountain', highlight: 'Sea of clouds, sunrise', time: '3-4 hrs', vibeEmoji: '☁️', vibe: 'Dreamy', hidden: false },
+    { slug: 'tianmen', title: 'Tianmen Mountain', highlight: 'Cable car, 999 steps, glass walk', time: 'Half-full day', vibeEmoji: '😱', vibe: 'Thrilling', hidden: false },
+    { slug: 'jinbian', title: 'Golden Whip Stream', highlight: 'Flat valley walk, wild monkeys', time: '2-3 hrs', vibeEmoji: '🌿', vibe: 'Relaxing', hidden: false },
+    { slug: 'grand-canyon', title: 'Grand Canyon Glass Bridge', highlight: 'Transparent bridge, bungee', time: '3-4 hrs', vibeEmoji: '⚡', vibe: 'Adrenaline', hidden: false },
+    { slug: 'huangshizhai', title: 'Huangshizhai', highlight: '360° panorama loop trail', time: '2-3 hrs', vibeEmoji: '🏔️', vibe: 'Vistas', hidden: false },
+    { slug: 'baofeng', title: 'Baofeng Lake', highlight: 'Boat ride, folk songs', time: '2-3 hrs', vibeEmoji: '🛶', vibe: 'Serene', hidden: false },
+    { slug: 'yellow-dragon', title: 'Yellow Dragon Cave', highlight: 'Karst caves, underground river', time: '2-3 hrs', vibeEmoji: '🐉', vibe: 'Mystical', hidden: false },
   ],
 };
