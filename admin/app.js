@@ -5,6 +5,9 @@ import { renderEditor as renderHeroEditor, renderPreview as renderHeroPreview } 
 import { renderEditor as renderTopAttractionsEditor, renderPreview as renderTopAttractionsPreview, renderAttractionDetailPreview } from './modules/top-attractions.js';
 import { renderEditor as renderWelcomeEditor, renderPreview as renderWelcomePreview } from './modules/welcome.js';
 import { renderEditor as renderNavEditor, renderPreview as renderNavPreview } from './modules/nav.js';
+import { renderEditor as renderAttractionsEditor, renderPreview as renderAttractionsPreview } from './modules/attractions.js';
+import { renderEditor as renderExperiencesEditor, renderPreview as renderExperiencesPreview } from './modules/experiences.js';
+import { collectImageNames } from './modules/spot-core.js';
 import { listTopAttractionImages } from './modules/top-attractions-render.js';
 import { initResizers } from './resizer.js';
 import {
@@ -41,6 +44,16 @@ const MODULES = {
     title: '🧭 顶部导航 Nav',
     hint: '编辑首页顶部导航菜单，保存即上线。隐藏项前台不渲染；Hotels 项自动输出酒店二级菜单。',
   },
+  attractions: {
+    file: 'attractions-data.mjs',
+    title: '🏞 景点详情页 Attractions',
+    hint: '编辑景点详情页（H1、亮点、路线、票务、画廊、FAQ 等），保存即上线。图片为根目录 images/ 图库。隐藏项前台不生成该页。',
+  },
+  experiences: {
+    file: 'experiences-data.mjs',
+    title: '🎢 体验 Experiences',
+    hint: '编辑体验页（玻璃桥、天门山、直升机等），保存即上线。图片为根目录 images/ 图库。隐藏项前台不生成该页。',
+  },
 };
 
 const state = {
@@ -56,6 +69,10 @@ const state = {
   welcomeSel: { type: 'block' },
   nav: null,
   navSel: { type: 'block' },
+  attractions: null,
+  attractionsSel: null,
+  experiences: null,
+  experiencesSel: null,
   sha: null,
   dirty: false,
   // 酒店预览模式：'card' = 卡片(默认)，'detail' = 三级详情页
@@ -147,6 +164,14 @@ async function loadModule(name) {
       state.nav = navBlock ? navBlock.value : { items: [] };
       if (!Array.isArray(state.nav.items)) state.nav.items = [];
       state.navSel = { type: 'block' };
+    } else if (name === 'attractions') {
+      const aBlock = blocks.find((b) => b.name === 'attractions');
+      state.attractions = aBlock ? aBlock.value : [];
+      state.attractionsSel = state.attractions.length ? state.attractions[0].slug : null;
+    } else if (name === 'experiences') {
+      const eBlock = blocks.find((b) => b.name === 'experiences');
+      state.experiences = eBlock ? eBlock.value : [];
+      state.experiencesSel = state.experiences.length ? state.experiences[0].slug : null;
     }
     renderEditorForCurrent();
     renderPreviewForCurrent();
@@ -190,6 +215,18 @@ function renderEditorForCurrent() {
       editorEl, state.nav,
       () => { setStatus(true); renderPreviewForCurrent(); },
       (sel) => { state.navSel = sel; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'attractions') {
+    renderAttractionsEditor(
+      editorEl, state.attractions,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (slug) => { state.attractionsSel = slug; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'experiences') {
+    renderExperiencesEditor(
+      editorEl, state.experiences,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (slug) => { state.experiencesSel = slug; renderPreviewForCurrent(); },
     );
   }
 }
@@ -242,6 +279,14 @@ function renderPreviewForCurrent() {
     previewTabsEl.hidden = true;
     previewTitleEl.textContent = '实时预览 · 顶部导航';
     renderNavPreview(previewEl, state.nav, state.navSel || { type: 'block' });
+  } else if (state.module === 'attractions') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 景点详情页';
+    renderAttractionsPreview(previewEl, state.attractions, state.attractionsSel);
+  } else if (state.module === 'experiences') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 体验页';
+    renderExperiencesPreview(previewEl, state.experiences, state.experiencesSel);
   }
 }
 
@@ -275,6 +320,17 @@ async function validateTopAttractionImages() {
   const missing = [];
   for (const p of listTopAttractionImages(state.topAttractions)) {
     if (!(await fileExists(p))) missing.push(`景点卡片图 ${p}`);
+  }
+  return missing;
+}
+
+// 景点/体验 保存前校验根图片引用（跳过 hidden 项，不产生死链）
+async function validateSpotImages(arr) {
+  const fileExists = async (p) => { try { return Boolean(await getFileSha(p)); } catch { return true; } };
+  const missing = [];
+  for (const name of collectImageNames(arr)) {
+    const p = `images/${name}.webp`;
+    if (!(await fileExists(p))) missing.push(`图片 ${p}`);
   }
   return missing;
 }
@@ -324,6 +380,26 @@ async function save() {
     } else if (state.module === 'nav') {
       const newText = rebuild(state.preamble, state.blocks, { siteNav: state.nav });
       const { sha } = await putFile(MODULES.nav.file, newText, state.sha, 'Update siteNav via admin');
+      state.sha = sha;
+    } else if (state.module === 'attractions') {
+      const missing = await validateSpotImages(state.attractions);
+      if (missing.length) {
+        toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
+        saveBtn.disabled = false;
+        return;
+      }
+      const newText = rebuild(state.preamble, state.blocks, { attractions: state.attractions });
+      const { sha } = await putFile(MODULES.attractions.file, newText, state.sha, 'Update attractions via admin');
+      state.sha = sha;
+    } else if (state.module === 'experiences') {
+      const missing = await validateSpotImages(state.experiences);
+      if (missing.length) {
+        toast('图片缺失，已阻止保存：' + missing.slice(0, 3).join('；') + (missing.length > 3 ? ` 等 ${missing.length} 处` : ''), 'err');
+        saveBtn.disabled = false;
+        return;
+      }
+      const newText = rebuild(state.preamble, state.blocks, { experiences: state.experiences });
+      const { sha } = await putFile(MODULES.experiences.file, newText, state.sha, 'Update experiences via admin');
       state.sha = sha;
     }
     setStatus(false);

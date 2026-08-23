@@ -604,3 +604,57 @@ body.resizing, body.resizing * {
   text-shadow: 0 1px 10px rgba(0,0,0,.3);
 }
 .hp-desc em { font-style: italic; color: #fff; font-weight: 600; }
+
+/* ---------- 景点/体验 详情页编辑器（spot-core） ---------- */
+.he-tree-add {
+  width: calc(100% - 8px); margin: 8px 4px 4px; padding: 8px 10px;
+  font-size: 12px; font-weight: 700; color: var(--brand); background: #eff6ff;
+  border: 1px dashed #bfdbfe; border-radius: 8px; cursor: pointer; text-align: left;
+}
+.he-tree-add:hover { background: #dbeafe; }
+
+/* 图片字段 */
+.img-field { display: flex; gap: 12px; align-items: flex-start; }
+.img-thumb {
+  width: 92px; height: 64px; object-fit: cover; border-radius: 8px;
+  border: 1px solid var(--line); background: #f1f5f9; flex: none;
+}
+.img-thumb.img-broken { display: none; }
+.img-field-row { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.img-field-btns { display: inline-flex; gap: 8px; }
+
+/* JSON 文本域 */
+.json-area { width: 100%; min-height: 220px; font-family: ui-monospace, monospace; font-size: 13px; line-height: 1.5; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; resize: vertical; }
+.img-lib-status { margin-top: 8px; font-size: 12px; padding: 6px 10px; border-radius: 8px; }
+.img-lib-status.err { background: #fef2f2; color: #b91c1c; }
+.img-lib-status.ok { background: #ecfdf5; color: #047857; }
+.img-lib-status.info { background: #eff6ff; color: #1d4ed8; }
+
+/* 嵌套字段集 / 列表项 */
+.sub-fields { border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px 16px; margin: 16px 0; background: #fbfdff; }
+.sub-fields > legend { font-size: 13px; font-weight: 800; color: var(--brand); padding: 0 8px; text-transform: uppercase; letter-spacing: .04em; }
+.list-items { display: flex; flex-direction: column; gap: 12px; }
+.list-item { border: 1px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+.list-item.drag-over { outline: 2px dashed var(--brand); outline-offset: -2px; background: rgba(37,99,235,.06); }
+.list-item-head { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #f8fafc; border-bottom: 1px solid var(--line); cursor: grab; }
+.list-grip { color: var(--muted); font-size: 12px; }
+.list-idx { font-size: 11px; font-weight: 800; color: var(--muted); background: #e2e8f0; border-radius: 999px; padding: 1px 7px; }
+.list-item-title { flex: 1; min-width: 0; font-size: 13px; font-weight: 700; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list-item-body { padding: 12px 16px 14px; }
+.list-item-body .field { margin: 10px 0; }
+.list-item-body .sub-fields { margin: 10px 0; }
+
+.check-row { display: flex; align-items: center; gap: 8px; margin: 14px 0; font-size: 14px; font-weight: 600; }
+.check-row input { width: auto; }
+
+/* 图片库弹层 */
+.modal-wide { max-width: 760px; }
+.img-lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-top: 12px; max-height: 46vh; overflow: auto; }
+.img-lib-item { display: flex; flex-direction: column; gap: 4px; padding: 6px; border: 1px solid var(--line); border-radius: 10px; background: #fff; cursor: pointer; text-align: center; }
+.img-lib-item:hover { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(37,99,235,.14); }
+.img-lib-item img { width: 100%; height: 70px; object-fit: cover; border-radius: 6px; background: #f1f5f9; }
+.img-lib-name { font-size: 10px; color: var(--muted); word-break: break-all; }
+.img-upload-input { display: block; width: 100%; margin-bottom: 10px; }
+
+/* 预览 iframe */
+.pv-iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; }

@@ -13,6 +13,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { planGuides } from '../plan-guides-data.mjs';
+import { siteNav } from '../home-data.mjs';
+import { applyNav } from '../admin/modules/nav-render.js';
+import { applyIndexNav, buildIndexNav } from './index-nav.mjs';
+import { hotelCategories } from '../hotels-data.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -177,6 +181,9 @@ for (const guide of planGuides) {
     allOk = false;
     continue;
   }
+
+  out = applyNav(out, siteNav, '../');
+  out = applyIndexNav(out, buildIndexNav(hotelCategories, '../'));
 
   const dest = path.join(OUT_DIR, guide.slug + '.html');
   fs.writeFileSync(dest, out, 'utf8');

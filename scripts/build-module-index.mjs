@@ -6,6 +6,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { modules, SITE_BASE } from '../module-index-data.mjs';
+import { siteNav } from '../home-data.mjs';
+import { applyNav } from '../admin/modules/nav-render.js';
+import { applyIndexNav, buildIndexNav } from './index-nav.mjs';
+import { hotelCategories } from '../hotels-data.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -94,17 +98,28 @@ for (const m of modules) {
     out = out.split(k).join(v);
   }
 
+  // Data-driven nav (single source = siteNav; skip hidden items like Plan/Food).
+  out = applyNav(out, siteNav, '../');
+  out = applyIndexNav(out, buildIndexNav(hotelCategories, '../'));
+
   // Mark the current module's top-level nav link as active + expose it to
   // assistive tech via aria-current="page". Exactly one top-level link should
   // carry it per page (mega-link sub-items are excluded by the test's :not()).
+  // Skip when the module's nav item is hidden (Plan/Food): there is no link to
+  // mark, and the page is intentionally unreachable from the nav — not an error.
   {
-    const activeHref = `../${m.slug}/index.html`;
-    const re = new RegExp(`(<a href="${activeHref}"[^>]*class="nav-link)([^"]*)(")`);
-    if (re.test(out)) {
-      out = out.replace(re, `$1 active$2" aria-current="page"`);
+    const navItem = siteNav.items.find((it) => it.url === `${m.slug}/index.html`);
+    if (navItem && navItem.hidden) {
+      // hidden module: no nav link to mark active
     } else {
-      console.error(`✗ [${m.slug}] active nav link ${activeHref} not found — aria-current not injected`);
-      allOk = false;
+      const activeHref = `../${m.slug}/index.html`;
+      const re = new RegExp(`(<a href="${activeHref}"[^>]*class="nav-link)([^"]*)(")`);
+      if (re.test(out)) {
+        out = out.replace(re, `$1 active$2" aria-current="page"`);
+      } else {
+        console.error(`✗ [${m.slug}] active nav link ${activeHref} not found — aria-current not injected`);
+        allOk = false;
+      }
     }
   }
 

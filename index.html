@@ -479,19 +479,6 @@
           <li class="nav-item h-full flex items-center">
             <a href="tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Tours</a>
           </li>
-          <li class="nav-item h-full flex items-center">
-            <a href="plan/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
-              Plan
-              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
-            </a>
-            <div class="mega-menu" style="width:260px;">
-              <div class="flex flex-col gap-1">
-                <a href="plan/zhangjiajie-itinerary.html" class="mega-link">Zhangjiajie Itinerary (3–5 Days)</a>
-                <a href="plan/best-time-to-visit-zhangjiajie.html" class="mega-link">Best Time to Visit</a>
-                <a href="plan/zhangjiajie-vs-wulingyuan.html" class="mega-link">Zhangjiajie vs Wulingyuan</a>
-              </div>
-            </div>
-          </li>
           <!--HOTEL-NAV:MEGA:START-->
           <li class="nav-item h-full flex items-center">
             <a href="hotels/mountain-lodges.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
@@ -542,10 +529,6 @@
       <a href="experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
       <a href="experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
       <a href="tours/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Tours</a>
-      <a href="plan/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Plan</a>
-      <a href="plan/zhangjiajie-itinerary.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Zhangjiajie Itinerary (3–5 Days)</a>
-      <a href="plan/best-time-to-visit-zhangjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Best Time to Visit</a>
-      <a href="plan/zhangjiajie-vs-wulingyuan.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Zhangjiajie vs Wulingyuan</a>
       <!--HOTEL-NAV:MOBILE:START-->
       <a href="hotels/mountain-lodges.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏔️ Mountain Lodges</a>
       <a href="hotels/selected-stays.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">⭐ Selected Stays</a>
@@ -924,8 +907,8 @@
     </div>
   </section>
 
-  <!-- ========== 5. PLAN LIKE A LOCAL ========== -->
-  <section id="plan" class="py-24 px-6 bg-white">
+  <!-- ========== 5. PLAN LIKE A LOCAL (hidden: Plan module not shown on frontend; toggle via siteNav Plan.hidden) ========== -->
+  <section id="plan" class="py-24 px-6 bg-white" hidden>
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16 fade-in">
         <p class="text-gold-dark text-sm font-medium tracking-[0.2em] uppercase mb-4">Plan Like a Local</p>
@@ -1020,8 +1003,8 @@
     </div>
   </section>
 
-  <!-- ========== 7. FOOD ========== -->
-  <section id="food" class="py-24 px-6 bg-stone-50">
+  <!-- ========== 7. FOOD (hidden: Food module not shown on frontend; toggle via siteNav Food.hidden) ========== -->
+  <section id="food" class="py-24 px-6 bg-stone-50" hidden>
     <div class="max-w-7xl mx-auto">
       <div class="flex items-end justify-between mb-6">
         <div>

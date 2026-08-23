@@ -9,12 +9,13 @@ const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 // Each block is the inner HTML between the matching <!--HOTEL-NAV:*:START/END--> markers.
 // Indentation matches the original hand-written index.html exactly so that with all 4
 // categories visible the output is byte-identical (zero regression).
-export function buildIndexNav(cats) {
+export function buildIndexNav(cats, base = '') {
   const vis = cats.filter((c) => !c.hidden);
-  const topHref = vis.length ? `hotels/${vis[0].slug}.html` : '#';
+  const hp = (slug) => base + 'hotels/' + slug + '.html';
+  const topHref = vis.length ? hp(vis[0].slug) : '#';
 
   const megaLinks = vis.map((c) =>
-    `                <a href="hotels/${c.slug}.html" class="mega-link">${c.navLabel}</a>`
+    `                <a href="${hp(c.slug)}" class="mega-link">${c.navLabel}</a>`
   ).join('\n');
 
   const mega =
@@ -31,7 +32,7 @@ ${megaLinks}
           </li>`;
 
   const mobile = vis.map((c) =>
-    `      <a href="hotels/${c.slug}.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">${c.navLabel}</a>`
+    `      <a href="${hp(c.slug)}" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">${c.navLabel}</a>`
   ).join('\n');
 
   const cards = vis.map((c) => {
@@ -41,7 +42,7 @@ ${megaLinks}
     const m = /^hotel-([a-z0-9-]+)-/.exec(c.cardImg || '');
     const dir = (m && m[1]) || c.slug;
     const img = `images/${dir}/${imgName(c.cardImg)}`;
-    return `        <a href="hotels/${c.slug}.html" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
+    return `        <a href="${hp(c.slug)}" class="group relative min-h-[240px] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 fade-in block">
           <img src="${img}" alt="${escAttr(c.cardAlt)}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" loading="lazy" decoding="async">
           <div class="absolute inset-0 bg-gradient-to-t from-forest/85 via-forest/20 to-transparent"></div>
           <div class="absolute inset-0 flex flex-col justify-end p-6 text-white">

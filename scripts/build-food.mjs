@@ -6,6 +6,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { foodCategories } from '../food-data.mjs';
+import { siteNav } from '../home-data.mjs';
+import { applyNav } from '../admin/modules/nav-render.js';
+import { applyIndexNav, buildIndexNav } from './index-nav.mjs';
+import { hotelCategories } from '../hotels-data.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -161,7 +165,7 @@ for (const cat of foodCategories) {
     name: x.name, url: `${base}/food/${cat.slug}.html`,
   }));
 
-  const html = fill(tpl, {
+  let html = fill(tpl, {
     TITLE: escHtml(`${cat.title} in Zhangjiajie | Visit Zhangjiajie`),
     META_DESC: escAttr(cat.metaDesc),
     CANONICAL: `${base}/food/${cat.slug}.html`,
@@ -177,6 +181,9 @@ for (const cat of foodCategories) {
     BODY: body,
     JSONLD: JSON.stringify(itemListJsonLd(items), null, 2),
   });
+
+  html = applyNav(html, siteNav, '../');
+  html = applyIndexNav(html, buildIndexNav(hotelCategories, '../'));
 
   const dest = path.join(OUT_DIR, cat.slug + '.html');
   fs.writeFileSync(dest, html, 'utf8');

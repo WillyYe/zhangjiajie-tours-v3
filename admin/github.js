@@ -107,6 +107,24 @@ export async function putFile(path, text, sha, message) {
   return { sha: data.content.sha };
 }
 
+// 列出目录内容，返回文件名数组（仅 type==='file'）。
+// 用于根目录 images/ 图库浏览。空目录/404 返回 []。
+export async function listDir(path) {
+  const { token, repo, branch } = getConfig();
+  const url = `${API}/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
+  const headers = { Accept: 'application/vnd.github+json' };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(url, { headers });
+  if (res.status === 404) return [];
+  if (!res.ok) {
+    const msg = await res.text().catch(() => '');
+    throw new Error(`列目录 ${path} 失败 (${res.status}) ${msg.slice(0, 200)}`);
+  }
+  const data = await res.json();
+  if (!Array.isArray(data)) return [];
+  return data.filter((e) => e.type === 'file').map((e) => e.name);
+}
+
 // 查询文件 SHA；不存在返回 null（用于「新建 vs 更新」判断，以及删除时必填）
 export async function getFileSha(path) {
   const { token, repo, branch } = getConfig();

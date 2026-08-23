@@ -32,7 +32,7 @@ export const welcome = {
 export const siteNav = {
   items: [
     { label: 'Home', url: 'index.html', hidden: false, children: [] },
-    { label: 'Attractions', url: 'attractions/index.html', hidden: false, children: [
+    { label: 'Attractions', url: 'attractions/index.html', hidden: false, footerLabel: 'Attractions', children: [
       { label: 'Tianzi Mountain', url: 'attractions/tianzi.html' },
       { label: 'Golden Whip Stream', url: 'attractions/jinbian.html' },
       { label: 'Huangshizhai', url: 'attractions/huangshizhai.html' },
@@ -42,7 +42,7 @@ export const siteNav = {
       { label: 'Yellow Dragon Cave', url: 'attractions/yellow-dragon.html' },
       { label: 'Yuanjiajie (Avatar)', url: 'attractions/yuanjiajie.html' },
     ] },
-    { label: 'Experiences', url: 'experiences/index.html', hidden: false, children: [
+    { label: 'Experiences', url: 'experiences/index.html', hidden: false, footerLabel: 'Experiences', children: [
       { label: 'Avatar & Bailong Elevator', url: 'experiences/avatar-bailong-elevator.html' },
       { label: 'Glass Bridge & Bungee', url: 'experiences/glass-bridge-bungee.html' },
       { label: 'Tianmen Mountain', url: 'experiences/tianmen-mountain.html' },
@@ -50,13 +50,14 @@ export const siteNav = {
       { label: 'Cultural Shows', url: 'experiences/cultural-shows.html' },
       { label: 'Minority & Local Life', url: 'experiences/minority-local-life.html' },
     ] },
-    { label: 'Tours', url: 'tours/index.html', hidden: false, children: [] },
-    { label: 'Plan', url: 'plan/index.html', hidden: false, children: [
+    { label: 'Tours', url: 'tours/index.html', hidden: false, footerLabel: 'Tours & Itineraries', children: [] },
+    { label: 'Plan', url: 'plan/index.html', hidden: true, footerLabel: 'Plan Like a Local', children: [
       { label: 'Zhangjiajie Itinerary (3–5 Days)', url: 'plan/zhangjiajie-itinerary.html' },
       { label: 'Best Time to Visit', url: 'plan/best-time-to-visit-zhangjiajie.html' },
       { label: 'Zhangjiajie vs Wulingyuan', url: 'plan/zhangjiajie-vs-wulingyuan.html' },
     ] },
-    { label: 'Hotels', url: 'hotels/mountain-lodges.html', hidden: false, children: [
+    { label: 'Food', url: 'food/index.html', hidden: true, footerLabel: 'Local Food', children: [] },
+    { label: 'Hotels', url: 'hotels/mountain-lodges.html', hidden: false, footerLabel: 'Hotels', children: [
       { label: '🏔️ Mountain Lodges', url: 'hotels/mountain-lodges.html' },
       { label: '⭐ Selected Stays', url: 'hotels/selected-stays.html' },
       { label: '💡 Value Hotels', url: 'hotels/value-hotels.html' },

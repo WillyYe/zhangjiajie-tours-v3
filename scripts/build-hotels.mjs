@@ -9,6 +9,7 @@ import { hotels, hotelCategories } from '../hotels-data.mjs';
 import { hero as homeHero, topAttractions, welcome, siteNav } from '../home-data.mjs';
 import { buildIndexNav, applyIndexNav } from './index-nav.mjs';
 import { applyHome } from './build-home.mjs';
+import { applyNav } from '../admin/modules/nav-render.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -265,7 +266,7 @@ for (const cat of hotelCategories) {
     url: `${base}/hotels/${cat.slug}.html#${id}`,
   })));
 
-  const html = fill(tpl, {
+  let html = fill(tpl, {
     TITLE: escHtml(`${cat.title} in Zhangjiajie | Visit Zhangjiajie`),
     META_DESC: escAttr(cat.metaDesc),
     CANONICAL: `${base}/hotels/${cat.slug}.html`,
@@ -281,6 +282,9 @@ for (const cat of hotelCategories) {
     BODY: body,
     JSONLD: JSON.stringify(jsonLd, null, 2),
   });
+
+  html = applyNav(html, siteNav, '../');
+  html = applyIndexNav(html, buildIndexNav(hotelCategories, '../'));
 
   const dest = path.join(OUT_DIR, cat.slug + '.html');
   fs.writeFileSync(dest, html, 'utf8');
@@ -301,7 +305,9 @@ for (const key of Object.keys(hotels)) {
   }
   (h.detail.rooms || []).forEach((r) => validateImage(r.img, key));
   (h.detail.gallery || []).forEach((g) => validateImage((typeof g === 'string' ? g : g.img), key));
-  const html = generateDetail(key, h, cat, h.detail);
+  let html = generateDetail(key, h, cat, h.detail);
+  html = applyNav(html, siteNav, '../');
+  html = applyIndexNav(html, buildIndexNav(hotelCategories, '../'));
   fs.writeFileSync(path.join(OUT_DIR, key + '.html'), html, 'utf8');
   console.log(`  ✓ wrote hotels/${key}.html (detail, ${html.length} bytes)`);
   expectedSlugs.add(key);
