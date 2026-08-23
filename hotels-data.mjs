@@ -277,6 +277,7 @@ export const hotels = {
         },
       ],
     },
+    hidden: true,
   },
   vienna: {
     name: 'Vienna International Hotel',
