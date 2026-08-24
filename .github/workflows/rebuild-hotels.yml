@@ -1,7 +1,7 @@
-name: Rebuild front-end pages (hotels + home hero)
+name: Rebuild front-end pages (hotels + home + attractions)
 
-# 当后台通过 GitHub Contents API 修改数据文件（hotels-data.mjs 或 home-data.mjs）后，
-# 自动重新生成静态 HTML（hotels/*.html、index.html 的酒店导航 + 首屏 Hero 区块），
+# 当后台通过 GitHub Contents API 修改数据文件（hotels-data.mjs / home-data.mjs / attractions-data.mjs）后，
+# 自动重新生成静态 HTML（hotels/*.html、attractions/*.html、index.html 的导航 + 首屏 Hero 区块），
 # 避免前端显示旧内容。新增数据文件时把路径加进 paths 即可。
 on:
   push:
@@ -9,6 +9,7 @@ on:
     paths:
       - 'hotels-data.mjs'
       - 'home-data.mjs'
+      - 'attractions-data.mjs'
 
 concurrency:
   group: rebuild-front-${{ github.ref }}
@@ -31,15 +32,17 @@ jobs:
           node-version: 20
 
       - name: Build front-end pages
-        run: node scripts/build-hotels.mjs
+        run: |
+          node scripts/build-hotels.mjs
+          node scripts/build-attractions.mjs
 
       - name: Commit and push regenerated pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           changed=0
-          if ! git diff --quiet -- hotels/ index.html; then
-            git add hotels/ index.html
+          if ! git diff --quiet -- hotels/ attractions/ index.html; then
+            git add hotels/ attractions/ index.html
             changed=1
           fi
           if [ "$changed" = "1" ]; then
