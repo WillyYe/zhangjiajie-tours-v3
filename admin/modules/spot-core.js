@@ -15,7 +15,7 @@ import { applyNav } from './nav-render.js';
 import { applyIndexNav, buildIndexNav } from '../../scripts/index-nav.mjs';
 import { siteNav } from '../../home-data.mjs';
 import { hotelCategories } from '../../hotels-data.mjs';
-import { getFile, putFile, putImage, getFileSha, listDir } from '../github.js';
+import { getFile, putFile, putImage, getFileSha, listDir, deleteFile } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
 
 const imgName = Fragments.imgName;
@@ -53,91 +53,7 @@ function notify(msg, type) {
   else console.log('[spot] ' + msg);
 }
 
-// ---------- Schema（attractions 与 experiences 共用同一套字段骨架）----------
-// type: text | textarea | image | checkbox | json | list | object
-const SCHEMA = [
-  { key: 'file', label: '文件名 file', type: 'text', tip: '生成页面的文件名，一般不动' },
-  { key: 'slug', label: 'Slug（URL 路径）', type: 'text', tip: '地址栏路径，谨慎修改' },
-  { key: 'title', label: 'SEO 标题 title', type: 'text', tip: '浏览器标签 / 分享卡片标题' },
-  { key: 'metaDesc', label: 'Meta Description', type: 'textarea', tip: '搜索摘要，150 字内' },
-  { key: 'canonical', label: 'Canonical URL', type: 'text', tip: '规范链接，一般不动' },
-  { key: 'breadcrumb', label: '面包屑 breadcrumb', type: 'text' },
-  { key: 'h1', label: 'H1 主标题', type: 'text' },
-  { key: 'subtitle', label: '副标题 subtitle', type: 'text' },
-  { key: 'heroImg', label: 'Hero 主图', type: 'image', tip: '根目录 images/<name>.webp' },
-  { key: 'heroImgAlt', label: 'Hero Alt', type: 'text' },
-  { key: 'heroBgImg', label: 'Hero 背景图', type: 'image' },
-  { key: 'heroIntro', label: 'Hero 导语', type: 'textarea' },
-  { key: 'tldr', label: '摘要 TL;DR', type: 'textarea' },
-  { key: 'introH2', label: '导语 H2', type: 'text' },
-  { key: 'introParas', label: '导语段落', type: 'list', of: { type: 'textarea' }, tip: '多条段落' },
-  { key: 'highlightsIntro', label: '亮点导语', type: 'text' },
-  { key: 'highlights', label: '亮点 Highlights', type: 'list', of: { type: 'object', fields: [
-    { key: 'img', label: '图片', type: 'image' },
-    { key: 'alt', label: 'Alt', type: 'text' },
-    { key: 'title', label: '标题', type: 'text' },
-    { key: 'sub', label: '副标', type: 'text' },
-    { key: 'desc', label: '描述', type: 'textarea' },
-  ] } },
-  { key: 'routesIntro', label: '路线导语', type: 'text' },
-  { key: 'routes', label: '路线 Routes', type: 'list', of: { type: 'object', fields: [
-    { key: 'icon', label: '图标', type: 'text' },
-    { key: 'title', label: '标题', type: 'text' },
-    { key: 'sub', label: '副标', type: 'text' },
-    { key: 'steps', label: '步骤', type: 'list', of: { type: 'object', fields: [
-      { key: 'strong', label: '强调', type: 'text' },
-      { key: 'text', label: '说明', type: 'textarea' },
-    ] } },
-  ] } },
-  { key: 'bestTime', label: '最佳时间 Best Time', type: 'object', fields: [
-    { key: 'cards', label: '时间卡片', type: 'list', of: { type: 'object', fields: [
-      { key: 'icon', label: '图标', type: 'text' },
-      { key: 'period', label: '时段', type: 'text' },
-      { key: 'desc', label: '说明', type: 'textarea' },
-    ] } },
-    { key: 'note', label: '备注', type: 'textarea' },
-  ] },
-  { key: 'tips', label: '贴士 Tips', type: 'list', of: { type: 'object', fields: [
-    { key: 'icon', label: '图标', type: 'text' },
-    { key: 'title', label: '标题', type: 'text' },
-    { key: 'desc', label: '描述', type: 'textarea' },
-  ] } },
-  { key: 'gettingThere', label: '到达方式', type: 'list', of: { type: 'object', fields: [
-    { key: 'strong', label: '强调', type: 'text' },
-    { key: 'text', label: '说明', type: 'textarea' },
-  ] } },
-  { key: 'tickets', label: '票务 Tickets', type: 'list', of: { type: 'object', fields: [
-    { key: 'item', label: '项目', type: 'text' },
-    { key: 'detail', label: '说明', type: 'textarea' },
-  ] } },
-  { key: 'facts', label: '事实 Facts', type: 'list', of: { type: 'object', fields: [
-    { key: 'label', label: '标签', type: 'text' },
-    { key: 'value', label: '值', type: 'text' },
-  ] } },
-  { key: 'localTip', label: '本地贴士', type: 'textarea' },
-  { key: 'galleryTitle', label: '画廊标题', type: 'text' },
-  { key: 'gallery', label: '画廊 Gallery', type: 'list', of: { type: 'object', fields: [
-    { key: 'img', label: '图片', type: 'image' },
-    { key: 'alt', label: 'Alt', type: 'text' },
-  ] } },
-  { key: 'faqs', label: 'FAQ', type: 'list', of: { type: 'object', fields: [
-    { key: 'q', label: '问题', type: 'textarea' },
-    { key: 'a', label: '答案', type: 'textarea' },
-  ] } },
-  { key: 'related', label: '相关推荐 Related', type: 'list', of: { type: 'object', fields: [
-    { key: 'slug', label: 'Slug', type: 'text' },
-    { key: 'img', label: '图片', type: 'image' },
-    { key: 'alt', label: 'Alt', type: 'text' },
-    { key: 'title', label: '标题', type: 'text' },
-    { key: 'sub', label: '副标', type: 'text' },
-  ] } },
-  { key: 'geo', label: '地理坐标 Geo', type: 'object', fields: [
-    { key: 'lat', label: '纬度 lat', type: 'text' },
-    { key: 'lng', label: '经度 lng', type: 'text' },
-  ] },
-  { key: 'jsonld', label: '结构化数据 JSON-LD', type: 'json', tip: '机器可读 SEO 数据，谨慎修改' },
-  { key: 'hidden', label: '隐藏（前台不生成该详情页）', type: 'checkbox', tip: '勾选后前台不生成、相关推荐也过滤掉它' },
-];
+import { SCHEMA, findSpotImageReferences } from './spot-refs.js';
 
 // ---------- 图片库（根目录 images/）----------
 let _imgLibModal = null;
@@ -147,6 +63,11 @@ let _imgLibLoading = false;
 let _imgLibBase = '';
 // 当前图库已有的图片名（不含扩展名），用于上传后同步静态清单
 let _imgLibNames = [];
+// 当前模块的全部 spots 数据（删除前引用检查用它扫描所有 type:'image' 字段，防前台破图）
+let _imgLibSpots = [];
+// 打开图库时选中的字段名 + 状态条 DOM（删除反馈复用上传状态条）
+let _imgLibCurrentName = '';
+let _imgLibStatus = null;
 
 // 隔离图库（imgBase 非空）与酒店模块同构：优先读静态清单 admin/imglib/<base>.json（秒开、免 API），
 // 清单缺失时回落到 GitHub listDir。根图库（景点）保持原有 listDir 行为不变。
@@ -176,30 +97,13 @@ async function syncLibList(names) {
 async function ensureImageList(currentName) {
   if (_imgLibLoading) return;
   _imgLibLoading = true;
+  _imgLibCurrentName = currentName || '';
   const folder = 'images' + (_imgLibBase ? '/' + _imgLibBase : '');
-  const thumbBase = '../images/' + (_imgLibBase ? _imgLibBase + '/' : '');
   try {
     const names = await loadLibNames(folder);
-    _imgLibListEl.replaceChildren();
     const webps = names.filter((n) => /\.(webp|jpg|jpeg|avif|png)$/i.test(n));
     _imgLibNames = webps.map((n) => n.replace(/\.(webp|jpg|jpeg|avif|png)$/i, ''));
-    if (!webps.length) _imgLibListEl.append(el('p', { class: 'hint', text: '图库为空，可上传图片。' }));
-    let selectedEl = null;
-    // 数据里 heroImg 等字段可能带扩展名（yuanjiajie-avatar.webp），列表项是去扩展名的，
-    // 必须两边都归一化，否则"当前已选图"永远匹配不上、定位失效。
-    const cur = String(currentName || '').replace(/\.(webp|jpg|jpeg|avif|png)$/i, '');
-    for (const n of webps) {
-      const name = n.replace(/\.(webp|jpg|jpeg|avif|png)$/i, '');
-      const isSel = !!cur && name === cur;
-      const card = el('button', { class: 'img-lib-item' + (isSel ? ' selected' : ''), type: 'button', onclick: () => _imgLibPick && _imgLibPick(name) }, [
-        el('img', { src: thumbBase + n, alt: name, loading: 'lazy', onerror: (e) => (e.target.style.visibility = 'hidden') }),
-        el('span', { class: 'img-lib-name', text: name }),
-      ]);
-      if (isSel) selectedEl = card;
-      _imgLibListEl.append(card);
-    }
-    // 选图后跳到对应图片：打开图库时把已选图片滚动到视野中央并显示出来
-    if (selectedEl) requestAnimationFrame(() => selectedEl.scrollIntoView({ block: 'center', behavior: 'smooth' }));
+    renderLibGrid(currentName);
   } catch (e) {
     _imgLibListEl.replaceChildren(el('p', { class: 'hint', text: '加载图库失败：' + e.message }));
   } finally {
@@ -207,15 +111,117 @@ async function ensureImageList(currentName) {
   }
 }
 
-function openImageLibrary(currentName, onPick, base) {
+// 用内存中的 _imgLibNames 直接渲染网格（删除后立即反映，不重新 fetch 清单，避免 Pages 部署延迟导致陈旧显示）
+function renderLibGrid(currentName) {
+  if (!_imgLibListEl) return;
+  _imgLibListEl.replaceChildren();
+  if (!_imgLibNames.length) {
+    _imgLibListEl.append(el('p', { class: 'hint', text: '图库为空，点「上传选中文件到图库」添加' }));
+    return;
+  }
+  const thumbBase = '../images/' + (_imgLibBase ? _imgLibBase + '/' : '');
+  // 数据里 heroImg 等字段可能带扩展名，列表项是去扩展名的，必须两边都归一化，否则"当前已选图"匹配不上
+  const cur = String(currentName || '').replace(/\.(webp|jpg|jpeg|avif|png)$/i, '');
+  let selectedEl = null;
+  for (const name of _imgLibNames) {
+    const isSel = !!cur && name === cur;
+    const card = el('div', { class: 'img-lib-item' + (isSel ? ' selected' : ''), onclick: () => _imgLibPick && _imgLibPick(name) }, [
+      el('img', { src: thumbBase + name + '.webp', alt: name, loading: 'lazy', onerror: (e) => (e.target.style.visibility = 'hidden') }),
+      el('span', { class: 'img-lib-name', text: name }),
+    ]);
+    // 根库（imgBase 为空 = 根 images/）也允许删除：delete 前由 findAllReferences 做引用检查
+    // （扫描本模块全部 spot 的 image 字段 + 首页 index.html 的 images/<base>/ 引用），
+    // 仅当确无任何引用才放行，运营可安全清理历史孤儿图而绝不破前台（A）。
+    card.append(el('button', {
+      type: 'button', class: 'img-lib-del', title: '删除', text: '🗑',
+      onclick: (e) => { e.stopPropagation(); confirmDelete(name); },
+    }));
+    if (isSel) selectedEl = card;
+    _imgLibListEl.append(card);
+  }
+  if (selectedEl) requestAnimationFrame(() => selectedEl.scrollIntoView({ block: 'center', behavior: 'smooth' }));
+}
+
+// 综合引用检查：① 本模块全部 spots 的 image 字段（防破详情页）；② 首页 index.html 的
+// <img src="images/[base/]name.webp">（防破首页静态区块 / Top 8 网格）。任一命中即拦截删除。
+async function findAllReferences(name) {
+  const refs = [];
+  if (_imgLibSpots && _imgLibSpots.length) {
+    refs.push(...findSpotImageReferences(_imgLibSpots, name));
+  }
+  refs.push(...await findIndexImageReferences(name, _imgLibBase));
+  return refs;
+}
+
+// 扫描首页 index.html 里 `images/<base>/<name>.webp`（base 为空=根库）的直接引用。
+// 后台只读 fetch 线上 index.html，命中即视为被前台引用 → 删除时拦截，避免破图。
+const _IDX_IMG_RE = /src=["']images\/((?:[a-z0-9_-]+)\/)?([a-zA-Z0-9_-]+)\.(?:webp|jpg|jpeg|png|avif)["']/gi;
+async function findIndexImageReferences(name, base) {
+  const target = String(name).replace(/\.(webp|jpg|jpeg|avif|png)$/i, '');
+  try {
+    const res = await fetch(new URL('../../index.html', import.meta.url));
+    if (!res.ok) return [];
+    const html = await res.text();
+    _IDX_IMG_RE.lastIndex = 0;
+    const refs = [];
+    let m;
+    while ((m = _IDX_IMG_RE.exec(html))) {
+      const sub = m[1] ? m[1].replace(/\/$/, '') : '';
+      if (sub !== (base || '')) continue;
+      if (m[2] !== target) continue;
+      const ctx = html.slice(Math.max(0, m.index - 240), m.index);
+      const altM = /alt=["']([^"']{0,40})/i.exec(ctx);
+      refs.push('首页 index.html（' + (altM ? altM[1] : m[2]) + '）');
+    }
+    return refs;
+  } catch (e) { return []; }
+}
+
+// 删除单张图：先引用检查（防破图），再二次确认，最后删 GitHub 文件 + 同步清单 + 重渲染
+async function confirmDelete(name) {
+  const refs = await findAllReferences(name);
+  if (refs.length) {
+    const shown = refs.slice(0, 5).join('、') + (refs.length > 5 ? ' 等' : '');
+    setStatus(_imgLibStatus, `⚠️ 无法删除：${name}.webp 正被引用（${shown}）。删除会导致前台破图。`, 'err');
+    return;
+  }
+  if (!confirm(
+    `确认删除 ${name}.webp？\n\n` +
+    `⚠️ 一级删除图片的风险约束：\n` +
+    `1. 不可恢复：删除后 GitHub 仓库中该文件立即移除，无法通过“撤销”恢复；\n` +
+    `2. 引用检查：系统已自动检查本模块详情页及首页 index.html，若该图正被引用会拦截本次删除；\n` +
+    `3. 破图风险：若绕过检查或后续误改引用路径，可能导致前台破图，需重新上传同名图片或修复引用。\n\n` +
+    `确定要继续删除吗？`
+  )) return;
+  try {
+    setStatus(_imgLibStatus, '删除中…', 'info');
+    const path = `images/${_imgLibBase ? _imgLibBase + '/' : ''}${name}.webp`;
+    const sha = await getFileSha(path);
+    if (!sha) { setStatus(_imgLibStatus, `文件不存在：${path}`, 'err'); return; }
+    await deleteFile(path, sha, `Delete ${name}.webp via admin`);
+    const newNames = _imgLibNames.filter((n) => n !== name);
+    await syncLibList(newNames);
+    _imgLibNames = newNames;
+    renderLibGrid(_imgLibCurrentName);
+    setStatus(_imgLibStatus, `已删除 ${name}.webp`, 'ok');
+  } catch (e) {
+    setStatus(_imgLibStatus, '删除失败：' + e.message, 'err');
+    notify('删除失败：' + e.message, 'err');
+  }
+}
+
+export function openImageLibrary(currentName, onPick, base, spots) {
   _imgLibBase = base || '';
+  // 显式传入引用检查数据源：spot 类模块由 renderForm 已填 _imgLibSpots；
+  // top-attractions 无 spot 数据，传 [] 避免误用其它模块残留数据，仅靠首页 index.html 扫描保护。
+  if (spots !== undefined) _imgLibSpots = spots;
   if (!_imgLibModal) {
     const mask = el('div', { class: 'modal-mask', 'data-modal': 'img-lib', hidden: true });
     const panel = el('div', { class: 'modal modal-wide' });
     const closeBtn = el('button', { type: 'button', class: 'icon-btn', text: '✕', onclick: () => (mask.hidden = true) });
     const header = el('div', { class: 'modal-header' }, [
       el('div', { class: 'modal-icon', text: '🖼' }),
-      el('div', {}, [el('h2', { text: '选择图片' }), el('p', { class: 'modal-subtitle', id: 'spotLibSubtitle', text: _imgLibBase ? `本模块图片库 · images/${_imgLibBase}/（仅显示本模块图片）` : '根目录 images/ 图库（景点与体验共用）' })]),
+      el('div', {}, [el('h2', { text: '选择图片' }), el('p', { class: 'modal-subtitle', id: 'spotLibSubtitle', text: _imgLibBase ? `本模块图片库 · images/${_imgLibBase}/（仅显示本模块图片）` : '根目录 images/ 图库（历史共享图，删除前会检查是否被前台引用）' })]),
       closeBtn,
     ]);
     const fileInput = el('input', { type: 'file', accept: 'image/*', class: 'img-upload-input' });
@@ -250,7 +256,7 @@ function openImageLibrary(currentName, onPick, base) {
   const sub = _imgLibModal.querySelector('#spotLibSubtitle');
   if (sub) sub.textContent = _imgLibBase
     ? `本模块图片库 · images/${_imgLibBase}/（仅显示本模块图片）`
-    : '根目录 images/ 图库（景点与体验共用）';
+    : '根目录 images/ 图库（历史共享图，删除前会检查是否被前台引用）';
   // 选图后：关闭弹窗，由字段侧回调把缩略图滚到视野并高亮，做到"直接跳到对应图片并显示出来"
   _imgLibPick = (name) => {
     _imgLibModal.hidden = true;
@@ -355,10 +361,12 @@ function renderImageField(obj, key, onChange, label, tip, imgPrefix, imgBase) {
     });
   };
   const browse = el('button', { type: 'button', class: 'btn btn-sm', text: '浏览图库', onclick: () => openImageLibrary(obj[key], (name) => { input.value = name; obj[key] = name; updateThumb(); jumpToThumb(); onChange(); }, imgBase) });
+  // 根库入口：景点/体验历史共享图（images/ 根目录）也需可管理（清理孤儿图），故每个 image 字段旁提供根库浏览。
+  const browseRoot = el('button', { type: 'button', class: 'btn btn-sm btn-ghost', title: '浏览根目录 images/ 历史图库（景点与体验共用，含可清理的孤儿图）', text: '🌐 根库', onclick: () => openImageLibrary(obj[key], (name) => { input.value = name; obj[key] = name; updateThumb(); jumpToThumb(); onChange(); }, '') });
   const clear = el('button', { type: 'button', class: 'btn btn-sm btn-ghost', text: '清空', onclick: () => { input.value = ''; obj[key] = ''; updateThumb(); onChange(); } });
   return fieldRow(label, el('div', { class: 'img-field' }, [
     thumb,
-    el('div', { class: 'img-field-row' }, [input, el('div', { class: 'img-field-btns' }, [browse, clear])]),
+    el('div', { class: 'img-field-row' }, [input, el('div', { class: 'img-field-btns' }, [browse, browseRoot, clear])]),
   ]), tip);
 }
 
@@ -429,7 +437,7 @@ function listItemSummary(of, item) {
 export function createSpotEditor(config) {
   const { title, itemLabel, template, kind, imgBase } = config;
   const imgPrefix = imgBase ? imgBase + '/' : '';
-  const ui = { slug: null };
+  const ui = { slug: null, libOpen: false };
 
   function findItem(arr) { return arr.find((i) => i.slug === ui.slug); }
 
@@ -481,6 +489,27 @@ export function createSpotEditor(config) {
         ]));
         tree.append(node);
       });
+      // 图片库分组：独立入口，可直接管理本模块图片 / 删除图片（带引用检查）
+      const libOpen = ui.libOpen;
+      const libHead = el('div', { class: 'he-tree-cat-head' }, [
+        el('span', { class: 'he-chevron', text: '▸', onclick: (e) => { e.stopPropagation(); ui.libOpen = !libOpen; renderTree(); } }),
+        el('span', {
+          class: 'he-tree-cat-name', text: '🖼 图片库',
+          onclick: () => { ui.libOpen = !libOpen; renderTree(); },
+        }),
+      ]);
+      const libCat = el('div', { class: 'he-tree-cat' + (libOpen ? ' open' : '') }, [libHead]);
+      if (libOpen) {
+        libCat.append(el('div', { class: 'he-tree-cat-body' }, [
+          el('div', { class: 'he-tree-hint', text: `管理本模块图片库 images/${imgBase}/。删除前会检查是否被本模块详情页或首页引用——正被引用的图无法删除（防破图）。` }),
+          el('button', {
+            type: 'button', class: 'btn btn-primary', text: '🖼 打开图片库',
+            onclick: () => openImageLibrary(null, () => {}, imgBase),
+          }),
+        ]));
+      }
+      tree.append(libCat);
+
       // 新增按钮
       const addBtn = el('button', { class: 'he-tree-add', type: 'button', text: '+ 新增' + itemLabel, onclick: () => {
         const slug = (prompt('新' + itemLabel + '的 slug（英文，如 new-spot）：') || '').trim().toLowerCase().replace(/\s+/g, '-');
@@ -502,6 +531,7 @@ export function createSpotEditor(config) {
     }
 
     function renderForm() {
+      _imgLibSpots = arr; // 引用检查数据源：删除图时扫描本模块全部 spot 的 image 字段，防前台破图（C）
       formHost.replaceChildren();
       const item = findItem(arr);
       if (!item) { formHost.append(el('div', { class: 'he-empty', text: '请选择一项。' })); return; }

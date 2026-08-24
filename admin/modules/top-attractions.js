@@ -3,7 +3,7 @@
 // 右栏预览复用 top-attractions-render.js 的 buildTopAttractionsHtml（与 build 同源 → 所见即所得）。
 // 选中某一行时可切到「详情页预览」tab，复用景点详情页真实模板（与 attractions 模块预览同源）。
 import { buildTopAttractionsHtml } from './top-attractions-render.js';
-import { renderSpotDetailPreview } from './spot-core.js';
+import { renderSpotDetailPreview, openImageLibrary } from './spot-core.js';
 import { bindResizer } from '../resizer.js';
 
 let data = null;
@@ -160,6 +160,26 @@ export function renderEditor(container, d, onChange, onSelect) {
       rowsCat.append(body);
     }
     tree.append(rowsCat);
+
+    // ③ 图片库（管理首页 Top 8 网格所用的 images/top-attractions/ 配图；删除前检查是否被首页引用）
+    const libOpen = ui.open === 'lib';
+    const libHead = el('div', { class: 'he-tree-cat-head' }, [
+      el('span', {
+        class: 'he-tree-cat-name', text: '🖼 图片库（Top 8 配图）',
+        onclick: () => { ui.open = libOpen ? null : 'lib'; renderTree(); },
+      }),
+    ]);
+    const libCat = el('div', { class: 'he-tree-cat' + (libOpen ? ' open' : '') }, [libHead]);
+    if (libOpen) {
+      libCat.append(el('div', { class: 'he-tree-cat-body' }, [
+        el('div', { class: 'he-tree-hint', text: '管理首页 Top 8 网格所用的 images/top-attractions/ 配图。删除前会检查是否被首页引用——正被引用的图无法删除（防破图）。' }),
+        el('button', {
+          type: 'button', class: 'btn btn-primary', text: '🖼 打开图片库',
+          onclick: () => openImageLibrary(null, () => {}, 'top-attractions', []),
+        }),
+      ]));
+    }
+    tree.append(libCat);
   }
 
   function reorder(from, to) {
