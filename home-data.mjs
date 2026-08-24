@@ -119,7 +119,7 @@ export const homeTourCards = {
       id: 'vip-wen',
       icon: '💎',
       iconBg: 'bg-forest/10',
-      title: 'VIP Tour',
+      title: 'VIP Tour wen',
       subtitle: 'Ultimate experience',
       subtitleColor: 'stone-500',
       desc: 'Skip the queues, stay in top hotels, and reach the quietest viewpoints. For travelers who\'d rather relax and let us handle the rest.',
