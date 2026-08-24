@@ -22,105 +22,305 @@ export const attractions = [
     h1: 'Tianzi Mountain',
     subtitle: '天子山 · Sea of Clouds & Imperial Pillars',
     heroIntro: 'The highest and widest lookout over the Wulingyuan peaks — named for the Tujia "Son of Heaven" who led a revolt here. On a clear morning the stone pillars rise out of a rolling ocean of cloud.',
-    tldr: `Tianzi Mountain (天子山) is the northwest ridge of the Wulingyuan Scenic Area in Zhangjiajie, Hunan, China, reaching about 1,262 m. It is the best place in the park to see the famous "sea of clouds" and the surreal quartz-sandstone pillars that gave Zhangjiajie its UNESCO fame.`,
+    tldr: 'Tianzi Mountain (天子山) is the northwest ridge of the Wulingyuan Scenic Area in Zhangjiajie, Hunan, China, reaching about 1,262 m. It is the best place in the park to see the famous "sea of clouds" and the surreal quartz-sandstone pillars that gave Zhangjiajie its UNESCO fame.',
     introH2: 'Why Tianzi Mountain is a must-see',
-    introParas: [
-      `If Yuanjiajie is the postcard, Tianzi Mountain is the panorama. Sitting on the parks northwest rim at around 1,262 m, it offers the widest, highest vantage points over the quartz-sandstone forest — the same pillars that inspired the floating mountains in Avatar, seen from above rather than below.`,
-      `The name means "Son of Heaven" (天子), after Xiang Dakun, a Tujia leader who rebelled against the Ming court here in the 14th century. Today the imperial metaphor lives on in viewpoint names like "Emperor Pen Peak" and "West Sea of Rocks".`,
-      `What makes Tianzi special is the cloud. After rain the valleys fill with a silver sea of clouds and only the pillar tops poke through — a sight that pulls photographers up before dawn. Build in a buffer day; the peaks are shy when its foggy.`,
-    ],
+    introParas: ['If Yuanjiajie is the postcard, Tianzi Mountain is the panorama. Sitting on the parks northwest rim at around 1,262 m, it offers the widest, highest vantage points over the quartz-sandstone forest — the same pillars that inspired the floating mountains in Avatar, seen from above rather than below.', 'The name means "Son of Heaven" (天子), after Xiang Dakun, a Tujia leader who rebelled against the Ming court here in the 14th century. Today the imperial metaphor lives on in viewpoint names like "Emperor Pen Peak" and "West Sea of Rocks".', 'What makes Tianzi special is the cloud. After rain the valleys fill with a silver sea of clouds and only the pillar tops poke through — a sight that pulls photographers up before dawn. Build in a buffer day; the peaks are shy when its foggy.'],
     highlightsIntro: 'Five signature viewpoints along the Tianzi ridge — each a short shuttle or walk apart.',
     highlights: [
-      { img: 'tianzi-autumn.webp', alt: 'Autumn Tianzi Mountain ridges', title: 'Helong Observation Deck', sub: '贺龙公园', desc: 'The main Tianzi viewpoint and the highest overlook in Wulingyuan. On clear mornings the "sea of clouds" rolls beneath you and the imperial peaks stand like sentinels.' },
-      { img: 'tianzi-snow.webp', alt: 'Snow-dusted Tianzi peaks', title: 'Imperial Brush Peak', sub: '御笔峰', desc: 'A cluster of slender pillars said to look like the emperors writing brushes. It is one of the most photographed silhouettes in all of Zhangjiajie.' },
-      { img: 'hero-tianzi-clouds.webp', alt: 'Clouds pouring over Tianzi ridge', title: 'West Sea of Rocks', sub: '西海石林', desc: 'A vast amphitheatre of stone peaks dropping into the mist. Walk the railing path at sunrise and the rock forest seems to float.' },
-      { img: 'peaks-panorama.webp', alt: 'Panorama of sandstone pillars', title: 'Fairy Scattered Flowers', sub: '仙女散花', desc: 'A viewpoint where a lone peak appears to hold a basket of flowers — best lit in the soft gold of late afternoon.' },
-      { img: 'yangjiajie-wall.webp', alt: 'Wall-like peak formation', title: 'Tianzi cable car up', sub: '天子山索道', desc: 'A 2,000 m cable car that lifts you from the valley to the Tianzi ridge in about 20 minutes — the most scenic (and queueless) way up.' },
+      {
+        img: 'tianzi-autumn.webp',
+        alt: 'Autumn Tianzi Mountain ridges',
+        title: 'Helong Observation Deck',
+        sub: '贺龙公园',
+        desc: 'The main Tianzi viewpoint and the highest overlook in Wulingyuan. On clear mornings the "sea of clouds" rolls beneath you and the imperial peaks stand like sentinels.',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snow-dusted Tianzi peaks',
+        title: 'Imperial Brush Peak',
+        sub: '御笔峰',
+        desc: 'A cluster of slender pillars said to look like the emperors writing brushes. It is one of the most photographed silhouettes in all of Zhangjiajie.',
+      },
+      {
+        img: 'hero-tianzi-clouds.webp',
+        alt: 'Clouds pouring over Tianzi ridge',
+        title: 'West Sea of Rocks',
+        sub: '西海石林',
+        desc: 'A vast amphitheatre of stone peaks dropping into the mist. Walk the railing path at sunrise and the rock forest seems to float.',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Panorama of sandstone pillars',
+        title: 'Fairy Scattered Flowers',
+        sub: '仙女散花',
+        desc: 'A viewpoint where a lone peak appears to hold a basket of flowers — best lit in the soft gold of late afternoon.',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Wall-like peak formation',
+        title: 'Tianzi cable car up',
+        sub: '天子山索道',
+        desc: 'A 2,000 m cable car that lifts you from the valley to the Tianzi ridge in about 20 minutes — the most scenic (and queueless) way up.',
+      },
     ],
     routesIntro: 'Two ways to see Tianzi — pick by time, energy and weather.',
     routes: [
       {
-        icon: 'zap', title: 'Classic viewpoint loop', sub: '2–3 hours · cable car up + shuttle along the rim',
+        icon: 'zap',
+        title: 'Classic viewpoint loop',
+        sub: '2–3 hours · cable car up + shuttle along the rim',
         steps: [
-          { strong: 'Tianzi cable car up', text: 'ride from the valley to the ridge in ~20 minutes.' },
-          { strong: 'Helong Deck', text: 'main panorama and the sea-of-clouds lookout.' },
-          { strong: 'West Sea of Rocks', text: 'walk the railed path for the floating-peak shot.' },
-          { strong: 'Imperial Brush Peak', text: 'the iconic brush-shaped silhouette.' },
-          { strong: 'Shuttle to Tianzi Gate', text: 'then descend or connect to Yuanjiajie.' },
+          {
+            strong: 'Tianzi cable car up',
+            text: 'ride from the valley to the ridge in ~20 minutes.',
+          },
+          {
+            strong: 'Helong Deck',
+            text: 'main panorama and the sea-of-clouds lookout.',
+          },
+          {
+            strong: 'West Sea of Rocks',
+            text: 'walk the railed path for the floating-peak shot.',
+          },
+          {
+            strong: 'Imperial Brush Peak',
+            text: 'the iconic brush-shaped silhouette.',
+          },
+          {
+            strong: 'Shuttle to Tianzi Gate',
+            text: 'then descend or connect to Yuanjiajie.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Hiking descent', sub: '3–4 hours · strenuous, few crowds',
+        icon: 'footprints',
+        title: 'Hiking descent',
+        sub: '3–4 hours · strenuous, few crowds',
         steps: [
-          { strong: 'Ridge walk west', text: 'follow the rim path toward Yangjiajie.' },
-          { strong: 'Descend the stone steps', text: 'steep but quiet, away from tour groups.' },
-          { strong: 'Connect to Yuanjiajie', text: 'or exit via the Yangjiajie cable car.' },
-          { strong: 'Park shuttle', text: 'back to your gate.' },
+          {
+            strong: 'Ridge walk west',
+            text: 'follow the rim path toward Yangjiajie.',
+          },
+          {
+            strong: 'Descend the stone steps',
+            text: 'steep but quiet, away from tour groups.',
+          },
+          {
+            strong: 'Connect to Yuanjiajie',
+            text: 'or exit via the Yangjiajie cable car.',
+          },
+          {
+            strong: 'Park shuttle',
+            text: 'back to your gate.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Apr – May', desc: 'Spring green, comfortable, good cloud days.' },
-        { icon: 'calendar-heart', period: 'Sep – Nov', desc: 'Crisp air, clear skies, best visibility.' },
-        { icon: 'cloud-fog', period: 'After rain', desc: 'Mornings right after rain = sea of clouds.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Apr – May',
+          desc: 'Spring green, comfortable, good cloud days.',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Sep – Nov',
+          desc: 'Crisp air, clear skies, best visibility.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'After rain',
+          desc: 'Mornings right after rain = sea of clouds.',
+        },
       ],
       note: 'Avoid: heavy summer fog can shroud the peaks for hours; National Day (Oct 1–7) and summer holidays mean long cable-car queues.',
     },
     tips: [
-      { icon: 'users', title: 'Ride the cable car, not the bus', desc: 'The Tianzi cable car is the scenic way up and skips the long shuttle transfer from the East Gate.' },
-      { icon: 'cloud-rain', title: 'Weather is everything', desc: 'Peaks often vanish in fog. Build in a buffer day; mornings after rain give the best sea of clouds.' },
-      { icon: 'utensils', title: 'Bring water and snacks', desc: 'Food on the ridge is limited and pricey. Carry at least 1 L water per person.' },
-      { icon: 'bird', title: 'Arrive for sunrise', desc: 'The sea of clouds is best 06:30–08:00. Stay near the East Gate and enter at opening.' },
-      { icon: 'bed-double', title: 'Pair with Yuanjiajie', desc: 'Tianzi and Yuanjiajie share the same plateau system — do them on one ticket across two mornings.' },
+      {
+        icon: 'users',
+        title: 'Ride the cable car, not the bus',
+        desc: 'The Tianzi cable car is the scenic way up and skips the long shuttle transfer from the East Gate.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Weather is everything',
+        desc: 'Peaks often vanish in fog. Build in a buffer day; mornings after rain give the best sea of clouds.',
+      },
+      {
+        icon: 'utensils',
+        title: 'Bring water and snacks',
+        desc: 'Food on the ridge is limited and pricey. Carry at least 1 L water per person.',
+      },
+      {
+        icon: 'bird',
+        title: 'Arrive for sunrise',
+        desc: 'The sea of clouds is best 06:30–08:00. Stay near the East Gate and enter at opening.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Pair with Yuanjiajie',
+        desc: 'Tianzi and Yuanjiajie share the same plateau system — do them on one ticket across two mornings.',
+      },
     ],
     gettingThere: [
-      { strong: 'City → Wulingyuan East Gate.', text: 'From Zhangjiajie city or the railway station take a bus to the East Gate (武陵源东门), about 40–60 min, ¥13.' },
-      { strong: 'East Gate → Tianzi cable car.', text: 'Inside the park, take the shuttle to the Tianzi Mountain cable car station (~40 min).' },
-      { strong: 'Cable car up.', text: 'Ride to the Tianzi ridge in ~20 minutes, then follow the rim signs.' },
-      { strong: 'Alternative entry.', text: 'You can also reach Tianzi via the Yuanjiajie plateau and the connecting shuttle.' },
+      {
+        strong: 'City → Wulingyuan East Gate.',
+        text: 'From Zhangjiajie city or the railway station take a bus to the East Gate (武陵源东门), about 40–60 min, ¥13.',
+      },
+      {
+        strong: 'East Gate → Tianzi cable car.',
+        text: 'Inside the park, take the shuttle to the Tianzi Mountain cable car station (~40 min).',
+      },
+      {
+        strong: 'Cable car up.',
+        text: 'Ride to the Tianzi ridge in ~20 minutes, then follow the rim signs.',
+      },
+      {
+        strong: 'Alternative entry.',
+        text: 'You can also reach Tianzi via the Yuanjiajie plateau and the connecting shuttle.',
+      },
     ],
     tickets: [
-      { item: 'Wulingyuan combo ticket', detail: '¥227 — valid 4 days; includes park shuttle bus and insurance' },
-      { item: 'Tianzi cable car (one-way)', detail: '¥72' },
-      { item: 'Tianzi cable car (round-trip)', detail: '¥144' },
-      { item: 'Opening hours', detail: '07:00 – 17:00' },
-      { item: 'Best months', detail: 'April–May, September–November' },
+      {
+        item: 'Wulingyuan combo ticket',
+        detail: '¥327 — valid 4 days; includes park shuttle bus and insurance',
+      },
+      {
+        item: 'Tianzi cable car (one-way)',
+        detail: '¥72',
+      },
+      {
+        item: 'Tianzi cable car (round-trip)',
+        detail: '¥244',
+      },
+      {
+        item: 'Opening hours',
+        detail: '07:00 – 17:00',
+      },
+      {
+        item: 'Best months',
+        detail: 'April–May, September–November',
+      },
     ],
     facts: [
-      { label: 'Elevation', value: '~1,262 m' },
-      { label: 'Area', value: '~67 km²' },
-      { label: 'Best season', value: 'Apr–May · Sep–Nov' },
-      { label: 'Suggested visit', value: '2–4 hours' },
-      { label: 'Opening hours', value: '07:00–17:00' },
-      { label: 'Ticket', value: '¥227 + ¥72 cable' },
-      { label: 'Type', value: 'UNESCO WHS' },
+      {
+        label: 'Elevation',
+        value: '~1,262 m',
+      },
+      {
+        label: 'Area',
+        value: '~67 km²',
+      },
+      {
+        label: 'Best season',
+        value: 'Apr–May · Sep–Nov',
+      },
+      {
+        label: 'Suggested visit',
+        value: '2–4 hours',
+      },
+      {
+        label: 'Opening hours',
+        value: '07:00–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥227 + ¥72 cable',
+      },
+      {
+        label: 'Type',
+        value: 'UNESCO WHS',
+      },
     ],
     localTip: 'Tianzi\'s Helong Deck faces east — the sea of clouds lights up about 30 minutes after sunrise. Get the first cable car and you may have the railing to yourself.',
     galleryTitle: 'Scenery of Tianzi Mountain & Wulingyuan',
     gallery: [
-      { img: 'tianzi-autumn.webp', alt: 'Autumn Tianzi ridges' },
-      { img: 'tianzi-snow.webp', alt: 'Snow on the peaks' },
-      { img: 'hero-tianzi-clouds.webp', alt: 'Cloud sea over the ridge' },
-      { img: 'peaks-panorama.webp', alt: 'Sandstone pillars at dawn' },
-      { img: 'yangjiajie-wall.webp', alt: 'Wall-like peak formation' },
-      { img: 'intro-bg.webp', alt: 'Misty Wulingyuan valley' },
+      {
+        img: 'tianzi-autumn.webp',
+        alt: 'Autumn Tianzi ridges',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snow on the peaks',
+      },
+      {
+        img: 'hero-tianzi-clouds.webp',
+        alt: 'Cloud sea over the ridge',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Sandstone pillars at dawn',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Wall-like peak formation',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty Wulingyuan valley',
+      },
     ],
     faqs: [
-      { q: 'Where is Tianzi Mountain, and how do I get there from Zhangjiajie city?', a: 'Tianzi Mountain sits in the Wulingyuan section of Zhangjiajie National Forest Park, about 40 km from the city. From Zhangjiajie city or the railway station take a bus to the parks East Gate (roughly 40–60 minutes, around ¥13), then the park shuttle to the Tianzi cable car, which lifts you to the ridge in about 20 minutes.' },
-      { q: 'What is the "sea of clouds" and when can I see it?', a: 'After rain the valleys fill with a low layer of cloud and only the pillar tops show — the famous "sea of clouds". It is most reliable in spring and autumn, right after rainfall, typically 06:30–09:00. Clear, dry days show the pillars but no cloud sea.' },
-      { q: 'Do I need a separate ticket for the Tianzi cable car?', a: 'Yes. Park entry (about ¥227, valid 4 days) covers the shuttle buses, but the Tianzi cable car is priced separately at roughly ¥72 one way or ¥144 round-trip. Many visitors ride up and shuttle or walk down.' },
-      { q: 'How long should I plan for Tianzi Mountain?', a: 'A half day covers the main viewpoints from the Helong Deck along the West Sea of Rocks to Imperial Brush Peak. Pair it with Yuanjiajie on the same combo ticket and you will want a full day across two mornings.' },
-      { q: 'What is the best time of year to visit Tianzi Mountain?', a: 'Spring (April–May) and autumn (September–November) are best — mild weather and the clearest chance of the sea of clouds. Arrive early; overcast or foggy days can shroud the peaks, and cable-car queues peak mid-morning.' },
-      { q: 'Can foreign tourists use credit cards, and do I need my passport?', a: 'Bring your passport — it is required to buy park tickets and may be checked at entrances. Cards are not reliable at small vendors inside the park, so carry some cash (RMB) for snacks, water, and the cable car. Alipay works if you have linked an international card.' },
+      {
+        q: 'Where is Tianzi Mountain, and how do I get there from Zhangjiajie city?',
+        a: 'Tianzi Mountain sits in the Wulingyuan section of Zhangjiajie National Forest Park, about 40 km from the city. From Zhangjiajie city or the railway station take a bus to the parks East Gate (roughly 40–60 minutes, around ¥13), then the park shuttle to the Tianzi cable car, which lifts you to the ridge in about 20 minutes.',
+      },
+      {
+        q: 'What is the "sea of clouds" and when can I see it?',
+        a: 'After rain the valleys fill with a low layer of cloud and only the pillar tops show — the famous "sea of clouds". It is most reliable in spring and autumn, right after rainfall, typically 06:30–09:00. Clear, dry days show the pillars but no cloud sea.',
+      },
+      {
+        q: 'Do I need a separate ticket for the Tianzi cable car?',
+        a: 'Yes. Park entry (about ¥227, valid 4 days) covers the shuttle buses, but the Tianzi cable car is priced separately at roughly ¥72 one way or ¥144 round-trip. Many visitors ride up and shuttle or walk down.',
+      },
+      {
+        q: 'How long should I plan for Tianzi Mountain?',
+        a: 'A half day covers the main viewpoints from the Helong Deck along the West Sea of Rocks to Imperial Brush Peak. Pair it with Yuanjiajie on the same combo ticket and you will want a full day across two mornings.',
+      },
+      {
+        q: 'What is the best time of year to visit Tianzi Mountain?',
+        a: 'Spring (April–May) and autumn (September–November) are best — mild weather and the clearest chance of the sea of clouds. Arrive early; overcast or foggy days can shroud the peaks, and cable-car queues peak mid-morning.',
+      },
+      {
+        q: 'Can foreign tourists use credit cards, and do I need my passport?',
+        a: 'Bring your passport — it is required to buy park tickets and may be checked at entrances. Cards are not reliable at small vendors inside the park, so carry some cash (RMB) for snacks, water, and the cable car. Alipay works if you have linked an international card.',
+      },
     ],
     related: [
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Hallelujah Mountains' },
-      { slug: 'tianmen', img: 'peaks-panorama', alt: 'Tianmen Mountain', title: 'Tianmen Mountain', sub: '天门山 · 99 bends and glass walkway' },
-      { slug: 'huangshizhai', img: 'huangshizhai-winter', alt: 'Huangshizhai', title: 'Huangshizhai', sub: '黄石寨 · Classic panorama loop' },
-      { slug: 'jinbian', img: 'jinbianxi-stream', alt: 'Golden Whip Stream', title: 'Golden Whip Stream', sub: '金鞭溪 · Riverside walk' },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Hallelujah Mountains',
+      },
+      {
+        slug: 'tianmen',
+        img: 'peaks-panorama',
+        alt: 'Tianmen Mountain',
+        title: 'Tianmen Mountain',
+        sub: '天门山 · 99 bends and glass walkway',
+      },
+      {
+        slug: 'huangshizhai',
+        img: 'huangshizhai-winter',
+        alt: 'Huangshizhai',
+        title: 'Huangshizhai',
+        sub: '黄石寨 · Classic panorama loop',
+      },
+      {
+        slug: 'jinbian',
+        img: 'jinbianxi-stream',
+        alt: 'Golden Whip Stream',
+        title: 'Golden Whip Stream',
+        sub: '金鞭溪 · Riverside walk',
+      },
     ],
-    geo: { lat: 29.42, lng: 110.47 },
+    geo: {
+      lat: 29.42,
+      lng: 110.47,
+    },
     jsonld: {
       name: 'Tianzi Mountain',
       alternateName: ['天子山', 'Son of Heaven Mountain', 'Tianzi Shan', 'Tianzi Mountain Scenic Area'],
@@ -128,26 +328,58 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/tianzi-autumn.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/hero-tianzi-clouds.webp'],
       touristType: ['Foreign tourists', 'Nature lovers', 'Photographers'],
       faq: [
-        { q: 'Where is Tianzi Mountain, and how do I get there from Zhangjiajie city?', a: 'Tianzi Mountain sits in the Wulingyuan section of Zhangjiajie National Forest Park, about 40 km from the city. From the city take a bus to the parks East Gate (around ¥13, 40–60 min), then the shuttle to the Tianzi cable car, which lifts you to the ridge in about 20 minutes.' },
-        { q: 'What is the sea of clouds and when can I see it?', a: 'After rain the valleys fill with low cloud and only the pillar tops show. It is most reliable in spring and autumn right after rainfall, typically 06:30–09:00.' },
-        { q: 'Do I need a separate ticket for the Tianzi cable car?', a: 'Yes. Park entry (about ¥227, valid 4 days) covers shuttle buses, but the Tianzi cable car is roughly ¥72 one way or ¥144 round-trip.' },
-        { q: 'How long should I plan for Tianzi Mountain?', a: 'A half day covers the main viewpoints. Pair it with Yuanjiajie on the same combo ticket for a full day across two mornings.' },
-        { q: 'What is the best time of year to visit?', a: 'Spring (April–May) and autumn (September–November) are best, with the clearest chance of the sea of clouds. Arrive early; foggy days can shroud the peaks.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.' },
+        {
+          q: 'Where is Tianzi Mountain, and how do I get there from Zhangjiajie city?',
+          a: 'Tianzi Mountain sits in the Wulingyuan section of Zhangjiajie National Forest Park, about 40 km from the city. From the city take a bus to the parks East Gate (around ¥13, 40–60 min), then the shuttle to the Tianzi cable car, which lifts you to the ridge in about 20 minutes.',
+        },
+        {
+          q: 'What is the sea of clouds and when can I see it?',
+          a: 'After rain the valleys fill with low cloud and only the pillar tops show. It is most reliable in spring and autumn right after rainfall, typically 06:30–09:00.',
+        },
+        {
+          q: 'Do I need a separate ticket for the Tianzi cable car?',
+          a: 'Yes. Park entry (about ¥227, valid 4 days) covers shuttle buses, but the Tianzi cable car is roughly ¥72 one way or ¥144 round-trip.',
+        },
+        {
+          q: 'How long should I plan for Tianzi Mountain?',
+          a: 'A half day covers the main viewpoints. Pair it with Yuanjiajie on the same combo ticket for a full day across two mornings.',
+        },
+        {
+          q: 'What is the best time of year to visit?',
+          a: 'Spring (April–May) and autumn (September–November) are best, with the clearest chance of the sea of clouds. Arrive early; foggy days can shroud the peaks.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Classic Tianzi Mountain loop (2–3 hours)',
         steps: [
-          { name: 'Tianzi cable car up', text: 'Ride from the valley to the ridge in about 20 minutes.' },
-          { name: 'Helong Deck', text: 'Main panorama and the sea-of-clouds lookout.' },
-          { name: 'West Sea of Rocks', text: 'Walk the railed path for the floating-peak shot.' },
-          { name: 'Imperial Brush Peak', text: 'The iconic brush-shaped silhouette.' },
-          { name: 'Shuttle to Tianzi Gate', text: 'Then descend or connect to Yuanjiajie.' },
+          {
+            name: 'Tianzi cable car up',
+            text: 'Ride from the valley to the ridge in about 20 minutes.',
+          },
+          {
+            name: 'Helong Deck',
+            text: 'Main panorama and the sea-of-clouds lookout.',
+          },
+          {
+            name: 'West Sea of Rocks',
+            text: 'Walk the railed path for the floating-peak shot.',
+          },
+          {
+            name: 'Imperial Brush Peak',
+            text: 'The iconic brush-shaped silhouette.',
+          },
+          {
+            name: 'Shuttle to Tianzi Gate',
+            text: 'Then descend or connect to Yuanjiajie.',
+          },
         ],
       },
     },
   },
-
   {
     slug: 'jinbian',
     file: 'jinbian.html',
@@ -161,105 +393,305 @@ export const attractions = [
     h1: 'Golden Whip Stream',
     subtitle: '金鞭溪 · A Flat Walk Through the Stone Forest',
     heroIntro: 'The easiest and most family-friendly trail in Zhangjiajie — a mostly flat 7.5 km path along a crystal-clear stream, hemmed by the same towering peaks but without the cliffs and queues.',
-    tldr: `Golden Whip Stream (金鞭溪) is a 7.5 km valley walk in the Wulingyuan core of Zhangjiajie National Forest Park, Hunan, China. It follows a clear mountain stream between quartz-sandstone peaks and is the parks flattest, most accessible trail — ideal for families, older travelers and anyone wanting the scenery without the climbs.`,
+    tldr: 'Golden Whip Stream (金鞭溪) is a 7.5 km valley walk in the Wulingyuan core of Zhangjiajie National Forest Park, Hunan, China. It follows a clear mountain stream between quartz-sandstone peaks and is the parks flattest, most accessible trail — ideal for families, older travelers and anyone wanting the scenery without the climbs.',
     introH2: 'Why Golden Whip Stream is a must-see',
-    introParas: [
-      `Most of Zhangjiajie is about looking down from high ridges. Golden Whip Stream is the opposite — you walk through the stone forest at its base, the stream gurgling beside you and the peaks towering overhead. Its the most relaxed way to feel the landscape.`,
-      `The path is almost entirely flat and paved, following the water for about 7.5 km from the East Gate area to Shadao Ravine. Wild macaques live along the banks, and on quiet mornings the only sounds are water and birdsong.`,
-      `Because its easy and shaded, its the best first walk for families with kids, travelers with limited mobility, or anyone arriving on a low-energy day. You can do the full 7.5 km or turn back at any point.`,
-    ],
+    introParas: ['Most of Zhangjiajie is about looking down from high ridges. Golden Whip Stream is the opposite — you walk through the stone forest at its base, the stream gurgling beside you and the peaks towering overhead. Its the most relaxed way to feel the landscape.', 'The path is almost entirely flat and paved, following the water for about 7.5 km from the East Gate area to Shadao Ravine. Wild macaques live along the banks, and on quiet mornings the only sounds are water and birdsong.', 'Because its easy and shaded, its the best first walk for families with kids, travelers with limited mobility, or anyone arriving on a low-energy day. You can do the full 7.5 km or turn back at any point.'],
     highlightsIntro: 'Five things to look for along the stream — most within the first few kilometers.',
     highlights: [
-      { img: 'jinbianxi-stream.webp', alt: 'Crystal stream through the gorge', title: 'The stream itself', sub: '金鞭溪水', desc: 'A clear, cold mountain stream the whole way. In summer its the perfect place to cool off your feet; the water is drinkable at source but bring your own bottle.' },
-      { img: 'jinbianxi-rock.webp', alt: 'Golden Whip Rock pinnacle', title: 'Golden Whip Rock', sub: '金鞭岩', desc: 'A 380 m quartz-sandstone pinnacle at the trails start — the peak that named the stream, said to look like a golden whip pointing at the sky.' },
-      { img: 'peaks-panorama.webp', alt: 'Pillars rising over the valley', title: 'Scholar Rock', sub: '秀才藏书', desc: 'A pillar that locals say looks like a scholar holding books. The naming games along the stream are half the fun.' },
-      { img: 'yangjiajie-wall.webp', alt: 'Wall-like peak formation', title: 'Monkey Hill', sub: '猴子坡', desc: 'The most reliable spot to see wild macaques. Keep your distance, never feed them, and zip your bags — they are bold and quick.' },
-      { img: 'intro-bg.webp', alt: 'Misty Wulingyuan valley', title: 'Shadao Ravine', sub: '砂刀沟', desc: 'The trails far end, where the canyon narrows and the cliffs close in. A calm, photogenic finale before you shuttle back.' },
+      {
+        img: 'jinbianxi-stream.webp',
+        alt: 'Crystal stream through the gorge',
+        title: 'The stream itself',
+        sub: '金鞭溪水',
+        desc: 'A clear, cold mountain stream the whole way. In summer its the perfect place to cool off your feet; the water is drinkable at source but bring your own bottle.',
+      },
+      {
+        img: 'jinbianxi-rock.webp',
+        alt: 'Golden Whip Rock pinnacle',
+        title: 'Golden Whip Rock',
+        sub: '金鞭岩',
+        desc: 'A 380 m quartz-sandstone pinnacle at the trails start — the peak that named the stream, said to look like a golden whip pointing at the sky.',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Pillars rising over the valley',
+        title: 'Scholar Rock',
+        sub: '秀才藏书',
+        desc: 'A pillar that locals say looks like a scholar holding books. The naming games along the stream are half the fun.',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Wall-like peak formation',
+        title: 'Monkey Hill',
+        sub: '猴子坡',
+        desc: 'The most reliable spot to see wild macaques. Keep your distance, never feed them, and zip your bags — they are bold and quick.',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty Wulingyuan valley',
+        title: 'Shadao Ravine',
+        sub: '砂刀沟',
+        desc: 'The trails far end, where the canyon narrows and the cliffs close in. A calm, photogenic finale before you shuttle back.',
+      },
     ],
     routesIntro: 'Two ways to walk it — pick by time and energy.',
     routes: [
       {
-        icon: 'zap', title: 'Classic out-and-back', sub: '2–3 hours · flat, family-friendly',
+        icon: 'zap',
+        title: 'Classic out-and-back',
+        sub: '2–3 hours · flat, family-friendly',
         steps: [
-          { strong: 'Start at the East Gate', text: 'follow the stream southwest.' },
-          { strong: 'Golden Whip Rock', text: 'the namesake pinnacle, ~1 km in.' },
-          { strong: 'Monkey Hill', text: 'watch the macaques from a safe distance.' },
-          { strong: 'Shadao Ravine', text: 'turn back here or continue to the shuttle.' },
-          { strong: 'Shuttle back', text: 'to the East Gate.' },
+          {
+            strong: 'Start at the East Gate',
+            text: 'follow the stream southwest.',
+          },
+          {
+            strong: 'Golden Whip Rock',
+            text: 'the namesake pinnacle, ~1 km in.',
+          },
+          {
+            strong: 'Monkey Hill',
+            text: 'watch the macaques from a safe distance.',
+          },
+          {
+            strong: 'Shadao Ravine',
+            text: 'turn back here or continue to the shuttle.',
+          },
+          {
+            strong: 'Shuttle back',
+            text: 'to the East Gate.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Full valley hike', sub: '4–5 hours · to the Yuanjiajie shuttle',
+        icon: 'footprints',
+        title: 'Full valley hike',
+        sub: '4–5 hours · to the Yuanjiajie shuttle',
         steps: [
-          { strong: 'Walk the full 7.5 km', text: 'along the stream to its end.' },
-          { strong: 'Connect to Yuanjiajie', text: 'via the shuttle at Shadao.' },
-          { strong: 'Ride up', text: 'to the Yuanjiajie plateau if you like.' },
-          { strong: 'Return', text: 'by shuttle to your gate.' },
+          {
+            strong: 'Walk the full 7.5 km',
+            text: 'along the stream to its end.',
+          },
+          {
+            strong: 'Connect to Yuanjiajie',
+            text: 'via the shuttle at Shadao.',
+          },
+          {
+            strong: 'Ride up',
+            text: 'to the Yuanjiajie plateau if you like.',
+          },
+          {
+            strong: 'Return',
+            text: 'by shuttle to your gate.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Apr – May', desc: 'Lush green, wildflowers, comfortable.' },
-        { icon: 'calendar-heart', period: 'Sep – Nov', desc: 'Clear water, crisp air, fewer crowds.' },
-        { icon: 'cloud-fog', period: 'Morning', desc: 'Low light and mist make the gorge magical.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Apr – May',
+          desc: 'Lush green, wildflowers, comfortable.',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Sep – Nov',
+          desc: 'Clear water, crisp air, fewer crowds.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'Morning',
+          desc: 'Low light and mist make the gorge magical.',
+        },
       ],
       note: 'Avoid: midsummer afternoons get hot and busy; the trail is shaded but start early. Rain makes the rocks slippery — wear grippy shoes.',
     },
     tips: [
-      { icon: 'users', title: 'Best for families', desc: 'Flat, paved and shaded — the only Zhangjiajie trail comfortable for strollers and older travelers.' },
-      { icon: 'bird', title: 'Mind the macaques', desc: 'Wild monkeys along the banks. Never feed them, hide your snacks, and keep bags zipped.' },
-      { icon: 'utensils', title: 'Bring water', desc: 'There are few vendors mid-trail. Carry at least 1 L per person, more in summer.' },
-      { icon: 'cloud-rain', title: 'Wear good shoes', desc: 'The path is flat but can be slick after rain. Closed shoes with grip beat sandals.' },
-      { icon: 'bed-double', title: 'Pair with Yuanjiajie', desc: 'End the walk at the Yuanjiajie shuttle and ride up — a natural full-day combo.' },
+      {
+        icon: 'users',
+        title: 'Best for families',
+        desc: 'Flat, paved and shaded — the only Zhangjiajie trail comfortable for strollers and older travelers.',
+      },
+      {
+        icon: 'bird',
+        title: 'Mind the macaques',
+        desc: 'Wild monkeys along the banks. Never feed them, hide your snacks, and keep bags zipped.',
+      },
+      {
+        icon: 'utensils',
+        title: 'Bring water',
+        desc: 'There are few vendors mid-trail. Carry at least 1 L per person, more in summer.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Wear good shoes',
+        desc: 'The path is flat but can be slick after rain. Closed shoes with grip beat sandals.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Pair with Yuanjiajie',
+        desc: 'End the walk at the Yuanjiajie shuttle and ride up — a natural full-day combo.',
+      },
     ],
     gettingThere: [
-      { strong: 'City → Wulingyuan East Gate.', text: 'Bus from Zhangjiajie city or railway station, about 40–60 min, ¥13.' },
-      { strong: 'Enter the park.', text: 'The Golden Whip Stream trailhead is a short walk inside the East Gate.' },
-      { strong: 'Walk the stream.', text: 'The path is clearly signed and mostly flat.' },
-      { strong: 'Return by shuttle.', text: 'From Shadao Ravine back to the East Gate.' },
+      {
+        strong: 'City → Wulingyuan East Gate.',
+        text: 'Bus from Zhangjiajie city or railway station, about 40–60 min, ¥13.',
+      },
+      {
+        strong: 'Enter the park.',
+        text: 'The Golden Whip Stream trailhead is a short walk inside the East Gate.',
+      },
+      {
+        strong: 'Walk the stream.',
+        text: 'The path is clearly signed and mostly flat.',
+      },
+      {
+        strong: 'Return by shuttle.',
+        text: 'From Shadao Ravine back to the East Gate.',
+      },
     ],
     tickets: [
-      { item: 'Wulingyuan combo ticket', detail: '¥227 — valid 4 days; includes park shuttle bus and insurance' },
-      { item: 'Golden Whip Stream', detail: 'Included in the combo ticket (no separate fee)' },
-      { item: 'Opening hours', detail: '07:00 – 17:00' },
-      { item: 'Trail length', detail: '~7.5 km one way, mostly flat' },
-      { item: 'Best months', detail: 'April–May, September–November' },
+      {
+        item: 'Wulingyuan combo ticket',
+        detail: '¥227 — valid 4 days; includes park shuttle bus and insurance',
+      },
+      {
+        item: 'Golden Whip Stream',
+        detail: 'Included in the combo ticket (no separate fee)',
+      },
+      {
+        item: 'Opening hours',
+        detail: '07:00 – 17:00',
+      },
+      {
+        item: 'Trail length',
+        detail: '~7.5 km one way, mostly flat',
+      },
+      {
+        item: 'Best months',
+        detail: 'April–May, September–November',
+      },
     ],
     facts: [
-      { label: 'Length', value: '~7.5 km' },
-      { label: 'Difficulty', value: 'Easy (flat)' },
-      { label: 'Best season', value: 'Apr–May · Sep–Nov' },
-      { label: 'Suggested visit', value: '2–4 hours' },
-      { label: 'Opening hours', value: '07:00–17:00' },
-      { label: 'Ticket', value: '¥227 combo' },
-      { label: 'Type', value: 'UNESCO WHS' },
+      {
+        label: 'Length',
+        value: '~7.5 km',
+      },
+      {
+        label: 'Difficulty',
+        value: 'Easy (flat)',
+      },
+      {
+        label: 'Best season',
+        value: 'Apr–May · Sep–Nov',
+      },
+      {
+        label: 'Suggested visit',
+        value: '2–4 hours',
+      },
+      {
+        label: 'Opening hours',
+        value: '07:00–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥227 combo',
+      },
+      {
+        label: 'Type',
+        value: 'UNESCO WHS',
+      },
     ],
     localTip: 'The macaques at Monkey Hill are entertaining but opportunistic — if you eat on the trail, do it away from the water where they gather, and never let a child hold food openly.',
     galleryTitle: 'Scenery of Golden Whip Stream & Wulingyuan',
     gallery: [
-      { img: 'jinbianxi-stream.webp', alt: 'Crystal stream through the gorge' },
-      { img: 'jinbianxi-rock.webp', alt: 'Golden Whip Rock pinnacle' },
-      { img: 'peaks-panorama.webp', alt: 'Sandstone pillars at dawn' },
-      { img: 'yangjiajie-wall.webp', alt: 'Wall-like peak formation' },
-      { img: 'intro-bg.webp', alt: 'Misty Wulingyuan valley' },
-      { img: 'gallery-painting.webp', alt: 'Painted-style Wulingyuan scene' },
+      {
+        img: 'jinbianxi-stream.webp',
+        alt: 'Crystal stream through the gorge',
+      },
+      {
+        img: 'jinbianxi-rock.webp',
+        alt: 'Golden Whip Rock pinnacle',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Sandstone pillars at dawn',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Wall-like peak formation',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty Wulingyuan valley',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted-style Wulingyuan scene',
+      },
     ],
     faqs: [
-      { q: 'Where is Golden Whip Stream, and how do I get there?', a: 'Golden Whip Stream is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from Zhangjiajie city. Take a bus to the parks East Gate (around ¥13, 40–60 min); the trailhead is a short walk inside the gate.' },
-      { q: 'Is Golden Whip Stream suitable for children and older travelers?', a: 'Yes — it is the parks flattest, paved, shaded trail, ideal for families, strollers and travelers with limited mobility. You can walk as little or as far as you like and turn back any time.' },
-      { q: 'Are there monkeys, and is it safe?', a: 'Wild macaques live along the banks, especially at Monkey Hill. They are bold and quick — never feed them, hide food, and keep a safe distance. Attacks are rare but happen when visitors provoke or feed them.' },
-      { q: 'How long is the walk and how hard is it?', a: 'The full trail is about 7.5 km and almost entirely flat, taking 2–3 hours for the popular out-and-back or 4–5 hours end to end. It connects to the Yuanjiajie shuttle at the far end.' },
-      { q: 'What is the best time of year to visit?', a: 'Spring (April–May) and autumn (September–November) are best — green or crisp, with fewer crowds. Start early; midsummer afternoons are hot and busy, and the rocks get slippery after rain.' },
-      { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for park tickets. Cards are unreliable at small vendors inside the park, so carry cash (RMB). Alipay works with a linked international card.' },
+      {
+        q: 'Where is Golden Whip Stream, and how do I get there?',
+        a: 'Golden Whip Stream is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from Zhangjiajie city. Take a bus to the parks East Gate (around ¥13, 40–60 min); the trailhead is a short walk inside the gate.',
+      },
+      {
+        q: 'Is Golden Whip Stream suitable for children and older travelers?',
+        a: 'Yes — it is the parks flattest, paved, shaded trail, ideal for families, strollers and travelers with limited mobility. You can walk as little or as far as you like and turn back any time.',
+      },
+      {
+        q: 'Are there monkeys, and is it safe?',
+        a: 'Wild macaques live along the banks, especially at Monkey Hill. They are bold and quick — never feed them, hide food, and keep a safe distance. Attacks are rare but happen when visitors provoke or feed them.',
+      },
+      {
+        q: 'How long is the walk and how hard is it?',
+        a: 'The full trail is about 7.5 km and almost entirely flat, taking 2–3 hours for the popular out-and-back or 4–5 hours end to end. It connects to the Yuanjiajie shuttle at the far end.',
+      },
+      {
+        q: 'What is the best time of year to visit?',
+        a: 'Spring (April–May) and autumn (September–November) are best — green or crisp, with fewer crowds. Start early; midsummer afternoons are hot and busy, and the rocks get slippery after rain.',
+      },
+      {
+        q: 'Do I need my passport and can I use cards?',
+        a: 'Bring your passport for park tickets. Cards are unreliable at small vendors inside the park, so carry cash (RMB). Alipay works with a linked international card.',
+      },
     ],
     related: [
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Hallelujah Mountains' },
-      { slug: 'tianzi', img: 'tianzi-autumn', alt: 'Tianzi Mountain', title: 'Tianzi Mountain', sub: '天子山 · Sea of clouds' },
-      { slug: 'huangshizhai', img: 'huangshizhai-winter', alt: 'Huangshizhai', title: 'Huangshizhai', sub: '黄石寨 · Panorama loop' },
-      { slug: 'baofeng', img: 'gallery-painting', alt: 'Baofeng Lake', title: 'Baofeng Lake', sub: '宝峰湖 · Boat ride' },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Hallelujah Mountains',
+      },
+      {
+        slug: 'tianzi',
+        img: 'tianzi-autumn',
+        alt: 'Tianzi Mountain',
+        title: 'Tianzi Mountain',
+        sub: '天子山 · Sea of clouds',
+      },
+      {
+        slug: 'huangshizhai',
+        img: 'huangshizhai-winter',
+        alt: 'Huangshizhai',
+        title: 'Huangshizhai',
+        sub: '黄石寨 · Panorama loop',
+      },
+      {
+        slug: 'baofeng',
+        img: 'gallery-painting',
+        alt: 'Baofeng Lake',
+        title: 'Baofeng Lake',
+        sub: '宝峰湖 · Boat ride',
+      },
     ],
-    geo: { lat: 29.35, lng: 110.48 },
+    geo: {
+      lat: 29.35,
+      lng: 110.48,
+    },
     jsonld: {
       name: 'Golden Whip Stream',
       alternateName: ['金鞭溪', 'Jinbianxi', 'Golden Whip Brook'],
@@ -267,26 +699,58 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/jinbianxi-stream.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/jinbianxi-rock.webp'],
       touristType: ['Foreign tourists', 'Families', 'Nature lovers'],
       faq: [
-        { q: 'Where is Golden Whip Stream, and how do I get there?', a: 'It is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Take a bus to the East Gate (around ¥13, 40–60 min); the trailhead is a short walk inside.' },
-        { q: 'Is it suitable for children and older travelers?', a: 'Yes — it is the flattest, paved, shaded trail in the park, great for families and those with limited mobility. Walk as far as you like and turn back.' },
-        { q: 'Are there monkeys, and is it safe?', a: 'Wild macaques live along the banks. Never feed them, hide food, and keep distance. Attacks are rare but happen when visitors provoke them.' },
-        { q: 'How long is the walk?', a: 'About 7.5 km and almost flat — 2–3 hours out-and-back or 4–5 hours end to end, connecting to the Yuanjiajie shuttle.' },
-        { q: 'What is the best time of year to visit?', a: 'Spring and autumn are best. Start early; summer afternoons are hot and the rocks get slippery after rain.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.' },
+        {
+          q: 'Where is Golden Whip Stream, and how do I get there?',
+          a: 'It is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Take a bus to the East Gate (around ¥13, 40–60 min); the trailhead is a short walk inside.',
+        },
+        {
+          q: 'Is it suitable for children and older travelers?',
+          a: 'Yes — it is the flattest, paved, shaded trail in the park, great for families and those with limited mobility. Walk as far as you like and turn back.',
+        },
+        {
+          q: 'Are there monkeys, and is it safe?',
+          a: 'Wild macaques live along the banks. Never feed them, hide food, and keep distance. Attacks are rare but happen when visitors provoke them.',
+        },
+        {
+          q: 'How long is the walk?',
+          a: 'About 7.5 km and almost flat — 2–3 hours out-and-back or 4–5 hours end to end, connecting to the Yuanjiajie shuttle.',
+        },
+        {
+          q: 'What is the best time of year to visit?',
+          a: 'Spring and autumn are best. Start early; summer afternoons are hot and the rocks get slippery after rain.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Golden Whip Stream walk (2–3 hours)',
         steps: [
-          { name: 'Start at the East Gate', text: 'Follow the stream southwest.' },
-          { name: 'Golden Whip Rock', text: 'The namesake pinnacle, about 1 km in.' },
-          { name: 'Monkey Hill', text: 'Watch the macaques from a safe distance.' },
-          { name: 'Shadao Ravine', text: 'Turn back here or continue to the shuttle.' },
-          { name: 'Shuttle back', text: 'To the East Gate.' },
+          {
+            name: 'Start at the East Gate',
+            text: 'Follow the stream southwest.',
+          },
+          {
+            name: 'Golden Whip Rock',
+            text: 'The namesake pinnacle, about 1 km in.',
+          },
+          {
+            name: 'Monkey Hill',
+            text: 'Watch the macaques from a safe distance.',
+          },
+          {
+            name: 'Shadao Ravine',
+            text: 'Turn back here or continue to the shuttle.',
+          },
+          {
+            name: 'Shuttle back',
+            text: 'To the East Gate.',
+          },
         ],
       },
     },
   },
-
   {
     slug: 'huangshizhai',
     file: 'huangshizhai.html',
@@ -300,103 +764,297 @@ export const attractions = [
     h1: 'Huangshizhai',
     subtitle: '黄石寨 · The View That Defines Zhangjiajie',
     heroIntro: 'A compact cliff-top loop with the parks most-quoted viewpoint — "He who has not been to Huangshizhai has not seen Zhangjiajie." A 360° ring of stone pillars with a cable car both ways.',
-    tldr: `Huangshizhai (黄石寨) is a flat-topped sandstone mesa in the Wulingyuan core of Zhangjiajie National Forest Park, Hunan, China, about 1,080 m high. A circular cliff-edge trail gives a 360° panorama of the surrounding quartz-sandstone peaks, and a cable car makes it an easy half-day even for non-hikers.`,
+    tldr: 'Huangshizhai (黄石寨) is a flat-topped sandstone mesa in the Wulingyuan core of Zhangjiajie National Forest Park, Hunan, China, about 1,080 m high. A circular cliff-edge trail gives a 360° panorama of the surrounding quartz-sandstone peaks, and a cable car makes it an easy half-day even for non-hikers.',
     introH2: 'Why Huangshizhai is a must-see',
-    introParas: [
-      `Huangshizhai is the classic "overview" stop. Unlike the long ridge walks, its a loop on a flat mesa top, so you get the full 360° ring of pillars without climbing all day. Locals say if you skip it, you havent really seen Zhangjiajie.`,
-      `A cable car runs both ways from the East Gate area, so you can ride up, stroll the level loop, and ride down — perfect for travelers who want the view without the sweat. Theres also a stair path if you prefer to walk.`,
-      `Because the loop is short and paved, its one of the best spots for a relaxed sunrise or sunset among the peaks. Give it a clear morning and the whole stone forest opens up below you.`,
-    ],
+    introParas: ['Huangshizhai is the classic "overview" stop. Unlike the long ridge walks, its a loop on a flat mesa top, so you get the full 360° ring of pillars without climbing all day. Locals say if you skip it, you havent really seen Zhangjiajie.', 'A cable car runs both ways from the East Gate area, so you can ride up, stroll the level loop, and ride down — perfect for travelers who want the view without the sweat. Theres also a stair path if you prefer to walk.', 'Because the loop is short and paved, its one of the best spots for a relaxed sunrise or sunset among the peaks. Give it a clear morning and the whole stone forest opens up below you.'],
     highlightsIntro: 'Five stops on the circular cliff-top loop.',
     highlights: [
-      { img: 'huangshizhai-winter.webp', alt: 'Pillars of Huangshizhai', title: 'The Grand View Terrace', sub: '摘星台', desc: 'The loops signature overlook — a 360° sweep of the quartz-sandstone forest. This is the "you havent seen Zhangjiajie" viewpoint.' },
-      { img: 'peaks-panorama.webp', alt: 'Panorama of sandstone pillars', title: 'Five-Finger Peak', sub: '五指峰', desc: 'A cluster of five pillars said to look like a giant hand. One of the most recognizable silhouettes from the loop.' },
-      { img: 'yangjiajie-wall.webp', alt: 'Wall-like peak formation', title: 'Huangshi Village', sub: '黄石寨村', desc: 'The mesa-top clearing with tea stalls and the best place to rest and take in the silence between the peaks.' },
-      { img: 'intro-bg.webp', alt: 'Misty Wulingyuan valley', title: 'Sword Test Stone', sub: '定海神针', desc: 'A slender lone pillar rising straight from the forest floor — a favorite subject for the parks postcard photographers.' },
-      { img: 'gallery-painting.webp', alt: 'Painted Wulingyuan scene', title: 'Huangshi cable car', sub: '黄石寨索道', desc: 'The cable car up and down the mesa, about 8 minutes each way, with great aerial views of the gorge.' },
+      {
+        img: 'huangshizhai-winter.webp',
+        alt: 'Pillars of Huangshizhai',
+        title: 'The Grand View Terrace',
+        sub: '摘星台',
+        desc: 'The loops signature overlook — a 360° sweep of the quartz-sandstone forest. This is the "you havent seen Zhangjiajie" viewpoint.',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Panorama of sandstone pillars',
+        title: 'Five-Finger Peak',
+        sub: '五指峰',
+        desc: 'A cluster of five pillars said to look like a giant hand. One of the most recognizable silhouettes from the loop.',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Wall-like peak formation',
+        title: 'Huangshi Village',
+        sub: '黄石寨村',
+        desc: 'The mesa-top clearing with tea stalls and the best place to rest and take in the silence between the peaks.',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty Wulingyuan valley',
+        title: 'Sword Test Stone',
+        sub: '定海神针',
+        desc: 'A slender lone pillar rising straight from the forest floor — a favorite subject for the parks postcard photographers.',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted Wulingyuan scene',
+        title: 'Huangshi cable car',
+        sub: '黄石寨索道',
+        desc: 'The cable car up and down the mesa, about 8 minutes each way, with great aerial views of the gorge.',
+      },
     ],
     routesIntro: 'Two ways up and around — pick by energy.',
     routes: [
       {
-        icon: 'zap', title: 'Cable car loop', sub: '1.5–2 hours · easy, both ways by cable',
+        icon: 'zap',
+        title: 'Cable car loop',
+        sub: '1.5–2 hours · easy, both ways by cable',
         steps: [
-          { strong: 'Cable car up', text: 'from the East Gate area, ~8 minutes.' },
-          { strong: 'Walk the loop', text: 'the level cliff-top circle, ~1 hour.' },
-          { strong: 'Grand View Terrace', text: 'the 360° signature stop.' },
-          { strong: 'Cable car down', text: 'or descend the stone stairs.' },
+          {
+            strong: 'Cable car up',
+            text: 'from the East Gate area, ~8 minutes.',
+          },
+          {
+            strong: 'Walk the loop',
+            text: 'the level cliff-top circle, ~1 hour.',
+          },
+          {
+            strong: 'Grand View Terrace',
+            text: 'the 360° signature stop.',
+          },
+          {
+            strong: 'Cable car down',
+            text: 'or descend the stone stairs.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Hike the stairs', sub: '2–3 hours · moderate, stair climb',
+        icon: 'footprints',
+        title: 'Hike the stairs',
+        sub: '2–3 hours · moderate, stair climb',
         steps: [
-          { strong: 'Climb the stair path', text: 'about 4,000 steps to the mesa.' },
-          { strong: 'Loop the rim', text: 'clockwise for the best light.' },
-          { strong: 'Cable car down', text: 'to save your knees.' },
+          {
+            strong: 'Climb the stair path',
+            text: 'about 4,000 steps to the mesa.',
+          },
+          {
+            strong: 'Loop the rim',
+            text: 'clockwise for the best light.',
+          },
+          {
+            strong: 'Cable car down',
+            text: 'to save your knees.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Apr – May', desc: 'Green peaks, comfortable, good light.' },
-        { icon: 'calendar-heart', period: 'Sep – Nov', desc: 'Crisp air, clear panoramas.' },
-        { icon: 'cloud-fog', period: 'Sunrise', desc: 'The 360° ring glows at first light.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Apr – May',
+          desc: 'Green peaks, comfortable, good light.',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Sep – Nov',
+          desc: 'Crisp air, clear panoramas.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'Sunrise',
+          desc: 'The 360° ring glows at first light.',
+        },
       ],
       note: 'Avoid: summer fog can flatten the view; the loop is exposed, so bring water and a hat. National Day (Oct 1–7) brings heavy cable-car queues.',
     },
     tips: [
-      { icon: 'users', title: 'Take the cable car', desc: 'Both ways by cable car makes this an easy half-day with no serious climbing.' },
-      { icon: 'cloud-rain', title: 'Go for clear mornings', desc: 'The 360° view needs clear sky. Foggy days waste the panorama — save it for a blue morning.' },
-      { icon: 'utensils', title: 'Bring water and a hat', desc: 'The loop is exposed with little shade. Carry at least 1 L per person.' },
-      { icon: 'bird', title: 'Sunrise or sunset', desc: 'The ring of pillars is most dramatic at low sun. Arrive at opening for the quietest light.' },
-      { icon: 'bed-double', title: 'Pair with Golden Whip Stream', desc: 'Do Huangshizhai in the morning, then walk Golden Whip Stream below in the afternoon.' },
+      {
+        icon: 'users',
+        title: 'Take the cable car',
+        desc: 'Both ways by cable car makes this an easy half-day with no serious climbing.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Go for clear mornings',
+        desc: 'The 360° view needs clear sky. Foggy days waste the panorama — save it for a blue morning.',
+      },
+      {
+        icon: 'utensils',
+        title: 'Bring water and a hat',
+        desc: 'The loop is exposed with little shade. Carry at least 1 L per person.',
+      },
+      {
+        icon: 'bird',
+        title: 'Sunrise or sunset',
+        desc: 'The ring of pillars is most dramatic at low sun. Arrive at opening for the quietest light.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Pair with Golden Whip Stream',
+        desc: 'Do Huangshizhai in the morning, then walk Golden Whip Stream below in the afternoon.',
+      },
     ],
     gettingThere: [
-      { strong: 'City → Wulingyuan East Gate.', text: 'Bus from Zhangjiajie city or railway station, about 40–60 min, ¥13.' },
-      { strong: 'East Gate → Huangshizhai.', text: 'Inside the park, take the shuttle to the Huangshizhai cable car station.' },
-      { strong: 'Cable car up.', text: 'Ride to the mesa in about 8 minutes.' },
-      { strong: 'Loop and return.', text: 'Walk the rim, then cable car or stairs down.' },
+      {
+        strong: 'City → Wulingyuan East Gate.',
+        text: 'Bus from Zhangjiajie city or railway station, about 40–60 min, ¥13.',
+      },
+      {
+        strong: 'East Gate → Huangshizhai.',
+        text: 'Inside the park, take the shuttle to the Huangshizhai cable car station.',
+      },
+      {
+        strong: 'Cable car up.',
+        text: 'Ride to the mesa in about 8 minutes.',
+      },
+      {
+        strong: 'Loop and return.',
+        text: 'Walk the rim, then cable car or stairs down.',
+      },
     ],
     tickets: [
-      { item: 'Wulingyuan combo ticket', detail: '¥227 — valid 4 days; includes park shuttle bus and insurance' },
-      { item: 'Huangshizhai cable car (round-trip)', detail: '¥118' },
-      { item: 'Opening hours', detail: '07:00 – 17:00' },
-      { item: 'Loop length', detail: '~2.5 km, mostly flat' },
-      { item: 'Best months', detail: 'April–May, September–November' },
+      {
+        item: 'Wulingyuan combo ticket',
+        detail: '¥227 — valid 4 days; includes park shuttle bus and insurance',
+      },
+      {
+        item: 'Huangshizhai cable car (round-trip)',
+        detail: '¥118',
+      },
+      {
+        item: 'Opening hours',
+        detail: '07:00 – 17:00',
+      },
+      {
+        item: 'Loop length',
+        detail: '~2.5 km, mostly flat',
+      },
+      {
+        item: 'Best months',
+        detail: 'April–May, September–November',
+      },
     ],
     facts: [
-      { label: 'Elevation', value: '~1,080 m' },
-      { label: 'Loop length', value: '~2.5 km' },
-      { label: 'Best season', value: 'Apr–May · Sep–Nov' },
-      { label: 'Suggested visit', value: '1.5–3 hours' },
-      { label: 'Opening hours', value: '07:00–17:00' },
-      { label: 'Ticket', value: '¥227 + ¥118 cable' },
-      { label: 'Type', value: 'UNESCO WHS' },
+      {
+        label: 'Elevation',
+        value: '~1,080 m',
+      },
+      {
+        label: 'Loop length',
+        value: '~2.5 km',
+      },
+      {
+        label: 'Best season',
+        value: 'Apr–May · Sep–Nov',
+      },
+      {
+        label: 'Suggested visit',
+        value: '1.5–3 hours',
+      },
+      {
+        label: 'Opening hours',
+        value: '07:00–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥227 + ¥118 cable',
+      },
+      {
+        label: 'Type',
+        value: 'UNESCO WHS',
+      },
     ],
     localTip: 'Huangshizhai is the one viewpoint where the cable car goes both ways — if your legs are tired after Yuanjiajie or Tianzi, this is the easy panorama to still tick off.',
     galleryTitle: 'Scenery of Huangshizhai & Wulingyuan',
     gallery: [
-      { img: 'huangshizhai-winter.webp', alt: 'Pillars of Huangshizhai' },
-      { img: 'peaks-panorama.webp', alt: 'Panorama of sandstone pillars' },
-      { img: 'yangjiajie-wall.webp', alt: 'Wall-like peak formation' },
-      { img: 'intro-bg.webp', alt: 'Misty Wulingyuan valley' },
-      { img: 'gallery-painting.webp', alt: 'Painted Wulingyuan scene' },
-      { img: 'yuanjiajie-mist.webp', alt: 'Morning sea of clouds' },
+      {
+        img: 'huangshizhai-winter.webp',
+        alt: 'Pillars of Huangshizhai',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Panorama of sandstone pillars',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Wall-like peak formation',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty Wulingyuan valley',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted Wulingyuan scene',
+      },
+      {
+        img: 'yuanjiajie-mist.webp',
+        alt: 'Morning sea of clouds',
+      },
     ],
     faqs: [
-      { q: 'Where is Huangshizhai, and how do I get there?', a: 'Huangshizhai is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Take a bus to the East Gate (around ¥13, 40–60 min), then the park shuttle to the Huangshizhai cable car station.' },
-      { q: 'Is Huangshizhai hard to climb?', a: 'Not if you take the cable car — it runs both ways, about 8 minutes each, so you can enjoy the 360° loop with almost no climbing. There is also a ~4,000-step stair path if you prefer to walk up.' },
-      { q: 'Why is Huangshizhai famous?', a: 'Its the classic overview of Zhangjiajie — a flat mesa-top loop with a full 360° ring of sandstone pillars. The local saying goes: "He who has not been to Huangshizhai has not seen Zhangjiajie."' },
-      { q: 'How long should I plan for Huangshizhai?', a: 'A half day is plenty: cable car up, about an hour around the level loop, cable car down. Pair it with Golden Whip Stream below for a full day.' },
-      { q: 'What is the best time of year to visit?', a: 'Spring (April–May) and autumn (September–November) give the clearest panoramas. Go on a clear morning — fog flattens the view, and the exposed loop gets hot in summer.' },
-      { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for park tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.' },
+      {
+        q: 'Where is Huangshizhai, and how do I get there?',
+        a: 'Huangshizhai is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Take a bus to the East Gate (around ¥13, 40–60 min), then the park shuttle to the Huangshizhai cable car station.',
+      },
+      {
+        q: 'Is Huangshizhai hard to climb?',
+        a: 'Not if you take the cable car — it runs both ways, about 8 minutes each, so you can enjoy the 360° loop with almost no climbing. There is also a ~4,000-step stair path if you prefer to walk up.',
+      },
+      {
+        q: 'Why is Huangshizhai famous?',
+        a: 'Its the classic overview of Zhangjiajie — a flat mesa-top loop with a full 360° ring of sandstone pillars. The local saying goes: "He who has not been to Huangshizhai has not seen Zhangjiajie."',
+      },
+      {
+        q: 'How long should I plan for Huangshizhai?',
+        a: 'A half day is plenty: cable car up, about an hour around the level loop, cable car down. Pair it with Golden Whip Stream below for a full day.',
+      },
+      {
+        q: 'What is the best time of year to visit?',
+        a: 'Spring (April–May) and autumn (September–November) give the clearest panoramas. Go on a clear morning — fog flattens the view, and the exposed loop gets hot in summer.',
+      },
+      {
+        q: 'Do I need my passport and can I use cards?',
+        a: 'Bring your passport for park tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.',
+      },
     ],
     related: [
-      { slug: 'tianzi', img: 'tianzi-autumn', alt: 'Tianzi Mountain', title: 'Tianzi Mountain', sub: '天子山 · Sea of clouds' },
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Mountains' },
-      { slug: 'jinbian', img: 'jinbianxi-stream', alt: 'Golden Whip Stream', title: 'Golden Whip Stream', sub: '金鞭溪 · Riverside walk' },
-      { slug: 'tianmen', img: 'peaks-panorama', alt: 'Tianmen Mountain', title: 'Tianmen Mountain', sub: '天门山 · 99 bends' },
+      {
+        slug: 'tianzi',
+        img: 'tianzi-autumn',
+        alt: 'Tianzi Mountain',
+        title: 'Tianzi Mountain',
+        sub: '天子山 · Sea of clouds',
+      },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Mountains',
+      },
+      {
+        slug: 'jinbian',
+        img: 'jinbianxi-stream',
+        alt: 'Golden Whip Stream',
+        title: 'Golden Whip Stream',
+        sub: '金鞭溪 · Riverside walk',
+      },
+      {
+        slug: 'tianmen',
+        img: 'peaks-panorama',
+        alt: 'Tianmen Mountain',
+        title: 'Tianmen Mountain',
+        sub: '天门山 · 99 bends',
+      },
     ],
-    geo: { lat: 29.36, lng: 110.46 },
+    geo: {
+      lat: 29.36,
+      lng: 110.46,
+    },
     jsonld: {
       name: 'Huangshizhai',
       alternateName: ['黄石寨', 'Yellow Stone Village', 'Huangshi Zhai'],
@@ -404,25 +1062,54 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/huangshizhai-winter.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp'],
       touristType: ['Foreign tourists', 'Nature lovers', 'Casual hikers'],
       faq: [
-        { q: 'Where is Huangshizhai, and how do I get there?', a: 'It is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Bus to the East Gate (around ¥13, 40–60 min), then shuttle to the Huangshizhai cable car.' },
-        { q: 'Is it hard to climb?', a: 'Not with the cable car, which runs both ways (~8 min each). A ~4,000-step stair path is also an option.' },
-        { q: 'Why is it famous?', a: 'It is the classic 360° overview of Zhangjiajie — the saying goes, "He who has not been to Huangshizhai has not seen Zhangjiajie."' },
-        { q: 'How long should I plan?', a: 'A half day: cable car up, about an hour around the loop, cable car down. Pair with Golden Whip Stream for a full day.' },
-        { q: 'What is the best time of year to visit?', a: 'Spring and autumn give the clearest panoramas. Go on a clear morning; fog flattens the view.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.' },
+        {
+          q: 'Where is Huangshizhai, and how do I get there?',
+          a: 'It is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Bus to the East Gate (around ¥13, 40–60 min), then shuttle to the Huangshizhai cable car.',
+        },
+        {
+          q: 'Is it hard to climb?',
+          a: 'Not with the cable car, which runs both ways (~8 min each). A ~4,000-step stair path is also an option.',
+        },
+        {
+          q: 'Why is it famous?',
+          a: 'It is the classic 360° overview of Zhangjiajie — the saying goes, "He who has not been to Huangshizhai has not seen Zhangjiajie."',
+        },
+        {
+          q: 'How long should I plan?',
+          a: 'A half day: cable car up, about an hour around the loop, cable car down. Pair with Golden Whip Stream for a full day.',
+        },
+        {
+          q: 'What is the best time of year to visit?',
+          a: 'Spring and autumn give the clearest panoramas. Go on a clear morning; fog flattens the view.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Huangshizhai cable-car loop (1.5–2 hours)',
         steps: [
-          { name: 'Cable car up', text: 'From the East Gate area, about 8 minutes.' },
-          { name: 'Walk the loop', text: 'The level cliff-top circle, about 1 hour.' },
-          { name: 'Grand View Terrace', text: 'The 360° signature stop.' },
-          { name: 'Cable car down', text: 'Or descend the stone stairs.' },
+          {
+            name: 'Cable car up',
+            text: 'From the East Gate area, about 8 minutes.',
+          },
+          {
+            name: 'Walk the loop',
+            text: 'The level cliff-top circle, about 1 hour.',
+          },
+          {
+            name: 'Grand View Terrace',
+            text: 'The 360° signature stop.',
+          },
+          {
+            name: 'Cable car down',
+            text: 'Or descend the stone stairs.',
+          },
         ],
       },
     },
   },
-
   {
     slug: 'tianmen',
     file: 'tianmen.html',
@@ -436,104 +1123,301 @@ export const attractions = [
     h1: 'Tianmen Mountain',
     subtitle: '天门山 · Heavenly Gate & Glass Skywalk',
     heroIntro: 'The mountain that looms over Zhangjiajie city itself — ride the worlds longest cable car, snake up the 99-bend road, walk through the natural Heavenly Gate arch, and test your nerves on a glass cliff walkway.',
-    tldr: `Tianmen Mountain (天门山) is a standalone peak south of Zhangjiajie city, Hunan, China, about 1,518 m high. It is famous for the Heavenly Gate (天门洞), a 131 m natural arch, reached by the worlds longest passenger cable car and a 99-bend mountain road, with glass skywalks along the cliff edge.`,
+    tldr: 'Tianmen Mountain (天门山) is a standalone peak south of Zhangjiajie city, Hunan, China, about 1,518 m high. It is famous for the Heavenly Gate (天门洞), a 131 m natural arch, reached by the worlds longest passenger cable car and a 99-bend mountain road, with glass skywalks along the cliff edge.',
     introH2: 'Why Tianmen Mountain is a must-see',
-    introParas: [
-      `Tianmen is different from the Wulingyuan peaks — its a single dramatic mountain right next to the city, and the experience is engineered thrill as much as scenery. The cable car from downtown is the longest in the world at 7.5 km, climbing through clouds to the summit.`,
-      `At the top, a walkway threads the cliff face, including sections of transparent glass floor. Then a path and stairs lead down to the Heavenly Gate, a vast natural arch pierced through the rock — the "Gate to Heaven" that gives the mountain its name.`,
-      `Below, the 99-Bend Road coils up the mountainside like a dragon, and a escalator inside the cliff carries you the final stretch. Its the most "theme-park meets nature" day in Zhangjiajie, and easy to reach without entering the Wulingyuan park.`,
-    ],
+    introParas: ['Tianmen is different from the Wulingyuan peaks — its a single dramatic mountain right next to the city, and the experience is engineered thrill as much as scenery. The cable car from downtown is the longest in the world at 7.5 km, climbing through clouds to the summit.', 'At the top, a walkway threads the cliff face, including sections of transparent glass floor. Then a path and stairs lead down to the Heavenly Gate, a vast natural arch pierced through the rock — the "Gate to Heaven" that gives the mountain its name.', 'Below, the 99-Bend Road coils up the mountainside like a dragon, and a escalator inside the cliff carries you the final stretch. Its the most "theme-park meets nature" day in Zhangjiajie, and easy to reach without entering the Wulingyuan park.'],
     highlightsIntro: 'Five signature thrills of Tianmen Mountain.',
     highlights: [
-      { img: 'peaks-panorama.webp', alt: 'Tianmen summit panorama', title: 'Cable car up', sub: '天门山索道', desc: 'The worlds longest passenger cable car at 7.5 km, rising from downtown Zhangjiajie through mist to the summit in about 30 minutes.' },
-      { img: 'intro-bg.webp', alt: 'Misty mountain scene', title: 'Heavenly Gate', sub: '天门洞', desc: 'A 131 m natural arch punched through the cliff — the "Gate to Heaven". Reach it by the cliff escalator and a final stair climb.' },
-      { img: 'yangjiajie-wall.webp', alt: 'Cliff formation', title: 'Glass Skywalk', sub: '玻璃栈道', desc: 'A cliff-edge walkway with a transparent glass floor, 1,430 m above the valley. Shoes covers provided; knees optional.' },
-      { img: 'gallery-painting.webp', alt: 'Painted mountain scene', title: '99-Bend Road', sub: '通天大道', desc: 'The mountain road with 99 hairpin turns coiling up to the gate — a marvel of engineering and a dizzying view from above.' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak', title: 'Summit loops', sub: '山顶环线', desc: 'Paved cliff-top loops with lookouts over the city and the Yuanjiajie ranges beyond — calm after the adrenaline.' },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Tianmen summit panorama',
+        title: 'Cable car up',
+        sub: '天门山索道',
+        desc: 'The worlds longest passenger cable car at 7.5 km, rising from downtown Zhangjiajie through mist to the summit in about 30 minutes.',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty mountain scene',
+        title: 'Heavenly Gate',
+        sub: '天门洞',
+        desc: 'A 131 m natural arch punched through the cliff — the "Gate to Heaven". Reach it by the cliff escalator and a final stair climb.',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Cliff formation',
+        title: 'Glass Skywalk',
+        sub: '玻璃栈道',
+        desc: 'A cliff-edge walkway with a transparent glass floor, 1,430 m above the valley. Shoes covers provided; knees optional.',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted mountain scene',
+        title: '99-Bend Road',
+        sub: '通天大道',
+        desc: 'The mountain road with 99 hairpin turns coiling up to the gate — a marvel of engineering and a dizzying view from above.',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+        title: 'Summit loops',
+        sub: '山顶环线',
+        desc: 'Paved cliff-top loops with lookouts over the city and the Yuanjiajie ranges beyond — calm after the adrenaline.',
+      },
     ],
     routesIntro: 'Two ways to experience Tianmen — pick by nerves and time.',
     routes: [
       {
-        icon: 'zap', title: 'Classic cable-car day', sub: 'Half–full day · cable car up + glass walk + gate',
+        icon: 'zap',
+        title: 'Classic cable-car day',
+        sub: 'Half–full day · cable car up + glass walk + gate',
         steps: [
-          { strong: 'Cable car from downtown', text: '7.5 km to the summit, ~30 min.' },
-          { strong: 'West summit loop', text: 'cliff walkways and the glass skywalk.' },
-          { strong: 'Cliff escalator', text: 'down toward the Heavenly Gate.' },
-          { strong: 'Heavenly Gate stairs', text: 'climb to the arch.' },
-          { strong: '99-Bend Road bus', text: 'down to the foot of the mountain.' },
+          {
+            strong: 'Cable car from downtown',
+            text: '7.5 km to the summit, ~30 min.',
+          },
+          {
+            strong: 'West summit loop',
+            text: 'cliff walkways and the glass skywalk.',
+          },
+          {
+            strong: 'Cliff escalator',
+            text: 'down toward the Heavenly Gate.',
+          },
+          {
+            strong: 'Heavenly Gate stairs',
+            text: 'climb to the arch.',
+          },
+          {
+            strong: '99-Bend Road bus',
+            text: 'down to the foot of the mountain.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Hiking alternative', sub: '4+ hours · strenuous',
+        icon: 'footprints',
+        title: 'Hiking alternative',
+        sub: '4+ hours · strenuous',
         steps: [
-          { strong: 'Hike the upper trails', text: 'from the summit loops.' },
-          { strong: 'Descend to the gate', text: 'on foot via the stone steps.' },
-          { strong: 'Return by bus', text: 'the 99-Bend Road to the base.' },
+          {
+            strong: 'Hike the upper trails',
+            text: 'from the summit loops.',
+          },
+          {
+            strong: 'Descend to the gate',
+            text: 'on foot via the stone steps.',
+          },
+          {
+            strong: 'Return by bus',
+            text: 'the 99-Bend Road to the base.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Apr – May', desc: 'Green, comfortable, good visibility.' },
-        { icon: 'calendar-heart', period: 'Sep – Nov', desc: 'Crisp air, clear summit views.' },
-        { icon: 'cloud-fog', period: 'After rain', desc: 'Sea of clouds below the cable car.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Apr – May',
+          desc: 'Green, comfortable, good visibility.',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Sep – Nov',
+          desc: 'Crisp air, clear summit views.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'After rain',
+          desc: 'Sea of clouds below the cable car.',
+        },
       ],
       note: 'Avoid: the glass walkway closes in heavy ice or storms; winter can be spectacular but slippery. National Day (Oct 1–7) means long cable-car queues.',
     },
     tips: [
-      { icon: 'users', title: 'Book the cable car early', desc: 'Tianmen is hugely popular; arrive at opening to avoid the longest queue of your trip.' },
-      { icon: 'cloud-rain', title: 'Check the glass walk status', desc: 'It closes in ice or storms. If its closed, the cliff walkways and gate are still worth it.' },
-      { icon: 'utensils', title: 'Bring water and a layer', desc: 'The summit is cooler and exposed. Carry at least 1 L per person.' },
-      { icon: 'bird', title: 'Wear real shoes', desc: 'You will climb many stairs to the Heavenly Gate. Skip sandals and heels.' },
-      { icon: 'bed-double', title: 'Stay in the city', desc: 'Tianmen is 15 min from downtown Zhangjiajie — no need to enter the Wulingyuan park.' },
+      {
+        icon: 'users',
+        title: 'Book the cable car early',
+        desc: 'Tianmen is hugely popular; arrive at opening to avoid the longest queue of your trip.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Check the glass walk status',
+        desc: 'It closes in ice or storms. If its closed, the cliff walkways and gate are still worth it.',
+      },
+      {
+        icon: 'utensils',
+        title: 'Bring water and a layer',
+        desc: 'The summit is cooler and exposed. Carry at least 1 L per person.',
+      },
+      {
+        icon: 'bird',
+        title: 'Wear real shoes',
+        desc: 'You will climb many stairs to the Heavenly Gate. Skip sandals and heels.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Stay in the city',
+        desc: 'Tianmen is 15 min from downtown Zhangjiajie — no need to enter the Wulingyuan park.',
+      },
     ],
     gettingThere: [
-      { strong: 'In the city.', text: 'Tianmen Mountain is south of Zhangjiajie city center — the cable-car lower station is in town.' },
-      { strong: 'Cable car up', text: 'from the downtown station, 7.5 km to the summit.' },
-      { strong: 'Or 99-Bend Road bus', text: 'from the mountain foot if you skip the cable car.' },
-      { strong: 'Return downtown', text: 'by cable car or road bus.' },
+      {
+        strong: 'In the city.',
+        text: 'Tianmen Mountain is south of Zhangjiajie city center — the cable-car lower station is in town.',
+      },
+      {
+        strong: 'Cable car up',
+        text: 'from the downtown station, 7.5 km to the summit.',
+      },
+      {
+        strong: 'Or 99-Bend Road bus',
+        text: 'from the mountain foot if you skip the cable car.',
+      },
+      {
+        strong: 'Return downtown',
+        text: 'by cable car or road bus.',
+      },
     ],
     tickets: [
-      { item: 'Tianmen Mountain ticket', detail: '¥258 — includes cable car, shuttle and escalator' },
-      { item: 'Glass skywalk', detail: 'Included (shoe covers provided)' },
-      { item: 'Opening hours', detail: '07:30 – 17:00' },
-      { item: 'Cable car length', detail: '7.5 km (world longest)' },
-      { item: 'Best months', detail: 'April–May, September–November' },
+      {
+        item: 'Tianmen Mountain ticket',
+        detail: '¥258 — includes cable car, shuttle and escalator',
+      },
+      {
+        item: 'Glass skywalk',
+        detail: 'Included (shoe covers provided)',
+      },
+      {
+        item: 'Opening hours',
+        detail: '07:30 – 17:00',
+      },
+      {
+        item: 'Cable car length',
+        detail: '7.5 km (world longest)',
+      },
+      {
+        item: 'Best months',
+        detail: 'April–May, September–November',
+      },
     ],
     facts: [
-      { label: 'Elevation', value: '~1,518 m' },
-      { label: 'Cable car', value: '7.5 km' },
-      { label: 'Best season', value: 'Apr–May · Sep–Nov' },
-      { label: 'Suggested visit', value: 'Half–full day' },
-      { label: 'Opening hours', value: '07:30–17:00' },
-      { label: 'Ticket', value: '¥258' },
-      { label: 'Type', value: 'National AAAAA' },
+      {
+        label: 'Elevation',
+        value: '~1,518 m',
+      },
+      {
+        label: 'Cable car',
+        value: '7.5 km',
+      },
+      {
+        label: 'Best season',
+        value: 'Apr–May · Sep–Nov',
+      },
+      {
+        label: 'Suggested visit',
+        value: 'Half–full day',
+      },
+      {
+        label: 'Opening hours',
+        value: '07:30–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥258',
+      },
+      {
+        label: 'Type',
+        value: 'National AAAAA',
+      },
     ],
     localTip: 'Tianmen is the one big Zhangjiajie sight you can do without the Wulingyuan combo ticket — handy if you have a late flight and only a half day in the city.',
     galleryTitle: 'Scenery of Tianmen Mountain',
     gallery: [
-      { img: 'peaks-panorama.webp', alt: 'Tianmen summit panorama' },
-      { img: 'intro-bg.webp', alt: 'Misty mountain scene' },
-      { img: 'yangjiajie-wall.webp', alt: 'Cliff formation' },
-      { img: 'gallery-painting.webp', alt: 'Painted mountain scene' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak' },
-      { img: 'jinbianxi-rock.webp', alt: 'Weathered sandstone' },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Tianmen summit panorama',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty mountain scene',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Cliff formation',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted mountain scene',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+      },
+      {
+        img: 'jinbianxi-rock.webp',
+        alt: 'Weathered sandstone',
+      },
     ],
     faqs: [
-      { q: 'Where is Tianmen Mountain, and how do I get there?', a: 'Tianmen Mountain is a standalone peak south of Zhangjiajie city, Hunan. The cable-car lower station is in the city, so you can reach it by bus or taxi from the railway station in about 15 minutes — no need to enter the Wulingyuan park.' },
-      { q: 'What is the Heavenly Gate?', a: 'The Heavenly Gate (天门洞) is a 131 m natural arch pierced through the cliff face. You reach it via a cliff-escalator and a final stair climb. It is the landmark that gives the mountain its name.' },
-      { q: 'Is the glass skywalk safe?', a: 'Yes — the glass is reinforced and shoe covers are provided. It closes only in ice or storms. If closed, the cliff-edge walkways and the Heavenly Gate are still open.' },
-      { q: 'How long should I plan for Tianmen Mountain?', a: 'A half to full day: cable car up (~30 min), summit loops and glass walk, down to the Heavenly Gate, then the 99-Bend Road bus to the base.' },
-      { q: 'What is the best time of year to visit?', a: 'Spring (April–May) and autumn (September–November) are best for clear views. After rain you may catch a sea of clouds below the cable car. Arrive early to beat the cable-car queue.' },
-      { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.' },
+      {
+        q: 'Where is Tianmen Mountain, and how do I get there?',
+        a: 'Tianmen Mountain is a standalone peak south of Zhangjiajie city, Hunan. The cable-car lower station is in the city, so you can reach it by bus or taxi from the railway station in about 15 minutes — no need to enter the Wulingyuan park.',
+      },
+      {
+        q: 'What is the Heavenly Gate?',
+        a: 'The Heavenly Gate (天门洞) is a 131 m natural arch pierced through the cliff face. You reach it via a cliff-escalator and a final stair climb. It is the landmark that gives the mountain its name.',
+      },
+      {
+        q: 'Is the glass skywalk safe?',
+        a: 'Yes — the glass is reinforced and shoe covers are provided. It closes only in ice or storms. If closed, the cliff-edge walkways and the Heavenly Gate are still open.',
+      },
+      {
+        q: 'How long should I plan for Tianmen Mountain?',
+        a: 'A half to full day: cable car up (~30 min), summit loops and glass walk, down to the Heavenly Gate, then the 99-Bend Road bus to the base.',
+      },
+      {
+        q: 'What is the best time of year to visit?',
+        a: 'Spring (April–May) and autumn (September–November) are best for clear views. After rain you may catch a sea of clouds below the cable car. Arrive early to beat the cable-car queue.',
+      },
+      {
+        q: 'Do I need my passport and can I use cards?',
+        a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.',
+      },
     ],
     related: [
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Mountains' },
-      { slug: 'tianzi', img: 'tianzi-autumn', alt: 'Tianzi Mountain', title: 'Tianzi Mountain', sub: '天子山 · Sea of clouds' },
-      { slug: 'grand-canyon', img: 'yangjiajie-wall', alt: 'Grand Canyon Glass Bridge', title: 'Grand Canyon Glass Bridge', sub: '大峡谷玻璃桥 · Bungee' },
-      { slug: 'baofeng', img: 'gallery-painting', alt: 'Baofeng Lake', title: 'Baofeng Lake', sub: '宝峰湖 · Boat ride' },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Mountains',
+      },
+      {
+        slug: 'tianzi',
+        img: 'tianzi-autumn',
+        alt: 'Tianzi Mountain',
+        title: 'Tianzi Mountain',
+        sub: '天子山 · Sea of clouds',
+      },
+      {
+        slug: 'grand-canyon',
+        img: 'yangjiajie-wall',
+        alt: 'Grand Canyon Glass Bridge',
+        title: 'Grand Canyon Glass Bridge',
+        sub: '大峡谷玻璃桥 · Bungee',
+      },
+      {
+        slug: 'baofeng',
+        img: 'gallery-painting',
+        alt: 'Baofeng Lake',
+        title: 'Baofeng Lake',
+        sub: '宝峰湖 · Boat ride',
+      },
     ],
-    geo: { lat: 29.05, lng: 110.48 },
+    geo: {
+      lat: 29.05,
+      lng: 110.48,
+    },
     jsonld: {
       name: 'Tianmen Mountain',
       alternateName: ['天门山', 'Heavenly Gate Mountain', 'Tianmen Shan'],
@@ -541,26 +1425,58 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/intro-bg.webp'],
       touristType: ['Foreign tourists', 'Adventure seekers', 'Photographers'],
       faq: [
-        { q: 'Where is Tianmen Mountain, and how do I get there?', a: 'It is a standalone peak south of Zhangjiajie city. The cable-car station is downtown, reachable by bus or taxi from the railway station in about 15 minutes — no Wulingyuan ticket needed.' },
-        { q: 'What is the Heavenly Gate?', a: 'A 131 m natural arch through the cliff, reached by cliff-escalator and stairs. It gives the mountain its name.' },
-        { q: 'Is the glass skywalk safe?', a: 'Yes — reinforced glass with shoe covers; it closes only in ice or storms. The walkways and gate stay open.' },
-        { q: 'How long should I plan?', a: 'Half to full day: cable car up, summit loops and glass walk, down to the gate, then the 99-Bend Road bus.' },
-        { q: 'What is the best time of year to visit?', a: 'Spring and autumn for clear views; after rain for a sea of clouds. Arrive early to beat the cable-car queue.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.' },
+        {
+          q: 'Where is Tianmen Mountain, and how do I get there?',
+          a: 'It is a standalone peak south of Zhangjiajie city. The cable-car station is downtown, reachable by bus or taxi from the railway station in about 15 minutes — no Wulingyuan ticket needed.',
+        },
+        {
+          q: 'What is the Heavenly Gate?',
+          a: 'A 131 m natural arch through the cliff, reached by cliff-escalator and stairs. It gives the mountain its name.',
+        },
+        {
+          q: 'Is the glass skywalk safe?',
+          a: 'Yes — reinforced glass with shoe covers; it closes only in ice or storms. The walkways and gate stay open.',
+        },
+        {
+          q: 'How long should I plan?',
+          a: 'Half to full day: cable car up, summit loops and glass walk, down to the gate, then the 99-Bend Road bus.',
+        },
+        {
+          q: 'What is the best time of year to visit?',
+          a: 'Spring and autumn for clear views; after rain for a sea of clouds. Arrive early to beat the cable-car queue.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Tianmen Mountain classic day (half–full day)',
         steps: [
-          { name: 'Cable car from downtown', text: '7.5 km to the summit, about 30 minutes.' },
-          { name: 'West summit loop', text: 'Cliff walkways and the glass skywalk.' },
-          { name: 'Cliff escalator', text: 'Down toward the Heavenly Gate.' },
-          { name: 'Heavenly Gate stairs', text: 'Climb to the arch.' },
-          { name: '99-Bend Road bus', text: 'Down to the mountain foot.' },
+          {
+            name: 'Cable car from downtown',
+            text: '7.5 km to the summit, about 30 minutes.',
+          },
+          {
+            name: 'West summit loop',
+            text: 'Cliff walkways and the glass skywalk.',
+          },
+          {
+            name: 'Cliff escalator',
+            text: 'Down toward the Heavenly Gate.',
+          },
+          {
+            name: 'Heavenly Gate stairs',
+            text: 'Climb to the arch.',
+          },
+          {
+            name: '99-Bend Road bus',
+            text: 'Down to the mountain foot.',
+          },
         ],
       },
     },
   },
-
   {
     slug: 'grand-canyon',
     file: 'grand-canyon.html',
@@ -574,104 +1490,301 @@ export const attractions = [
     h1: 'Grand Canyon Glass Bridge',
     subtitle: '大峡谷玻璃桥 · Walk on Air Above the Canyon',
     heroIntro: 'Stride across the worlds highest and longest glass-bottom bridge, 300 m above the Zhangjiajie Grand Canyon — then add a bungee jump or a zip line if your nerves allow.',
-    tldr: `The Zhangjiajie Grand Canyon Glass Bridge (大峡谷玻璃桥) spans 430 m across the Zhangjiajie Grand Canyon, Hunan, China, 300 m above the river. It was the worlds highest and longest glass-bottom bridge when built, with a bungee jump and canyon walking trails below.`,
+    tldr: 'The Zhangjiajie Grand Canyon Glass Bridge (大峡谷玻璃桥) spans 430 m across the Zhangjiajie Grand Canyon, Hunan, China, 300 m above the river. It was the worlds highest and longest glass-bottom bridge when built, with a bungee jump and canyon walking trails below.',
     introH2: 'Why the Glass Bridge is a must-see',
-    introParas: [
-      `This is the pure adrenaline stop. The bridge deck is transparent glass, so you look straight down 300 m to the canyon floor as you cross. On a clear day the视图 is spectacular; on a foggy day its downright surreal.`,
-      `Below the bridge, the Zhangjiajie Grand Canyon is a lush gorge with waterfalls, a river and wooden walkways — a pleasant contrast to the thrill above. A bungee jump (one of the worlds highest) and a zip line let you add more altitude if you like.`,
-      `Its a self-contained ticketed area separate from the Wulingyuan park, about 40 minutes from the city. Allow a half day: the bridge crossing is quick, but the canyon walk and photo queues take time.`,
-    ],
+    introParas: ['This is the pure adrenaline stop. The bridge deck is transparent glass, so you look straight down 300 m to the canyon floor as you cross. On a clear day the视图 is spectacular; on a foggy day its downright surreal.', 'Below the bridge, the Zhangjiajie Grand Canyon is a lush gorge with waterfalls, a river and wooden walkways — a pleasant contrast to the thrill above. A bungee jump (one of the worlds highest) and a zip line let you add more altitude if you like.', 'Its a self-contained ticketed area separate from the Wulingyuan park, about 40 minutes from the city. Allow a half day: the bridge crossing is quick, but the canyon walk and photo queues take time.'],
     highlightsIntro: 'Five things to do at the Grand Canyon.',
     highlights: [
-      { img: 'yangjiajie-wall.webp', alt: 'Canyon cliff walls', title: 'The glass bridge', sub: '玻璃桥', desc: 'A 430 m glass-bottom span, 300 m above the canyon. Shoe covers provided; the deck flexes faintly underfoot — part of the fun.' },
-      { img: 'peaks-panorama.webp', alt: 'Panorama of peaks', title: 'Bungee jump', sub: '蹦极', desc: 'One of the worlds highest bungee jumps, launched from the bridge. For the brave only — book ahead, limited slots.' },
-      { img: 'intro-bg.webp', alt: 'Misty canyon scene', title: 'Canyon walk', sub: '大峡谷步道', desc: 'Wooden trails, waterfalls and a river below the bridge — a calm walk after the adrenaline.' },
-      { img: 'gallery-painting.webp', alt: 'Painted canyon scene', title: 'Zip line', sub: '滑索', desc: 'A high zip line across the gorge for a bird-eye crossing without the glass.' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak', title: 'River cruise', sub: '峡谷游船', desc: 'A short boat ride on the canyon river to round out the visit on the water.' },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Canyon cliff walls',
+        title: 'The glass bridge',
+        sub: '玻璃桥',
+        desc: 'A 430 m glass-bottom span, 300 m above the canyon. Shoe covers provided; the deck flexes faintly underfoot — part of the fun.',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Panorama of peaks',
+        title: 'Bungee jump',
+        sub: '蹦极',
+        desc: 'One of the worlds highest bungee jumps, launched from the bridge. For the brave only — book ahead, limited slots.',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty canyon scene',
+        title: 'Canyon walk',
+        sub: '大峡谷步道',
+        desc: 'Wooden trails, waterfalls and a river below the bridge — a calm walk after the adrenaline.',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted canyon scene',
+        title: 'Zip line',
+        sub: '滑索',
+        desc: 'A high zip line across the gorge for a bird-eye crossing without the glass.',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+        title: 'River cruise',
+        sub: '峡谷游船',
+        desc: 'A short boat ride on the canyon river to round out the visit on the water.',
+      },
     ],
     routesIntro: 'Two ways to do the Grand Canyon — pick by thrill level.',
     routes: [
       {
-        icon: 'zap', title: 'Bridge + canyon walk', sub: '2–3 hours · family-friendly',
+        icon: 'zap',
+        title: 'Bridge + canyon walk',
+        sub: '2–3 hours · family-friendly',
         steps: [
-          { strong: 'Cross the glass bridge', text: 'the main event, ~10 min each way.' },
-          { strong: 'Descend the trail', text: 'wooden paths into the canyon.' },
-          { strong: 'Waterfalls and river', text: 'photo stops along the way.' },
-          { strong: 'River cruise', text: 'short boat ride to the exit.' },
+          {
+            strong: 'Cross the glass bridge',
+            text: 'the main event, ~10 min each way.',
+          },
+          {
+            strong: 'Descend the trail',
+            text: 'wooden paths into the canyon.',
+          },
+          {
+            strong: 'Waterfalls and river',
+            text: 'photo stops along the way.',
+          },
+          {
+            strong: 'River cruise',
+            text: 'short boat ride to the exit.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Thrill add-ons', sub: '3–4 hours · bungee + zip',
+        icon: 'footprints',
+        title: 'Thrill add-ons',
+        sub: '3–4 hours · bungee + zip',
         steps: [
-          { strong: 'Bridge crossing', text: 'with the glass floor.' },
-          { strong: 'Bungee jump', text: 'from the bridge, if booked.' },
-          { strong: 'Zip line', text: 'across the gorge.' },
-          { strong: 'Canyon walk out', text: 'to the exit.' },
+          {
+            strong: 'Bridge crossing',
+            text: 'with the glass floor.',
+          },
+          {
+            strong: 'Bungee jump',
+            text: 'from the bridge, if booked.',
+          },
+          {
+            strong: 'Zip line',
+            text: 'across the gorge.',
+          },
+          {
+            strong: 'Canyon walk out',
+            text: 'to the exit.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Apr – May', desc: 'Green canyon, comfortable, good light.' },
-        { icon: 'calendar-heart', period: 'Sep – Nov', desc: 'Crisp air, clear gorge views.' },
-        { icon: 'cloud-fog', period: 'Clear days', desc: 'Best visibility down the 300 m drop.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Apr – May',
+          desc: 'Green canyon, comfortable, good light.',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Sep – Nov',
+          desc: 'Crisp air, clear gorge views.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'Clear days',
+          desc: 'Best visibility down the 300 m drop.',
+        },
       ],
       note: 'Avoid: the bridge closes in high wind, thunder or heavy ice. Fog hides the view but adds atmosphere — your call. National Day (Oct 1–7) means very long queues.',
     },
     tips: [
-      { icon: 'users', title: 'Book a time slot', desc: 'The bridge uses timed entry with a cap on visitors. Reserve ahead or arrive at opening.' },
-      { icon: 'cloud-rain', title: 'Check wind status', desc: 'The bridge closes in high wind or storms. Have a fallback plan (the canyon walk stays open).' },
-      { icon: 'utensils', title: 'Bring water', desc: 'The canyon walk is longer than it looks. Carry at least 1 L per person.' },
-      { icon: 'bird', title: 'No phones on the glass', desc: 'Phones and selfie sticks are restricted on the bridge for safety — use the designated photo spots.' },
-      { icon: 'bed-double', title: 'Pair with Tianmen', desc: 'Both are near the city and thrill-focused — do them on the same day if you like heights.' },
+      {
+        icon: 'users',
+        title: 'Book a time slot',
+        desc: 'The bridge uses timed entry with a cap on visitors. Reserve ahead or arrive at opening.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Check wind status',
+        desc: 'The bridge closes in high wind or storms. Have a fallback plan (the canyon walk stays open).',
+      },
+      {
+        icon: 'utensils',
+        title: 'Bring water',
+        desc: 'The canyon walk is longer than it looks. Carry at least 1 L per person.',
+      },
+      {
+        icon: 'bird',
+        title: 'No phones on the glass',
+        desc: 'Phones and selfie sticks are restricted on the bridge for safety — use the designated photo spots.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Pair with Tianmen',
+        desc: 'Both are near the city and thrill-focused — do them on the same day if you like heights.',
+      },
     ],
     gettingThere: [
-      { strong: 'City → Grand Canyon.', text: 'Bus or taxi from Zhangjiajie city, about 40–60 min.' },
-      { strong: 'Arrive at the base.', text: 'buy or show your timed ticket.' },
-      { strong: 'Ride up to the bridge.', text: 'by the site shuttle or cable to the span.' },
-      { strong: 'Walk out via the canyon.', text: 'to the exit and your transport.' },
+      {
+        strong: 'City → Grand Canyon.',
+        text: 'Bus or taxi from Zhangjiajie city, about 40–60 min.',
+      },
+      {
+        strong: 'Arrive at the base.',
+        text: 'buy or show your timed ticket.',
+      },
+      {
+        strong: 'Ride up to the bridge.',
+        text: 'by the site shuttle or cable to the span.',
+      },
+      {
+        strong: 'Walk out via the canyon.',
+        text: 'to the exit and your transport.',
+      },
     ],
     tickets: [
-      { item: 'Glass Bridge ticket', detail: '¥138 — includes bridge crossing and canyon walk' },
-      { item: 'Bungee jump', detail: '¥299 (separate, book ahead, limited slots)' },
-      { item: 'Zip line', detail: '¥40 (optional add-on)' },
-      { item: 'Opening hours', detail: '07:30 – 17:00' },
-      { item: 'Best months', detail: 'April–May, September–November' },
+      {
+        item: 'Glass Bridge ticket',
+        detail: '¥138 — includes bridge crossing and canyon walk',
+      },
+      {
+        item: 'Bungee jump',
+        detail: '¥299 (separate, book ahead, limited slots)',
+      },
+      {
+        item: 'Zip line',
+        detail: '¥40 (optional add-on)',
+      },
+      {
+        item: 'Opening hours',
+        detail: '07:30 – 17:00',
+      },
+      {
+        item: 'Best months',
+        detail: 'April–May, September–November',
+      },
     ],
     facts: [
-      { label: 'Bridge length', value: '430 m' },
-      { label: 'Height', value: '~300 m' },
-      { label: 'Best season', value: 'Apr–May · Sep–Nov' },
-      { label: 'Suggested visit', value: '2–4 hours' },
-      { label: 'Opening hours', value: '07:30–17:00' },
-      { label: 'Ticket', value: '¥138' },
-      { label: 'Type', value: 'National AAAAA' },
+      {
+        label: 'Bridge length',
+        value: '430 m',
+      },
+      {
+        label: 'Height',
+        value: '~300 m',
+      },
+      {
+        label: 'Best season',
+        value: 'Apr–May · Sep–Nov',
+      },
+      {
+        label: 'Suggested visit',
+        value: '2–4 hours',
+      },
+      {
+        label: 'Opening hours',
+        value: '07:30–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥138',
+      },
+      {
+        label: 'Type',
+        value: 'National AAAAA',
+      },
     ],
     localTip: 'The bridge caps visitors per time slot, so a 09:00 arrival usually means a 30-minute wait instead of two hours at midday. Go early, then do Tianmen Mountain in the afternoon.',
     galleryTitle: 'Scenery of the Grand Canyon Glass Bridge',
     gallery: [
-      { img: 'yangjiajie-wall.webp', alt: 'Canyon cliff walls' },
-      { img: 'peaks-panorama.webp', alt: 'Panorama of peaks' },
-      { img: 'intro-bg.webp', alt: 'Misty canyon scene' },
-      { img: 'gallery-painting.webp', alt: 'Painted canyon scene' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak' },
-      { img: 'jinbianxi-rock.webp', alt: 'Weathered sandstone' },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Canyon cliff walls',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Panorama of peaks',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty canyon scene',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted canyon scene',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+      },
+      {
+        img: 'jinbianxi-rock.webp',
+        alt: 'Weathered sandstone',
+      },
     ],
     faqs: [
-      { q: 'Where is the Grand Canyon Glass Bridge, and how do I get there?', a: 'It is in the Zhangjiajie Grand Canyon, about 40–60 minutes by bus or taxi from Zhangjiajie city. It is a separate ticketed area from the Wulingyuan park.' },
-      { q: 'Is the glass bridge safe?', a: 'Yes — the bridge was engineered with large safety margins and shoe covers are provided. It closes only in high wind, thunder or heavy ice. Phones and selfie sticks are restricted on the span for safety.' },
-      { q: 'How much is the bungee jump?', a: 'The bungee is a separate add-on at about ¥299, with limited daily slots — book ahead if you want it. The standard bridge ticket is about ¥138.' },
-      { q: 'How long should I plan for the Grand Canyon?', a: 'A half day: the bridge crossing is quick (about 10 minutes each way) but the canyon walk, waterfalls and photo queues take 2–3 hours.' },
-      { q: 'What is the best time of year to visit?', a: 'Spring (April–May) and autumn (September–November) give the clearest views down the 300 m drop. Arrive early for the shortest bridge queue.' },
-      { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.' },
+      {
+        q: 'Where is the Grand Canyon Glass Bridge, and how do I get there?',
+        a: 'It is in the Zhangjiajie Grand Canyon, about 40–60 minutes by bus or taxi from Zhangjiajie city. It is a separate ticketed area from the Wulingyuan park.',
+      },
+      {
+        q: 'Is the glass bridge safe?',
+        a: 'Yes — the bridge was engineered with large safety margins and shoe covers are provided. It closes only in high wind, thunder or heavy ice. Phones and selfie sticks are restricted on the span for safety.',
+      },
+      {
+        q: 'How much is the bungee jump?',
+        a: 'The bungee is a separate add-on at about ¥299, with limited daily slots — book ahead if you want it. The standard bridge ticket is about ¥138.',
+      },
+      {
+        q: 'How long should I plan for the Grand Canyon?',
+        a: 'A half day: the bridge crossing is quick (about 10 minutes each way) but the canyon walk, waterfalls and photo queues take 2–3 hours.',
+      },
+      {
+        q: 'What is the best time of year to visit?',
+        a: 'Spring (April–May) and autumn (September–November) give the clearest views down the 300 m drop. Arrive early for the shortest bridge queue.',
+      },
+      {
+        q: 'Do I need my passport and can I use cards?',
+        a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.',
+      },
     ],
     related: [
-      { slug: 'tianmen', img: 'peaks-panorama', alt: 'Tianmen Mountain', title: 'Tianmen Mountain', sub: '天门山 · 99 bends' },
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Mountains' },
-      { slug: 'baofeng', img: 'gallery-painting', alt: 'Baofeng Lake', title: 'Baofeng Lake', sub: '宝峰湖 · Boat ride' },
-      { slug: 'yellow-dragon', img: 'intro-bg', alt: 'Yellow Dragon Cave', title: 'Yellow Dragon Cave', sub: '黄龙洞 · Karst cave' },
+      {
+        slug: 'tianmen',
+        img: 'peaks-panorama',
+        alt: 'Tianmen Mountain',
+        title: 'Tianmen Mountain',
+        sub: '天门山 · 99 bends',
+      },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Mountains',
+      },
+      {
+        slug: 'baofeng',
+        img: 'gallery-painting',
+        alt: 'Baofeng Lake',
+        title: 'Baofeng Lake',
+        sub: '宝峰湖 · Boat ride',
+      },
+      {
+        slug: 'yellow-dragon',
+        img: 'intro-bg',
+        alt: 'Yellow Dragon Cave',
+        title: 'Yellow Dragon Cave',
+        sub: '黄龙洞 · Karst cave',
+      },
     ],
-    geo: { lat: 29.37, lng: 110.40 },
+    geo: {
+      lat: 29.37,
+      lng: 110.4,
+    },
     jsonld: {
       name: 'Zhangjiajie Grand Canyon Glass Bridge',
       alternateName: ['大峡谷玻璃桥', 'Grand Canyon Glass Bridge', 'Zhangjiajie Glass Bridge'],
@@ -679,25 +1792,54 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/yangjiajie-wall.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp'],
       touristType: ['Foreign tourists', 'Adventure seekers', 'Families'],
       faq: [
-        { q: 'Where is the Grand Canyon Glass Bridge, and how do I get there?', a: 'In the Zhangjiajie Grand Canyon, about 40–60 minutes by bus or taxi from the city. It is separate from the Wulingyuan park.' },
-        { q: 'Is the glass bridge safe?', a: 'Yes — engineered with large safety margins; shoe covers provided. It closes only in high wind, thunder or heavy ice. Phones are restricted on the span.' },
-        { q: 'How much is the bungee jump?', a: 'A separate add-on at about ¥299 with limited slots — book ahead. The bridge ticket is about ¥138.' },
-        { q: 'How long should I plan?', a: 'A half day: bridge crossing is quick but the canyon walk and queues take 2–3 hours.' },
-        { q: 'What is the best time of year to visit?', a: 'Spring and autumn give the clearest views down the drop. Arrive early for the shortest queue.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.' },
+        {
+          q: 'Where is the Grand Canyon Glass Bridge, and how do I get there?',
+          a: 'In the Zhangjiajie Grand Canyon, about 40–60 minutes by bus or taxi from the city. It is separate from the Wulingyuan park.',
+        },
+        {
+          q: 'Is the glass bridge safe?',
+          a: 'Yes — engineered with large safety margins; shoe covers provided. It closes only in high wind, thunder or heavy ice. Phones are restricted on the span.',
+        },
+        {
+          q: 'How much is the bungee jump?',
+          a: 'A separate add-on at about ¥299 with limited slots — book ahead. The bridge ticket is about ¥138.',
+        },
+        {
+          q: 'How long should I plan?',
+          a: 'A half day: bridge crossing is quick but the canyon walk and queues take 2–3 hours.',
+        },
+        {
+          q: 'What is the best time of year to visit?',
+          a: 'Spring and autumn give the clearest views down the drop. Arrive early for the shortest queue.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Grand Canyon Glass Bridge visit (2–3 hours)',
         steps: [
-          { name: 'Arrive and ride up', text: 'Shuttle or cable to the bridge span.' },
-          { name: 'Cross the glass bridge', text: 'About 10 minutes each way.' },
-          { name: 'Descend the trail', text: 'Wooden paths into the canyon.' },
-          { name: 'Waterfalls and river', text: 'Photo stops and a short cruise.' },
+          {
+            name: 'Arrive and ride up',
+            text: 'Shuttle or cable to the bridge span.',
+          },
+          {
+            name: 'Cross the glass bridge',
+            text: 'About 10 minutes each way.',
+          },
+          {
+            name: 'Descend the trail',
+            text: 'Wooden paths into the canyon.',
+          },
+          {
+            name: 'Waterfalls and river',
+            text: 'Photo stops and a short cruise.',
+          },
         ],
       },
     },
   },
-
   {
     slug: 'baofeng',
     file: 'baofeng.html',
@@ -711,103 +1853,297 @@ export const attractions = [
     h1: 'Baofeng Lake',
     subtitle: '宝峰湖 · The Mirror of the Peaks',
     heroIntro: 'A tranquil alpine lake tucked between the Zhangjiajie peaks — drift across it by boat, hear Tujia folk songs echo off the cliffs, and watch the stone pillars double in the still water.',
-    tldr: `Baofeng Lake (宝峰湖) is a man-made mountain lake in the Wulingyuan area of Zhangjiajie, Hunan, China, about 1,000 m above sea level. Visitors take a boat tour past quartz-sandstone cliffs while local Tujia singers perform — a calm, scenic counterpoint to the parks hikes.`,
+    tldr: 'Baofeng Lake (宝峰湖) is a man-made mountain lake in the Wulingyuan area of Zhangjiajie, Hunan, China, about 1,000 m above sea level. Visitors take a boat tour past quartz-sandstone cliffs while local Tujia singers perform — a calm, scenic counterpoint to the parks hikes.',
     introH2: 'Why Baofeng Lake is a must-see',
-    introParas: [
-      `After days of climbing, Baofeng Lake is the deep breath. The water is so still it mirrors the surrounding peaks, and a slow boat ride lets you take it in without using your legs.`,
-      `The boat guides are often local Tujia singers who perform traditional songs that echo off the cliffs — a genuine cultural moment, not a staged show. Its one of the few places in Zhangjiajie where you sit and listen rather than walk.`,
-      `At about 1,000 m elevation and backed by the same sandstone pillars, the lake is photogenic in any season — green in summer, misty in spring, and dramatic when the surrounding ridges catch low light.`,
-    ],
+    introParas: ['After days of climbing, Baofeng Lake is the deep breath. The water is so still it mirrors the surrounding peaks, and a slow boat ride lets you take it in without using your legs.', 'The boat guides are often local Tujia singers who perform traditional songs that echo off the cliffs — a genuine cultural moment, not a staged show. Its one of the few places in Zhangjiajie where you sit and listen rather than walk.', 'At about 1,000 m elevation and backed by the same sandstone pillars, the lake is photogenic in any season — green in summer, misty in spring, and dramatic when the surrounding ridges catch low light.'],
     highlightsIntro: 'Five things to enjoy at Baofeng Lake.',
     highlights: [
-      { img: 'gallery-painting.webp', alt: 'Still lake among peaks', title: 'The boat cruise', sub: '游船', desc: 'A guided boat tour across the lake, about 30–40 minutes, with Tujia folk songs performed on board.' },
-      { img: 'peaks-panorama.webp', alt: 'Peaks reflected in water', title: 'Mirror reflections', sub: '倒影', desc: 'On calm mornings the sandstone peaks double in the water — the lakes signature shot.' },
-      { img: 'yangjiajie-wall.webp', alt: 'Cliff walls', title: 'Cliff echoes', sub: '山歌', desc: 'Local singers perform traditional Tujia songs that bounce off the surrounding cliffs.' },
-      { img: 'intro-bg.webp', alt: 'Misty valley', title: 'Emerald inlet', sub: '翡翠峡', desc: 'A narrow, green inlet where the cliffs close in and the water turns jade.' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak', title: 'Lakeside walk', sub: '湖畔步道', desc: 'Short paved paths around part of the shore for a gentle stroll after the cruise.' },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Still lake among peaks',
+        title: 'The boat cruise',
+        sub: '游船',
+        desc: 'A guided boat tour across the lake, about 30–40 minutes, with Tujia folk songs performed on board.',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Peaks reflected in water',
+        title: 'Mirror reflections',
+        sub: '倒影',
+        desc: 'On calm mornings the sandstone peaks double in the water — the lakes signature shot.',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Cliff walls',
+        title: 'Cliff echoes',
+        sub: '山歌',
+        desc: 'Local singers perform traditional Tujia songs that bounce off the surrounding cliffs.',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty valley',
+        title: 'Emerald inlet',
+        sub: '翡翠峡',
+        desc: 'A narrow, green inlet where the cliffs close in and the water turns jade.',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+        title: 'Lakeside walk',
+        sub: '湖畔步道',
+        desc: 'Short paved paths around part of the shore for a gentle stroll after the cruise.',
+      },
     ],
     routesIntro: 'Two ways to enjoy the lake — pick by pace.',
     routes: [
       {
-        icon: 'zap', title: 'Boat tour', sub: '1–1.5 hours · easy, seated',
+        icon: 'zap',
+        title: 'Boat tour',
+        sub: '1–1.5 hours · easy, seated',
         steps: [
-          { strong: 'Board at the dock', text: 'after the short lakeside walk.' },
-          { strong: 'Cruise the lake', text: '~30–40 min with singing.' },
-          { strong: 'Photo stops', text: 'at the reflections and cliffs.' },
-          { strong: 'Return to dock', text: 'and exit.' },
+          {
+            strong: 'Board at the dock',
+            text: 'after the short lakeside walk.',
+          },
+          {
+            strong: 'Cruise the lake',
+            text: '~30–40 min with singing.',
+          },
+          {
+            strong: 'Photo stops',
+            text: 'at the reflections and cliffs.',
+          },
+          {
+            strong: 'Return to dock',
+            text: 'and exit.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Walk + boat', sub: '2 hours · gentle',
+        icon: 'footprints',
+        title: 'Walk + boat',
+        sub: '2 hours · gentle',
         steps: [
-          { strong: 'Lakeside path', text: 'a short paved stroll.' },
-          { strong: 'Board the boat', text: 'for the full cruise.' },
-          { strong: 'Exit', text: 'via the visitor area.' },
+          {
+            strong: 'Lakeside path',
+            text: 'a short paved stroll.',
+          },
+          {
+            strong: 'Board the boat',
+            text: 'for the full cruise.',
+          },
+          {
+            strong: 'Exit',
+            text: 'via the visitor area.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Apr – May', desc: 'Green shores, misty, photogenic.' },
-        { icon: 'calendar-heart', period: 'Sep – Nov', desc: 'Clear water, crisp reflections.' },
-        { icon: 'cloud-fog', period: 'Morning', desc: 'Calmest water for mirror shots.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Apr – May',
+          desc: 'Green shores, misty, photogenic.',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Sep – Nov',
+          desc: 'Clear water, crisp reflections.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'Morning',
+          desc: 'Calmest water for mirror shots.',
+        },
       ],
       note: 'Avoid: windy days ripple the surface and kill the reflections; after heavy rain the water turns murky. Midday sun is fine but mornings are best for photos.',
     },
     tips: [
-      { icon: 'users', title: 'Best for a rest day', desc: 'Seated, easy and short — ideal after Tianzi or Yuanjiajie hikes.' },
-      { icon: 'cloud-rain', title: 'Go for calm mornings', desc: 'Still water gives the mirror reflections. Windy days are less magical.' },
-      { icon: 'utensils', title: 'Bring water', desc: 'Limited shade on the lakeside path. Carry at least 0.5 L per person.' },
-      { icon: 'bird', title: 'Listen for the songs', desc: 'The Tujia singing is the highlight — sit near the bow to hear it best.' },
-      { icon: 'bed-double', title: 'Pair with Grand Canyon', desc: 'Both are near the city and calm — a gentle half-day combo.' },
+      {
+        icon: 'users',
+        title: 'Best for a rest day',
+        desc: 'Seated, easy and short — ideal after Tianzi or Yuanjiajie hikes.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Go for calm mornings',
+        desc: 'Still water gives the mirror reflections. Windy days are less magical.',
+      },
+      {
+        icon: 'utensils',
+        title: 'Bring water',
+        desc: 'Limited shade on the lakeside path. Carry at least 0.5 L per person.',
+      },
+      {
+        icon: 'bird',
+        title: 'Listen for the songs',
+        desc: 'The Tujia singing is the highlight — sit near the bow to hear it best.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Pair with Grand Canyon',
+        desc: 'Both are near the city and calm — a gentle half-day combo.',
+      },
     ],
     gettingThere: [
-      { strong: 'City → Baofeng Lake.', text: 'Bus or taxi from Zhangjiajie city, about 40–60 min toward Wulingyuan.' },
-      { strong: 'Arrive at the dock.', text: 'buy or show your ticket.' },
-      { strong: 'Lakeside walk', text: 'short paved path to the boat.' },
-      { strong: 'Cruise and return.', text: 'back to the visitor area.' },
+      {
+        strong: 'City → Baofeng Lake.',
+        text: 'Bus or taxi from Zhangjiajie city, about 40–60 min toward Wulingyuan.',
+      },
+      {
+        strong: 'Arrive at the dock.',
+        text: 'buy or show your ticket.',
+      },
+      {
+        strong: 'Lakeside walk',
+        text: 'short paved path to the boat.',
+      },
+      {
+        strong: 'Cruise and return.',
+        text: 'back to the visitor area.',
+      },
     ],
     tickets: [
-      { item: 'Baofeng Lake ticket', detail: '¥96 — includes the boat cruise' },
-      { item: 'Opening hours', detail: '07:30 – 17:00' },
-      { item: 'Cruise length', detail: '~30–40 minutes' },
-      { item: 'Elevation', detail: '~1,000 m' },
-      { item: 'Best months', detail: 'April–May, September–November' },
+      {
+        item: 'Baofeng Lake ticket',
+        detail: '¥96 — includes the boat cruise',
+      },
+      {
+        item: 'Opening hours',
+        detail: '07:30 – 17:00',
+      },
+      {
+        item: 'Cruise length',
+        detail: '~30–40 minutes',
+      },
+      {
+        item: 'Elevation',
+        detail: '~1,000 m',
+      },
+      {
+        item: 'Best months',
+        detail: 'April–May, September–November',
+      },
     ],
     facts: [
-      { label: 'Elevation', value: '~1,000 m' },
-      { label: 'Cruise', value: '~35 min' },
-      { label: 'Best season', value: 'Apr–May · Sep–Nov' },
-      { label: 'Suggested visit', value: '1–2 hours' },
-      { label: 'Opening hours', value: '07:30–17:00' },
-      { label: 'Ticket', value: '¥96' },
-      { label: 'Type', value: 'National AAAAA' },
+      {
+        label: 'Elevation',
+        value: '~1,000 m',
+      },
+      {
+        label: 'Cruise',
+        value: '~35 min',
+      },
+      {
+        label: 'Best season',
+        value: 'Apr–May · Sep–Nov',
+      },
+      {
+        label: 'Suggested visit',
+        value: '1–2 hours',
+      },
+      {
+        label: 'Opening hours',
+        value: '07:30–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥96',
+      },
+      {
+        label: 'Type',
+        value: 'National AAAAA',
+      },
     ],
     localTip: 'Baofeng Lake is the gentlest ticket in Zhangjiajie — if your group is tired, swap a hike for this boat ride and still get postcard peaks without the climbing.',
     galleryTitle: 'Scenery of Baofeng Lake',
     gallery: [
-      { img: 'gallery-painting.webp', alt: 'Still lake among peaks' },
-      { img: 'peaks-panorama.webp', alt: 'Peaks reflected in water' },
-      { img: 'yangjiajie-wall.webp', alt: 'Cliff walls' },
-      { img: 'intro-bg.webp', alt: 'Misty valley' },
-      { img: 'tianzi-autumn.webp', alt: 'Autumn ridges' },
-      { img: 'jinbianxi-stream.webp', alt: 'Clear stream' },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Still lake among peaks',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Peaks reflected in water',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Cliff walls',
+      },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Misty valley',
+      },
+      {
+        img: 'tianzi-autumn.webp',
+        alt: 'Autumn ridges',
+      },
+      {
+        img: 'jinbianxi-stream.webp',
+        alt: 'Clear stream',
+      },
     ],
     faqs: [
-      { q: 'Where is Baofeng Lake, and how do I get there?', a: 'Baofeng Lake is in the Wulingyuan area of Zhangjiajie, Hunan, about 40–60 minutes by bus or taxi from the city. It is a separate ticketed area from the main Wulingyuan park.' },
-      { q: 'What is the boat tour like?', a: 'A guided 30–40 minute cruise across the lake, often with Tujia folk songs performed on board. It is seated and easy — no walking required once you board.' },
-      { q: 'When are the reflections best?', a: 'On calm, wind-free mornings the peaks mirror in the still water. Windy or post-heavy-rain days ripple or muddy the surface, so mornings are best for photos.' },
-      { q: 'How long should I plan for Baofeng Lake?', a: 'A half day at most: a short lakeside walk plus the 30–40 minute cruise. It pairs well with the Grand Canyon Glass Bridge nearby.' },
-      { q: 'What is the best time of year to visit?', a: 'Spring (April–May) and autumn (September–November) are green and photogenic. Go early in the day for calm water and the best light.' },
-      { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.' },
+      {
+        q: 'Where is Baofeng Lake, and how do I get there?',
+        a: 'Baofeng Lake is in the Wulingyuan area of Zhangjiajie, Hunan, about 40–60 minutes by bus or taxi from the city. It is a separate ticketed area from the main Wulingyuan park.',
+      },
+      {
+        q: 'What is the boat tour like?',
+        a: 'A guided 30–40 minute cruise across the lake, often with Tujia folk songs performed on board. It is seated and easy — no walking required once you board.',
+      },
+      {
+        q: 'When are the reflections best?',
+        a: 'On calm, wind-free mornings the peaks mirror in the still water. Windy or post-heavy-rain days ripple or muddy the surface, so mornings are best for photos.',
+      },
+      {
+        q: 'How long should I plan for Baofeng Lake?',
+        a: 'A half day at most: a short lakeside walk plus the 30–40 minute cruise. It pairs well with the Grand Canyon Glass Bridge nearby.',
+      },
+      {
+        q: 'What is the best time of year to visit?',
+        a: 'Spring (April–May) and autumn (September–November) are green and photogenic. Go early in the day for calm water and the best light.',
+      },
+      {
+        q: 'Do I need my passport and can I use cards?',
+        a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.',
+      },
     ],
     related: [
-      { slug: 'tianmen', img: 'peaks-panorama', alt: 'Tianmen Mountain', title: 'Tianmen Mountain', sub: '天门山 · 99 bends' },
-      { slug: 'grand-canyon', img: 'yangjiajie-wall', alt: 'Grand Canyon Glass Bridge', title: 'Grand Canyon Glass Bridge', sub: '大峡谷玻璃桥 · Bungee' },
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Mountains' },
-      { slug: 'yellow-dragon', img: 'intro-bg', alt: 'Yellow Dragon Cave', title: 'Yellow Dragon Cave', sub: '黄龙洞 · Karst cave' },
+      {
+        slug: 'tianmen',
+        img: 'peaks-panorama',
+        alt: 'Tianmen Mountain',
+        title: 'Tianmen Mountain',
+        sub: '天门山 · 99 bends',
+      },
+      {
+        slug: 'grand-canyon',
+        img: 'yangjiajie-wall',
+        alt: 'Grand Canyon Glass Bridge',
+        title: 'Grand Canyon Glass Bridge',
+        sub: '大峡谷玻璃桥 · Bungee',
+      },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Mountains',
+      },
+      {
+        slug: 'yellow-dragon',
+        img: 'intro-bg',
+        alt: 'Yellow Dragon Cave',
+        title: 'Yellow Dragon Cave',
+        sub: '黄龙洞 · Karst cave',
+      },
     ],
-    geo: { lat: 29.45, lng: 110.50 },
+    geo: {
+      lat: 29.45,
+      lng: 110.5,
+    },
     jsonld: {
       name: 'Baofeng Lake',
       alternateName: ['宝峰湖', 'Baofeng Hu', 'Precious Peak Lake'],
@@ -815,25 +2151,54 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/gallery-painting.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp'],
       touristType: ['Foreign tourists', 'Families', 'Nature lovers'],
       faq: [
-        { q: 'Where is Baofeng Lake, and how do I get there?', a: 'In the Wulingyuan area of Zhangjiajie, about 40–60 minutes by bus or taxi from the city. Separate ticketed area from the main park.' },
-        { q: 'What is the boat tour like?', a: 'A guided 30–40 minute cruise, often with Tujia folk songs on board. Seated and easy.' },
-        { q: 'When are the reflections best?', a: 'Calm, wind-free mornings give the best mirror reflections. Windy or post-rain days are less ideal.' },
-        { q: 'How long should I plan?', a: 'A half day: short lakeside walk plus the 30–40 minute cruise. Pairs with the Grand Canyon nearby.' },
-        { q: 'What is the best time of year to visit?', a: 'Spring and autumn are green and photogenic. Go early for calm water.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.' },
+        {
+          q: 'Where is Baofeng Lake, and how do I get there?',
+          a: 'In the Wulingyuan area of Zhangjiajie, about 40–60 minutes by bus or taxi from the city. Separate ticketed area from the main park.',
+        },
+        {
+          q: 'What is the boat tour like?',
+          a: 'A guided 30–40 minute cruise, often with Tujia folk songs on board. Seated and easy.',
+        },
+        {
+          q: 'When are the reflections best?',
+          a: 'Calm, wind-free mornings give the best mirror reflections. Windy or post-rain days are less ideal.',
+        },
+        {
+          q: 'How long should I plan?',
+          a: 'A half day: short lakeside walk plus the 30–40 minute cruise. Pairs with the Grand Canyon nearby.',
+        },
+        {
+          q: 'What is the best time of year to visit?',
+          a: 'Spring and autumn are green and photogenic. Go early for calm water.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Baofeng Lake visit (1–2 hours)',
         steps: [
-          { name: 'Arrive at the dock', text: 'After a short lakeside walk.' },
-          { name: 'Cruise the lake', text: 'About 30–40 minutes with singing.' },
-          { name: 'Photo stops', text: 'At the reflections and cliffs.' },
-          { name: 'Return', text: 'To the visitor area.' },
+          {
+            name: 'Arrive at the dock',
+            text: 'After a short lakeside walk.',
+          },
+          {
+            name: 'Cruise the lake',
+            text: 'About 30–40 minutes with singing.',
+          },
+          {
+            name: 'Photo stops',
+            text: 'At the reflections and cliffs.',
+          },
+          {
+            name: 'Return',
+            text: 'To the visitor area.',
+          },
         ],
       },
     },
   },
-
   {
     slug: 'yellow-dragon',
     file: 'yellow-dragon.html',
@@ -847,103 +2212,297 @@ export const attractions = [
     h1: 'Yellow Dragon Cave',
     subtitle: '黄龙洞 · The Dragon\'s Underground Palace',
     heroIntro: 'Escape the heat and the crowds in a vast limestone labyrinth — towering stalagmites, a boat ride on an underground river, and chambers big enough to lose your voice in.',
-    tldr: `Yellow Dragon Cave (黄龙洞) is a large karst cave system in the Wulingyuan area of Zhangjiajie, Hunan, China. It features towering stalactites and stalagmites, an underground river with boat tours, and the vast Dragon Kings Palace chamber — a cool, all-weather alternative to the outdoor peaks.`,
+    tldr: 'Yellow Dragon Cave (黄龙洞) is a large karst cave system in the Wulingyuan area of Zhangjiajie, Hunan, China. It features towering stalactites and stalagmites, an underground river with boat tours, and the vast Dragon Kings Palace chamber — a cool, all-weather alternative to the outdoor peaks.',
     introH2: 'Why Yellow Dragon Cave is a must-see',
-    introParas: [
-      `When the peaks are fogged in or the summer heat is brutal, Yellow Dragon Cave is the smart backup. Its a massive limestone cave kept at a constant cool temperature, with boardwalks threading past stone formations millions of years old.`,
-      `The highlight is the underground river — you board a small boat and drift through lit caverns where the ceiling drips and glitters. The Dragon Kings Palace chamber is enormous, with a sound-and-light show that fills the space.`,
-      `Its family-friendly, mostly flat inside, and runs rain or shine. Pair it with Baofeng Lake nearby for a gentle, weather-proof half day away from the big hiking crowds.`,
-    ],
+    introParas: ['When the peaks are fogged in or the summer heat is brutal, Yellow Dragon Cave is the smart backup. Its a massive limestone cave kept at a constant cool temperature, with boardwalks threading past stone formations millions of years old.', 'The highlight is the underground river — you board a small boat and drift through lit caverns where the ceiling drips and glitters. The Dragon Kings Palace chamber is enormous, with a sound-and-light show that fills the space.', 'Its family-friendly, mostly flat inside, and runs rain or shine. Pair it with Baofeng Lake nearby for a gentle, weather-proof half day away from the big hiking crowds.'],
     highlightsIntro: 'Five wonders inside the cave.',
     highlights: [
-      { img: 'intro-bg.webp', alt: 'Cave entrance scene', title: 'Underground river', sub: '响水河', desc: 'A boat ride on the caves subterranean river, drifting past dripping, light-lit rock walls.' },
-      { img: 'gallery-painting.webp', alt: 'Painted cave scene', title: 'Dragon Kings Palace', sub: '龙王宝殿', desc: 'The caves vast central chamber, with a sound-and-light show that fills the soaring space.' },
-      { img: 'peaks-panorama.webp', alt: 'Peaks outside', title: 'Stalagmite forest', sub: '石笋林', desc: 'Tall stone pillars grown from the cave floor over millennia — some among the tallest in China.' },
-      { img: 'yangjiajie-wall.webp', alt: 'Cliff formation', title: 'Cool escape', sub: '恒温', desc: 'A constant cool temperature year-round — the perfect break from summer heat or a rainy day.' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak', title: 'Boardwalk loops', sub: '游步道', desc: 'Paved, mostly flat paths through the chambers — easy on the legs and stroller-friendly.' },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Cave entrance scene',
+        title: 'Underground river',
+        sub: '响水河',
+        desc: 'A boat ride on the caves subterranean river, drifting past dripping, light-lit rock walls.',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted cave scene',
+        title: 'Dragon Kings Palace',
+        sub: '龙王宝殿',
+        desc: 'The caves vast central chamber, with a sound-and-light show that fills the soaring space.',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Peaks outside',
+        title: 'Stalagmite forest',
+        sub: '石笋林',
+        desc: 'Tall stone pillars grown from the cave floor over millennia — some among the tallest in China.',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Cliff formation',
+        title: 'Cool escape',
+        sub: '恒温',
+        desc: 'A constant cool temperature year-round — the perfect break from summer heat or a rainy day.',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+        title: 'Boardwalk loops',
+        sub: '游步道',
+        desc: 'Paved, mostly flat paths through the chambers — easy on the legs and stroller-friendly.',
+      },
     ],
     routesIntro: 'Two ways through the cave — pick by time.',
     routes: [
       {
-        icon: 'zap', title: 'Standard cave tour', sub: '1.5–2 hours · guided, easy',
+        icon: 'zap',
+        title: 'Standard cave tour',
+        sub: '1.5–2 hours · guided, easy',
         steps: [
-          { strong: 'Enter and descend', text: 'via the lit boardwalks.' },
-          { strong: 'Stalagmite chambers', text: 'past the tall stone pillars.' },
-          { strong: 'Underground river boat', text: 'drift through the caverns.' },
-          { strong: 'Dragon Kings Palace', text: 'the sound-and-light finale.' },
+          {
+            strong: 'Enter and descend',
+            text: 'via the lit boardwalks.',
+          },
+          {
+            strong: 'Stalagmite chambers',
+            text: 'past the tall stone pillars.',
+          },
+          {
+            strong: 'Underground river boat',
+            text: 'drift through the caverns.',
+          },
+          {
+            strong: 'Dragon Kings Palace',
+            text: 'the sound-and-light finale.',
+          },
         ],
       },
       {
-        icon: 'footprints', title: 'Full loop', sub: '2–3 hours · more chambers',
+        icon: 'footprints',
+        title: 'Full loop',
+        sub: '2–3 hours · more chambers',
         steps: [
-          { strong: 'All chambers', text: 'the longer guided route.' },
-          { strong: 'Boat ride', text: 'on the underground river.' },
-          { strong: 'Exit', text: 'via the visitor area.' },
+          {
+            strong: 'All chambers',
+            text: 'the longer guided route.',
+          },
+          {
+            strong: 'Boat ride',
+            text: 'on the underground river.',
+          },
+          {
+            strong: 'Exit',
+            text: 'via the visitor area.',
+          },
         ],
       },
     ],
     bestTime: {
       cards: [
-        { icon: 'calendar-heart', period: 'Summer', desc: 'Cool escape from the heat (constant temp).' },
-        { icon: 'calendar-heart', period: 'Rainy days', desc: 'Runs rain or shine — great backup.' },
-        { icon: 'cloud-fog', period: 'Year-round', desc: 'Indoor, so weather never spoils it.' },
+        {
+          icon: 'calendar-heart',
+          period: 'Summer',
+          desc: 'Cool escape from the heat (constant temp).',
+        },
+        {
+          icon: 'calendar-heart',
+          period: 'Rainy days',
+          desc: 'Runs rain or shine — great backup.',
+        },
+        {
+          icon: 'cloud-fog',
+          period: 'Year-round',
+          desc: 'Indoor, so weather never spoils it.',
+        },
       ],
       note: 'Avoid: it is busiest midday and on national holidays. Mornings are quieter. Inside is cool and damp — bring a light layer even in summer.',
     },
     tips: [
-      { icon: 'users', title: 'The rain-day backup', desc: 'When the peaks are fogged in, the cave is at its best — dry, lit and crowd-light.' },
-      { icon: 'cloud-rain', title: 'Bring a layer', desc: 'The cave stays cool and damp year-round. A light jacket beats shivering.' },
-      { icon: 'utensils', title: 'Wear grippy shoes', desc: 'Paths can be wet in spots. Closed shoes beat sandals.' },
-      { icon: 'bird', title: 'Take the boat', desc: 'The underground river ride is the memory-maker — dont skip it for the walk-only route.' },
-      { icon: 'bed-double', title: 'Pair with Baofeng Lake', desc: 'Both are near the city and gentle — a weather-proof half-day combo.' },
+      {
+        icon: 'users',
+        title: 'The rain-day backup',
+        desc: 'When the peaks are fogged in, the cave is at its best — dry, lit and crowd-light.',
+      },
+      {
+        icon: 'cloud-rain',
+        title: 'Bring a layer',
+        desc: 'The cave stays cool and damp year-round. A light jacket beats shivering.',
+      },
+      {
+        icon: 'utensils',
+        title: 'Wear grippy shoes',
+        desc: 'Paths can be wet in spots. Closed shoes beat sandals.',
+      },
+      {
+        icon: 'bird',
+        title: 'Take the boat',
+        desc: 'The underground river ride is the memory-maker — dont skip it for the walk-only route.',
+      },
+      {
+        icon: 'bed-double',
+        title: 'Pair with Baofeng Lake',
+        desc: 'Both are near the city and gentle — a weather-proof half-day combo.',
+      },
     ],
     gettingThere: [
-      { strong: 'City → Yellow Dragon Cave.', text: 'Bus or taxi from Zhangjiajie city, about 50–70 min toward Wulingyuan.' },
-      { strong: 'Arrive at the entrance.', text: 'buy or show your ticket.' },
-      { strong: 'Descend into the cave.', text: 'via the lit boardwalks.' },
-      { strong: 'Tour and exit.', text: 'by the visitor area.' },
+      {
+        strong: 'City → Yellow Dragon Cave.',
+        text: 'Bus or taxi from Zhangjiajie city, about 50–70 min toward Wulingyuan.',
+      },
+      {
+        strong: 'Arrive at the entrance.',
+        text: 'buy or show your ticket.',
+      },
+      {
+        strong: 'Descend into the cave.',
+        text: 'via the lit boardwalks.',
+      },
+      {
+        strong: 'Tour and exit.',
+        text: 'by the visitor area.',
+      },
     ],
     tickets: [
-      { item: 'Yellow Dragon Cave ticket', detail: '¥121 — includes the guided cave tour and boat' },
-      { item: 'Opening hours', detail: '08:00 – 17:00' },
-      { item: 'Tour length', detail: '~1.5–2 hours' },
-      { item: 'Temperature', detail: 'Constant cool year-round' },
-      { item: 'Best months', detail: 'Year-round (great in summer/rain)' },
+      {
+        item: 'Yellow Dragon Cave ticket',
+        detail: '¥121 — includes the guided cave tour and boat',
+      },
+      {
+        item: 'Opening hours',
+        detail: '08:00 – 17:00',
+      },
+      {
+        item: 'Tour length',
+        detail: '~1.5–2 hours',
+      },
+      {
+        item: 'Temperature',
+        detail: 'Constant cool year-round',
+      },
+      {
+        item: 'Best months',
+        detail: 'Year-round (great in summer/rain)',
+      },
     ],
     facts: [
-      { label: 'Type', value: 'Karst cave' },
-      { label: 'Tour', value: '~1.5–2 h' },
-      { label: 'Best season', value: 'Summer · Rainy days' },
-      { label: 'Suggested visit', value: '1.5–3 hours' },
-      { label: 'Opening hours', value: '08:00–17:00' },
-      { label: 'Ticket', value: '¥121' },
-      { label: 'Type', value: 'National AAAAA' },
+      {
+        label: 'Type',
+        value: 'Karst cave',
+      },
+      {
+        label: 'Tour',
+        value: '~1.5–2 h',
+      },
+      {
+        label: 'Best season',
+        value: 'Summer · Rainy days',
+      },
+      {
+        label: 'Suggested visit',
+        value: '1.5–3 hours',
+      },
+      {
+        label: 'Opening hours',
+        value: '08:00–17:00',
+      },
+      {
+        label: 'Ticket',
+        value: '¥121',
+      },
+      {
+        label: 'Type',
+        value: 'National AAAAA',
+      },
     ],
     localTip: 'Yellow Dragon Cave stays at a constant cool temperature, so on a 35°C August afternoon it is the most comfortable hour in Zhangjiajie — and the underground boat ride is a genuine wow.',
     galleryTitle: 'Scenery of Yellow Dragon Cave',
     gallery: [
-      { img: 'intro-bg.webp', alt: 'Cave entrance scene' },
-      { img: 'gallery-painting.webp', alt: 'Painted cave scene' },
-      { img: 'peaks-panorama.webp', alt: 'Peaks outside' },
-      { img: 'yangjiajie-wall.webp', alt: 'Cliff formation' },
-      { img: 'tianzi-snow.webp', alt: 'Snowy peak' },
-      { img: 'jinbianxi-rock.webp', alt: 'Weathered sandstone' },
+      {
+        img: 'intro-bg.webp',
+        alt: 'Cave entrance scene',
+      },
+      {
+        img: 'gallery-painting.webp',
+        alt: 'Painted cave scene',
+      },
+      {
+        img: 'peaks-panorama.webp',
+        alt: 'Peaks outside',
+      },
+      {
+        img: 'yangjiajie-wall.webp',
+        alt: 'Cliff formation',
+      },
+      {
+        img: 'tianzi-snow.webp',
+        alt: 'Snowy peak',
+      },
+      {
+        img: 'jinbianxi-rock.webp',
+        alt: 'Weathered sandstone',
+      },
     ],
     faqs: [
-      { q: 'Where is Yellow Dragon Cave, and how do I get there?', a: 'It is in the Wulingyuan area of Zhangjiajie, Hunan, about 50–70 minutes by bus or taxi from the city. It is a separate ticketed area from the main Wulingyuan park.' },
-      { q: 'What is inside the cave?', a: 'A large karst system with towering stalactites and stalagmites, an underground river you tour by boat, and the vast Dragon Kings Palace chamber with a sound-and-light show.' },
-      { q: 'Is it suitable when it rains or is hot?', a: 'Perfect for both — its indoor and runs rain or shine, and stays cool year-round, making it the best summer-heat or foggy-day escape from the peaks.' },
-      { q: 'How long should I plan for Yellow Dragon Cave?', a: 'A half day: the guided tour and boat ride take 1.5–2 hours. It pairs well with Baofeng Lake nearby.' },
-      { q: 'What should I bring?', a: 'A light layer — the cave is cool and damp year-round — and grippy closed shoes for the occasionally wet paths.' },
-      { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.' },
+      {
+        q: 'Where is Yellow Dragon Cave, and how do I get there?',
+        a: 'It is in the Wulingyuan area of Zhangjiajie, Hunan, about 50–70 minutes by bus or taxi from the city. It is a separate ticketed area from the main Wulingyuan park.',
+      },
+      {
+        q: 'What is inside the cave?',
+        a: 'A large karst system with towering stalactites and stalagmites, an underground river you tour by boat, and the vast Dragon Kings Palace chamber with a sound-and-light show.',
+      },
+      {
+        q: 'Is it suitable when it rains or is hot?',
+        a: 'Perfect for both — its indoor and runs rain or shine, and stays cool year-round, making it the best summer-heat or foggy-day escape from the peaks.',
+      },
+      {
+        q: 'How long should I plan for Yellow Dragon Cave?',
+        a: 'A half day: the guided tour and boat ride take 1.5–2 hours. It pairs well with Baofeng Lake nearby.',
+      },
+      {
+        q: 'What should I bring?',
+        a: 'A light layer — the cave is cool and damp year-round — and grippy closed shoes for the occasionally wet paths.',
+      },
+      {
+        q: 'Do I need my passport and can I use cards?',
+        a: 'Bring your passport for tickets. Cards are unreliable at small vendors, so carry cash (RMB). Alipay works with a linked international card.',
+      },
     ],
     related: [
-      { slug: 'baofeng', img: 'gallery-painting', alt: 'Baofeng Lake', title: 'Baofeng Lake', sub: '宝峰湖 · Boat ride' },
-      { slug: 'grand-canyon', img: 'yangjiajie-wall', alt: 'Grand Canyon Glass Bridge', title: 'Grand Canyon Glass Bridge', sub: '大峡谷玻璃桥 · Bungee' },
-      { slug: 'yuanjiajie', img: 'yuanjiajie-avatar', alt: 'Yuanjiajie', title: 'Yuanjiajie', sub: '袁家界 · Avatar Mountains' },
-      { slug: 'tianmen', img: 'peaks-panorama', alt: 'Tianmen Mountain', title: 'Tianmen Mountain', sub: '天门山 · 99 bends' },
+      {
+        slug: 'baofeng',
+        img: 'gallery-painting',
+        alt: 'Baofeng Lake',
+        title: 'Baofeng Lake',
+        sub: '宝峰湖 · Boat ride',
+      },
+      {
+        slug: 'grand-canyon',
+        img: 'yangjiajie-wall',
+        alt: 'Grand Canyon Glass Bridge',
+        title: 'Grand Canyon Glass Bridge',
+        sub: '大峡谷玻璃桥 · Bungee',
+      },
+      {
+        slug: 'yuanjiajie',
+        img: 'yuanjiajie-avatar',
+        alt: 'Yuanjiajie',
+        title: 'Yuanjiajie',
+        sub: '袁家界 · Avatar Mountains',
+      },
+      {
+        slug: 'tianmen',
+        img: 'peaks-panorama',
+        alt: 'Tianmen Mountain',
+        title: 'Tianmen Mountain',
+        sub: '天门山 · 99 bends',
+      },
     ],
-    geo: { lat: 29.45, lng: 110.52 },
+    geo: {
+      lat: 29.45,
+      lng: 110.52,
+    },
     jsonld: {
       name: 'Yellow Dragon Cave',
       alternateName: ['黄龙洞', 'Huanglong Dong', 'Yellow Dragon Cavern'],
@@ -951,20 +2510,50 @@ export const attractions = [
       images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/intro-bg.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/gallery-painting.webp'],
       touristType: ['Foreign tourists', 'Families', 'All-weather visitors'],
       faq: [
-        { q: 'Where is Yellow Dragon Cave, and how do I get there?', a: 'In the Wulingyuan area of Zhangjiajie, about 50–70 minutes by bus or taxi from the city. Separate ticketed area from the main park.' },
-        { q: 'What is inside the cave?', a: 'A large karst system with stalactites and stalagmites, an underground river toured by boat, and the Dragon Kings Palace chamber with a sound-and-light show.' },
-        { q: 'Is it good when it rains or is hot?', a: 'Perfect for both — indoor, runs rain or shine, and stays cool year-round. The best summer or foggy-day escape.' },
-        { q: 'How long should I plan?', a: 'A half day: the guided tour and boat take 1.5–2 hours. Pairs with Baofeng Lake nearby.' },
-        { q: 'What should I bring?', a: 'A light layer (cool and damp inside) and grippy closed shoes for wet paths.' },
-        { q: 'Do I need my passport and can I use cards?', a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.' },
+        {
+          q: 'Where is Yellow Dragon Cave, and how do I get there?',
+          a: 'In the Wulingyuan area of Zhangjiajie, about 50–70 minutes by bus or taxi from the city. Separate ticketed area from the main park.',
+        },
+        {
+          q: 'What is inside the cave?',
+          a: 'A large karst system with stalactites and stalagmites, an underground river toured by boat, and the Dragon Kings Palace chamber with a sound-and-light show.',
+        },
+        {
+          q: 'Is it good when it rains or is hot?',
+          a: 'Perfect for both — indoor, runs rain or shine, and stays cool year-round. The best summer or foggy-day escape.',
+        },
+        {
+          q: 'How long should I plan?',
+          a: 'A half day: the guided tour and boat take 1.5–2 hours. Pairs with Baofeng Lake nearby.',
+        },
+        {
+          q: 'What should I bring?',
+          a: 'A light layer (cool and damp inside) and grippy closed shoes for wet paths.',
+        },
+        {
+          q: 'Do I need my passport and can I use cards?',
+          a: 'Bring your passport for tickets. Carry cash (RMB); Alipay works with a linked international card.',
+        },
       ],
       howto: {
         name: 'Yellow Dragon Cave tour (1.5–2 hours)',
         steps: [
-          { name: 'Enter and descend', text: 'Via the lit boardwalks.' },
-          { name: 'Stalagmite chambers', text: 'Past the tall stone pillars.' },
-          { name: 'Underground river boat', text: 'Drift through the caverns.' },
-          { name: 'Dragon Kings Palace', text: 'The sound-and-light finale.' },
+          {
+            name: 'Enter and descend',
+            text: 'Via the lit boardwalks.',
+          },
+          {
+            name: 'Stalagmite chambers',
+            text: 'Past the tall stone pillars.',
+          },
+          {
+            name: 'Underground river boat',
+            text: 'Drift through the caverns.',
+          },
+          {
+            name: 'Dragon Kings Palace',
+            text: 'The sound-and-light finale.',
+          },
         ],
       },
     },
