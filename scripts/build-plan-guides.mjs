@@ -33,7 +33,7 @@ const escHtml = (s) => String(s)
 function imgSrc(name) {
   let n = String(name);
   if (!/\.(webp|jpg|jpeg|avif|png)$/i.test(n)) n += '.webp';
-  return '../images/' + n;
+  return '../images/plan/' + n;
 }
 
 // ---------- block builders ----------

@@ -6,6 +6,7 @@ const editor = createSpotEditor({
   itemLabel: '景点',
   template: 'templates/attraction-page.html',
   kind: 'attraction',
+  imgBase: 'attractions',
 });
 
 export const { renderEditor, renderPreview } = editor;

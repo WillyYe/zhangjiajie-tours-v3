@@ -125,7 +125,7 @@ export const attractions = [
       name: 'Tianzi Mountain',
       alternateName: ['天子山', 'Son of Heaven Mountain', 'Tianzi Shan', 'Tianzi Mountain Scenic Area'],
       description: 'Tianzi Mountain is a ridge in the Wulingyuan section of Zhangjiajie National Forest Park, Hunan, China, reaching about 1,262 m. It offers the parks widest views of the quartz-sandstone pillars and the famous sea of clouds, and is part of a UNESCO World Heritage site.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/tianzi-autumn.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/hero-tianzi-clouds.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/tianzi-autumn.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/hero-tianzi-clouds.webp'],
       touristType: ['Foreign tourists', 'Nature lovers', 'Photographers'],
       faq: [
         { q: 'Where is Tianzi Mountain, and how do I get there from Zhangjiajie city?', a: 'Tianzi Mountain sits in the Wulingyuan section of Zhangjiajie National Forest Park, about 40 km from the city. From the city take a bus to the parks East Gate (around ¥13, 40–60 min), then the shuttle to the Tianzi cable car, which lifts you to the ridge in about 20 minutes.' },
@@ -264,7 +264,7 @@ export const attractions = [
       name: 'Golden Whip Stream',
       alternateName: ['金鞭溪', 'Jinbianxi', 'Golden Whip Brook'],
       description: 'Golden Whip Stream is a 7.5 km flat riverside trail in the Wulingyuan core of Zhangjiajie National Forest Park, Hunan, China, following a clear mountain stream between quartz-sandstone peaks. It is the parks most accessible walk and part of a UNESCO World Heritage site.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/jinbianxi-stream.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/jinbianxi-rock.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/jinbianxi-stream.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/jinbianxi-rock.webp'],
       touristType: ['Foreign tourists', 'Families', 'Nature lovers'],
       faq: [
         { q: 'Where is Golden Whip Stream, and how do I get there?', a: 'It is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Take a bus to the East Gate (around ¥13, 40–60 min); the trailhead is a short walk inside.' },
@@ -401,7 +401,7 @@ export const attractions = [
       name: 'Huangshizhai',
       alternateName: ['黄石寨', 'Yellow Stone Village', 'Huangshi Zhai'],
       description: 'Huangshizhai is a flat-topped sandstone mesa in the Wulingyuan core of Zhangjiajie National Forest Park, Hunan, China, about 1,080 m high. A circular cliff-edge trail gives a 360° panorama of the quartz-sandstone peaks, reached by a two-way cable car, and is part of a UNESCO World Heritage site.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/huangshizhai-winter.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/huangshizhai-winter.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp'],
       touristType: ['Foreign tourists', 'Nature lovers', 'Casual hikers'],
       faq: [
         { q: 'Where is Huangshizhai, and how do I get there?', a: 'It is in the Wulingyuan core of Zhangjiajie National Forest Park, about 40 km from the city. Bus to the East Gate (around ¥13, 40–60 min), then shuttle to the Huangshizhai cable car.' },
@@ -538,7 +538,7 @@ export const attractions = [
       name: 'Tianmen Mountain',
       alternateName: ['天门山', 'Heavenly Gate Mountain', 'Tianmen Shan'],
       description: 'Tianmen Mountain is a peak south of Zhangjiajie city, Hunan, China, about 1,518 m high. It features the Heavenly Gate, a 131 m natural arch, the worlds longest passenger cable car at 7.5 km, a 99-bend road and glass cliff skywalks.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/intro-bg.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/intro-bg.webp'],
       touristType: ['Foreign tourists', 'Adventure seekers', 'Photographers'],
       faq: [
         { q: 'Where is Tianmen Mountain, and how do I get there?', a: 'It is a standalone peak south of Zhangjiajie city. The cable-car station is downtown, reachable by bus or taxi from the railway station in about 15 minutes — no Wulingyuan ticket needed.' },
@@ -676,7 +676,7 @@ export const attractions = [
       name: 'Zhangjiajie Grand Canyon Glass Bridge',
       alternateName: ['大峡谷玻璃桥', 'Grand Canyon Glass Bridge', 'Zhangjiajie Glass Bridge'],
       description: 'The Zhangjiajie Grand Canyon Glass Bridge is a 430 m glass-bottom bridge spanning the Zhangjiajie Grand Canyon, Hunan, China, about 300 m above the river. It was the worlds highest and longest glass-bottom bridge when built, with a bungee jump and canyon walking trails.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/yangjiajie-wall.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/yangjiajie-wall.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp'],
       touristType: ['Foreign tourists', 'Adventure seekers', 'Families'],
       faq: [
         { q: 'Where is the Grand Canyon Glass Bridge, and how do I get there?', a: 'In the Zhangjiajie Grand Canyon, about 40–60 minutes by bus or taxi from the city. It is separate from the Wulingyuan park.' },
@@ -812,7 +812,7 @@ export const attractions = [
       name: 'Baofeng Lake',
       alternateName: ['宝峰湖', 'Baofeng Hu', 'Precious Peak Lake'],
       description: 'Baofeng Lake is a mountain lake in the Wulingyuan area of Zhangjiajie, Hunan, China, about 1,000 m above sea level. Visitors take a guided boat cruise past quartz-sandstone cliffs with Tujia folk songs performed on board.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/gallery-painting.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/gallery-painting.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/peaks-panorama.webp'],
       touristType: ['Foreign tourists', 'Families', 'Nature lovers'],
       faq: [
         { q: 'Where is Baofeng Lake, and how do I get there?', a: 'In the Wulingyuan area of Zhangjiajie, about 40–60 minutes by bus or taxi from the city. Separate ticketed area from the main park.' },
@@ -948,7 +948,7 @@ export const attractions = [
       name: 'Yellow Dragon Cave',
       alternateName: ['黄龙洞', 'Huanglong Dong', 'Yellow Dragon Cavern'],
       description: 'Yellow Dragon Cave is a large karst cave system in the Wulingyuan area of Zhangjiajie, Hunan, China, with towering stalactites and stalagmites, an underground river toured by boat, and the vast Dragon Kings Palace chamber. It is a cool, all-weather attraction.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/intro-bg.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/gallery-painting.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/intro-bg.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/attractions/gallery-painting.webp'],
       touristType: ['Foreign tourists', 'Families', 'All-weather visitors'],
       faq: [
         { q: 'Where is Yellow Dragon Cave, and how do I get there?', a: 'In the Wulingyuan area of Zhangjiajie, about 50–70 minutes by bus or taxi from the city. Separate ticketed area from the main park.' },

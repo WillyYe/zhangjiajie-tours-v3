@@ -115,7 +115,7 @@ export const experiences = [
       name: 'Avatar Mountains & Bailong Elevator',
       alternateName: ['Yuanjiajie', 'Hallelujah Mountain', 'Bailong Elevator', 'Avatar Mountain'],
       description: 'Ride the world\'s tallest outdoor elevator to the Yuanjiajie plateau in Zhangjiajie, home to the quartz-sandstone pillars that inspired Avatar\'s Hallelujah Mountains.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/yuanjiajie-avatar.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/yuanjiajie-mist.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/yuanjiajie-avatar.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/yuanjiajie-mist.webp'],
       touristType: ['Foreign tourists', 'Avatar fans', 'Families'],
       faq: [
         { q: 'How long does the Bailong Elevator take?', a: 'The ride itself is about 90 seconds, but queues can add 5–60 minutes depending on arrival time.' },
@@ -246,7 +246,7 @@ export const experiences = [
       name: 'Grand Canyon Glass Bridge & Bungee',
       alternateName: ['Zhangjiajie Glass Bridge', 'Grand Canyon Glass Bridge', 'Zhangjiajie Bungee'],
       description: 'Walk the world\'s longest and highest glass-bottom bridge over the Zhangjiajie Grand Canyon, or take one of the world\'s highest commercial bungee jumps from the bridge center.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/yangjiajie-wall.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/yangjiajie-wall.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/peaks-panorama.webp'],
       touristType: ['Adventure travelers', 'Adrenaline seekers', 'Foreign tourists'],
       faq: [
         { q: 'How high is the Glass Bridge?', a: 'About 300 m above the canyon floor, with a 430 m span.' },
@@ -378,7 +378,7 @@ export const experiences = [
       name: 'Tianmen Mountain',
       alternateName: ['天门山', 'Heaven\'s Gate Mountain', 'Tianmen Shan'],
       description: 'Tianmen Mountain near Zhangjiajie city is famous for the world\'s longest cable car, the 99-turn Tongtian Avenue, the cliffside glass walkway, and the Heaven\'s Gate natural arch.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/tianzi-snow.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/peaks-panorama.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/tianzi-snow.webp'],
       touristType: ['Foreign tourists', 'Adventure travelers', 'Families'],
       faq: [
         { q: 'How long is the cable car?', a: '7.5 km, about 28 minutes.' },
@@ -509,7 +509,7 @@ export const experiences = [
       name: 'Zhangjiajie Helicopter Tour',
       alternateName: ['Helicopter flight Zhangjiajie', 'Aerial tour Zhangjiajie'],
       description: 'A scenic helicopter tour over Zhangjiajie and Wulingyuan, offering a bird\'s-eye view of the Avatar mountains, Tianzi Mountain, and Tianmen Mountain.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/tianzi-autumn.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/peaks-panorama.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/tianzi-autumn.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/peaks-panorama.webp'],
       touristType: ['Photographers', 'Luxury travelers', 'Families'],
       faq: [
         { q: 'How long is the flight?', a: '10–15 minutes for standard loops, 20–30 minutes for extended routes.' },
@@ -639,7 +639,7 @@ export const experiences = [
       name: 'Zhangjiajie Cultural Shows',
       alternateName: ['Tianmen Fox Fairy', 'Charming Xiangxi', 'Tujia show Zhangjiajie'],
       description: 'Evening cultural shows in Zhangjiajie featuring Tujia and Miao music, dance, and legend, including Tianmen Fox Fairy and Charming Xiangxi.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/gallery-painting.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/intro-bg.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/gallery-painting.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/intro-bg.webp'],
       touristType: ['Culture travelers', 'Families', 'Evening visitors'],
       faq: [
         { q: 'What are the best shows?', a: 'Tianmen Fox Fairy and Charming Xiangxi are the two most popular.' },
@@ -768,7 +768,7 @@ export const experiences = [
       name: 'Minority & Local Life in Zhangjiajie',
       alternateName: ['Tujia village visit', 'Miao culture Zhangjiajie', 'Local life Wulingyuan'],
       description: 'Experience Tujia and Miao culture in the Wuling mountains around Zhangjiajie through village visits, markets, handicrafts, and traditional food.',
-      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/huangshizhai-winter.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/gallery-painting.webp'],
+      images: ['https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/huangshizhai-winter.webp', 'https://willyye.github.io/zhangjiajie-tours-v3/images/experiences/gallery-painting.webp'],
       touristType: ['Culture travelers', 'Food travelers', 'Families'],
       faq: [
         { q: 'Who are the Tujia and Miao?', a: 'They are two ethnic minority groups with long histories in the Wuling mountains of Hunan.' },

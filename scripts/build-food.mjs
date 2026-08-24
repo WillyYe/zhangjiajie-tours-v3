@@ -20,7 +20,7 @@ const IMAGES_DIR = path.join(ROOT, 'images');
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp');
-const imgSrc = (n) => '../images/' + imgName(n);
+const imgSrc = (n) => '../images/food/' + imgName(n);
 
 const ACTIVE = 'text-forest font-bold';
 const NORMAL = '';

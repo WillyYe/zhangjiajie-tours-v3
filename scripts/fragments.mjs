@@ -149,7 +149,7 @@ export function buildRelated(d, relatedPrefix, prefix = '') {
 // (experiences are physically isolated under images/experiences/).
 export function buildPageMap(d, kind) {
   const relatedPrefix = kind === 'experience' ? '../experiences/' : '../attractions/';
-  const imgPrefix = kind === 'experience' ? 'experiences/' : '';
+  const imgPrefix = kind === 'experience' ? 'experiences/' : 'attractions/';
   // Templates hardcode `../images/{{HERO_IMG}}` / `../images/{{HERO_BG_IMG}}`,
   // so these two bare-filename placeholders must carry the subfolder prefix.
   const heroPath = (v) => (v ? imgSrc(v, imgPrefix).slice('../images/'.length) : '');

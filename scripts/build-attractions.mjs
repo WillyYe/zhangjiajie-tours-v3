@@ -32,7 +32,7 @@ function collectImages(a) {
   a.highlights.forEach((h) => names.push(h.img));
   a.gallery.forEach((g) => names.push(g.img));
   a.related.forEach((r) => names.push(r.img));
-  return names.map((n) => imgSrc(n)).map((p) => p.replace('../', '')); // -> images/xxx.webp
+  return names.map((n) => imgSrc(n, 'attractions/')).map((p) => p.replace('../', '')); // -> images/attractions/xxx.webp
 }
 function validateImages(a) {
   const missing = collectImages(a).filter((rel) => !fs.existsSync(path.join(ROOT, rel)));

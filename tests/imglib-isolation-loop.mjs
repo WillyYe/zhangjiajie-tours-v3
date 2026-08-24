@@ -74,8 +74,8 @@ const mExp = buildPageMap(sample, 'experience');
 const mAt = buildPageMap(sample, 'attraction');
 assert(mExp.HERO_IMG === 'experiences/x.webp' && mExp.HERO_BG_IMG === 'experiences/y.webp',
   `buildPageMap(experience) hero 带隔离前缀（实际 ${mExp.HERO_IMG}）`);
-assert(mAt.HERO_IMG === 'x.webp' && mAt.HERO_BG_IMG === 'y.webp',
-  `buildPageMap(attraction) hero 不带前缀（实际 ${mAt.HERO_IMG}）`);
+assert(mAt.HERO_IMG === 'attractions/x.webp' && mAt.HERO_BG_IMG === 'attractions/y.webp',
+  `buildPageMap(attraction) hero 带隔离前缀 attractions/（实际 ${mAt.HERO_IMG}）`);
 
 // A5 imgSrc 默认无前缀 —— 保证 food/plan-guides/hotels 等其它调用方零影响
 assert(imgSrc('a') === '../images/a.webp', `imgSrc 默认无前缀（${imgSrc('a')}）`);
@@ -229,7 +229,7 @@ async function checkSpotModule(module, label, expectPrefix, expectSubtitle) {
 }
 
 await checkSpotModule('experiences', '体验', '../images/experiences/', 'images/experiences/');
-await checkSpotModule('attractions', '景点', '../images/', '根目录 images/');
+await checkSpotModule('attractions', '景点', '../images/attractions/', 'images/attractions/');
 
 // B6 回到体验模块：副标题不得残留景点的"根目录"文案（陈旧副标题回归防护）
 await page.click('.module[data-module="experiences"]');
