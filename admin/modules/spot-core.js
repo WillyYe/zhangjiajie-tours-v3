@@ -251,6 +251,7 @@ export function openImageLibrary(currentName, onPick, base, spots) {
     document.body.append(mask);
     _imgLibModal = mask;
     _imgLibListEl = listEl;
+    _imgLibStatus = uploadStatus; // 删除反馈复用上传状态条（之前漏赋，导致删除无提示/被引用拦截静默失效）
   }
   // 副标题必须每次打开都刷新：同一弹窗被景点（根图库）与体验（隔离图库）复用
   const sub = _imgLibModal.querySelector('#spotLibSubtitle');
