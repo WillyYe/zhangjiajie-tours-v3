@@ -116,7 +116,7 @@ export const homeTourCards = {
       hidden: false,
     },
     {
-      id: 'vip',
+      id: 'vip-wen',
       icon: '💎',
       iconBg: 'bg-forest/10',
       title: 'VIP Tour',
