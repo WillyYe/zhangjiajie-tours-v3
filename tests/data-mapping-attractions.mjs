@@ -79,7 +79,8 @@ console.log('C. 前后台映射（build 与后台预览共用 buildPageMap）');
   const item = attractions[0];
   const map = buildPageMap(item, 'attraction');
   ok(map.H1.includes(item.h1), 'H1 占位符填充了数据中的 H1');
-  ok(map.HERO_IMG === item.heroImg, 'HERO_IMG 占位符填充了 heroImg 名');
+  // buildPageMap 返回模块前缀路径（如 'attractions/tianzi-autumn.webp'），与模板拼 ../images/ 一致
+  ok(map.HERO_IMG.endsWith(item.heroImg) && map.HERO_IMG.includes('/'), 'HERO_IMG 占位符填充了 heroImg 路径（含模块前缀）');
   ok(map.HIGHLIGHTS.includes(item.highlights[0].title), 'HIGHLIGHTS 片段包含首个亮点标题');
   // 编辑数据应改变输出
   const edited = { ...item, h1: 'DIFFERENT-H1' };

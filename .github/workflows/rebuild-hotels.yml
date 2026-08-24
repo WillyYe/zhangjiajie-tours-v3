@@ -1,8 +1,16 @@
-name: Rebuild front-end pages (hotels + home + attractions)
+name: Rebuild front-end pages (all data-driven modules)
 
-# 当后台通过 GitHub Contents API 修改数据文件（hotels-data.mjs / home-data.mjs / attractions-data.mjs）后，
-# 自动重新生成静态 HTML（hotels/*.html、attractions/*.html、index.html 的导航 + 首屏 Hero 区块），
-# 避免前端显示旧内容。新增数据文件时把路径加进 paths 即可。
+# Loop Engineering: 后台(admin) 通过 GitHub Contents API 写入任意 *-data.mjs 后，
+# 自动重新生成全部静态 HTML（hotels/ attractions/ experiences/ food/ tours/ plan/
+# 以及 index.html 的 Hero/导航/Top8/Tour 区块），保证「后台改动 → 前台即时更新」。
+#
+# 关键不变量（由 tests/publish-loop.mjs 静态门禁守护）：
+#   - paths 必须覆盖全部数据源（含 attractions/experiences/tours 等曾被遗漏的模块）
+#   - 必须跑全部 build-*.mjs（单一 build-hotels.mjs 只覆盖 hotels+home）
+#   - commit 时 git add 必须包含全部产物目录 + index.html
+#
+# 新增数据源时：① 把 'xxx-data.mjs' 加进 paths；② 在下方 build 步骤加一行
+#   `node scripts/build-xxx.mjs`；③ 把产物目录加进 git add。然后更新 publish-loop.mjs。
 on:
   push:
     branches: [main]
@@ -10,6 +18,18 @@ on:
       - 'hotels-data.mjs'
       - 'home-data.mjs'
       - 'attractions-data.mjs'
+      - 'experiences-data.mjs'
+      - 'food-data.mjs'
+      - 'tours-data.mjs'
+      - 'plan-guides-data.mjs'
+      - 'module-index-data.mjs'
+      # 模板 / 构建脚本变更也会改变产物 → 同样触发重建
+      - 'templates/**'
+      - 'scripts/build-*.mjs'
+      - 'scripts/fragments.mjs'
+      - 'scripts/index-nav.mjs'
+      - 'admin/modules/nav-render.js'
+      - 'admin/modules/top-attractions-render.js'
 
 concurrency:
   group: rebuild-front-${{ github.ref }}
@@ -20,7 +40,7 @@ permissions:
 
 jobs:
   build:
-    name: Regenerate front-end pages
+    name: Regenerate all front-end pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,23 +51,27 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build front-end pages
+      # 顺序无关：每个 build 脚本只读取 *-data.mjs（数据源），写入各自产物目录。
+      - name: Build all front-end pages
         run: |
           node scripts/build-hotels.mjs
           node scripts/build-attractions.mjs
+          node scripts/build-experiences.mjs
+          node scripts/build-food.mjs
+          node scripts/build-tours.mjs
+          node scripts/build-plan-guides.mjs
+          node scripts/build-module-index.mjs
+          node scripts/build-top-attractions.mjs
 
       - name: Commit and push regenerated pages
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          changed=0
-          if ! git diff --quiet -- hotels/ attractions/ index.html; then
-            git add hotels/ attractions/ index.html
-            changed=1
-          fi
-          if [ "$changed" = "1" ]; then
-            git commit -m "chore: rebuild hotels/*.html + index.html from data files [skip ci]"
+          if ! git diff --quiet -- hotels/ attractions/ experiences/ food/ tours/ plan/ index.html; then
+            git add hotels/ attractions/ experiences/ food/ tours/ plan/ index.html
+            git commit -m "chore: rebuild front-end pages from data files [skip ci]"
             git push
+            echo "Regenerated and pushed front-end pages."
           else
             echo "No front-end changes to commit."
           fi

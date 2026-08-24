@@ -11,6 +11,8 @@
     "test:e2e": "node tests/browser-test.mjs",
     "test:hotel": "node tests/hotel-detail-test.mjs",
     "test:mapping": "node tests/data-mapping-test.mjs",
+    "test:mapping:site": "node tests/data-mapping-sitepages.mjs",
+    "test:publish": "node tests/publish-loop.mjs",
     "test:admin": "node tests/admin-static-check.mjs",
     "test:admin-spot": "node tests/admin-spot-smoke.mjs",
     "test:index-nav": "node tests/index-nav-loop.mjs",
@@ -26,7 +28,6 @@
     "test:attraction-detail": "node tests/attraction-detail-preview-loop.mjs",
     "test:preview-spot": "node tests/preview-spot-404-loop.mjs",
     "test:subpath-fetch": "node tests/diag-subpath-fetch.mjs",
-    "test:publish": "node tests/publish-loop.mjs",
     "test:imglib": "node tests/imglib-isolation-loop.mjs"
   },
   "devDependencies": {

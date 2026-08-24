@@ -149,7 +149,10 @@ function fill(tpl, map) {
 
 function validateImage(n, slug) {
   const p = path.join(IMAGES_DIR, slug || '', imgName(n));
-  if (!fs.existsSync(p)) { console.error('  ✗ missing image: ' + (slug ? slug + '/' : '') + imgName(n)); process.exitCode = 1; return false; }
+  // Missing image is a CONTENT warning (broken <img>), NOT a build failure.
+  // A missing asset must not abort the whole site rebuild — the live-site
+  // verify-prod.mjs check already catches broken images separately.
+  if (!fs.existsSync(p)) { console.warn('  ⚠ missing image (broken <img>, fix data or upload): ' + (slug ? slug + '/' : '') + imgName(n)); return false; }
   return true;
 }
 

@@ -72,6 +72,7 @@ const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').re
 // C1 三级详情页：name / tagline / 每个 room.name 必须出现
 for (const [k, h] of Object.entries(hotels0)) {
   if (!h.detail) continue;
+  if (h.hidden) continue; // 隐藏酒店不生成详情页（build 与后台一致）
   const fp = path.join(ROOT, 'hotels', k + '.html');
   if (!existsSync(fp)) { bad('C1 详情页存在 ' + k, new Error('hotels/' + k + '.html 未生成')); continue; }
   const html = readFileSync(fp, 'utf8');

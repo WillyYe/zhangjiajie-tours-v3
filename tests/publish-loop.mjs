@@ -7,14 +7,17 @@
 //   index.html 仍显示旧值。 原因：.github/workflows/rebuild-hotels.yml 只监听
 //   hotels-data.mjs，不监听 home-data.mjs，触发不到 build，index.html 不更新。
 //
-// Strategy: 用三组断言锁住该闭环：
-//   ① 静态门禁：workflow 文件的 paths 必须覆盖所有 *-data.mjs 数据源。
-//   ② 静态门禁：workflow 必须调用 node scripts/build-hotels.mjs（同一脚本同时
-//      处理 hotels + home，避免后续每加一块数据都改 workflow）。
-//   ③ 运行时实证：在 /tmp 副本里改 hero.bgImg → 跑 build → index.html url 必须
+// Strategy: 用多组断言锁住该闭环：
+//   ① 静态门禁：workflow 文件的 paths 必须覆盖所有 *-data.mjs 数据源
+//      （hotels / home / attractions / experiences / food / tours / plan-guides /
+//       module-index）—— 任一遗漏都会让该模块后台改了前台不变。
+//   ② 静态门禁：workflow 必须调用全部 node scripts/build-*.mjs（单一
+//      build-hotels.mjs 只覆盖 hotels + home，experiences/tours 等需各自脚本）。
+//   ③ 静态门禁：commit 步骤必须 git add 全部产物目录 + index.html。
+//   ④ 运行时实证：在 /tmp 副本里改 hero.bgImg → 跑 build → index.html url 必须
 //      反映新值。这个是最关键的实证：证明 trigger → build 是真的能工作。
 //
-// Stop condition: 三组断言全过 + 现有 home-loop/preview-loop 等不能退化。
+// Stop condition: 全部断言过 + 现有 home-loop/preview-loop 等不能退化。
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -40,21 +43,46 @@ console.log('\n[2] workflow paths 覆盖所有数据源');
 const wfText = fs.readFileSync(WF, 'utf8');
 // 抽出 paths: 列表里的所有 'xxx.mjs' 路径
 const pathMatches = [...wfText.matchAll(/^\s*-\s*'([^']+\.mjs)'\s*$/gm)].map((m) => m[1]);
-const requiredDataFiles = ['hotels-data.mjs', 'home-data.mjs'];
+// 所有数据驱动模块的数据源（后台 admin/app.js 注册表可编辑的 + 其余数据文件）
+const requiredDataFiles = [
+  'hotels-data.mjs',
+  'home-data.mjs',
+  'attractions-data.mjs',
+  'experiences-data.mjs',
+  'food-data.mjs',
+  'tours-data.mjs',
+  'plan-guides-data.mjs',
+  'module-index-data.mjs',
+];
 for (const df of requiredDataFiles) {
   if (pathMatches.includes(df)) ok(`paths 包含 ${df}`);
-  else bad(`paths 缺少 ${df}`);
+  else bad(`paths 缺少 ${df}（遗漏该模块会让后台改动无法触发重建）`);
 }
 
-// ---- ③ workflow 必须调 node scripts/build-hotels.mjs ----
-console.log('\n[3] workflow 调用正确的 build 命令');
-if (/node\s+scripts\/build-hotels\.mjs/.test(wfText)) ok('包含 `node scripts/build-hotels.mjs`');
-else bad('未调 `node scripts/build-hotels.mjs`');
+// ---- ③ workflow 必须调全部 node scripts/build-*.mjs ----
+console.log('\n[3] workflow 调用全部 build 命令');
+const requiredBuilds = [
+  'build-hotels.mjs',
+  'build-attractions.mjs',
+  'build-experiences.mjs',
+  'build-food.mjs',
+  'build-tours.mjs',
+  'build-plan-guides.mjs',
+  'build-module-index.mjs',
+  'build-top-attractions.mjs',
+];
+for (const b of requiredBuilds) {
+  if (new RegExp('node\\s+scripts/' + b).test(wfText)) ok(`包含 \`node scripts/${b}\``);
+  else bad(`未调 \`node scripts/${b}\`（该模块前台不会随数据更新）`);
+}
 
-// ---- ④ workflow 提交时同时 add index.html 和 hotels/ ----
-console.log('\n[4] workflow commit 同时含 hotels/ + index.html');
-if (/git\s+add\s+hotels\/\s+index\.html/.test(wfText)) ok('commit 步骤 git add hotels/ + index.html');
-else bad('commit 步骤未同时 add hotels/ + index.html');
+// ---- ④ workflow 提交时必须 add 全部产物目录 + index.html ----
+console.log('\n[4] workflow commit 含全部产物目录 + index.html');
+const requiredAdds = ['hotels/', 'attractions/', 'experiences/', 'food/', 'tours/', 'plan/', 'index.html'];
+for (const a of requiredAdds) {
+  if (wfText.includes('git add') && wfText.includes(a)) ok(`commit 步骤 git add 含 ${a}`);
+  else bad(`commit 步骤未 add ${a}`);
+}
 
 // ---- ⑤ 运行时实证：home-data.mjs 改动 → build 后 index.html 真的更新 ----
 console.log('\n[5] 运行时实证：home-data.mjs 改动 → index.html url 反映新值');
