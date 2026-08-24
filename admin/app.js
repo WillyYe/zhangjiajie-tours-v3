@@ -3,6 +3,7 @@ import { parseMjs, rebuild } from './mjs.js';
 import { renderEditor as renderHotelsEditor, renderPreview as renderHotelCard, renderCategoryPreview, renderDetailPreview } from './modules/hotels.js';
 import { renderEditor as renderHeroEditor, renderPreview as renderHeroPreview } from './modules/hero.js';
 import { renderEditor as renderTopAttractionsEditor, renderPreview as renderTopAttractionsPreview, renderAttractionDetailPreview } from './modules/top-attractions.js';
+import { renderEditor as renderHomeTourCardsEditor, renderPreview as renderHomeTourCardsPreview } from './modules/home-tour-cards.js';
 import { renderEditor as renderWelcomeEditor, renderPreview as renderWelcomePreview } from './modules/welcome.js';
 import { renderEditor as renderNavEditor, renderPreview as renderNavPreview } from './modules/nav.js';
 import { renderEditor as renderAttractionsEditor, renderPreview as renderAttractionsPreview } from './modules/attractions.js';
@@ -35,6 +36,11 @@ const MODULES = {
     file: 'home-data.mjs',
     title: '⭐ Top 8 Must-See Spots',
     hint: '编辑首页 Top 8 必看景点卡片，保存即上线。图片仅限本模块图库 images/top-attractions/，不与其他模块混用。',
+  },
+  homeTourCards: {
+    file: 'home-data.mjs',
+    title: '🏠 首页 Tour 卡',
+    hint: '编辑首页「Tour Packages」三张文字卡（Day / Private / VIP）。数据驱动、纯文字无图库，保存即上线。与 🎟 Tour Packages（hub 行程页）相互独立。',
   },
   welcome: {
     file: 'home-data.mjs',
@@ -72,6 +78,8 @@ const state = {
   hero: null,
   topAttractions: null,
   topAttractionsSel: { type: 'block' },
+  homeTourCards: null,
+  homeTourCardsSel: { type: 'block' },
   welcome: null,
   welcomeSel: { type: 'block' },
   nav: null,
@@ -164,6 +172,10 @@ async function loadModule(name) {
       const taBlock = blocks.find((b) => b.name === 'topAttractions');
       state.topAttractions = taBlock ? taBlock.value : { eyebrow: '', title: '', subtitle: '', items: [] };
       state.topAttractionsSel = { type: 'block' };
+    } else if (name === 'homeTourCards') {
+      const htBlock = blocks.find((b) => b.name === 'homeTourCards');
+      state.homeTourCards = htBlock ? htBlock.value : { eyebrow: '', title: '', cards: [] };
+      state.homeTourCardsSel = { type: 'block' };
     } else if (name === 'welcome') {
       const wBlock = blocks.find((b) => b.name === 'welcome');
       state.welcome = wBlock ? wBlock.value : { eyebrow: '', h2: '', paras: [], stats: [], bgImg: '' };
@@ -216,6 +228,12 @@ function renderEditorForCurrent() {
       editorEl, state.topAttractions,
       () => { setStatus(true); renderPreviewForCurrent(); },
       (sel) => { state.topAttractionsSel = sel; renderPreviewForCurrent(); },
+    );
+  } else if (state.module === 'homeTourCards') {
+    renderHomeTourCardsEditor(
+      editorEl, state.homeTourCards,
+      () => { setStatus(true); renderPreviewForCurrent(); },
+      (sel) => { state.homeTourCardsSel = sel; renderPreviewForCurrent(); },
     );
   } else if (state.module === 'welcome') {
     renderWelcomeEditor(
@@ -290,6 +308,10 @@ function renderPreviewForCurrent() {
       previewTitleEl.textContent = '实时预览 · 景点卡片';
       renderTopAttractionsPreview(previewEl, state.topAttractions, sel);
     }
+  } else if (state.module === 'homeTourCards') {
+    previewTabsEl.hidden = true;
+    previewTitleEl.textContent = '实时预览 · 首页 Tour 卡';
+    renderHomeTourCardsPreview(previewEl, state.homeTourCards, state.homeTourCardsSel || { type: 'block' });
   } else if (state.module === 'welcome') {
     previewTabsEl.hidden = true;
     previewTitleEl.textContent = '实时预览 · 欢迎区';
@@ -415,6 +437,10 @@ async function save() {
       }
       const newText = rebuild(state.preamble, state.blocks, { topAttractions: state.topAttractions });
       const { sha } = await putFile(MODULES.topAttractions.file, newText, state.sha, 'Update topAttractions via admin');
+      state.sha = sha;
+    } else if (state.module === 'homeTourCards') {
+      const newText = rebuild(state.preamble, state.blocks, { homeTourCards: state.homeTourCards });
+      const { sha } = await putFile(MODULES.homeTourCards.file, newText, state.sha, 'Update homeTourCards via admin');
       state.sha = sha;
     } else if (state.module === 'welcome') {
       const newText = rebuild(state.preamble, state.blocks, { welcome: state.welcome });

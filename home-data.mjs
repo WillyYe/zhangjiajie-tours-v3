@@ -86,3 +86,76 @@ export const topAttractions = {
     { slug: 'yellow-dragon', rank: 8, spot: 'Yellow Dragon Cave', highlight: 'Karst caves, underground river', time: '2–3 hrs', vibe: '🐉 Mystical', hidden: false },
   ],
 };
+
+// ========== 首页 Tour Packages 三卡（后台 🏠 首页 Tour 卡 模块编辑） ==========
+// 管首页 #tour-day 区块的 3 张文字卡（Day / Private / VIP），以现有前台硬编码为基准镜像。
+// id 决定卡片锚点 id（tour-<id>-card），被 module-index 的 #tour-day-card/#tour-private-card/#tour-vip-card 引用。
+// features 存不含 ✓ 的纯文本，render 时统一加 ✓（与前台一致）。
+// price 存完整展示串（如 "From $129/person"），$数字 在 render 时包 gold，与线上 "From <span class="text-gold">$129</span>/person" 一致。
+// 可选字段：iconBg(三选一) / subtitleColor(stone-500|gold-dark) / buttonStyle(forest|gold) / popular(加高亮环) / hidden(前台不渲染)。
+export const homeTourCards = {
+  eyebrow: 'Choose Your Style',
+  title: 'Tour Packages',
+  cards: [
+    {
+      id: 'day',
+      icon: '📅',
+      iconBg: 'bg-sand',
+      title: 'Day Tour',
+      subtitle: 'One-day highlights',
+      subtitleColor: 'stone-500',
+      desc: 'Perfect if you\'re short on time. Hit the biggest sights in one action-packed day with a private guide and driver.',
+      features: [
+        'Yuanjiajie + Avatar Platform',
+        'Tianzi Mountain overlook',
+        'Golden Whip Stream walk',
+        'Private car + English guide',
+        'Hotel pickup & drop-off',
+      ],
+      price: 'From $129/person',
+      buttonStyle: 'forest',
+      popular: false,
+      hidden: false,
+    },
+    {
+      id: 'private',
+      icon: '🎒',
+      iconBg: 'bg-gold/20',
+      title: 'Private Tour',
+      subtitle: 'Most Popular ★',
+      subtitleColor: 'gold-dark',
+      desc: 'Built around your pace and interests — your own guide, your own car, and a flexible plan that changes when you want it to.',
+      features: [
+        'Customizable 3–7 day itinerary',
+        'Private English-speaking guide',
+        'Private vehicle throughout',
+        '4★ hotel accommodation',
+        'All entrance tickets included',
+      ],
+      price: 'From $599/person',
+      buttonStyle: 'gold',
+      popular: true,
+      hidden: false,
+    },
+    {
+      id: 'vip',
+      icon: '💎',
+      iconBg: 'bg-forest/10',
+      title: 'VIP Tour',
+      subtitle: 'Ultimate experience',
+      subtitleColor: 'stone-500',
+      desc: 'Skip the queues, stay in top hotels, and reach the quietest viewpoints. For travelers who\'d rather relax and let us handle the rest.',
+      features: [
+        'Fast-track entry (skip lines)',
+        '5★ luxury hotel suite',
+        'Premium dining experiences',
+        'Helicopter option available',
+        'Personal concierge 24/7',
+      ],
+      price: 'From $1,999/person',
+      buttonStyle: 'forest',
+      popular: false,
+      hidden: false,
+    },
+  ],
+};

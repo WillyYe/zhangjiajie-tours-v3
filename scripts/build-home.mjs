@@ -8,6 +8,8 @@ import { buildWelcome, applyWelcome } from '../admin/modules/welcome-render.js';
 export { buildWelcome, applyWelcome };
 import { buildSiteNavMega, buildSiteNavMobile, applyNav } from '../admin/modules/nav-render.js';
 export { buildSiteNavMega, buildSiteNavMobile, applyNav };
+import { buildHomeTourCardsHtml, applyHomeTourCards } from '../admin/modules/home-tour-cards-render.js';
+export { buildHomeTourCardsHtml, applyHomeTourCards };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -57,6 +59,7 @@ export function applyHome(html, data) {
   if (data && data.topAttractions) out = applyTopAttractions(out, data.topAttractions);
   if (data && data.welcome) out = applyWelcome(out, data.welcome);
   if (data && data.siteNav) out = applyNav(out, data.siteNav);
+  if (data && data.homeTourCards) out = applyHomeTourCards(out, data.homeTourCards);
   return out;
 }
 
@@ -64,8 +67,8 @@ export function applyHome(html, data) {
 
 // CLI：node scripts/build-home.mjs 直接重写 index.html（供手动/串联调用）
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { hero, topAttractions, welcome, siteNav } = await import('../home-data.mjs');
+  const { hero, topAttractions, welcome, siteNav, homeTourCards } = await import('../home-data.mjs');
   const html = fs.readFileSync(INDEX, 'utf8');
-  fs.writeFileSync(INDEX, applyHome(html, { hero, topAttractions, welcome, siteNav }), 'utf8');
-  console.log('  ✓ rewrote index.html hero + top-attractions + welcome blocks (build-home)');
+  fs.writeFileSync(INDEX, applyHome(html, { hero, topAttractions, welcome, siteNav, homeTourCards }), 'utf8');
+  console.log('  ✓ rewrote index.html hero + top-attractions + welcome + tour-cards blocks (build-home)');
 }
