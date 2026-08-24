@@ -4,6 +4,7 @@
 // 选中某一行时可切到「详情页预览」tab，复用景点详情页真实模板（与 attractions 模块预览同源）。
 import { buildTopAttractionsHtml } from './top-attractions-render.js';
 import { renderSpotDetailPreview } from './spot-core.js';
+import { bindResizer } from '../resizer.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -87,7 +88,9 @@ export function renderEditor(container, d, onChange, onSelect) {
   const wrap = el('div', { class: 'he' });
   const tree = el('div', { class: 'he-tree' });
   const formHost = el('div', { class: 'he-form-host' });
-  wrap.append(tree, formHost);
+  const treeResizer = el('div', { class: 'resizer', 'data-resizer': 'tree', title: '左右拖动调整分类树宽度' });
+  bindResizer(treeResizer);
+  wrap.append(tree, treeResizer, formHost);
   container.replaceChildren(wrap);
 
   // ---------------- 树 ----------------
