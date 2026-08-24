@@ -24,15 +24,8 @@ export const hotels = {
       jsonDesc: 'A design-led boutique retreat in Wulingyuan, Zhangjiajie, minutes from the park east gate, with courtyard rooms and a riverside terrace.',
       areaServed: 'Wulingyuan, Zhangjiajie',
       roomsTitle: 'Rooms & suites',
-      roomsSub: 'Ten room types across the courtyard and riverside wings — from compact kings to terrace suites and a family layout.',
+      roomsSub: 'Four room types across the courtyard and riverside wings — from compact kings to terrace suites and a family layout.',
       rooms: [
-        {
-          img: 'hotel-jimo-room-mansi-twin',
-          alt: 'Mansi Deluxe Twin room',
-          name: 'Mansi Deluxe Twin',
-          nameZh: '漫时光豪华双床房',
-          features: ['Two twin beds', '“Slow-time” warm styling', 'Courtyard or city outlook'],
-        },
         {
           img: 'hotel-jimo-room-mansi-king',
           alt: 'Mansi Comfort King room',
@@ -48,27 +41,6 @@ export const hotels = {
           features: ['King bed', 'Private terrace', 'Direct courtyard access'],
         },
         {
-          img: 'hotel-jimo-room-court-twin',
-          alt: 'Courtyard Twin terrace room',
-          name: 'Courtyard Twin (Terrace)',
-          nameZh: '庭院双床房',
-          features: ['Twin beds', 'Private terrace', 'Courtyard-facing'],
-        },
-        {
-          img: 'hotel-jimo-room-court-suite',
-          alt: 'Courtyard Suite terrace room',
-          name: 'Courtyard Suite (Terrace)',
-          nameZh: '庭院套房',
-          features: ['Suite layout', 'Private terrace', 'Separate lounge space'],
-        },
-        {
-          img: 'hotel-jimo-room-bathtub',
-          alt: 'Courtyard Bathtub room',
-          name: 'Courtyard Bathtub Room',
-          nameZh: '庭院浴缸房',
-          features: ['Spa bathtub', 'Twin beds', 'Courtyard outlook'],
-        },
-        {
           img: 'hotel-jimo-room-family',
           alt: 'Family Suite room',
           name: 'Family Suite',
@@ -82,20 +54,6 @@ export const hotels = {
           nameZh: '大床套房',
           features: ['King bed', 'Suite living area', 'Premium finishes'],
         },
-        {
-          img: 'hotel-jimo-room-esports',
-          alt: 'E-sports Room',
-          name: 'E-sports Room',
-          nameZh: '电竞房',
-          features: ['Gaming setup', 'King bed', 'High-speed gear'],
-        },
-        {
-          img: 'hotel-jimo-room-special',
-          alt: 'Special King room',
-          name: 'Special King',
-          nameZh: '特价房',
-          features: ['Standard king', 'Best-value rate', 'Cozy & compact'],
-        },
       ],
       galleryTitle: 'Inside Sun Valley Resort ',
       gallerySub: 'The courtyard, the garden, and the riverside calm that give the hotel its character.',
@@ -103,14 +61,6 @@ export const hotels = {
         {
           img: 'hotel-jimo-lobby2',
           alt: 'JiMO common area',
-        },
-        {
-          img: 'hotel-jimo-lobby3',
-          alt: 'JiMO lounge',
-        },
-        {
-          img: 'hotel-jimo-garden',
-          alt: 'Sun Valley garden courtyard',
         },
         {
           img: 'hotel-jimo-hero',
