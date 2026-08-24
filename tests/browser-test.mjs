@@ -87,21 +87,21 @@ await page.waitForTimeout(400);
 ok('Page <title> is non-empty', (await page.title()).trim().length > 0, await page.title());
 
 // ---------- 2. card counts (v3: 8 attractions, 6 experiences) ----------
-const attrCount = await page.locator('#attraction [id^="attraction-"]').count();
-ok('Attractions module renders 8 cards', attrCount === 8, `found ${attrCount}`);
+const attrRows = await page.locator('#tour-ranking tbody tr').count();
+ok('Top 8 Must-See Spots table renders 8 rows', attrRows === 8, `found ${attrRows}`);
 const expCount = await page.locator('#experience [id^="exp-"]').count();
 ok('Experiences module renders 6 cards', expCount === 6, `found ${expCount}`);
 
-// ---------- 2b. each homepage attraction card is a clickable <a> to its detail page ----------
-// Regression guard: previously 7/8 cards were <div> (not navigable) and the
-// mega-menu pointed at in-page #attraction-* anchors instead of real detail pages.
-const ATTR_SLUGS = ['yuanjiajie','tianzi','jinbian','huangshizhai','tianmen','grand-canyon','baofeng','yellow-dragon'];
-for (const slug of ATTR_SLUGS) {
-  const card = page.locator(`#attraction [id="attraction-${slug}"]`);
-  const tag = await card.evaluate(el => el.tagName.toLowerCase()).catch(() => 'NOT_FOUND');
-  ok(`Attraction card "${slug}" is a clickable <a>`, tag === 'a', `tag=${tag}`);
-  const href = await card.getAttribute('href').catch(() => null);
-  ok(`Attraction card "${slug}" links to its detail page`, href === `attractions/${slug}.html`, `href=${href}`);
+// ---------- 2b. each Top 8 table row shows the correct spot name (data-driven, no dead card links) ----------
+const ATTR_SPOTS = {
+  yuanjiajie: 'Yuanjiajie (Avatar Mountains)', tianzi: 'Tianzi Mountain', jinbian: 'Golden Whip Stream',
+  huangshizhai: 'Huangshizhai', tianmen: 'Tianmen Mountain', 'grand-canyon': 'Grand Canyon Glass Bridge',
+  baofeng: 'Baofeng Lake', 'yellow-dragon': 'Yellow Dragon Cave',
+};
+for (const slug of Object.keys(ATTR_SPOTS)) {
+  const row = page.locator(`#tour-ranking tbody tr#spot-${slug}`);
+  const txt = await row.innerText().catch(() => 'NOT_FOUND');
+  ok(`Top 8 row "${slug}" shows spot name`, txt.includes(ATTR_SPOTS[slug]), `txt=${txt.slice(0, 36)}`);
 }
 
 // ---------- 2c. mega-menu links all 8 attraction detail pages (no dead #anchors) ----------
@@ -245,7 +245,7 @@ ok('Close (✕) button closes the modal', modalClosedBtn);
 await page.evaluate(() => window.scrollTo(0, 0));
 await page.waitForTimeout(300);
 await page.screenshot({ path: path.join(SHOT_DIR, 'desktop-full.png'), fullPage: true });
-for (const [sel, name] of [['#tour', 'desktop-tour'], ['#attraction', 'desktop-attraction']]) {
+for (const [sel, name] of [['#tour', 'desktop-tour'], ['#tour-ranking', 'desktop-top8']]) {
   if (await page.locator(sel).count()) {
     await page.locator(sel).scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);

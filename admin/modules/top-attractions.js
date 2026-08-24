@@ -1,29 +1,13 @@
-// 景点 Top Attractions 后台模块（与酒店模块同布局：左树 / 中表单 / 右实时预览）
-// 数据来自 home-data.mjs 的 topAttractions 块；图片仅限 images/top-attractions/（物理隔离，不借图）。
+// 首页 Top 8 Must-See Spots 后台模块（与酒店模块同布局：左树 / 中表单 / 右实时预览）
+// 数据来自 home-data.mjs 的 topAttractions 块（纯文字表格：# / Spot / Highlight / Time / Vibe）。
 // 右栏预览复用 top-attractions-render.js 的 buildTopAttractionsHtml（与 build 同源 → 所见即所得）。
-import { createImageLib } from '../imglib-core.js';
-import { buildTopAttractionsHtml, BADGE } from './top-attractions-render.js';
+// 选中某一行时可切到「详情页预览」tab，复用景点详情页真实模板（与 attractions 模块预览同源）。
+import { buildTopAttractionsHtml } from './top-attractions-render.js';
 import { renderSpotDetailPreview } from './spot-core.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
 const ui = { open: 'block' }; // 当前展开的分组
-
-const taLib = createImageLib({
-  slug: 'top-attractions',
-  findReferences: (name) => (data ? data.items.filter((it) => it.img === name).map((it) => it.title) : []),
-});
-
-// 角标颜色下拉选项（与 BADGE 字典一致）
-const BADGE_OPTIONS = [
-  ['forest', 'Forest（森林绿）'],
-  ['emerald', 'Emerald（翠绿）'],
-  ['gold', 'Gold（金）'],
-  ['blue', 'Blue（蓝）'],
-  ['red', 'Red（红）'],
-  ['orange', 'Orange（橙）'],
-  ['purple', 'Purple（紫）'],
-];
 
 // ---------- DOM helpers（镜像 hero.js / hotels.js） ----------
 function el(tag, attrs = {}, children = []) {
@@ -66,50 +50,6 @@ function longField(field, value, onInput) {
   ]);
 }
 
-function selectField(field, value, onInput, options) {
-  const sel = el('select', { onchange: (e) => onInput(e.target.value) });
-  for (const [val, label] of options) {
-    const o = el('option', { value: val, text: label });
-    if (val === value) o.selected = true;
-    sel.append(o);
-  }
-  return el('div', { class: 'field' }, [
-    el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
-    sel,
-  ]);
-}
-
-// 图片字段：仅限本模块图库 images/top-attractions/
-function imageField(field, value, onInput) {
-  const thumbBox = el('div', { class: 'he-thumb-box' + (value ? '' : ' no-img') });
-  const thumb = el('img', { class: 'he-thumb', src: value ? taLib.imgUrl(value) : '' });
-  thumb.onerror = () => thumbBox.classList.add('no-img');
-  thumb.onload = () => thumbBox.classList.remove('no-img');
-  thumbBox.append(thumb);
-  const input = el('input', {
-    type: 'text',
-    value: value ?? '',
-    placeholder: 'webp 文件名（不含扩展名）',
-    oninput: (e) => {
-      const v = e.target.value;
-      onInput(v);
-      if (v) { thumb.src = taLib.imgUrl(v); thumbBox.classList.remove('no-img'); }
-      else { thumb.src = ''; thumbBox.classList.add('no-img'); }
-    },
-  });
-  const btn = el('button', {
-    type: 'button',
-    class: 'btn btn-sm btn-ghost',
-    text: '🖼 浏览图片库',
-    onclick: () => taLib.open(thumbBox, thumb, input, onInput),
-  });
-  const row = el('div', { class: 'img-field' }, [thumbBox, input, btn]);
-  return el('div', { class: 'field' }, [
-    el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
-    row,
-  ]);
-}
-
 function iconBtn(icon, title, handler) {
   return el('button', {
     class: 'he-act', type: 'button', title, text: icon,
@@ -129,7 +69,7 @@ function notify(msg, type) {
   else console.log('[top-attractions] ' + msg);
 }
 
-// 选中卡片高亮（写入右侧预览时由 iframe load 触发）
+// 当前选中行的 slug（用于详情页预览关联）
 function currentSlug() {
   if (sel.type === 'card' && data.items[sel.index]) return data.items[sel.index].slug;
   return null;
@@ -153,7 +93,7 @@ export function renderEditor(container, d, onChange, onSelect) {
   // ---------------- 树 ----------------
   function renderTree() {
     tree.replaceChildren();
-    tree.append(el('div', { class: 'he-tree-title', text: '景点 Top Attractions' }));
+    tree.append(el('div', { class: 'he-tree-title', text: 'Top 8 Must-See Spots' }));
 
     // ① 区块设置
     const blockOpen = ui.open === 'block';
@@ -174,32 +114,32 @@ export function renderEditor(container, d, onChange, onSelect) {
     }
     tree.append(blockCat);
 
-    // ② 景点卡片
-    const cardsOpen = ui.open === 'cards';
-    const cardsHead = el('div', { class: 'he-tree-cat-head' }, [
-      el('span', { class: 'he-chevron', text: '▸', onclick: (e) => { e.stopPropagation(); ui.open = cardsOpen ? null : 'cards'; renderTree(); } }),
+    // ② 表格行
+    const rowsOpen = ui.open === 'rows';
+    const rowsHead = el('div', { class: 'he-tree-cat-head' }, [
+      el('span', { class: 'he-chevron', text: '▸', onclick: (e) => { e.stopPropagation(); ui.open = rowsOpen ? null : 'rows'; renderTree(); } }),
       el('span', {
-        class: 'he-tree-cat-name', text: `景点卡片 (${data.items.length})`,
+        class: 'he-tree-cat-name', text: `表格行 (${data.items.length})`,
         onclick: () => {
-          ui.open = 'cards';
+          ui.open = 'rows';
           if (sel.type !== 'card') sel = { type: 'card', index: 0 };
           renderTree(); renderForm(); if (onSelectCb) onSelectCb(sel);
         },
       }),
-      el('span', { class: 'he-tree-actions' }, [iconBtn('➕', '新增卡片', openAddCard)]),
+      el('span', { class: 'he-tree-actions' }, [iconBtn('➕', '新增行', openAddRow)]),
     ]);
-    const cardsCat = el('div', { class: 'he-tree-cat' + (cardsOpen ? ' open' : '') }, [cardsHead]);
-    if (cardsOpen) {
+    const rowsCat = el('div', { class: 'he-tree-cat' + (rowsOpen ? ' open' : '') }, [rowsHead]);
+    if (rowsOpen) {
       const body = el('div', { class: 'he-tree-cat-body' });
       data.items.forEach((it, idx) => {
         const node = el('div', {
           class: 'he-tree-hotel' + (sel.type === 'card' && sel.index === idx ? ' active' : '') + (it.hidden ? ' is-hidden' : ''),
           draggable: true,
         }, [
-          el('span', { class: 'he-tree-hotel-zh', text: it.title || '(无标题)' }),
+          el('span', { class: 'he-tree-hotel-zh', text: (it.rank != null ? it.rank + '. ' : '') + (it.spot || '(无标题)') }),
           el('span', { class: 'he-tree-hotel-en', text: it.slug || '' }),
         ]);
-        node.onclick = () => { ui.open = 'cards'; sel = { type: 'card', index: idx }; renderTree(); renderForm(); if (onSelectCb) onSelectCb(sel); };
+        node.onclick = () => { ui.open = 'rows'; sel = { type: 'card', index: idx }; renderTree(); renderForm(); if (onSelectCb) onSelectCb(sel); };
         node.ondragstart = (e) => { e.dataTransfer.setData('text/plain', String(idx)); e.dataTransfer.effectAllowed = 'move'; };
         node.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; node.classList.add('drag-over'); };
         node.ondragleave = () => node.classList.remove('drag-over');
@@ -209,14 +149,14 @@ export function renderEditor(container, d, onChange, onSelect) {
           if (!isNaN(src) && src !== idx) reorder(src, idx);
         };
         node.append(el('span', { class: 'he-tree-hotel-acts' }, [
-          iconBtn(it.hidden ? '🚫' : '👁', it.hidden ? '显示卡片' : '隐藏卡片', () => { it.hidden = !it.hidden; markDirty(); renderTree(); if (onSelectCb) onSelectCb(sel); }),
-          iconBtn('🗑', '删除卡片', () => deleteCard(idx)),
+          iconBtn(it.hidden ? '🚫' : '👁', it.hidden ? '显示行' : '隐藏行', () => { it.hidden = !it.hidden; markDirty(); renderTree(); if (onSelectCb) onSelectCb(sel); }),
+          iconBtn('🗑', '删除行', () => deleteRow(idx)),
         ]));
         body.append(node);
       });
-      cardsCat.append(body);
+      rowsCat.append(body);
     }
-    tree.append(cardsCat);
+    tree.append(rowsCat);
   }
 
   function reorder(from, to) {
@@ -231,10 +171,10 @@ export function renderEditor(container, d, onChange, onSelect) {
     markDirty(); renderTree(); renderForm(); if (onSelectCb) onSelectCb(sel);
   }
 
-  function deleteCard(idx) {
+  function deleteRow(idx) {
     const it = data.items[idx];
     if (!it) return;
-    if (!confirm(`确认删除卡片「${it.title || it.slug}」？\n\n只删除数据、不删除图片（图片可在图库单独管理）。`)) return;
+    if (!confirm(`确认删除行「${it.spot || it.slug}」？\n\n只删除数据，不影响其它模块。`)) return;
     data.items.splice(idx, 1);
     if (sel.type === 'card') {
       if (sel.index >= data.items.length) {
@@ -244,13 +184,12 @@ export function renderEditor(container, d, onChange, onSelect) {
     markDirty(); renderTree(); renderForm(); if (onSelectCb) onSelectCb(sel);
   }
 
-  function openAddCard() {
+  function openAddRow() {
     data.items.push({
-      slug: 'new-attraction-' + (data.items.length + 1),
-      img: '', imgAlt: '', imgW: 800, imgH: 450,
-      badge: '', badgeColor: 'forest', title: 'New Attraction', desc: '', hidden: false,
+      slug: 'new-spot-' + (data.items.length + 1),
+      rank: data.items.length + 1, spot: 'New Spot', highlight: '', time: '', vibe: '', hidden: false,
     });
-    ui.open = 'cards';
+    ui.open = 'rows';
     sel = { type: 'card', index: data.items.length - 1 };
     markDirty(); renderTree(); renderForm(); if (onSelectCb) onSelectCb(sel);
   }
@@ -262,7 +201,7 @@ export function renderEditor(container, d, onChange, onSelect) {
       formHost.append(
         el('div', { class: 'he-form-head' }, [el('span', { class: 'he-form-key', text: '区块设置' })]),
       );
-      formHost.append(textField({ label: '顶部小字 Eyebrow', tip: '金色大写小字，如 Explore' }, data.eyebrow, (v) => { data.eyebrow = v; markDirty(); }));
+      formHost.append(textField({ label: '顶部小字 Eyebrow', tip: "金色大写小字，如 Don't Miss These" }, data.eyebrow, (v) => { data.eyebrow = v; markDirty(); }));
       formHost.append(textField({ label: '区块标题 Title', tip: '区块主标题' }, data.title, (v) => { data.title = v; markDirty(); }));
       formHost.append(longField({ label: '副标题 Subtitle', tip: '区块下方一句说明', rows: 3 }, data.subtitle, (v) => { data.subtitle = v; markDirty(); }));
       return;
@@ -272,37 +211,34 @@ export function renderEditor(container, d, onChange, onSelect) {
     if (!it) { sel = { type: 'block' }; renderTree(); renderForm(); return; }
     formHost.append(
       el('div', { class: 'he-form-head' }, [
-        el('span', { class: 'he-form-zh', text: it.title || '(无标题)' }),
+        el('span', { class: 'he-form-zh', text: it.spot || '(无标题)' }),
         el('span', { class: 'he-form-key', text: `#${sel.index + 1} · ${it.slug}` }),
       ]),
     );
 
-    // Slug（可手改，附“由标题生成”）
+    // Slug（关联景点详情页预览，运营一般不动）
     const slugInput = el('input', {
       type: 'text', value: it.slug || '', placeholder: '小写字母/数字/连字符',
       oninput: (e) => { it.slug = e.target.value; markDirty(); },
     });
     const genBtn = el('button', {
       type: 'button', class: 'btn btn-sm btn-ghost', text: '↻ 由标题生成',
-      onclick: () => { const s = slugify(it.title || ''); slugInput.value = s; it.slug = s; markDirty(); },
+      onclick: () => { const s = slugify(it.spot || ''); slugInput.value = s; it.slug = s; markDirty(); },
     });
     formHost.append(el('div', { class: 'field' }, [
-      el('label', {}, [el('span', { text: 'Slug' }), el('span', { class: 'tip', text: ' 决定 id 与详情页链接 attractions/<slug>.html' })]),
+      el('label', {}, [el('span', { text: 'Slug' }), el('span', { class: 'tip', text: ' 关联后台「详情页预览」tab 的景点（attractions/<slug>.html）' })]),
       el('div', { class: 'img-field' }, [slugInput, genBtn]),
     ]));
 
-    formHost.append(imageField({ label: '卡片图 Image', tip: '仅 images/top-attractions/ 图库（点击浏览可上传/删除）' }, it.img, (v) => { it.img = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
-    formHost.append(textField({ label: '图片 Alt', tip: '无障碍替代文本（屏幕阅读器）' }, it.imgAlt, (v) => { it.imgAlt = v; markDirty(); }));
-    formHost.append(textField({ label: '图宽 imgW', tip: '锁定显示比例，防加载抖动' }, String(it.imgW || ''), (v) => { it.imgW = parseInt(v, 10) || 0; markDirty(); }));
-    formHost.append(textField({ label: '图高 imgH', tip: '锁定显示比例，防加载抖动' }, String(it.imgH || ''), (v) => { it.imgH = parseInt(v, 10) || 0; markDirty(); }));
-    formHost.append(textField({ label: '角标文字 Badge', tip: '卡片左上角小标签' }, it.badge, (v) => { it.badge = v; markDirty(); }));
-    formHost.append(selectField({ label: '角标颜色 Badge Color', tip: '选关键字，不写裸类名' }, it.badgeColor, (v) => { it.badgeColor = v; markDirty(); }, BADGE_OPTIONS));
-    formHost.append(textField({ label: '卡片标题 Title' }, it.title, (v) => { it.title = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
-    formHost.append(longField({ label: '描述 Description', rows: 3 }, it.desc, (v) => { it.desc = v; markDirty(); }));
+    formHost.append(textField({ label: '序号 Rank', tip: '表格第 1 列 #，留空按列表顺序' }, String(it.rank != null ? it.rank : ''), (v) => { it.rank = v === '' ? null : (parseInt(v, 10) || 0); markDirty(); }));
+    formHost.append(textField({ label: 'Spot 景点名', tip: '表格第 2 列' }, it.spot, (v) => { it.spot = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
+    formHost.append(textField({ label: 'Highlight 亮点', tip: '表格第 3 列，一句话亮点' }, it.highlight, (v) => { it.highlight = v; markDirty(); }));
+    formHost.append(textField({ label: 'Time 用时', tip: '表格第 4 列，如 3–4 hrs' }, it.time, (v) => { it.time = v; markDirty(); }));
+    formHost.append(textField({ label: 'Vibe 氛围', tip: '表格第 5 列，可带 emoji' }, it.vibe, (v) => { it.vibe = v; markDirty(); }));
 
     const hiddenBtn = el('button', {
       type: 'button', class: 'btn btn-sm',
-      text: it.hidden ? '👁 显示此卡片' : '🚫 隐藏此卡片（前台不渲染）',
+      text: it.hidden ? '👁 显示此行' : '🚫 隐藏此行（前台不渲染）',
       onclick: () => { it.hidden = !it.hidden; markDirty(); renderTree(); if (onSelectCb) onSelectCb(sel); },
     });
     formHost.append(el('div', { class: 'field' }, [hiddenBtn]));
@@ -316,21 +252,18 @@ export function renderEditor(container, d, onChange, onSelect) {
 // 预览区：iframe srcdoc（复用站点真实 CSS → 所见即所得）
 // 注意：不要注入 <base href="../">。iframe srcdoc 继承父 URL = /admin/，
 // 下面路径已用 ../（如 ../styles/tailwind.css），从 /admin/ 出发 = 根/... 正确解析。
-// 预览去掉 fade-in 保证始终可见；图片/链接改 ../ 前缀以适配 /admin/ 基址。
+// 预览去掉 fade-in 保证始终可见。
 // ============================================================
 export function renderPreview(container, d, selection) {
   data = d || data;
-  const grid = buildTopAttractionsHtml(data);
-  const previewGrid = grid
-    .replace(/ fade-in/g, '')
-    .replace(/src="images\//g, 'src="../images/')
-    .replace(/href="attractions\//g, 'href="../attractions/');
-  const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;padding:18px;background:#f3efe7}</style></head><body>${previewGrid}</body></html>`;
+  const tbl = buildTopAttractionsHtml(data);
+  const previewTbl = tbl.replace(/ fade-in/g, '');
+  const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;padding:18px;background:#f3efe7}</style></head><body>${previewTbl}</body></html>`;
 
   container.replaceChildren();
   const iframe = el('iframe', {
     class: 'pv-detail-iframe',
-    title: 'Top Attractions 实时预览',
+    title: 'Top 8 Must-See Spots 实时预览',
     style: 'width:100%;height:100%;border:0;background:#f3efe7',
   });
   container.append(iframe);
@@ -339,8 +272,8 @@ export function renderPreview(container, d, selection) {
     if (!idoc) return;
     const slug = (selection && selection.type === 'card' && data.items[selection.index]) ? data.items[selection.index].slug : currentSlug();
     if (slug) {
-      const card = idoc.getElementById('attraction-' + slug);
-      if (card) { card.style.outline = '3px solid #2563eb'; card.style.outlineOffset = '2px'; }
+      const row = idoc.getElementById('spot-' + slug);
+      if (row) { row.style.outline = '3px solid #2563eb'; row.style.outlineOffset = '2px'; }
     }
   }, { once: true });
   iframe.srcdoc = doc;

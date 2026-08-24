@@ -90,9 +90,9 @@ for (const file of pages) {
 
   // ---- T6: card counts (index only) ----
   if (isIndex) {
-    const attrCards = [...html.matchAll(/\bid="attraction-[a-z-]+"/g)].length;
+    const topRows = [...html.matchAll(/<tr id="spot-[a-z-]+"/g)].length;
     const expCards = [...html.matchAll(/\bid="exp-[a-z-]+"/g)].length;
-    attrCards === 8 ? pass.push({ name: 'Attractions module has 8 cards' }) : fail.push({ name: 'Attractions card count', detail: `found ${attrCards}, expected 8` });
+    topRows === 8 ? pass.push({ name: 'Top 8 Must-See Spots table has 8 rows' }) : fail.push({ name: 'Top 8 table row count', detail: `found ${topRows}, expected 8` });
     expCards === 6 ? pass.push({ name: 'Experiences module has 6 cards' }) : fail.push({ name: 'Experiences card count', detail: `found ${expCards}, expected 6` });
   }
 
