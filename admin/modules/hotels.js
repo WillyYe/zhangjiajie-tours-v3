@@ -162,7 +162,7 @@ function setStatus(node, msg, type) {
 function buildLibModal() {
   const mask = el('div', { class: 'modal-mask', hidden: true });
   const modal = el('div', { class: 'modal img-lib-modal' });
-  const closeBtn = el('button', { type: 'button', class: 'icon-btn', style: 'margin-left:auto;font-size:18px', text: '✕', onclick: () => (mask.hidden = true) });
+  const closeBtn = el('button', { type: 'button', class: 'icon-btn', text: '✕', onclick: () => (mask.hidden = true) });
   const header = el('div', { class: 'modal-header' }, [
     el('div', { class: 'modal-icon', text: '🖼' }),
     el('div', {}, [
@@ -343,7 +343,7 @@ async function fileToWebp(file, quality = 0.92) {
 function buildUploadModal() {
   const mask = el('div', { class: 'modal-mask', hidden: true });
   const panel = el('div', { class: 'modal upload-modal' });
-  const closeBtn = el('button', { type: 'button', class: 'icon-btn', style: 'margin-left:auto;font-size:18px', text: '✕', onclick: () => (mask.hidden = true) });
+  const closeBtn = el('button', { type: 'button', class: 'icon-btn', text: '✕', onclick: () => (mask.hidden = true) });
   const header = el('div', { class: 'modal-header' }, [
     el('div', { class: 'modal-icon', text: '⬆' }),
     el('div', {}, [

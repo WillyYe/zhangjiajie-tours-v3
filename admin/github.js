@@ -185,7 +185,7 @@ export async function putImage(path, blob, sha, message) {
 // 删除文件（sha 必填）
 export async function deleteFile(path, sha, message) {
   const { token, repo, branch } = getConfig();
-  const url = `${API}/repos/${repo}/contents/${path}`;
+  const url = `${API}/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`;
   const headers = {
     Accept: 'application/vnd.github+json',
     'Content-Type': 'application/json',

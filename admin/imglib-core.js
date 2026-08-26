@@ -60,7 +60,6 @@ export function createImageLib({ slug, findReferences }) {
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'icon-btn';
-    closeBtn.style.cssText = 'margin-left:auto;font-size:18px';
     closeBtn.textContent = '✕';
     closeBtn.onclick = () => (mask.hidden = true);
     const header = document.createElement('div');
@@ -254,7 +253,6 @@ export function createImageLib({ slug, findReferences }) {
     const closeBtn = document.createElement('button');
     closeBtn.type = 'button';
     closeBtn.className = 'icon-btn';
-    closeBtn.style.cssText = 'margin-left:auto;font-size:18px';
     closeBtn.textContent = '✕';
     closeBtn.onclick = () => (mask.hidden = true);
     const header = document.createElement('div');
