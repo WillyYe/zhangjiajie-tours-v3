@@ -183,7 +183,7 @@ export const tours = {
       tagline: 'The Mountain with the Arch',
       heroLead: 'Tianmen Mountain stands alone south of the city — the 7.5 km cable car, 99-bend road and the Heaven’s Gate natural arch make it the most convenient “wow” of the trip.',
       duration: '1 Day',
-      price: 'From ¥760 / person',
+      price: 'From ¥860 / person',
       overview: 'Tianmen Mountain is outside Wulingyuan, so it is easy to reach and has a different feel: a single peak with vertical cliffs, a cave punched through the mountain, and a cable car that starts in the city and ends in the clouds. A half-day to full-day experience, best done on its own day.',
       itinerary: [
         {
