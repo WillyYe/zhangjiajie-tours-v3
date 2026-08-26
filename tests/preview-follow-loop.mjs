@@ -199,6 +199,35 @@ const eHeroIn = await waitAnchorInView('hero');
 ok(eDetailActive, '预览切换到「详情」页（detail 页签激活）');
 ok(eHeroIn, '详情页 #hero 滚入视区');
 
+console.log('F. 重渲染闭环回归：聚焦带标签模块字段后，预览 iframe 不应被反复重载（捕获"一直在闪"根因）');
+await openModule('tours');
+await page.click('.he-tree-cat-name:has-text("套餐卡片")', { timeout: 5000 });
+await page.waitForSelector('.he-tree-hotel', { timeout: 5000 });
+await page.click('.he-tree-hotel');
+await page.waitForTimeout(500);
+await page.check('#followToggle');
+// 先切到卡片模式，确保后续聚焦详情字段会触发一次真实模式切换+重渲染（观察其是否沉降）
+await page.evaluate(() => { const b = document.querySelector('#previewTabs .ptab[data-mode="card"]'); if (b) b.click(); });
+await page.waitForTimeout(400);
+// 安装 iframe 文档实例计数器：srcdoc 每重载一次就产生新 document 实例 → 新 id
+await page.evaluate(() => {
+  window.__docIds = [];
+  window.__docSeq = 0;
+  const tag = () => {
+    const f = document.querySelector('#preview iframe');
+    const d = f && f.contentDocument;
+    if (d) { if (!d.__pid) d.__pid = ++window.__docSeq; window.__docIds.push(d.__pid); }
+  };
+  tag();
+  window.__docTimer = setInterval(tag, 100);
+});
+// 聚焦详情字段（触发一次模式切换+重渲染）；若闭环存在会持续重载
+await page.evaluate(() => window.__jumpToField('detail', 'overview'));
+await page.waitForTimeout(700); // 关键窗口：环存在则 700ms 内多次重载 → distinct 飙高
+await page.evaluate(() => clearInterval(window.__docTimer));
+const docs = await page.evaluate(() => Array.from(new Set(window.__docIds)));
+ok(docs.length <= 3, `聚焦 tours 详情字段后 700ms 内预览 iframe 文档实例稳定（distinct=${docs.length}，≤3 即无重渲染闭环）`);
+
 console.log(`\n预览自动跟随：${pass} 通过 / ${fail} 失败`);
 await browser.close();
 ASSET_SERVER.close();

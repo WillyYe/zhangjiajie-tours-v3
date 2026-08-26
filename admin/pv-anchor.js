@@ -106,13 +106,9 @@ function scrollToAnchor(anchor, flash) {
   return tick();
 }
 
-// 重渲染后调用：仅保持激活字段在视区（不闪、不动模式——模式已就位）
+// 重渲染后调用：仅保持激活字段在视区（不切模式、不重渲染——避免自我触发的重渲染闭环）
 export function scrollToActive() {
   if (!followEnabled || paused || !activePv) return;
-  if (activePv.mode) {
-    const app = window.__adminApp;
-    if (app) app.setPreviewModeIfAvailable(activePv.mode);
-  }
   scrollToAnchor(activePv.anchor, false);
 }
 

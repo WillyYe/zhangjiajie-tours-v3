@@ -132,6 +132,7 @@ window.__adminApp = {
 
 // ---------- Preview tabs (🃏 卡片 / 📄 详情) ----------
 function setPreviewMode(mode) {
+  if (mode === state.previewMode) return; // 幂等早退：模式未变不重渲染（斩断重渲染闭环）
   state.previewMode = mode;
   for (const b of previewTabsEl.querySelectorAll('.ptab')) {
     b.classList.toggle('active', b.dataset.mode === mode);
