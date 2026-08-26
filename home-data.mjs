@@ -110,7 +110,7 @@ export const homeTourCards = {
       subtitleColor: 'gold-dark',
       desc: 'Built around your pace and interests — your own guide, your own car, and a flexible plan that changes when you want it to.',
       features: ['Customizable 3–7 day itinerary', 'Private English-speaking guide', 'Private vehicle throughout', '4★ hotel accommodation', 'All entrance tickets included'],
-      price: 'From $599/person',
+      price: 'From $699/person',
       buttonStyle: 'gold',
       popular: true,
       hidden: false,
