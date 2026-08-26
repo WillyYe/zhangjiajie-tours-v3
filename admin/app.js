@@ -19,6 +19,7 @@ import {
   renderStatus as renderSettingsStatus,
   setStatus as setSettingsStatus,
 } from './modules/settings.js';
+import { scrollToActive, setFollowEnabled, isFollowEnabled } from './pv-anchor.js';
 
 // ---------- 模块注册表 ----------
 const MODULES = {
@@ -278,7 +279,14 @@ function renderEditorForCurrent() {
 }
 
 // ---------- Preview routing ----------
+// 实时预览渲染（去抖 120ms）：合并连续按键，减少 iframe srcdoc 重载，配合自动跟随更顺滑
+let previewRenderTimer = null;
 function renderPreviewForCurrent() {
+  if (previewRenderTimer) clearTimeout(previewRenderTimer);
+  previewRenderTimer = setTimeout(renderPreviewNow, 120);
+}
+
+function renderPreviewNow() {
   if (state.module === 'hotels') {
     const sel = state.selection;
     if (!sel) { previewTabsEl.hidden = true; previewTitleEl.textContent = '实时预览'; previewEl.replaceChildren(); return; }
@@ -352,6 +360,7 @@ function renderPreviewForCurrent() {
       renderToursPreview(previewEl, state.tours, sel);
     }
   }
+  scrollToActive();
 }
 
 // 酒店保存前校验图片引用
@@ -501,6 +510,14 @@ async function save() {
 
 // ---------- Wire up ----------
 initSettings({ toast });
+
+// 自动跟随预览开关（默认开；localStorage 持久化）
+(function initFollowToggle() {
+  const el = document.getElementById('followToggle');
+  if (!el) return;
+  el.checked = isFollowEnabled();
+  el.addEventListener('change', () => setFollowEnabled(el.checked));
+})();
 $('saveBtn').addEventListener('click', save);
 $('reloadBtn').addEventListener('click', () => loadModule(state.module));
 

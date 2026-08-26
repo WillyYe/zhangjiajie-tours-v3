@@ -71,9 +71,14 @@
       <aside class="preview">
         <div class="preview-head">
           <h3 id="previewTitle">实时预览 · 酒店</h3>
-          <div class="preview-tabs" id="previewTabs" hidden>
-            <button type="button" class="ptab active" data-mode="card" title="卡片预览">🃏 卡片</button>
-            <button type="button" class="ptab" data-mode="detail" title="详情页预览（独立页面）">📄 详情</button>
+          <div class="preview-head-right">
+            <label class="pv-follow-toggle" title="开启后，聚焦任意字段，右侧预览自动滚动并定位到对应内容">
+              <input type="checkbox" id="followToggle" checked /> 自动跟随
+            </label>
+            <div class="preview-tabs" id="previewTabs" hidden>
+              <button type="button" class="ptab active" data-mode="card" title="卡片预览">🃏 卡片</button>
+              <button type="button" class="ptab" data-mode="detail" title="详情页预览（独立页面）">📄 详情</button>
+            </div>
           </div>
         </div>
         <div id="preview"></div>
