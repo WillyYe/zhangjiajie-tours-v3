@@ -364,7 +364,7 @@
   </section>
 
   <!-- ========== GEO G1: answer-first TL;DR ========== -->
-  <section class="border-y border-sand-dark/60 bg-white/60">
+  <section id="tldr" class="border-y border-sand-dark/60 bg-white/60">
     <div class="max-w-[1400px] mx-auto px-6 py-10 lg:py-12">
       <div class="flex items-start gap-4">
         <span class="shrink-0 mt-0.5 w-9 h-9 rounded-full bg-gold/15 text-gold-dark flex items-center justify-center"><svg class="w-5 h-5 lucide lucide-sparkles" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
@@ -390,7 +390,7 @@
       <main class="lg:col-span-2 space-y-16">
 
         <!-- Intro -->
-        <section class="fade-in">
+        <section id="intro" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">{{INTRO_H2}}</h2>
           <div class="space-y-4 text-stone/85 leading-relaxed text-base md:text-lg">
             {{INTRO_BODY}}
@@ -398,7 +398,7 @@
         </section>
 
         <!-- Highlights -->
-        <section class="fade-in">
+        <section id="highlights" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Top highlights</h2>
           <p class="text-stone-600 mb-8 max-w-2xl">{{HIGHLIGHTS_INTRO}}</p>
 
@@ -408,7 +408,7 @@
         </section>
 
         <!-- Recommended Routes -->
-        <section class="fade-in">
+        <section id="routes" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-3">Recommended routes</h2>
           <p class="text-stone-600 mb-8 max-w-2xl">{{ROUTES_INTRO}}</p>
 
@@ -418,19 +418,19 @@
         </section>
 
         <!-- Best time -->
-        <section class="fade-in">
+        <section id="best-time" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">Best time to visit</h2>
           {{BEST_TIME}}
         </section>
 
         <!-- Travel tips -->
-        <section class="fade-in">
+        <section id="tips" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-2">Travel tips</h2>
           {{TIPS}}
         </section>
 
         <!-- How to get there -->
-        <section class="fade-in">
+        <section id="getting-there" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">How to get there</h2>
           <div class="bg-white rounded-2xl border border-sand-dark p-6 sm:p-8 space-y-0">
             {{GETTING_THERE}}
@@ -439,7 +439,7 @@
         </section>
 
         <!-- Ticket & hours -->
-        <section class="fade-in">
+        <section id="tickets" class="fade-in">
           <h2 class="font-display text-3xl md:text-4xl text-forest mb-5">Tickets &amp; opening hours</h2>
           <table class="compare-table bg-white rounded-2xl overflow-hidden">
             <thead>
@@ -457,7 +457,7 @@
       <!-- ===== RIGHT: sticky sidebar (1/3) ===== -->
       <aside class="lg:col-span-1">
         <div class="sidebar-sticky">
-          <div class="facts-card bg-white rounded-2xl border border-sand-dark p-7 mb-5">
+          <div id="facts" class="facts-card bg-white rounded-2xl border border-sand-dark p-7 mb-5">
             <h3 class="font-display text-xl text-forest mb-5 pb-4 border-b border-sand-dark">Quick facts</h3>
             <dl class="space-y-3.5 text-sm">
               {{FACTS}}
@@ -472,7 +472,7 @@
             
           </div>
 
-          <div class="bg-forest rounded-2xl p-7 text-white">
+          <div id="local-tip" class="bg-forest rounded-2xl p-7 text-white">
             <h4 class="font-display text-lg mb-2">Local tip</h4>
             <p class="text-white/75 text-sm leading-relaxed">{{LOCAL_TIP}}</p>
           </div>
@@ -483,7 +483,7 @@
   </div>
 
   <!-- ========== PHOTO GALLERY ========== -->
-  <section class="bg-sand-dark/40 py-16 lg:py-20 px-6">
+  <section id="gallery" class="bg-sand-dark/40 py-16 lg:py-20 px-6">
     <div class="max-w-[1400px] mx-auto">
       <div class="text-center mb-10 fade-in">
         <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-3">Gallery</p>
@@ -496,7 +496,7 @@
   </section>
 
   <!-- ========== GEO G2: FAQ ========== -->
-  <section class="py-16 lg:py-20 px-6 bg-sand-dark/30">
+  <section id="faq" class="py-16 lg:py-20 px-6 bg-sand-dark/30">
     <div class="max-w-[1400px] mx-auto">
       <div class="text-center mb-10 fade-in">
         <p class="text-gold-dark text-xs font-bold uppercase tracking-[0.2em] mb-3">Good to know</p>
@@ -509,7 +509,7 @@
   </section>
 
   <!-- ========== RELATED ATTRACTIONS ========== -->
-  <section class="py-16 lg:py-20 px-6">
+  <section id="related" class="py-16 lg:py-20 px-6">
     <div class="max-w-[1400px] mx-auto">
       <div class="flex items-end justify-between mb-10 fade-in">
         <div>

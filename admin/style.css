@@ -671,3 +671,23 @@ body.resizing, body.resizing * {
 
 /* 预览 iframe */
 .pv-iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+
+/* 字段 → 预览跳转：可点击提示 + 高亮闪一下（iframe 内样式由 pv-anchor.js 注入） */
+.field[data-pv-anchor] { position: relative; }
+.field[data-pv-anchor]::before {
+  content: '🔍 定位'; position: absolute; top: -9px; right: 8px; z-index: 2;
+  font-size: 10px; font-weight: 700; color: #185fa5; background: #e6f1fb;
+  border: 1px solid #b5d4f4; border-radius: 999px; padding: 1px 7px; opacity: 0;
+  transition: opacity .15s ease; pointer-events: none;
+}
+.field[data-pv-anchor]:hover::before { opacity: 1; }
+
+/* 预览内高亮（iframe 文档内由 JS 注入相同定义，这里覆盖直接 DOM 渲染的模块） */
+.pv-flash {
+  outline: 3px solid #378ADD; outline-offset: 2px; border-radius: 8px;
+  animation: pvFlash 1.5s ease-out;
+}
+@keyframes pvFlash {
+  0% { box-shadow: 0 0 0 0 rgba(55,138,221,.55); }
+  100% { box-shadow: 0 0 0 16px rgba(55,138,221,0); }
+}

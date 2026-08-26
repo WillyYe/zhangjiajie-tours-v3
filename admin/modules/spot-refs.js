@@ -16,26 +16,26 @@ export const SCHEMA = [
   { key: 'title', label: 'SEO 标题 title', type: 'text', tip: '浏览器标签 / 分享卡片标题' },
   { key: 'metaDesc', label: 'Meta Description', type: 'textarea', tip: '搜索摘要，150 字内' },
   { key: 'canonical', label: 'Canonical URL', type: 'text', tip: '规范链接，一般不动' },
-  { key: 'breadcrumb', label: '面包屑 breadcrumb', type: 'text' },
-  { key: 'h1', label: 'H1 主标题', type: 'text' },
-  { key: 'subtitle', label: '副标题 subtitle', type: 'text' },
-  { key: 'heroImg', label: 'Hero 主图', type: 'image', tip: '根目录 images/<name>.webp' },
-  { key: 'heroImgAlt', label: 'Hero Alt', type: 'text' },
-  { key: 'heroBgImg', label: 'Hero 背景图', type: 'image' },
-  { key: 'heroIntro', label: 'Hero 导语', type: 'textarea' },
-  { key: 'tldr', label: '摘要 TL;DR', type: 'textarea' },
-  { key: 'introH2', label: '导语 H2', type: 'text' },
-  { key: 'introParas', label: '导语段落', type: 'list', of: { type: 'textarea' }, tip: '多条段落' },
-  { key: 'highlightsIntro', label: '亮点导语', type: 'text' },
-  { key: 'highlights', label: '亮点 Highlights', type: 'list', of: { type: 'object', fields: [
+  { key: 'breadcrumb', label: '面包屑 breadcrumb', type: 'text', pv: { mode: 'detail', anchor: 'hero' } },
+  { key: 'h1', label: 'H1 主标题', type: 'text', pv: { mode: 'detail', anchor: 'hero' } },
+  { key: 'subtitle', label: '副标题 subtitle', type: 'text', pv: { mode: 'detail', anchor: 'hero' } },
+  { key: 'heroImg', label: 'Hero 主图', type: 'image', tip: '根目录 images/<name>.webp', pv: { mode: 'detail', anchor: 'heroImg' } },
+  { key: 'heroImgAlt', label: 'Hero Alt', type: 'text', pv: { mode: 'detail', anchor: 'heroImg' } },
+  { key: 'heroBgImg', label: 'Hero 背景图', type: 'image', pv: { mode: 'detail', anchor: 'hero' } },
+  { key: 'heroIntro', label: 'Hero 导语', type: 'textarea', pv: { mode: 'detail', anchor: 'hero' } },
+  { key: 'tldr', label: '摘要 TL;DR', type: 'textarea', pv: { mode: 'detail', anchor: 'tldr' } },
+  { key: 'introH2', label: '导语 H2', type: 'text', pv: { mode: 'detail', anchor: 'intro' } },
+  { key: 'introParas', label: '导语段落', type: 'list', of: { type: 'textarea' }, tip: '多条段落', pv: { mode: 'detail', anchor: 'intro' } },
+  { key: 'highlightsIntro', label: '亮点导语', type: 'text', pv: { mode: 'detail', anchor: 'highlights' } },
+  { key: 'highlights', label: '亮点 Highlights', type: 'list', pv: { mode: 'detail', anchor: 'highlights' }, of: { type: 'object', fields: [
     { key: 'img', label: '图片', type: 'image' },
     { key: 'alt', label: 'Alt', type: 'text' },
     { key: 'title', label: '标题', type: 'text' },
     { key: 'sub', label: '副标', type: 'text' },
     { key: 'desc', label: '描述', type: 'textarea' },
   ] } },
-  { key: 'routesIntro', label: '路线导语', type: 'text' },
-  { key: 'routes', label: '路线 Routes', type: 'list', of: { type: 'object', fields: [
+  { key: 'routesIntro', label: '路线导语', type: 'text', pv: { mode: 'detail', anchor: 'routes' } },
+  { key: 'routes', label: '路线 Routes', type: 'list', pv: { mode: 'detail', anchor: 'routes' }, of: { type: 'object', fields: [
     { key: 'icon', label: '图标', type: 'text' },
     { key: 'title', label: '标题', type: 'text' },
     { key: 'sub', label: '副标', type: 'text' },
@@ -44,7 +44,7 @@ export const SCHEMA = [
       { key: 'text', label: '说明', type: 'textarea' },
     ] } },
   ] } },
-  { key: 'bestTime', label: '最佳时间 Best Time', type: 'object', fields: [
+  { key: 'bestTime', label: '最佳时间 Best Time', type: 'object', pv: { mode: 'detail', anchor: 'best-time' }, fields: [
     { key: 'cards', label: '时间卡片', type: 'list', of: { type: 'object', fields: [
       { key: 'icon', label: '图标', type: 'text' },
       { key: 'period', label: '时段', type: 'text' },
@@ -52,34 +52,34 @@ export const SCHEMA = [
     ] } },
     { key: 'note', label: '备注', type: 'textarea' },
   ] },
-  { key: 'tips', label: '贴士 Tips', type: 'list', of: { type: 'object', fields: [
+  { key: 'tips', label: '贴士 Tips', type: 'list', pv: { mode: 'detail', anchor: 'tips' }, of: { type: 'object', fields: [
     { key: 'icon', label: '图标', type: 'text' },
     { key: 'title', label: '标题', type: 'text' },
     { key: 'desc', label: '描述', type: 'textarea' },
   ] } },
-  { key: 'gettingThere', label: '到达方式', type: 'list', of: { type: 'object', fields: [
+  { key: 'gettingThere', label: '到达方式', type: 'list', pv: { mode: 'detail', anchor: 'getting-there' }, of: { type: 'object', fields: [
     { key: 'strong', label: '强调', type: 'text' },
     { key: 'text', label: '说明', type: 'textarea' },
   ] } },
-  { key: 'tickets', label: '票务 Tickets', type: 'list', of: { type: 'object', fields: [
+  { key: 'tickets', label: '票务 Tickets', type: 'list', pv: { mode: 'detail', anchor: 'tickets' }, of: { type: 'object', fields: [
     { key: 'item', label: '项目', type: 'text' },
     { key: 'detail', label: '说明', type: 'textarea' },
   ] } },
-  { key: 'facts', label: '事实 Facts', type: 'list', of: { type: 'object', fields: [
+  { key: 'facts', label: '事实 Facts', type: 'list', pv: { mode: 'detail', anchor: 'facts' }, of: { type: 'object', fields: [
     { key: 'label', label: '标签', type: 'text' },
     { key: 'value', label: '值', type: 'text' },
   ] } },
-  { key: 'localTip', label: '本地贴士', type: 'textarea' },
-  { key: 'galleryTitle', label: '画廊标题', type: 'text' },
-  { key: 'gallery', label: '画廊 Gallery', type: 'list', of: { type: 'object', fields: [
+  { key: 'localTip', label: '本地贴士', type: 'textarea', pv: { mode: 'detail', anchor: 'local-tip' } },
+  { key: 'galleryTitle', label: '画廊标题', type: 'text', pv: { mode: 'detail', anchor: 'gallery' } },
+  { key: 'gallery', label: '画廊 Gallery', type: 'list', pv: { mode: 'detail', anchor: 'gallery' }, of: { type: 'object', fields: [
     { key: 'img', label: '图片', type: 'image' },
     { key: 'alt', label: 'Alt', type: 'text' },
   ] } },
-  { key: 'faqs', label: 'FAQ', type: 'list', of: { type: 'object', fields: [
+  { key: 'faqs', label: 'FAQ', type: 'list', pv: { mode: 'detail', anchor: 'faq' }, of: { type: 'object', fields: [
     { key: 'q', label: '问题', type: 'textarea' },
     { key: 'a', label: '答案', type: 'textarea' },
   ] } },
-  { key: 'related', label: '相关推荐 Related', type: 'list', of: { type: 'object', fields: [
+  { key: 'related', label: '相关推荐 Related', type: 'list', pv: { mode: 'detail', anchor: 'related' }, of: { type: 'object', fields: [
     { key: 'slug', label: 'Slug', type: 'text' },
     { key: 'img', label: '图片', type: 'image' },
     { key: 'alt', label: 'Alt', type: 'text' },

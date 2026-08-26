@@ -3,6 +3,7 @@
 // 数据 homeTourCards 与首页 hero/topAttractions/welcome/nav 同住 home-data.mjs，
 // 保存时只重写 homeTourCards 块（mjs.js rebuild 保证 diff 最小，不波及其它块）。
 import { buildHomeTourCardsHtml } from './home-tour-cards-render.js';
+import { withPv } from '../pv-anchor.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -261,6 +262,7 @@ export function renderEditor(container, d, onChange, onSelect) {
 
     const it = data.cards[sel.index];
     if (!it) { sel = { type: 'block' }; renderTree(); renderForm(); return; }
+    const cardPv = { pv: { mode: 'card', anchor: 'tour-' + it.id + '-card' } };
     formHost.append(el('div', { class: 'he-form-head' }, [
       el('span', { class: 'he-form-zh', text: (it.icon ? it.icon + ' ' : '') + (it.title || '(无标题)') }),
       el('span', { class: 'he-form-key', text: `#${sel.index + 1} · ${it.id}` }),
@@ -271,26 +273,26 @@ export function renderEditor(container, d, onChange, onSelect) {
       type: 'text', value: it.id || '', placeholder: '小写字母/数字/连字符，决定锚点 tour-<id>-card',
       oninput: (e) => { it.id = e.target.value; markDirty(); },
     });
-    formHost.append(el('div', { class: 'field' }, [
+    formHost.append(withPv(el('div', { class: 'field' }, [
       el('label', {}, [el('span', { text: '卡片 id' }), el('span', { class: 'tip', text: ' 决定前台锚点 id（tour-<id>-card），被导航/共享卡片引用，改前确认无死链' })]),
       idInput,
-    ]));
+    ]), cardPv));
 
-    formHost.append(textField({ label: '图标 Emoji', tip: '如 📅 🎒 💎' }, it.icon, (v) => { it.icon = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
-    formHost.append(selectField({ label: '图标底色 Icon BG', tip: '圆底配色' }, it.iconBg, (v) => { it.iconBg = v; markDirty(); if (onSelectCb) onSelectCb(sel); }, ICON_BG_OPTIONS));
-    formHost.append(textField({ label: '标题 Title' }, it.title, (v) => { it.title = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
-    formHost.append(textField({ label: '副标题 Subtitle', tip: '如 One-day highlights / Most Popular ★' }, it.subtitle, (v) => { it.subtitle = v; markDirty(); }));
-    formHost.append(selectField({ label: '副标题颜色 Subtitle Color' }, it.subtitleColor, (v) => { it.subtitleColor = v; markDirty(); }, SUBTITLE_COLOR_OPTIONS));
-    formHost.append(longField({ label: '描述 Description', rows: 3 }, it.desc, (v) => { it.desc = v; markDirty(); }));
-    formHost.append(stringListEditor('特性 Features（每行一条，✓ 自动加）', it.features || (it.features = []), null));
-    formHost.append(textField({ label: '价格 Price', tip: '完整展示串，如 From $129/person；$数字 自动金色' }, it.price, (v) => { it.price = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
-    formHost.append(selectField({ label: '按钮配色 Button Style' }, it.buttonStyle, (v) => { it.buttonStyle = v; markDirty(); if (onSelectCb) onSelectCb(sel); }, BTN_OPTIONS));
+    formHost.append(withPv(textField({ label: '图标 Emoji', tip: '如 📅 🎒 💎' }, it.icon, (v) => { it.icon = v; markDirty(); if (onSelectCb) onSelectCb(sel); }), cardPv));
+    formHost.append(withPv(selectField({ label: '图标底色 Icon BG', tip: '圆底配色' }, it.iconBg, (v) => { it.iconBg = v; markDirty(); if (onSelectCb) onSelectCb(sel); }, ICON_BG_OPTIONS), cardPv));
+    formHost.append(withPv(textField({ label: '标题 Title' }, it.title, (v) => { it.title = v; markDirty(); if (onSelectCb) onSelectCb(sel); }), cardPv));
+    formHost.append(withPv(textField({ label: '副标题 Subtitle', tip: '如 One-day highlights / Most Popular ★' }, it.subtitle, (v) => { it.subtitle = v; markDirty(); }), cardPv));
+    formHost.append(withPv(selectField({ label: '副标题颜色 Subtitle Color' }, it.subtitleColor, (v) => { it.subtitleColor = v; markDirty(); }, SUBTITLE_COLOR_OPTIONS), cardPv));
+    formHost.append(withPv(longField({ label: '描述 Description', rows: 3 }, it.desc, (v) => { it.desc = v; markDirty(); }), cardPv));
+    formHost.append(withPv(stringListEditor('特性 Features（每行一条，✓ 自动加）', it.features || (it.features = []), null), cardPv));
+    formHost.append(withPv(textField({ label: '价格 Price', tip: '完整展示串，如 From $129/person；$数字 自动金色' }, it.price, (v) => { it.price = v; markDirty(); if (onSelectCb) onSelectCb(sel); }), cardPv));
+    formHost.append(withPv(selectField({ label: '按钮配色 Button Style' }, it.buttonStyle, (v) => { it.buttonStyle = v; markDirty(); if (onSelectCb) onSelectCb(sel); }, BTN_OPTIONS), cardPv));
 
     // popular / hidden 开关
     const popularChk = el('input', { type: 'checkbox', checked: !!it.popular, onchange: (e) => { it.popular = e.target.checked; markDirty(); if (onSelectCb) onSelectCb(sel); } });
-    formHost.append(el('div', { class: 'field field-inline' }, [popularChk, el('label', { class: 'chk', text: '高亮推荐（加金边环，如 Most Popular）' })]));
+    formHost.append(withPv(el('div', { class: 'field field-inline' }, [popularChk, el('label', { class: 'chk', text: '高亮推荐（加金边环，如 Most Popular）' })]), cardPv));
     const hiddenChk = el('input', { type: 'checkbox', checked: !!it.hidden, onchange: (e) => { it.hidden = e.target.checked; markDirty(); if (onSelectCb) onSelectCb(sel); } });
-    formHost.append(el('div', { class: 'field field-inline' }, [hiddenChk, el('label', { class: 'chk', text: '隐藏此卡片（前台不渲染）' })]));
+    formHost.append(withPv(el('div', { class: 'field field-inline' }, [hiddenChk, el('label', { class: 'chk', text: '隐藏此卡片（前台不渲染）' })]), cardPv));
   }
 
   renderTree();

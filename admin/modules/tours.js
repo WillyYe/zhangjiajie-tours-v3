@@ -4,6 +4,7 @@
 // 右栏详情预览复用 templates/tour-detail.html（与 build 同源 → 所见即所得）。
 import { createImageLib } from '../imglib-core.js';
 import { buildToursHubHtml, tourDetailMap } from './tours-render.js';
+import { withPv } from '../pv-anchor.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -56,10 +57,10 @@ function textField(field, value, onInput) {
     placeholder: field.placeholder || '',
     oninput: (e) => onInput(e.target.value),
   });
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     input,
-  ]);
+  ]), field);
 }
 
 function longField(field, value, onInput) {
@@ -69,10 +70,10 @@ function longField(field, value, onInput) {
     oninput: (e) => onInput(e.target.value),
   });
   ta.value = value ?? '';
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     ta,
-  ]);
+  ]), field);
 }
 
 function selectField(field, value, onInput, options) {
@@ -82,10 +83,10 @@ function selectField(field, value, onInput, options) {
     if (val === value) o.selected = true;
     selEl.append(o);
   }
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     selEl,
-  ]);
+  ]), field);
 }
 
 // 图片字段：仅限本模块图库 images/tours/（自动跳转 + 高亮当前选中图）
@@ -113,10 +114,10 @@ function imageField(field, value, onInput, lib = toursLib) {
     onclick: () => lib.open(thumbBox, thumb, input, onInput),
   });
   const row = el('div', { class: 'img-field' }, [thumbBox, input, btn]);
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     row,
-  ]);
+  ]), field);
 }
 
 function iconBtn(icon, title, handler) {
@@ -355,11 +356,11 @@ export function renderEditor(container, d, onChange, onSelect) {
     ]));
 
     // 基础字段
-    formHost.append(imageField({ label: '卡片图 Image', tip: '仅 images/tours/ 图库（点击浏览可上传/删除）' }, it.img, (v) => { it.img = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
+    formHost.append(imageField({ label: '卡片图 Image', tip: '仅 images/tours/ 图库（点击浏览可上传/删除）', pv: { mode: 'card', anchor: 'tour-' + it.slug } }, it.img, (v) => { it.img = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
     formHost.append(textField({ label: '图片 Alt' }, it.imgAlt, (v) => { it.imgAlt = v; markDirty(); }));
     formHost.append(textField({ label: '角标文字 Badge', tip: '如 3 Days' }, it.badge, (v) => { it.badge = v; markDirty(); }));
     formHost.append(selectField({ label: '角标颜色 Badge Color' }, it.badgeColor, (v) => { it.badgeColor = v; markDirty(); }, BADGE_OPTIONS));
-    formHost.append(textField({ label: '卡片标题 Title' }, it.title, (v) => { it.title = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
+    formHost.append(textField({ label: '卡片标题 Title', pv: { mode: 'card', anchor: 'tour-' + it.slug } }, it.title, (v) => { it.title = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
     formHost.append(longField({ label: '描述 Description', rows: 3 }, it.desc, (v) => { it.desc = v; markDirty(); }));
 
     // 详情页折叠
@@ -372,13 +373,13 @@ export function renderEditor(container, d, onChange, onSelect) {
     if (ui.detailOpen) {
       const dsec = el('div', { class: 'he-detail-sec' });
       dsec.append(el('div', { class: 'he-sec-title', text: '① Hero & 概览' }));
-      dsec.append(imageField({ label: '详情页封面 Hero Image', tip: '详情页大图，仅 images/tours/' }, it.heroImg, (v) => { it.heroImg = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
+      dsec.append(imageField({ label: '详情页封面 Hero Image', tip: '详情页大图，仅 images/tours/', pv: { mode: 'detail', anchor: 'hero' } }, it.heroImg, (v) => { it.heroImg = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
       dsec.append(textField({ label: '封面 Alt' }, it.heroAlt, (v) => { it.heroAlt = v; markDirty(); }));
-      dsec.append(textField({ label: '标签 Tagline', tip: '如 Best of Wulingyuan' }, it.tagline, (v) => { it.tagline = v; markDirty(); }));
-      dsec.append(longField({ label: 'Hero 引言 Hero Lead', rows: 3 }, it.heroLead, (v) => { it.heroLead = v; markDirty(); }));
+      dsec.append(textField({ label: '标签 Tagline', tip: '如 Best of Wulingyuan', pv: { mode: 'detail', anchor: 'hero' } }, it.tagline, (v) => { it.tagline = v; markDirty(); }));
+      dsec.append(longField({ label: 'Hero 引言 Hero Lead', rows: 3, pv: { mode: 'detail', anchor: 'hero' } }, it.heroLead, (v) => { it.heroLead = v; markDirty(); }));
       dsec.append(textField({ label: '行程时长 Duration', tip: '如 3 Days / 2 Nights' }, it.duration, (v) => { it.duration = v; markDirty(); }));
       dsec.append(textField({ label: '价格 Price', tip: '如 From ¥1,980 / person' }, it.price, (v) => { it.price = v; markDirty(); }));
-      dsec.append(longField({ label: '概览 Overview', rows: 4 }, it.overview, (v) => { it.overview = v; markDirty(); }));
+      dsec.append(longField({ label: '概览 Overview', rows: 4, pv: { mode: 'detail', anchor: 'overview' } }, it.overview, (v) => { it.overview = v; markDirty(); }));
 
       dsec.append(el('div', { class: 'he-sec-title', text: '② 每日行程 Itinerary' }));
       dsec.append(objectListEditor('每一项：时段 / 标题 / 说明', it.itinerary || (it.itinerary = []), [

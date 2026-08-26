@@ -17,6 +17,7 @@ import { siteNav } from '../../home-data.mjs';
 import { hotelCategories } from '../../hotels-data.mjs';
 import { getFile, putFile, putImage, getFileSha, listDir, deleteFile } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
+import { withPv } from '../pv-anchor.js';
 
 const imgName = Fragments.imgName;
 
@@ -335,22 +336,22 @@ function fileToWebp(file) {
 // ---------- 单值字段编辑器 ----------
 function renderField(parent, obj, field, onChange, imgPrefix, imgBase) {
   const key = field.key;
+  let row;
   if (field.type === 'text') {
     const input = el('input', { type: 'text', value: obj[key] == null ? '' : String(obj[key]) });
     input.addEventListener('input', () => { obj[key] = input.value; onChange(); });
-    parent.append(fieldRow(field.label, input, field.tip));
+    row = fieldRow(field.label, input, field.tip);
   } else if (field.type === 'textarea') {
     const ta = el('textarea', {}, obj[key] == null ? '' : String(obj[key]));
     ta.addEventListener('input', () => { obj[key] = ta.value; onChange(); });
-    parent.append(fieldRow(field.label, ta, field.tip));
+    row = fieldRow(field.label, ta, field.tip);
   } else if (field.type === 'checkbox') {
-    const wrap = el('label', { class: 'check-row' }, [
+    row = el('label', { class: 'check-row' }, [
       (() => { const c = el('input', { type: 'checkbox' }); c.checked = !!obj[key]; c.addEventListener('change', () => { obj[key] = c.checked; onChange(); }); return c; })(),
       el('span', { text: field.label + (field.tip ? '（' + field.tip + '）' : '') }),
     ]);
-    parent.append(wrap);
   } else if (field.type === 'image') {
-    parent.append(renderImageField(obj, key, onChange, field.label, field.tip, imgPrefix, imgBase));
+    row = renderImageField(obj, key, onChange, field.label, field.tip, imgPrefix, imgBase);
   } else if (field.type === 'json') {
     const text = JSON.stringify(obj[key] == null ? {} : obj[key], null, 2);
     const ta = el('textarea', { class: 'json-area' }, text);
@@ -364,15 +365,17 @@ function renderField(parent, obj, field, onChange, imgPrefix, imgBase) {
         setStatus(status, 'JSON 解析失败：' + e.message, 'err');
       }
     });
-    parent.append(fieldRow(field.label, el('div', {}, [ta, status]), field.tip));
+    row = fieldRow(field.label, el('div', {}, [ta, status]), field.tip);
   } else if (field.type === 'object') {
     const sub = el('fieldset', { class: 'sub-fields' }, [el('legend', { text: field.label })]);
     const target = obj[key] == null || typeof obj[key] !== 'object' ? (obj[key] = {}) : obj[key];
     for (const sf of field.fields) renderField(sub, target, sf, onChange, imgPrefix, imgBase);
-    parent.append(sub);
+    row = sub;
   } else if (field.type === 'list') {
-    parent.append(renderListField(obj, key, field, onChange, imgPrefix, imgBase));
+    row = renderListField(obj, key, field, onChange, imgPrefix, imgBase);
   }
+  // 字段 → 预览跳转：field.pv 声明了 mode/anchor 才挂跳转（点击标签/缩略图跳到对应卡片或详情）
+  if (row) parent.append(withPv(row, field));
 }
 
 function renderImageField(obj, key, onChange, label, tip, imgPrefix, imgBase) {

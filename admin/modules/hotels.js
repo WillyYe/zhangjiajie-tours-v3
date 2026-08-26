@@ -4,6 +4,7 @@
 
 import { getFileSha, putImage, deleteFile, putFile } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
+import { withPv } from '../pv-anchor.js';
 
 // 图片基准路径：相对本模块（admin/modules/）→ 仓库根 images/。
 // 物理隔离：每家酒店图片位于 images/<slug>/，用 import.meta.url 解析避免路径误判。
@@ -47,19 +48,19 @@ function textField(field, value, onInput) {
     value: value ?? '',
     oninput: (e) => onInput(e.target.value),
   });
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + field.tip })]),
     input,
-  ]);
+  ]), field);
 }
 
 function longField(field, value, onInput) {
   const ta = el('textarea', { oninput: (e) => onInput(e.target.value) });
   ta.value = value ?? '';
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + field.tip })]),
     ta,
-  ]);
+  ]), field);
 }
 
 function featuresField(value, onChange) {
@@ -131,10 +132,10 @@ function imageField(field, value, onInput, hotels, categories, slug) {
   });
 
   const row = el('div', { class: 'img-field' }, [thumbBox, input, btn]);
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + field.tip })]),
     row,
-  ]);
+  ]), field);
 }
 
 // ---------- 图片库 modal（全局单例） ----------
@@ -853,6 +854,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
       el('div', { class: 'he-step', text: '③ 编辑 Edit' })
     );
 
+    const cardAnchor = { name: 'pv-card-name', zh: 'pv-card-zh', area: 'pv-card-area', tier: 'pv-card-tier' };
     for (const f of FIELDS) {
       const commit = (v) => {
         h[f.key] = v;
@@ -860,13 +862,14 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
         onSelect && onSelect(ui.hotelKey);
       };
       if (f.key === 'img') {
-        formHost.append(imageField(f, h.img, commit, hotels, categories, ui.hotelKey));
+        formHost.append(imageField({ ...f, pv: { mode: 'card', anchor: 'pv-card-img' } }, h.img, commit, hotels, categories, ui.hotelKey));
       } else {
-        formHost.append(textField(f, h[f.key], commit));
+        const a = cardAnchor[f.key];
+        formHost.append(textField({ ...f, pv: a ? { mode: 'card', anchor: a } : undefined }, h[f.key], commit));
       }
     }
     formHost.append(
-      longField({ label: '简介 / Blurb', tip: '一段英文介绍' }, h.blurb, (v) => {
+      longField({ label: '简介 / Blurb', tip: '一段英文介绍', pv: { mode: 'card', anchor: 'pv-card-blurb' } }, h.blurb, (v) => {
         h.blurb = v;
         onChange();
         onSelect && onSelect(ui.hotelKey);
@@ -1143,11 +1146,13 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
   function buildDetailMetaEditor(d, sync) {
     const wrap = el('div', { class: 'he-sub', 'data-pv-anchor': 'pv-hero' });
     wrap.append(el('p', { class: 'he-sub-title', text: '📝 简介 & SEO' }));
+    const anchorMap = { tagline: 'hero', intro: 'pv-intro', roomsTitle: 'pv-rooms', galleryTitle: 'pv-gallery' };
     function detailField(label, tip, key, type) {
       const input = type === 'textarea' ? el('textarea', {}) : el('input', { type: 'text' });
       input.value = d[key] || '';
       input.addEventListener('input', () => { d[key] = input.value; sync(); });
-      return el('div', { class: 'field' }, [el('label', {}, [label, el('span', { class: 'tip', text: ' ' + tip })]), input]);
+      const a = anchorMap[key];
+      return withPv(el('div', { class: 'field' }, [el('label', {}, [label, el('span', { class: 'tip', text: ' ' + tip })]), input]), a ? { mode: 'detail', anchor: a } : undefined);
     }
     const introDefs = [
       ['Tagline（徽标小字）', '如 Boutique retreat', 'tagline'],
@@ -1191,7 +1196,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
           iconBtn('↓', '下移', () => { moveItem(d.rooms, i, 1); sync(); renderList(); }),
           iconBtn('🗑', '删除房间', () => { if (confirm('删除该房间？')) { d.rooms.splice(i, 1); sync(); renderList(); } }),
         ]));
-        list.append(card);
+        list.append(withPv(card, { pv: { mode: 'detail', anchor: 'room-' + i } }));
       });
       if (!d.rooms.length) list.append(el('p', { class: 'he-catsec-empty', text: '暂无房间，点下方添加。' }));
     }
@@ -1219,7 +1224,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
           iconBtn('↓', '下移', () => { moveItem(d.gallery, i, 1); sync(); renderList(); }),
           iconBtn('🗑', '删除', () => { d.gallery.splice(i, 1); sync(); renderList(); }),
         ]));
-        list.append(card);
+        list.append(withPv(card, { pv: { mode: 'detail', anchor: 'gallery-' + i } }));
       });
       if (!d.gallery.length) list.append(el('p', { class: 'he-catsec-empty', text: '暂无图片，点下方添加。' }));
     }
@@ -1257,7 +1262,7 @@ export function renderEditor(container, hotels, categories, onChange, onSelect, 
           const src = parseInt(e.dataTransfer.getData('text/plain'), 10);
           if (!isNaN(src) && src !== i) { const [x] = d.faq.splice(src, 1); d.faq.splice(i, 0, x); sync(); renderList(); }
         });
-        list.append(card);
+        list.append(withPv(card, { pv: { mode: 'detail', anchor: 'faq-' + i } }));
       });
       if (!d.faq.length) list.append(el('p', { class: 'faq-empty', text: '暂无常见问题。' }));
     }
@@ -1276,7 +1281,7 @@ export function renderPreview(container, hotel, slug) {
   container.classList.remove('detail-mode');
   container.replaceChildren();
   if (!hotel) return;
-  const imgWrap = el('div', { class: 'pv-img' });
+  const imgWrap = el('div', { class: 'pv-img', id: 'pv-card-img' });
   if (hotel.img) {
     const im = el('img', { class: 'pv-img-el', src: slug ? imgUrl(slug, hotel.img) : hotel.img + '.webp', alt: hotel.alt || '' });
     im.addEventListener('error', () => (imgWrap.textContent = '(图片加载失败: ' + hotel.img + ')'));
@@ -1287,13 +1292,17 @@ export function renderPreview(container, hotel, slug) {
   const card = el('div', { class: 'pv-card' }, [
     imgWrap,
     el('div', { class: 'pv-body' }, [
-      el('div', { class: 'pv-name', text: hotel.name || '' }),
-      el('div', { class: 'pv-zh', text: hotel.zh || '' }),
-      el('div', { class: 'pv-meta', text: `${hotel.area || ''} · ${hotel.tier || ''}` }),
-      el('div', { class: 'pv-blurb', text: hotel.blurb || '' }),
+      el('div', { class: 'pv-name', id: 'pv-card-name', text: hotel.name || '' }),
+      el('div', { class: 'pv-zh', id: 'pv-card-zh', text: hotel.zh || '' }),
+      el('div', { class: 'pv-meta' }, [
+        el('span', { id: 'pv-card-area', text: hotel.area || '' }),
+        ' · ',
+        el('span', { id: 'pv-card-tier', text: hotel.tier || '' }),
+      ]),
+      el('div', { class: 'pv-blurb', id: 'pv-card-blurb', text: hotel.blurb || '' }),
       el(
         'ul',
-        { class: 'pv-features' },
+        { class: 'pv-features', id: 'pv-card-features' },
         (hotel.features || []).map((f) => el('li', { text: f }))
       ),
     ]),
@@ -1368,10 +1377,10 @@ const _imgName = (n) => (/\.(webp|jpg|jpeg|avif|png)$/i.test(n) ? n : n + '.webp
 const _imgSrc = (n, slug) => '../images/' + (slug ? slug + '/' : '') + _imgName(n);
 const _findCatOf = (key, cats) => (cats || []).find((c) => (c.hotels || []).includes(key));
 
-function _roomCard(r, slug) {
+function _roomCard(r, slug, i) {
   const feats = (r.features || []).map((f) => `<li class="flex gap-2"><span class="text-gold-dark">✓</span><span>${_escHtml(f)}</span></li>`).join('');
   const zh = r.nameZh ? `            <p class="text-gold-dark text-xs font-semibold uppercase tracking-wide mb-2">${_escAttr(r.nameZh)}</p>\n` : '';
-  return `        <article class="card-hover group bg-white rounded-2xl overflow-hidden border border-sand-dark flex flex-col">
+  return `        <article id="room-${i}" class="card-hover group bg-white rounded-2xl overflow-hidden border border-sand-dark flex flex-col">
           <div class="overflow-hidden h-56"><img loading="lazy" decoding="async" src="${_imgSrc(r.img, slug)}" alt="${_escAttr(r.alt || r.name)}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
           <div class="p-6 flex flex-col flex-1">
             <h3 class="font-display text-xl text-forest leading-snug">${_escHtml(r.name)}</h3>
@@ -1397,7 +1406,7 @@ function _hotelJsonLd(h, key, detail) {
 }
 function _faqSection(items) {
   if (!items || !items.length) return '';
-  const cards = items.map((it) => `          <div class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
+  const cards = items.map((it, i) => `          <div id="faq-${i}" class="bg-white rounded-2xl border border-sand-dark p-6 md:p-7 fade-in">
             <h3 class="font-display text-lg md:text-xl text-forest mb-2">${_escHtml(it.q)}</h3>
             <p class="text-stone/80 leading-relaxed text-sm md:text-base">${_escHtml(it.a)}</p>
           </div>`).join('\n');
@@ -1451,10 +1460,10 @@ function _fillDetailTpl(tpl, hotel, key, categories) {
     INTRO_TEXT: _escHtml(detail.intro || hotel.blurb || ''),
     ROOMS_TITLE: _escHtml(detail.roomsTitle || 'Rooms & suites'),
     ROOMS_SUB: _escHtml(detail.roomsSub || ''),
-    ROOMS: (detail.rooms || []).map((r) => _roomCard(r, slug)).join('\n'),
+    ROOMS: (detail.rooms || []).map((r, i) => _roomCard(r, slug, i)).join('\n'),
     GALLERY_TITLE: _escHtml(detail.galleryTitle || `Inside ${hotel.name}`),
     GALLERY_SUB: _escHtml(detail.gallerySub || ''),
-    GALLERY: (detail.gallery || []).map((g) => _galleryImg(g, slug)).join('\n'),
+    GALLERY: (detail.gallery || []).map((g, i) => `<div id="gallery-${i}" class="pv-g-item">${_galleryImg(g, slug)}</div>`).join('\n'),
     FAQ_SECTION: _faqSection(detail.faq),
     OTHER_WAYS: _relatedSection(categories, cat, 'Other ways to browse hotels'),
     JSONLD: _hotelJsonLd(hotel, key, detail),

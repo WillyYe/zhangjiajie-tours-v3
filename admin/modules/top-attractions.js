@@ -5,6 +5,7 @@
 import { buildTopAttractionsHtml } from './top-attractions-render.js';
 import { renderSpotDetailPreview, openImageLibrary } from './spot-core.js';
 import { bindResizer } from '../resizer.js';
+import { withPv } from '../pv-anchor.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -32,10 +33,10 @@ function textField(field, value, onInput) {
     placeholder: field.placeholder || '',
     oninput: (e) => onInput(e.target.value),
   });
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     input,
-  ]);
+  ]), field);
 }
 
 function longField(field, value, onInput) {
@@ -45,10 +46,10 @@ function longField(field, value, onInput) {
     oninput: (e) => onInput(e.target.value),
   });
   ta.value = value ?? '';
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     ta,
-  ]);
+  ]), field);
 }
 
 function iconBtn(icon, title, handler) {
@@ -254,10 +255,10 @@ export function renderEditor(container, d, onChange, onSelect) {
     ]));
 
     formHost.append(textField({ label: '序号 Rank', tip: '表格第 1 列 #，留空按列表顺序' }, String(it.rank != null ? it.rank : ''), (v) => { it.rank = v === '' ? null : (parseInt(v, 10) || 0); markDirty(); }));
-    formHost.append(textField({ label: 'Spot 景点名', tip: '表格第 2 列' }, it.spot, (v) => { it.spot = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
-    formHost.append(textField({ label: 'Highlight 亮点', tip: '表格第 3 列，一句话亮点' }, it.highlight, (v) => { it.highlight = v; markDirty(); }));
-    formHost.append(textField({ label: 'Time 用时', tip: '表格第 4 列，如 3–4 hrs' }, it.time, (v) => { it.time = v; markDirty(); }));
-    formHost.append(textField({ label: 'Vibe 氛围', tip: '表格第 5 列，可带 emoji' }, it.vibe, (v) => { it.vibe = v; markDirty(); }));
+    formHost.append(textField({ label: 'Spot 景点名', tip: '表格第 2 列', pv: { mode: 'card', anchor: 'spot-' + it.slug } }, it.spot, (v) => { it.spot = v; markDirty(); if (onSelectCb) onSelectCb(sel); }));
+    formHost.append(textField({ label: 'Highlight 亮点', tip: '表格第 3 列，一句话亮点', pv: { mode: 'card', anchor: 'spot-' + it.slug } }, it.highlight, (v) => { it.highlight = v; markDirty(); }));
+    formHost.append(textField({ label: 'Time 用时', tip: '表格第 4 列，如 3–4 hrs', pv: { mode: 'card', anchor: 'spot-' + it.slug } }, it.time, (v) => { it.time = v; markDirty(); }));
+    formHost.append(textField({ label: 'Vibe 氛围', tip: '表格第 5 列，可带 emoji', pv: { mode: 'card', anchor: 'spot-' + it.slug } }, it.vibe, (v) => { it.vibe = v; markDirty(); }));
 
     const hiddenBtn = el('button', {
       type: 'button', class: 'btn btn-sm',

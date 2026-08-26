@@ -120,6 +120,15 @@ function toast(msg, type = '') {
 }
 window.__adminToast = toast;
 
+// 供 pv-anchor.js 切预览模式（仅当该模块支持此模式才切）
+window.__adminApp = {
+  get state() { return state; },
+  setPreviewModeIfAvailable(mode) {
+    const tab = previewTabsEl.querySelector(`.ptab[data-mode="${mode}"]`);
+    if (tab) setPreviewMode(mode);
+  },
+};
+
 // ---------- Preview tabs (🃏 卡片 / 📄 详情) ----------
 function setPreviewMode(mode) {
   state.previewMode = mode;
