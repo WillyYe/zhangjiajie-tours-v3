@@ -63,6 +63,8 @@ let _imgLibLoading = false;
 let _imgLibBase = '';
 // 当前图库已有的图片名（不含扩展名），用于上传后同步静态清单
 let _imgLibNames = [];
+// 刚刚上传图片的 objectURL 映射（内存级即时预览，不依赖 Pages 部署），避免"上传成功但图库看不到"
+let _justUploaded = {};
 // 当前模块的全部 spots 数据（删除前引用检查用它扫描所有 type:'image' 字段，防前台破图）
 let _imgLibSpots = [];
 // 打开图库时选中的字段名 + 状态条 DOM（删除反馈复用上传状态条）
@@ -102,7 +104,8 @@ async function ensureImageList(currentName) {
   try {
     const names = await loadLibNames(folder);
     const webps = names.filter((n) => /\.(webp|jpg|jpeg|avif|png)$/i.test(n));
-    _imgLibNames = webps.map((n) => n.replace(/\.(webp|jpg|jpeg|avif|png)$/i, ''));
+    // 合并：保留本次会话刚上传、但 Pages 尚未部署导致清单里还没有的名字，避免刷新后"刚传的图消失"
+    _imgLibNames = Array.from(new Set([...webps.map((n) => n.replace(/\.(webp|jpg|jpeg|avif|png)$/i, '')), ...Object.keys(_justUploaded)]));
     renderLibGrid(currentName);
   } catch (e) {
     _imgLibListEl.replaceChildren(el('p', { class: 'hint', text: '加载图库失败：' + e.message }));
@@ -112,7 +115,7 @@ async function ensureImageList(currentName) {
 }
 
 // 用内存中的 _imgLibNames 直接渲染网格（删除后立即反映，不重新 fetch 清单，避免 Pages 部署延迟导致陈旧显示）
-function renderLibGrid(currentName) {
+function renderLibGrid(currentName, instant) {
   if (!_imgLibListEl) return;
   _imgLibListEl.replaceChildren();
   if (!_imgLibNames.length) {
@@ -125,8 +128,9 @@ function renderLibGrid(currentName) {
   let selectedEl = null;
   for (const name of _imgLibNames) {
     const isSel = !!cur && name === cur;
-    const card = el('div', { class: 'img-lib-item' + (isSel ? ' selected' : ''), onclick: () => _imgLibPick && _imgLibPick(name) }, [
-      el('img', { src: thumbBase + name + '.webp', alt: name, loading: 'lazy', onerror: (e) => (e.target.style.visibility = 'hidden') }),
+    const justAdded = (instant && instant[name]) || _justUploaded[name];
+    const card = el('div', { class: 'img-lib-item' + (isSel ? ' selected' : '') + (justAdded ? ' just-added' : ''), onclick: () => _imgLibPick && _imgLibPick(name) }, [
+      el('img', { src: justAdded || (thumbBase + name + '.webp'), alt: name, loading: 'lazy', onerror: (e) => { if (!justAdded) e.target.style.visibility = 'hidden'; } }),
       el('span', { class: 'img-lib-name', text: name }),
     ]);
     // 根库（imgBase 为空 = 根 images/）也允许删除：delete 前由 findAllReferences 做引用检查
@@ -227,25 +231,54 @@ export function openImageLibrary(currentName, onPick, base, spots) {
     const fileInput = el('input', { type: 'file', accept: 'image/*', class: 'img-upload-input' });
     const uploadBtn = el('button', { type: 'button', class: 'btn btn-primary', text: '上传选中文件到图库' });
     const uploadStatus = el('div', { class: 'img-lib-status', hidden: true });
+    const progress = el('div', { class: 'upload-progress', hidden: true }, [el('div', { class: 'upload-progress-bar' })]);
     const listEl = el('div', { class: 'img-lib-grid' });
+    function setProgress(pct) {
+      progress.hidden = !(pct > 0);
+      const bar = progress.firstChild;
+      if (bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
+    }
     uploadBtn.addEventListener('click', async () => {
       const f = fileInput.files && fileInput.files[0];
       if (!f) { setStatus(uploadStatus, '请先选择一个图片文件', 'err'); return; }
+      if (uploadBtn.disabled) return; // 防止连点重复上传
+      uploadBtn.disabled = true;
       try {
-        setStatus(uploadStatus, '转换并上传中…', 'info');
+        setProgress(15);
+        setStatus(uploadStatus, '① 正在把图片转换为 webp…', 'info');
         const blob = await fileToWebp(f);
+        setProgress(45);
+        setStatus(uploadStatus, '② 转换完成，正在上传到 GitHub…', 'info');
         const base = (f.name || 'image').replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
         const name = base || ('img-' + Date.now());
         await putImage('images/' + (_imgLibBase ? _imgLibBase + '/' : '') + name + '.webp', blob, null, 'Upload image via admin');
-        setStatus(uploadStatus, '已上传 images/' + (_imgLibBase ? _imgLibBase + '/' : '') + name + '.webp', 'ok');
-        if (_imgLibBase) await syncLibList([..._imgLibNames, name]);
-        await ensureImageList();
+        setProgress(80);
+        setStatus(uploadStatus, '③ 已上传，正在同步图库清单…', 'info');
+        // 乐观即时更新：直接把新图加入内存列表并立即渲染，不等 Pages 部署（解决"上传成功但图库看不到"）
+        if (!_imgLibNames.includes(name)) _imgLibNames = [..._imgLibNames, name];
+        _justUploaded[name] = URL.createObjectURL(blob);
+        renderLibGrid(_imgLibCurrentName, { [name]: _justUploaded[name] });
+        if (_imgLibBase) await syncLibList(_imgLibNames);
+        setProgress(100);
+        setStatus(uploadStatus, `✓ 已上传 ${name}.webp 并加入图库（当前为上传原图即时预览；GitHub Pages 部署约 1–3 分钟后缩略图也会稳定显示）`, 'ok');
+        fileInput.value = '';
       } catch (e) {
+        setProgress(0);
         setStatus(uploadStatus, '上传失败：' + e.message, 'err');
+        notify('上传失败：' + e.message, 'err');
+      } finally {
+        uploadBtn.disabled = false;
+        setTimeout(() => setProgress(0), 1600);
       }
     });
-    const actions = el('div', { class: 'modal-actions' }, [uploadBtn]);
-    panel.append(header, el('div', { class: 'modal-body' }, [fileInput, uploadStatus, listEl]), actions);
+    const refreshBtn = el('button', { type: 'button', class: 'btn btn-sm btn-ghost', text: '🔄 刷新图库' });
+    refreshBtn.addEventListener('click', async () => {
+      setStatus(uploadStatus, '刷新中…', 'info');
+      try { await ensureImageList(_imgLibCurrentName); setStatus(uploadStatus, '已刷新图库列表', 'ok'); }
+      catch (e) { setStatus(uploadStatus, '刷新失败：' + e.message, 'err'); }
+    });
+    const actions = el('div', { class: 'modal-actions' }, [refreshBtn, uploadBtn]);
+    panel.append(header, el('div', { class: 'modal-body' }, [fileInput, progress, uploadStatus, listEl]), actions);
     mask.append(panel);
     mask.addEventListener('click', (e) => { if (e.target === mask) mask.hidden = true; });
     document.body.append(mask);

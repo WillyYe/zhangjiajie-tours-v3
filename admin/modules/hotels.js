@@ -142,6 +142,16 @@ let libModal = null;
 let uploadModal = null;
 // 当前图片库会话状态（跨函数共享）
 let libState = { list: [], hotels: null, thumbBox: null, thumb: null, input: null, onInput: null };
+// 刚刚上传图片的 objectURL 映射：内存级即时预览，不依赖 Pages 部署（避免"上传成功但图库看不到"）
+let justUploaded = {};
+// 上传进度条 DOM（buildUploadModal 内创建并赋值），供 setProgress 控制
+let uploadProgress = null;
+function setProgress(pct) {
+  if (!uploadProgress) return;
+  uploadProgress.hidden = !(pct > 0);
+  const bar = uploadProgress.firstChild;
+  if (bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
+}
 
 function setStatus(node, msg, type) {
   node.textContent = msg || '';
@@ -164,7 +174,8 @@ function buildLibModal() {
   const search = el('input', { class: 'img-lib-search', type: 'text', placeholder: '🔍 搜索文件名…' });
   search.addEventListener('input', () => renderLibGrid(libState.input ? libState.input.value : ''));
   const uploadBtn = el('button', { type: 'button', class: 'btn btn-sm', text: '⬆ 上传图片', onclick: () => openUploadPanel() });
-  const toolbar = el('div', { class: 'img-lib-toolbar' }, [search, uploadBtn]);
+  const refreshBtn = el('button', { type: 'button', class: 'btn btn-sm btn-ghost', text: '🔄 刷新', onclick: () => refreshList() });
+  const toolbar = el('div', { class: 'img-lib-toolbar' }, [search, refreshBtn, uploadBtn]);
   const grid = el('div', { class: 'img-lib-grid' });
   const status = el('div', { class: 'img-lib-status', hidden: true });
   modal.append(header, toolbar, grid, status);
@@ -207,15 +218,32 @@ async function openImageLib(thumbBox, thumb, input, onInput, hotels, categories,
   try {
     const res = await fetch(new URL(`../imglib/${slug}.json`, import.meta.url));
     libState.list = res.ok ? await res.json() : [];
-    renderLibGrid(input.value);
+    renderLibGrid(input ? input.value : '');
   } catch (e) {
     libState.list = [];
-    renderLibGrid(input.value);
+    renderLibGrid(input ? input.value : '');
   }
   libModal.mask.hidden = false;
 }
 
-function renderLibGrid(currentName) {
+// 重新从服务器拉取清单并刷新网格（上传后等 Pages 部署、或列表异常时手动点「刷新」）
+async function refreshList() {
+  setStatus(libModal.status, '刷新中…', 'info');
+  try {
+    const slug = libState.slug;
+    const res = await fetch(new URL(`../imglib/${slug}.json`, import.meta.url), { cache: 'no-store' });
+    const names = res.ok ? await res.json() : [];
+    // 合并：保留本次会话刚上传、但 Pages 尚未部署导致清单里还没有的名字
+    const merged = Array.from(new Set([...names, ...Object.keys(justUploaded)]));
+    libState.list = merged;
+    renderLibGrid(libState.input ? libState.input.value : '');
+    setStatus(libModal.status, '已刷新图库列表', 'ok');
+  } catch (e) {
+    setStatus(libModal.status, '刷新失败：' + e.message, 'err');
+  }
+}
+
+function renderLibGrid(currentName, instant) {
   const q = (libModal.toolbar.querySelector('.img-lib-search').value || '').toLowerCase().trim();
   const filtered = q ? libState.list.filter((n) => n.toLowerCase().includes(q)) : libState.list;
   libModal.grid.replaceChildren();
@@ -225,9 +253,10 @@ function renderLibGrid(currentName) {
   }
   let selectedEl = null;
   for (const name of filtered) {
-    const cell = el('div', { class: 'img-lib-item' + (name === currentName ? ' selected' : '') });
-    const im = el('img', { src: imgUrl(libState.slug, name), loading: 'lazy', alt: name });
-    im.addEventListener('error', () => cell.classList.add('broken'));
+    const justAdded = (instant && instant[name]) || justUploaded[name];
+    const cell = el('div', { class: 'img-lib-item' + (name === currentName ? ' selected' : '') + (justAdded ? ' just-added' : '') });
+    const im = el('img', { src: justAdded || imgUrl(libState.slug, name), loading: 'lazy', alt: name });
+    im.addEventListener('error', () => { if (!justAdded) cell.classList.add('broken'); });
     const delBtn = el('button', {
       type: 'button',
       class: 'img-lib-del',
@@ -280,7 +309,7 @@ async function confirmDelete(name) {
     const newList = libState.list.filter((n) => n !== name);
     await syncHotelList(libState.slug, newList);
     libState.list = newList;
-    renderLibGrid(libState.input.value);
+    renderLibGrid(libState.input ? libState.input.value : '');
     setStatus(libModal.status, `已删除 ${name}.webp`, 'ok');
   } catch (e) {
     setStatus(libModal.status, '删除失败：' + e.message, 'err');
@@ -328,6 +357,9 @@ function buildUploadModal() {
   const nameInput = el('input', { type: 'text', class: 'upload-name', placeholder: '文件名（不含扩展名）' });
   const meta = el('div', { class: 'upload-meta', text: '' });
   const status = el('div', { class: 'img-lib-status', hidden: true });
+  const progress = el('div', { class: 'upload-progress', hidden: true });
+  progress.append(el('div', { class: 'upload-progress-bar' }));
+  uploadProgress = progress;
   const confirmBtn = el('button', { type: 'button', class: 'btn btn-primary', text: '转换并上传', disabled: true });
   const cancelBtn = el('button', { type: 'button', class: 'btn btn-ghost', text: '取消', onclick: () => (mask.hidden = true) });
   const actions = el('div', { class: 'modal-actions' }, [cancelBtn, confirmBtn]);
@@ -338,6 +370,7 @@ function buildUploadModal() {
     el('label', { class: 'upload-label', text: '文件名（自动净化，强制 .webp）' }),
     nameInput,
     meta,
+    progress,
     status,
   ]), actions);
   mask.append(panel);
@@ -387,6 +420,7 @@ function openUploadPanel() {
   nameInput.value = '';
   meta.textContent = '';
   setStatus(status, '', '');
+  setProgress(0);
   confirmBtn.disabled = true;
   m.mask.hidden = false;
 }
@@ -399,22 +433,40 @@ async function doUpload(state, refs) {
   const prefix = `hotel-${libState.slug}-`;
   const finalName = raw.startsWith(prefix) ? raw : prefix + raw;
   const path = `images/${libState.slug}/${finalName}.webp`;
-  setStatus(refs.status, '上传中…', 'info');
+  const curName = libState.input ? libState.input.value : '';
   refs.confirmBtn.disabled = true;
   try {
+    setProgress(15);
+    setStatus(refs.status, '① 检查文件是否已存在…', 'info');
     const existingSha = await getFileSha(path);
     if (existingSha) {
       const ok = confirm(`images/${libState.slug}/${finalName}.webp 已存在，是否覆盖？`);
-      if (!ok) { setStatus(refs.status, '已取消', 'info'); refs.confirmBtn.disabled = false; return; }
+      if (!ok) { setStatus(refs.status, '已取消', 'info'); refs.confirmBtn.disabled = false; setProgress(0); return; }
     }
+    setProgress(45);
+    setStatus(refs.status, '② 正在上传到 GitHub…', 'info');
     await putImage(path, state.blob, existingSha, `Upload ${finalName}.webp via admin`);
+    setProgress(75);
+    // 乐观即时更新：图已上服务器 → 立即更新列表 + 用内存 objectURL 即时预览 + 提示（不依赖 Pages 部署，解决"上传成功但图库看不到"）
     const newList = libState.list.includes(finalName) ? libState.list : [...libState.list, finalName].sort();
-    await syncHotelList(libState.slug, newList);
     libState.list = newList;
-    renderLibGrid(libState.input.value);
-    setStatus(refs.status, `已上传 ${finalName}.webp`, 'ok');
-    setTimeout(() => { uploadModal.mask.hidden = true; }, 900);
+    justUploaded[finalName] = URL.createObjectURL(state.blob);
+    renderLibGrid(curName, { [finalName]: justUploaded[finalName] });
+    setStatus(libModal.status, `✓ 已上传 ${finalName}.webp 并加入图库（当前为上传原图即时预览）`, 'ok');
+    setStatus(refs.status, `✓ 已上传 ${finalName}.webp（正在同步清单…）`, 'ok');
+    // 同步清单（失败不再误判为"上传失败"，改为非阻塞警告）
+    setProgress(90);
+    try {
+      await syncHotelList(libState.slug, newList);
+      setProgress(100);
+      setStatus(refs.status, `✓ 已上传并同步 ${finalName}.webp`, 'ok');
+      setTimeout(() => { if (uploadModal) uploadModal.mask.hidden = true; }, 900);
+    } catch (e) {
+      setProgress(100);
+      setStatus(refs.status, `图片已上传成功，但清单未同步：${e.message}（图片已可用，可稍后点「刷新」重试）`, 'warn');
+    }
   } catch (e) {
+    setProgress(0);
     setStatus(refs.status, '上传失败：' + e.message, 'err');
     refs.confirmBtn.disabled = false;
   }

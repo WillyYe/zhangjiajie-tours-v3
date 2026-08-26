@@ -33,6 +33,16 @@ export function createImageLib({ slug, findReferences }) {
   let uploadModal = null;
   let uploadRetryBtn = null;
   let state = { list: [], thumbBox: null, thumb: null, input: null, onInput: null };
+  // 刚刚上传图片的 objectURL 映射：内存级即时预览，不依赖 Pages 部署（避免"上传成功但图库看不到"）
+  let justUploaded = {};
+  // 上传进度条 DOM（buildUploadModal 内创建并赋值），供 setProgress 控制
+  let uploadProgress = null;
+  function setProgress(pct) {
+    if (!uploadProgress) return;
+    uploadProgress.hidden = !(pct > 0);
+    const bar = uploadProgress.firstChild;
+    if (bar) bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
+  }
 
   function setStatus(node, msg, type) {
     if (!node) return;
@@ -67,9 +77,14 @@ export function createImageLib({ slug, findReferences }) {
     uploadBtn.className = 'btn btn-sm';
     uploadBtn.textContent = '⬆ 上传图片';
     uploadBtn.onclick = () => openUploadPanel();
+    const refreshBtn = document.createElement('button');
+    refreshBtn.type = 'button';
+    refreshBtn.className = 'btn btn-sm btn-ghost';
+    refreshBtn.textContent = '🔄 刷新';
+    refreshBtn.onclick = () => refreshList();
     const toolbar = document.createElement('div');
     toolbar.className = 'img-lib-toolbar';
-    toolbar.append(search, uploadBtn);
+    toolbar.append(search, refreshBtn, uploadBtn);
     const grid = document.createElement('div');
     grid.className = 'img-lib-grid';
     const status = document.createElement('div');
@@ -104,15 +119,31 @@ export function createImageLib({ slug, findReferences }) {
     try {
       const res = await fetch(listUrl);
       state.list = res.ok ? await res.json() : [];
-      renderLibGrid(input.value);
+      renderLibGrid(input ? input.value : '');
     } catch (e) {
       state.list = [];
-      renderLibGrid(input.value);
+      renderLibGrid(input ? input.value : '');
     }
     libModal.mask.hidden = false;
   }
 
-  function renderLibGrid(currentName) {
+  // 重新从服务器拉取清单并刷新网格（上传后等 Pages 部署、或列表异常时手动点「刷新」）
+  async function refreshList() {
+    setStatus(libModal.status, '刷新中…', 'info');
+    try {
+      const res = await fetch(listUrl, { cache: 'no-store' });
+      const names = res.ok ? await res.json() : [];
+      // 合并：保留本次会话刚上传、但 Pages 尚未部署导致清单里还没有的名字
+      const merged = Array.from(new Set([...names, ...Object.keys(justUploaded)]));
+      state.list = merged;
+      renderLibGrid(state.input ? state.input.value : '');
+      setStatus(libModal.status, '已刷新图库列表', 'ok');
+    } catch (e) {
+      setStatus(libModal.status, '刷新失败：' + e.message, 'err');
+    }
+  }
+
+  function renderLibGrid(currentName, instant) {
     const q = (libModal.toolbar.querySelector('.img-lib-search').value || '').toLowerCase().trim();
     const filtered = q ? state.list.filter((n) => n.toLowerCase().includes(q)) : state.list;
     libModal.grid.replaceChildren();
@@ -122,13 +153,14 @@ export function createImageLib({ slug, findReferences }) {
     }
     let selectedEl = null;
     for (const name of filtered) {
+      const justAdded = (instant && instant[name]) || justUploaded[name];
       const cell = document.createElement('div');
-      cell.className = 'img-lib-item' + (name === currentName ? ' selected' : '');
+      cell.className = 'img-lib-item' + (name === currentName ? ' selected' : '') + (justAdded ? ' just-added' : '');
       const im = document.createElement('img');
-      im.src = imgUrl(name);
+      im.src = justAdded || imgUrl(name);
       im.loading = 'lazy';
       im.alt = name;
-      im.onerror = () => cell.classList.add('broken');
+      im.onerror = () => { if (!justAdded) cell.classList.add('broken'); };
       const delBtn = document.createElement('button');
       delBtn.type = 'button';
       delBtn.className = 'img-lib-del';
@@ -171,7 +203,7 @@ export function createImageLib({ slug, findReferences }) {
       const newList = state.list.filter((n) => n !== name);
       await syncList(newList);
       state.list = newList;
-      renderLibGrid(state.input.value);
+      renderLibGrid(state.input ? state.input.value : '');
       setStatus(libModal.status, `已删除 ${name}.webp`, 'ok');
     } catch (e) {
       setStatus(libModal.status, '删除失败：' + e.message, 'err');
@@ -246,6 +278,11 @@ export function createImageLib({ slug, findReferences }) {
     const status = document.createElement('div');
     status.className = 'img-lib-status';
     status.hidden = true;
+    const progress = document.createElement('div');
+    progress.className = 'upload-progress';
+    progress.hidden = true;
+    progress.append(Object.assign(document.createElement('div'), { className: 'upload-progress-bar' }));
+    uploadProgress = progress;
     const confirmBtn = document.createElement('button');
     confirmBtn.type = 'button';
     confirmBtn.className = 'btn btn-primary';
@@ -288,6 +325,7 @@ export function createImageLib({ slug, findReferences }) {
       Object.assign(document.createElement('label'), { className: 'upload-label', textContent: '文件名（自动净化，强制 .webp）' }),
       nameInput,
       meta,
+      progress,
       status,
     );
     panel.append(header, body, actions);
@@ -347,6 +385,7 @@ export function createImageLib({ slug, findReferences }) {
     nameInput.value = '';
     meta.textContent = '';
     setStatus(status, '');
+    setProgress(0);
     confirmBtn.disabled = true;
     m.mask.hidden = false;
   }
@@ -357,19 +396,26 @@ export function createImageLib({ slug, findReferences }) {
     if (!upState.blob) { setStatus(refs.status, '请先选择图片', 'err'); return; }
     const finalName = raw;
     const path = `${imgDir}${finalName}.webp`;
-    setStatus(refs.status, '上传中…', 'info');
+    const curName = state.input ? state.input.value : '';
     refs.confirmBtn.disabled = true;
     if (uploadRetryBtn) uploadRetryBtn.hidden = true;
     try {
+      setProgress(15);
+      setStatus(refs.status, '① 检查文件是否已存在…', 'info');
       const existingSha = await getFileSha(path);
       if (existingSha) {
-        if (!confirm(`${path} 已存在，是否覆盖？`)) { setStatus(refs.status, '已取消', 'info'); refs.confirmBtn.disabled = false; return; }
+        if (!confirm(`${path} 已存在，是否覆盖？`)) { setStatus(refs.status, '已取消', 'info'); refs.confirmBtn.disabled = false; setProgress(0); return; }
       }
+      setProgress(45);
+      setStatus(refs.status, '② 正在上传到 GitHub…', 'info');
       await putImage(path, upState.blob, existingSha, `Upload ${finalName}.webp via admin`);
-      // 乐观更新：图已上服务器 → 立即更新列表 + 渲染 + 提示，不让后续清单失败误判为“上传失败”
+      setProgress(70);
+      // 乐观即时更新：图已上服务器 → 立即更新列表 + 用内存 objectURL 即时预览 + 提示（不依赖 Pages 部署，解决"上传成功但图库看不到"）
       const newList = state.list.includes(finalName) ? state.list : [...state.list, finalName].sort();
       state.list = newList;
-      renderLibGrid(state.input.value);
+      justUploaded[finalName] = URL.createObjectURL(upState.blob);
+      renderLibGrid(curName, { [finalName]: justUploaded[finalName] });
+      setStatus(libModal.status, `✓ 已上传 ${finalName}.webp 并加入图库（当前为上传原图即时预览）`, 'ok');
       setStatus(refs.status, `✓ 已上传 ${finalName}.webp（正在同步清单…）`, 'ok');
       // 回读确认服务器确实收到，防止“以为成功其实没传上”
       const confirmSha = await getFileSha(path);
@@ -380,16 +426,20 @@ export function createImageLib({ slug, findReferences }) {
         return;
       }
       // 同步清单：失败不再报“上传失败”，改为非阻塞警告 + 重试按钮
+      setProgress(90);
       try {
         await syncList(newList);
+        setProgress(100);
         setStatus(refs.status, `✓ 已上传并同步 ${finalName}.webp`, 'ok');
         setTimeout(() => { if (uploadModal) uploadModal.mask.hidden = true; }, 900);
       } catch (e) {
-        setStatus(refs.status, `图片已上传成功，但清单未同步：${e.message}（图片已可用，可稍后重试）`, 'warn');
+        setProgress(100);
+        setStatus(refs.status, `图片已上传成功，但清单未同步：${e.message}（图片已可用，可稍后点「刷新」重试）`, 'warn');
         toastErr('清单同步失败：' + e.message);
         if (uploadRetryBtn) uploadRetryBtn.hidden = false;
       }
     } catch (e) {
+      setProgress(0);
       setStatus(refs.status, '上传失败：' + e.message, 'err');
       toastErr('上传失败：' + e.message);
       refs.confirmBtn.disabled = false;
