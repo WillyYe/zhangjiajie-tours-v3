@@ -4,6 +4,7 @@
 // 保存时只重写 homeTourCards 块（mjs.js rebuild 保证 diff 最小，不波及其它块）。
 import { buildHomeTourCardsHtml } from './home-tour-cards-render.js';
 import { withPv } from '../pv-anchor.js';
+import { ensurePreviewFrame, setPreviewSrcdoc, onFrameLoad } from '../preview-frame.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -311,21 +312,15 @@ export function renderPreview(container, d, selection) {
     .replace(/href="tours\//g, 'href="../tours/');
   const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;padding:18px;background:#f3efe7}</style></head><body>${previewGrid}</body></html>`;
 
-  container.replaceChildren();
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: '首页 Tour 卡 实时预览',
-    style: 'width:100%;height:100%;border:0;background:#f3efe7',
-  });
-  container.append(iframe);
-  iframe.addEventListener('load', () => {
+  const tag = (selection && selection.type === 'card' && data.cards[selection.index]) ? data.cards[selection.index].id : currentCardId();
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: '首页 Tour 卡 实时预览', bg: '#f3efe7' });
+  onFrameLoad(iframe, () => {
     const idoc = iframe.contentDocument;
     if (!idoc) return;
-    const id = (selection && selection.type === 'card' && data.cards[selection.index]) ? data.cards[selection.index].id : currentCardId();
-    if (id) {
-      const card = idoc.getElementById('tour-' + id + '-card');
+    if (tag) {
+      const card = idoc.getElementById('tour-' + tag + '-card');
       if (card) { card.style.outline = '3px solid #2563eb'; card.style.outlineOffset = '2px'; }
     }
-  }, { once: true });
-  iframe.srcdoc = doc;
+  });
+  setPreviewSrcdoc(iframe, doc, tag);
 }

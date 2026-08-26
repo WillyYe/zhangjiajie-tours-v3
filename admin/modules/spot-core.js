@@ -18,6 +18,7 @@ import { hotelCategories } from '../../hotels-data.mjs';
 import { getFile, putFile, putImage, getFileSha, listDir, deleteFile } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
 import { withPv } from '../pv-anchor.js';
+import { ensurePreviewFrame, setPreviewSrcdoc, detachPreviewFrame } from '../preview-frame.js';
 
 const imgName = Fragments.imgName;
 
@@ -587,19 +588,15 @@ export function createSpotEditor(config) {
   // 单模块实例内仍用 config.template
   function loadTemplate() { return loadTemplateNamed(template); }
   async function renderPreview(container, arr, slug) {
-    container.replaceChildren();
     const item = (arr || []).find((i) => i.slug === slug);
-    if (!item) { container.append(el('div', { class: 'pv-empty', text: '请选择一项以预览。' })); return; }
-    const iframe = el('iframe', { class: 'pv-iframe', title: '实时预览' });
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = '0';
-    container.append(iframe);
+    if (!item) { detachPreviewFrame(container); container.append(el('div', { class: 'pv-empty', text: '请选择一项以预览。' })); return; }
+    const iframe = ensurePreviewFrame(container, { cls: 'pv-iframe', title: '实时预览' });
     try {
       const tpl = await loadTemplate();
-      iframe.srcdoc = fillTemplate(tpl, item, kind);
+      setPreviewSrcdoc(iframe, fillTemplate(tpl, item, kind), slug);
     } catch (e) {
-      container.replaceChildren(el('div', { class: 'pv-empty', text: '预览加载失败：' + e.message }));
+      detachPreviewFrame(container);
+      container.append(el('div', { class: 'pv-empty', text: '预览加载失败：' + e.message }));
     }
   }
 
@@ -646,19 +643,15 @@ function fillTemplate(tpl, item, k = 'attraction') {
 // 供其它模块复用：用真实模板渲染某个 spot/experience 详情页（所见即所得）。
 // 例如 Top 8 模块的「详情页」tab 直接复用，避免只 fetch 已部署页（只读、易过期、与后台数据漂移）。
 export async function renderSpotDetailPreview(container, arr, slug, k = 'attraction', tplPath = 'templates/attraction-page.html') {
-  container.replaceChildren();
   const item = (arr || []).find((i) => i.slug === slug);
-  if (!item) { container.append(el('div', { class: 'pv-empty', text: '未找到 slug=' + slug + ' 的详情数据。' })); return; }
-  const iframe = el('iframe', { class: 'pv-iframe', title: '实时预览 · ' + slug });
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = '0';
-  container.append(iframe);
+  if (!item) { detachPreviewFrame(container); container.append(el('div', { class: 'pv-empty', text: '未找到 slug=' + slug + ' 的详情数据。' })); return; }
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-iframe', title: '实时预览 · ' + slug });
   try {
     const tpl = await loadTemplateNamed(tplPath);
-    iframe.srcdoc = fillTemplate(tpl, item, k);
+    setPreviewSrcdoc(iframe, fillTemplate(tpl, item, k), slug);
   } catch (e) {
-    container.replaceChildren(el('div', { class: 'pv-empty', text: '预览加载失败：' + e.message }));
+    detachPreviewFrame(container);
+    container.append(el('div', { class: 'pv-empty', text: '预览加载失败：' + e.message }));
   }
 }
 

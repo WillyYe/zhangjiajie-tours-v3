@@ -115,11 +115,13 @@ export function scrollToActive() {
 // 切模式（如支持）+ 滚到锚点 + 高亮闪；同时登记为激活字段并恢复跟随
 export function jumpToField(mode, anchor) {
   if (!anchor) return;
+  // 仅当锚点/模式真正变化时才高亮闪，避免重复聚焦同一字段反复闪烁（C1）
+  const changed = !activePv || activePv.anchor !== anchor || activePv.mode !== (mode || '');
   activePv = { mode: mode || '', anchor };
   paused = false; // 聚焦/点击字段 = 显式选择 → 恢复跟随
   const app = window.__adminApp;
   if (app && mode) app.setPreviewModeIfAvailable(mode);
-  scrollToAnchor(anchor, true);
+  scrollToAnchor(anchor, changed);
 }
 
 // 给字段包裹层加 data 属性 + 点击/聚焦跳转

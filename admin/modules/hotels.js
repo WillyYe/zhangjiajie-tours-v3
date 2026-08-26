@@ -5,6 +5,7 @@
 import { getFileSha, putImage, deleteFile, putFile } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
 import { withPv } from '../pv-anchor.js';
+import { ensurePreviewFrame, setPreviewSrcdoc, onFrameLoad } from '../preview-frame.js';
 
 // 图片基准路径：相对本模块（admin/modules/）→ 仓库根 images/。
 // 物理隔离：每家酒店图片位于 images/<slug>/，用 import.meta.url 解析避免路径误判。
@@ -1510,10 +1511,8 @@ export function renderDetailPreview(container, hotel, key, categories) {
       subs.forEach((s) => io.observe(s));
       container._pvIO = io;
     }
-    container.replaceChildren();
-    const iframe = el('iframe', { class: 'pv-detail-iframe', title: 'detail-preview' });
-    container.append(iframe);
-    iframe.addEventListener('load', () => {
+    const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: 'detail-preview' });
+    onFrameLoad(iframe, () => {
       const idoc = iframe.contentDocument;
       if (!idoc) return;
       syncState.anchors = {
@@ -1526,8 +1525,8 @@ export function renderDetailPreview(container, hotel, key, categories) {
       };
       syncState.iwin = idoc.defaultView;
       tryScroll();
-    }, { once: true });
-    iframe.srcdoc = html;
+    });
+    setPreviewSrcdoc(iframe, html, key);
   };
   if (_detailTpl) {
     clearTimeout(_detailFillTimer);

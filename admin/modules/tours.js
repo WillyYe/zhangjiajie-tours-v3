@@ -5,6 +5,7 @@
 import { createImageLib } from '../imglib-core.js';
 import { buildToursHubHtml, tourDetailMap } from './tours-render.js';
 import { withPv } from '../pv-anchor.js';
+import { ensurePreviewFrame, setPreviewSrcdoc, onFrameLoad, detachPreviewFrame } from '../preview-frame.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -431,38 +432,27 @@ export function renderPreview(container, d, selection) {
     .replace(/href="tours\//g, 'href="../tours/');
   const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;padding:18px;background:#f3efe7}</style></head><body>${previewGrid}</body></html>`;
 
-  container.replaceChildren();
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: 'Tour Packages 实时预览',
-    style: 'width:100%;height:100%;border:0;background:#f3efe7',
-  });
-  container.append(iframe);
-  iframe.addEventListener('load', () => {
+  const tag = (selection && selection.type === 'card' && data.items[selection.index]) ? data.items[selection.index].slug : currentSlug();
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: 'Tour Packages 实时预览', bg: '#f3efe7' });
+  onFrameLoad(iframe, () => {
     const idoc = iframe.contentDocument;
     if (!idoc) return;
-    const slug = (selection && selection.type === 'card' && data.items[selection.index]) ? data.items[selection.index].slug : currentSlug();
-    if (slug) {
-      const card = idoc.getElementById('tour-' + slug);
+    if (tag) {
+      const card = idoc.getElementById('tour-' + tag);
       if (card) { card.style.outline = '3px solid #2563eb'; card.style.outlineOffset = '2px'; }
     }
-  }, { once: true });
-  iframe.srcdoc = doc;
+  });
+  setPreviewSrcdoc(iframe, doc, tag);
 }
 
 // 详情页预览：复用真实 templates/tour-detail.html（与 build 同源），所见即所得。
 export async function renderTourDetailPreview(container, tourObj, slug) {
-  container.replaceChildren();
   if (!slug || !tourObj) {
-    container.replaceChildren(el('div', { class: 'pv-loading', text: '未选择套餐，无法预览详情页。' }));
+    detachPreviewFrame(container);
+    container.append(el('div', { class: 'pv-loading', text: '未选择套餐，无法预览详情页。' }));
     return;
   }
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: 'Tour detail preview · ' + slug,
-    style: 'width:100%;height:100%;border:0;background:#fff',
-  });
-  container.append(iframe);
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: 'Tour detail preview · ' + slug, bg: '#fff' });
   const loading = el('div', { class: 'pv-loading', text: '加载详情页…' });
   container.append(loading);
   try {
@@ -475,9 +465,10 @@ export async function renderTourDetailPreview(container, tourObj, slug) {
     const map = tourDetailMap(tourObj, slug, others);
     const html = Object.entries(map).reduce((acc, [k, v]) => acc.split(`{{${k}}}`).join(v), tpl);
     loading.remove();
-    iframe.srcdoc = html;
+    setPreviewSrcdoc(iframe, html, slug);
   } catch (e) {
     loading.remove();
-    container.replaceChildren(el('div', { class: 'pv-loading', text: `详情页预览失败：${e.message}` }));
+    detachPreviewFrame(container);
+    container.append(el('div', { class: 'pv-loading', text: `详情页预览失败：${e.message}` }));
   }
 }

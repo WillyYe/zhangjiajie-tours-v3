@@ -3,6 +3,7 @@
 // 右栏预览复用 welcome-render.js 的 buildWelcome（与 build 同源 → 所见即所得）。
 import { createImageLib } from '../imglib-core.js';
 import { buildWelcome } from './welcome-render.js';
+import { ensurePreviewFrame, setPreviewSrcdoc } from '../preview-frame.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'para', index } | { type: 'stat', index }
@@ -313,12 +314,6 @@ export function renderPreview(container, welcome, selection) {
     .replace(/href="(attractions|experiences|tours)\//g, 'href="../$1/');
   const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;padding:18px;background:#f3efe7}</style></head><body>${previewGrid}</body></html>`;
 
-  container.replaceChildren();
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: '欢迎区实时预览',
-    style: 'width:100%;height:100%;border:0;background:#f3efe7',
-  });
-  container.append(iframe);
-  iframe.srcdoc = doc;
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: '欢迎区实时预览', bg: '#f3efe7' });
+  setPreviewSrcdoc(iframe, doc);
 }

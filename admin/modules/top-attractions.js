@@ -6,6 +6,7 @@ import { buildTopAttractionsHtml } from './top-attractions-render.js';
 import { renderSpotDetailPreview, openImageLibrary } from './spot-core.js';
 import { bindResizer } from '../resizer.js';
 import { withPv } from '../pv-anchor.js';
+import { ensurePreviewFrame, setPreviewSrcdoc, onFrameLoad } from '../preview-frame.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'card', index }
@@ -284,23 +285,17 @@ export function renderPreview(container, d, selection) {
   const previewTbl = tbl.replace(/ fade-in/g, '');
   const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;padding:18px;background:#f3efe7}</style></head><body>${previewTbl}</body></html>`;
 
-  container.replaceChildren();
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: 'Top 8 Must-See Spots 实时预览',
-    style: 'width:100%;height:100%;border:0;background:#f3efe7',
-  });
-  container.append(iframe);
-  iframe.addEventListener('load', () => {
+  const tag = (selection && selection.type === 'card' && data.items[selection.index]) ? data.items[selection.index].slug : currentSlug();
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: 'Top 8 Must-See Spots 实时预览', bg: '#f3efe7' });
+  onFrameLoad(iframe, () => {
     const idoc = iframe.contentDocument;
     if (!idoc) return;
-    const slug = (selection && selection.type === 'card' && data.items[selection.index]) ? data.items[selection.index].slug : currentSlug();
-    if (slug) {
-      const row = idoc.getElementById('spot-' + slug);
+    if (tag) {
+      const row = idoc.getElementById('spot-' + tag);
       if (row) { row.style.outline = '3px solid #2563eb'; row.style.outlineOffset = '2px'; }
     }
-  }, { once: true });
-  iframe.srcdoc = doc;
+  });
+  setPreviewSrcdoc(iframe, doc, tag);
 }
 
 // ============================================================

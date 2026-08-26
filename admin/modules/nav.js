@@ -2,6 +2,7 @@
 // 数据来自 home-data.mjs 的 siteNav 块；导航无自有图库（Hotels 占位交由 buildIndexNav 填充）。
 // 右栏预览复用 nav-render.js 的 buildSiteNavMega / buildSiteNavMobile（与 build 同源 → 所见即所得）。
 import { buildSiteNavMega, buildSiteNavMobile } from './nav-render.js';
+import { ensurePreviewFrame, setPreviewSrcdoc } from '../preview-frame.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'item', index } | { type: 'child', itemIdx, childIdx }
@@ -266,12 +267,6 @@ ${mega}
 ${mobile}
 </body></html>`;
 
-  container.replaceChildren();
-  const iframe = el('iframe', {
-    class: 'pv-detail-iframe',
-    title: '顶部导航实时预览',
-    style: 'width:100%;height:100%;border:0;background:#1a3a2a',
-  });
-  container.append(iframe);
-  iframe.srcdoc = doc;
+  const iframe = ensurePreviewFrame(container, { cls: 'pv-detail-iframe', title: '顶部导航实时预览', bg: '#1a3a2a' });
+  setPreviewSrcdoc(iframe, doc);
 }
