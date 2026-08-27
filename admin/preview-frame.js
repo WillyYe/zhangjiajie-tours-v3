@@ -40,11 +40,26 @@ export function detachPreviewFrame(container) {
   if (f) f.remove();
 }
 
-// 管理可复用的 load 监听：每次渲染重新绑定，避免 {once:true} 在复用 iframe 上只触发一次就失效。
+// 管理可复用的 load 监听：支持同一 iframe 注册多个 handler（模块的描边 + App 的 scrollToActive
+// 各注册一个），避免 {once:true} 在复用 iframe 上只触发一次、也避免后注册者覆盖先注册者。
+// 注意：每个渲染周期由 app.js 在 renderPreviewNow 开头调用 clearFrameHandlers 清一次，
+// 防止跨渲染累积旧 handler（旧闭包虽幂等但会无意义增长）。
+const _loadHandlers = new WeakMap();
 export function onFrameLoad(iframe, handler) {
-  if (iframe.__onLoad) iframe.removeEventListener('load', iframe.__onLoad);
-  iframe.__onLoad = handler;
-  iframe.addEventListener('load', handler);
+  let set = _loadHandlers.get(iframe);
+  if (!set) {
+    set = new Set();
+    _loadHandlers.set(iframe, set);
+    iframe.addEventListener('load', () => {
+      for (const h of [...set]) { try { h(iframe); } catch (e) { console.error('[onFrameLoad]', e); } }
+    });
+  }
+  set.add(handler);
+}
+// 清掉该 iframe 上一次渲染注册的所有 handler（在 renderPreviewNow 开头调用，保证每周期只留当前 handler）
+export function clearFrameHandlers(iframe) {
+  const set = _loadHandlers.get(iframe);
+  if (set) set.clear();
 }
 
 // 内容守卫：key = tag + '\u0000' + html；未变则跳过重载（不闪、不丢滚动）；变化才赋值并计数。

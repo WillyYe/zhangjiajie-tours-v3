@@ -20,6 +20,7 @@ import {
   setStatus as setSettingsStatus,
 } from './modules/settings.js';
 import { scrollToActive, setFollowEnabled, isFollowEnabled } from './pv-anchor.js';
+import { onFrameLoad, clearFrameHandlers } from './preview-frame.js';
 
 // ---------- 模块注册表 ----------
 const MODULES = {
@@ -288,6 +289,9 @@ function renderPreviewForCurrent() {
 }
 
 function renderPreviewNow() {
+  // 清理上一渲染周期注册的 iframe load handler，避免随编辑次数累积（每个周期只保留当前 handler）。
+  const _f = previewEl.querySelector('iframe');
+  if (_f) clearFrameHandlers(_f);
   if (state.module === 'hotels') {
     const sel = state.selection;
     if (!sel) { previewTabsEl.hidden = true; previewTitleEl.textContent = '实时预览'; previewEl.replaceChildren(); return; }
@@ -361,7 +365,13 @@ function renderPreviewNow() {
       renderToursPreview(previewEl, state.tours, sel);
     }
   }
-  scrollToActive();
+  // 关键：setPreviewSrcdoc 赋 srcdoc 是异步重载，iframe 此时仍是旧内容。
+  // 若同步调用 scrollToActive()，findTarget 找不到目标 → 不滚动 → 编辑时预览跳回顶部。
+  // 改为把 scrollToActive 挂到 iframe 的 load 事件上（内容加载完成后再滚回激活字段），
+  // 与模块注册的描边 handler 共存（onFrameLoad 支持多 handler）。
+  const pvIframe = previewEl.querySelector('iframe');
+  if (pvIframe) onFrameLoad(pvIframe, () => scrollToActive());
+  else scrollToActive();
 }
 
 // 酒店保存前校验图片引用
