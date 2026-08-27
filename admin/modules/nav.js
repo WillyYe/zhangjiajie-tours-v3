@@ -3,6 +3,7 @@
 // 右栏预览复用 nav-render.js 的 buildSiteNavMega / buildSiteNavMobile（与 build 同源 → 所见即所得）。
 import { buildSiteNavMega, buildSiteNavMobile } from './nav-render.js';
 import { ensurePreviewFrame, setPreviewSrcdoc } from '../preview-frame.js';
+import { withPv } from '../pv-anchor.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'item', index } | { type: 'child', itemIdx, childIdx }
@@ -30,10 +31,10 @@ function textField(field, value, onInput) {
     placeholder: field.placeholder || '',
     oninput: (e) => onInput(e.target.value),
   });
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     input,
-  ]);
+  ]), field);
 }
 
 function iconBtn(icon, title, handler) {
@@ -199,8 +200,8 @@ export function renderEditor(container, siteNav, onChange, onSelect) {
         el('span', { class: 'he-form-zh', text: it.label || '(无标签)' }),
         el('span', { class: 'he-form-key', text: `#${sel.index + 1}` }),
       ]));
-      formHost.append(textField({ label: '标签 Label', tip: '菜单显示文字' }, it.label, (v) => { it.label = v; markDirty(); }));
-      formHost.append(textField({ label: '链接 Url', tip: '页面路径；#contact 渲染为按钮', placeholder: 'index.html / attractions/index.html / #contact' }, it.url, (v) => { it.url = v; markDirty(); }));
+      formHost.append(textField({ label: '标签 Label', tip: '菜单显示文字', pv: { mode: '', anchor: 'nav-item-' + sel.index } }, it.label, (v) => { it.label = v; markDirty(); }));
+      formHost.append(textField({ label: '链接 Url', tip: '页面路径；#contact 渲染为按钮', placeholder: 'index.html / attractions/index.html / #contact', pv: { mode: '', anchor: 'nav-item-' + sel.index } }, it.url, (v) => { it.url = v; markDirty(); }));
       // 隐藏切换
       const hiddenBtn = el('button', {
         type: 'button', class: 'btn btn-sm',
@@ -213,8 +214,8 @@ export function renderEditor(container, siteNav, onChange, onSelect) {
       formHost.append(el('div', { class: 'he-subhead', text: `二级子项 (${it.children.length})` }));
       it.children.forEach((c, cidx) => {
         const row = el('div', { class: 'he-subrow' + (c.hidden ? ' is-hidden' : '') }, [
-          el('input', { type: 'text', value: c.label || '', placeholder: '子项标签', class: 'he-sub-input', oninput: (e) => { c.label = e.target.value; markDirty(); } }),
-          el('input', { type: 'text', value: c.url || '', placeholder: '子项链接', class: 'he-sub-input', oninput: (e) => { c.url = e.target.value; markDirty(); } }),
+          withPv(el('input', { type: 'text', value: c.label || '', placeholder: '子项标签', class: 'he-sub-input', oninput: (e) => { c.label = e.target.value; markDirty(); } }), { pv: { mode: '', anchor: 'nav-child-' + sel.index + '-' + cidx } }),
+          withPv(el('input', { type: 'text', value: c.url || '', placeholder: '子项链接', class: 'he-sub-input', oninput: (e) => { c.url = e.target.value; markDirty(); } }), { pv: { mode: '', anchor: 'nav-child-' + sel.index + '-' + cidx } }),
           iconBtn(c.hidden ? '👁' : '🚫', c.hidden ? '显示子项' : '隐藏子项', () => { c.hidden = !c.hidden; markDirty(); renderForm(); }),
           iconBtn('上移', '上移', () => { if (cidx > 0) reorderChild(it, cidx, cidx - 1); }),
           iconBtn('下移', '下移', () => { if (cidx < it.children.length - 1) reorderChild(it, cidx, cidx + 1); }),
@@ -257,7 +258,7 @@ export function renderPreview(container, siteNav, selection) {
   data = siteNav || data;
   const mega = buildSiteNavMega(data)
     .replace(/hidden lg:flex/g, 'flex')
-    .replace(/style="width:260px;"/g, 'style="width:260px;position:static;opacity:1;visibility:visible;pointer-events:auto;"');
+    .replace(/style="width:(\d+)px;"/g, (m, w) => 'style="width:' + w + 'px;position:static;opacity:1;visibility:visible;pointer-events:auto;"');
   const mobile = buildSiteNavMobile(data).replace(/hidden lg:hidden/g, 'block');
   const doc = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="../styles/tailwind.css"><style>body{margin:0;background:#1a3a2a;padding:20px;font-family:sans-serif}.pv-note{color:#cbd5e1;font-size:12px;margin:14px 0 8px}</style></head><body>
   <header style="background:#1a3a2a;display:flex;align-items:center;height:60px;padding:0 8px;">

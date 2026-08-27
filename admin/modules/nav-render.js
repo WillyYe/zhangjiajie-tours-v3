@@ -16,7 +16,7 @@ const withBase = (base, url) => {
 
 export function buildSiteNavMega(nav, base = '') {
   const items = (nav && Array.isArray(nav.items)) ? nav.items : [];
-  const lis = items.filter((it) => !it.hidden).map((it) => {
+  const lis = items.filter((it) => !it.hidden).map((it, idx) => {
     const url = withBase(base, it.url || '#');
     const isContact = url.startsWith('#');
     const isHotels = /(^|\/)hotels\//.test(url) || it.label === 'Hotels';
@@ -25,24 +25,24 @@ export function buildSiteNavMega(nav, base = '') {
       return '          <!--HOTEL-NAV:MEGA:START-->\n          <!--HOTEL-NAV:MEGA:END-->';
     }
     if (isContact) {
-      return `          <li class="nav-item h-full flex items-center">\n            <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">${escHtml(it.label)}</button>\n          </li>`;
+      return `          <li id="nav-item-${idx}" class="nav-item h-full flex items-center">\n            <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">${escHtml(it.label)}</button>\n          </li>`;
     }
     if (!children.length) {
-      return `          <li class="nav-item h-full flex items-center">\n            <a href="${escAttr(url)}" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">${escHtml(it.label)}</a>\n          </li>`;
+      return `          <li id="nav-item-${idx}" class="nav-item h-full flex items-center">\n            <a href="${escAttr(url)}" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">${escHtml(it.label)}</a>\n          </li>`;
     }
     const twoCol = children.length >= 6;
     const links = children.map((c) => `                <a href="${escAttr(withBase(base, c.url || '#'))}" class="mega-link">${escHtml(c.label)}</a>`).join('\n');
     const inner = twoCol
       ? `              <div class="grid grid-cols-2 gap-x-10 gap-y-1">\n${links}\n              </div>`
       : `              <div class="flex flex-col gap-1">\n${links}\n              </div>`;
-    return `          <li class="nav-item h-full flex items-center">\n            <a href="${escAttr(url)}" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">\n              ${escHtml(it.label)}\n              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>\n            </a>\n            <div class="mega-menu" style="width:${twoCol ? 560 : 260}px;">\n${inner}\n            </div>\n          </li>`;
+    return `          <li id="nav-item-${idx}" class="nav-item h-full flex items-center">\n            <a href="${escAttr(url)}" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">\n              ${escHtml(it.label)}\n              <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>\n            </a>\n            <div class="mega-menu" style="width:${twoCol ? 560 : 260}px;">\n${inner}\n            </div>\n          </li>`;
   }).join('\n');
   return `        <nav class="hidden lg:flex items-center h-full">\n          <ul class="flex items-center h-full" style="gap:1.618rem;">\n${lis}\n          </ul>\n        </nav>`;
 }
 
 export function buildSiteNavMobile(nav, base = '') {
   const items = (nav && Array.isArray(nav.items)) ? nav.items : [];
-  const links = items.filter((it) => !it.hidden).map((it) => {
+  const links = items.filter((it) => !it.hidden).map((it, idx) => {
     const url = withBase(base, it.url || '#');
     const isContact = url.startsWith('#');
     const isHotels = /(^|\/)hotels\//.test(url) || it.label === 'Hotels';
@@ -55,7 +55,7 @@ export function buildSiteNavMobile(nav, base = '') {
     }
     let out = `      <a href="${escAttr(url)}" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">${escHtml(it.label)}</a>`;
     if (children.length) {
-      out += '\n' + children.map((c) => `      <a href="${escAttr(withBase(base, c.url || '#'))}" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">${escHtml(c.label)}</a>`).join('\n');
+      out += '\n' + children.map((c, cidx) => `      <a id="nav-child-${idx}-${cidx}" href="${escAttr(withBase(base, c.url || '#'))}" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">${escHtml(c.label)}</a>`).join('\n');
     }
     return out;
   }).join('\n');

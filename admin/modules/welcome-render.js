@@ -16,11 +16,11 @@ export function buildWelcome(w) {
   const stats = (w && Array.isArray(w.stats)) ? w.stats : [];
   const bg = (w && w.bgImg) || 'intro-bg';
   const emWk = (s) => escHtml(s).replace(/\*([^*]+)\*/g, '<em class="wk-em">$1</em>');
-  const statsHtml = stats.map((s) =>
-    `      <div><p class="font-display text-3xl text-sand">${escHtml(s.num)}</p><p class="text-white/60 text-sm mt-1">${escHtml(s.label)}</p></div>`
+  const statsHtml = stats.map((s, i) =>
+    `      <div id="welcome-stat-${i}"><p class="font-display text-3xl text-sand">${escHtml(s.num)}</p><p class="text-white/60 text-sm mt-1">${escHtml(s.label)}</p></div>`
   ).join('\n');
-  const parasHtml = paras.map((p) =>
-    `          <p class="text-white/90 leading-relaxed text-base md:text-lg">\n            ${emWk(p)}\n          </p>`
+  const parasHtml = paras.map((p, i) =>
+    `          <p id="welcome-para-${i}" class="text-white/90 leading-relaxed text-base md:text-lg">\n            ${emWk(p)}\n          </p>`
   ).join('\n\n');
   return `  <!-- Quick stats bar (under Hero) -->
   <section class="bg-forest py-10 border-t border-white/10">
@@ -32,14 +32,14 @@ ${statsHtml}
   <!-- Home intro block — text-focused, blurred grand backdrop -->
   <section class="relative py-24 px-6 overflow-hidden">
     <!-- Blurred grand background photo (Xihai Peak Forest) -->
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('images/welcome/${imgName(bg)}');"></div>
+    <div id="welcome-bg" class="absolute inset-0 bg-cover bg-center" style="background-image:url('images/welcome/${imgName(bg)}');"></div>
     <!-- Dark green overlay like the hero, for text legibility -->
     <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(26,58,42,0.72) 0%, rgba(26,58,42,0.86) 100%);"></div>
 
     <!-- Content: text is the focus — visitor-centric + SEO-optimized -->
     <div class="relative z-10 max-w-3xl mx-auto text-center">
-      <p class="text-gold text-xs font-semibold tracking-[0.3em] uppercase mb-5 fade-in">${escHtml(eyebrow)}</p>
-      <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-7 fade-in">${escHtml(h2)}</h2>
+      <p id="welcome-eyebrow" class="text-gold text-xs font-semibold tracking-[0.3em] uppercase mb-5 fade-in">${escHtml(eyebrow)}</p>
+      <h2 id="welcome-h2" class="font-display text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-7 fade-in">${escHtml(h2)}</h2>
 
         <div class="text-left space-y-5 fade-in">
 ${parasHtml}

@@ -4,6 +4,7 @@
 import { createImageLib } from '../imglib-core.js';
 import { buildWelcome } from './welcome-render.js';
 import { ensurePreviewFrame, setPreviewSrcdoc } from '../preview-frame.js';
+import { withPv } from '../pv-anchor.js';
 
 let data = null;
 let sel = { type: 'block' }; // 'block' | { type: 'para', index } | { type: 'stat', index }
@@ -36,10 +37,10 @@ function textField(field, value, onInput) {
     placeholder: field.placeholder || '',
     oninput: (e) => onInput(e.target.value),
   });
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     input,
-  ]);
+  ]), field);
 }
 
 function longField(field, value, onInput) {
@@ -49,10 +50,10 @@ function longField(field, value, onInput) {
     oninput: (e) => onInput(e.target.value),
   });
   ta.value = value ?? '';
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     ta,
-  ]);
+  ]), field);
 }
 
 function imageField(field, value, onInput) {
@@ -79,10 +80,10 @@ function imageField(field, value, onInput) {
     onclick: () => wLib.open(thumbBox, thumb, input, onInput),
   });
   const row = el('div', { class: 'img-field' }, [thumbBox, input, btn]);
-  return el('div', { class: 'field' }, [
+  return withPv(el('div', { class: 'field' }, [
     el('label', {}, [field.label, el('span', { class: 'tip', text: ' ' + (field.tip || '') })]),
     row,
-  ]);
+  ]), field);
 }
 
 function iconBtn(icon, title, handler) {
@@ -263,9 +264,9 @@ export function renderEditor(container, welcome, onChange, onSelect) {
       formHost.append(
         el('div', { class: 'he-form-head' }, [el('span', { class: 'he-form-key', text: '区块设置' })]),
       );
-      formHost.append(textField({ label: '顶部小字 Eyebrow', tip: '金色大写小字，如 UNESCO World Heritage Site' }, data.eyebrow, (v) => { data.eyebrow = v; markDirty(); }));
-      formHost.append(textField({ label: '主标题 H2', tip: '欢迎区主标题' }, data.h2, (v) => { data.h2 = v; markDirty(); }));
-      formHost.append(imageField({ label: '背景图 Background', tip: '仅 images/welcome/ 图库（点击浏览可上传/删除）' }, data.bgImg, (v) => { data.bgImg = v; markDirty(); }));
+      formHost.append(textField({ label: '顶部小字 Eyebrow', tip: '金色大写小字，如 UNESCO World Heritage Site', pv: { mode: '', anchor: 'welcome-eyebrow' } }, data.eyebrow, (v) => { data.eyebrow = v; markDirty(); }));
+      formHost.append(textField({ label: '主标题 H2', tip: '欢迎区主标题', pv: { mode: '', anchor: 'welcome-h2' } }, data.h2, (v) => { data.h2 = v; markDirty(); }));
+      formHost.append(imageField({ label: '背景图 Background', tip: '仅 images/welcome/ 图库（点击浏览可上传/删除）', pv: { mode: '', anchor: 'welcome-bg' } }, data.bgImg, (v) => { data.bgImg = v; markDirty(); }));
       return;
     }
 
@@ -277,7 +278,7 @@ export function renderEditor(container, welcome, onChange, onSelect) {
           el('span', { class: 'he-form-key', text: `#${sel.index + 1}` }),
         ]),
       );
-      formHost.append(longField({ label: '段落正文', tip: '用 *星号* 包住要强调的文字', rows: 6 }, p, (v) => { data.paras[sel.index] = v; markDirty(); }));
+      formHost.append(longField({ label: '段落正文', tip: '用 *星号* 包住要强调的文字', rows: 6, pv: { mode: '', anchor: 'welcome-para-' + sel.index } }, p, (v) => { data.paras[sel.index] = v; markDirty(); }));
       formHost.append(el('div', { class: 'field' }, [moveBtns('para', sel.index, data.paras.length)]));
       return;
     }
@@ -291,8 +292,8 @@ export function renderEditor(container, welcome, onChange, onSelect) {
         el('span', { class: 'he-form-key', text: `#${sel.index + 1}` }),
       ]),
     );
-    formHost.append(textField({ label: '数值 Num', tip: '如 3,000+ / 54%' }, s.num, (v) => { s.num = v; markDirty(); }));
-    formHost.append(textField({ label: '标签 Label', tip: '如 Sandstone Pillars' }, s.label, (v) => { s.label = v; markDirty(); }));
+    formHost.append(textField({ label: '数值 Num', tip: '如 3,000+ / 54%', pv: { mode: '', anchor: 'welcome-stat-' + sel.index } }, s.num, (v) => { s.num = v; markDirty(); }));
+    formHost.append(textField({ label: '标签 Label', tip: '如 Sandstone Pillars', pv: { mode: '', anchor: 'welcome-stat-' + sel.index } }, s.label, (v) => { s.label = v; markDirty(); }));
     formHost.append(el('div', { class: 'field' }, [moveBtns('stat', sel.index, data.stats.length)]));
   }
 
