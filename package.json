@@ -31,7 +31,8 @@
     "test:attraction-detail": "node tests/attraction-detail-preview-loop.mjs",
     "test:preview-spot": "node tests/preview-spot-404-loop.mjs",
     "test:subpath-fetch": "node tests/diag-subpath-fetch.mjs",
-    "test:imglib": "node tests/imglib-isolation-loop.mjs"
+    "test:imglib": "node tests/imglib-isolation-loop.mjs",
+    "test:hotels-imglib": "node tests/hotels-imglib-delete-loop.mjs"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",

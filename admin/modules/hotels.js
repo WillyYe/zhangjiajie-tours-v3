@@ -6,6 +6,7 @@ import { getFileSha, putImage, deleteFile, putFile } from '../github.js';
 import { bindResizer, initResizers } from '../resizer.js';
 import { withPv } from '../pv-anchor.js';
 import { ensurePreviewFrame, setPreviewSrcdoc, onFrameLoad } from '../preview-frame.js';
+import { findHotelImageReferences as findReferences } from './hotel-refs.js';
 
 // 图片基准路径：相对本模块（admin/modules/）→ 仓库根 images/。
 // 物理隔离：每家酒店图片位于 images/<slug>/，用 import.meta.url 解析避免路径误判。
@@ -188,19 +189,8 @@ function buildLibModal() {
 }
 
 // 扫描哪些酒店 / 分类引用了某张图（用于删除保护）
-function findReferences(hotels, categories, name) {
-  const refs = [];
-  for (const [k, h] of Object.entries(hotels || {})) {
-    if (h && typeof h === 'object' && h.img === name) {
-      refs.push(h.zh || h.name || k);
-    }
-  }
-  // 分类 hero 也可能复用该图（如 mountain-lodges 用 hetianye 主图），删除会破前台分类页
-  for (const c of categories || []) {
-    if (c && c.heroImg === name) refs.push('分类「' + (c.title || c.slug) + '」hero');
-  }
-  return refs;
-}
+// 实现见 ./hotel-refs.js 的 findHotelImageReferences —— 递归覆盖全部图片字段
+// （img / cardImg / heroImg / gallery[].img / rooms[].img / detail.*.img 等），避免漏检误删破图。
 
 const LIB_BASE = 'admin/imglib/';
 // 把某酒店的图片清单写回仓库 admin/imglib/<slug>.json（保持排序；文件不存在则新建）
