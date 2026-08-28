@@ -50,7 +50,12 @@ export const siteNav = {
       { label: 'Cultural Shows', url: 'experiences/cultural-shows.html' },
       { label: 'Minority & Local Life', url: 'experiences/minority-local-life.html' },
     ] },
-    { label: 'Tours', url: 'tours/index.html', hidden: false, footerLabel: 'Tours & Itineraries', children: [] },
+    { label: 'Tours', url: 'tours/index.html', hidden: false, footerLabel: 'Tours & Itineraries', children: [
+      { label: 'Top 8 Must-See Spots', url: '#tour-ranking' },
+      { label: 'Day Tours', url: '#tour-day' },
+      { label: 'Private Tours', url: '#tour-private-card' },
+      { label: 'VIP Tours', url: '#tour-vip-card' },
+    ] },
     { label: 'Plan', url: 'plan/index.html', hidden: true, footerLabel: 'Plan Like a Local', children: [
       { label: 'Zhangjiajie Itinerary (3–5 Days)', url: 'plan/zhangjiajie-itinerary.html' },
       { label: 'Best Time to Visit', url: 'plan/best-time-to-visit-zhangjiajie.html' },

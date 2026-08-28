@@ -820,7 +820,7 @@ export const hotelCategories = [
     ],
     cardTitle: 'Mountain Lodges',
     cardDesc: 'Stay close to the peaks and trails',
-    cardImg: 'hotel-jimo-1',
+    cardImg: 'hotel-jimo-hero',
     cardAlt: 'Mountain lodges with valley views in Zhangjiajie',
     navLabel: '🏔️ Mountain Lodges',
     hotels: ['jimo', 'hetianye'],

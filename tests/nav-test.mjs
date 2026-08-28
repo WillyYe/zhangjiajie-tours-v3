@@ -119,7 +119,7 @@ try {
   const y1 = await page.evaluate(() => window.scrollY);
   ok('In-page anchor #tour-ranking scrolls page', y1 > 100, `scrollY=${y1}`);
   // back to top via Home
-  const homeA = page.locator('#main-header nav a[href="#home"]').first();
+  const homeA = page.locator('#main-header a[href="#home"]').first();
   await homeA.click(); await page.waitForTimeout(900);
   const y0 = await page.evaluate(() => window.scrollY);
   ok('Home (#home) anchor scrolls to top', y0 < 200, `scrollY=${y0}`);

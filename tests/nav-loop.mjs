@@ -59,8 +59,11 @@ try {
   const hiddenLabels = siteNavData.items.filter((it) => it.hidden).map((it) => it.label);
   let leak = hiddenLabels.filter((l) => l && all.includes('>' + l + '<'));
   assert(leak.length === 0, '② 隐藏的一级项不出现在生成导航（无泄漏）', '泄漏: ' + JSON.stringify(leak));
-  // 不得出现死锚点 #tour-*
-  assert(!/#tour-/.test(all), '② 生成导航不含死锚点 #tour-*');
+  // 不得出现死锚点 #tour-*：nav 里的 #tour-* 页内锚点必须在 index.html 有对应 id
+  const tourAnchors = [...all.matchAll(/href="#(tour-[^"]*)"/g)].map((m) => m[1]);
+  const htmlForAnchors = fs.readFileSync(INDEX, 'utf8');
+  const deadTour = tourAnchors.filter((h) => !htmlForAnchors.includes('id="' + h + '"'));
+  assert(deadTour.length === 0, '② 生成导航不含死锚点 #tour-*（页内锚点均有对应 id）', '死锚点: ' + JSON.stringify(deadTour));
 } catch (e) { no('② hidden 校验失败', e.message); }
 
 // ---------- ③ Hotels 占位 ----------
