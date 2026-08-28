@@ -240,10 +240,10 @@
                 <!--HOME:NAV:MEGA:START-->
         <nav class="hidden lg:flex items-center h-full">
           <ul class="flex items-center h-full" style="gap:1.618rem;">
-          <li class="nav-item h-full flex items-center">
+          <li id="nav-item-0" class="nav-item h-full flex items-center">
             <a href="../index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Home</a>
           </li>
-          <li class="nav-item h-full flex items-center">
+          <li id="nav-item-1" class="nav-item h-full flex items-center">
             <a href="../attractions/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
               Attractions
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
@@ -261,7 +261,7 @@
               </div>
             </div>
           </li>
-          <li class="nav-item h-full flex items-center">
+          <li id="nav-item-2" class="nav-item h-full flex items-center">
             <a href="../experiences/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center gap-1 transition-colors duration-200">
               Experiences
               <svg class="dropdown-caret" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
@@ -277,7 +277,7 @@
               </div>
             </div>
           </li>
-          <li class="nav-item h-full flex items-center">
+          <li id="nav-item-3" class="nav-item h-full flex items-center">
             <a href="../tours/index.html" class="nav-link text-[13px] font-medium header-nav-link px-3 h-full flex items-center transition-colors duration-200">Tours</a>
           </li>
           <!--HOTEL-NAV:MEGA:START-->
@@ -296,7 +296,7 @@
             </div>
           </li>
 <!--HOTEL-NAV:MEGA:END-->
-          <li class="nav-item h-full flex items-center">
+          <li id="nav-item-5" class="nav-item h-full flex items-center">
             <button type="button" onclick="openContactModal(event)" class="text-[13px] font-semibold border px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer header-cta">Contact Us</button>
           </li>
           </ul>
@@ -314,21 +314,21 @@
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-dark px-6 py-4 space-y-1 max-h-[80vh] overflow-y-auto">
       <a href="../index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Home</a>
       <a href="../attractions/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Attractions</a>
-      <a href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianzi Mountain</a>
-      <a href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Golden Whip Stream</a>
-      <a href="../attractions/huangshizhai.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Huangshizhai</a>
-      <a href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
-      <a href="../attractions/grand-canyon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Grand Canyon Glass Bridge</a>
-      <a href="../attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Baofeng Lake</a>
-      <a href="../attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yellow Dragon Cave</a>
-      <a href="../attractions/yuanjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yuanjiajie (Avatar)</a>
+      <a id="nav-child-1-0" href="../attractions/tianzi.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianzi Mountain</a>
+      <a id="nav-child-1-1" href="../attractions/jinbian.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Golden Whip Stream</a>
+      <a id="nav-child-1-2" href="../attractions/huangshizhai.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Huangshizhai</a>
+      <a id="nav-child-1-3" href="../attractions/tianmen.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
+      <a id="nav-child-1-4" href="../attractions/grand-canyon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Grand Canyon Glass Bridge</a>
+      <a id="nav-child-1-5" href="../attractions/baofeng.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Baofeng Lake</a>
+      <a id="nav-child-1-6" href="../attractions/yellow-dragon.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yellow Dragon Cave</a>
+      <a id="nav-child-1-7" href="../attractions/yuanjiajie.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Yuanjiajie (Avatar)</a>
       <a href="../experiences/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Experiences</a>
-      <a href="../experiences/avatar-bailong-elevator.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Avatar &amp; Bailong Elevator</a>
-      <a href="../experiences/glass-bridge-bungee.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Glass Bridge &amp; Bungee</a>
-      <a href="../experiences/tianmen-mountain.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
-      <a href="../experiences/helicopter-tour.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Helicopter Tour</a>
-      <a href="../experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
-      <a href="../experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
+      <a id="nav-child-2-0" href="../experiences/avatar-bailong-elevator.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Avatar &amp; Bailong Elevator</a>
+      <a id="nav-child-2-1" href="../experiences/glass-bridge-bungee.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Glass Bridge &amp; Bungee</a>
+      <a id="nav-child-2-2" href="../experiences/tianmen-mountain.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Tianmen Mountain</a>
+      <a id="nav-child-2-3" href="../experiences/helicopter-tour.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Helicopter Tour</a>
+      <a id="nav-child-2-4" href="../experiences/cultural-shows.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Cultural Shows</a>
+      <a id="nav-child-2-5" href="../experiences/minority-local-life.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">Minority &amp; Local Life</a>
       <a href="../tours/index.html" class="block text-stone font-semibold py-2" onclick="closeMobileMenu()">Tours</a>
       <!--HOTEL-NAV:MOBILE:START-->
       <a href="../hotels/mountain-lodges.html" class="block text-stone/80 py-1 pl-3 text-sm" onclick="closeMobileMenu()">🏔️ Mountain Lodges</a>
